@@ -1,367 +1,2099 @@
-{
-  // ==================== COMPANY ====================
-  "h4_company": {
-    id: "default",
-    // Business
-    legalName: "AV CHEM CHEMICAL &  MANUFACTURING ",
-    brandName: "H4 Construction solution ",
-    businessType: "Manufacturing",
-    address: "Mukkilapeedika, BP angadi ",
-    city: "Tirur",
-    district: "Malappuram",
-    state: "Kerala",
-    pin: "676102",
-    phone: "+91-7907344030",
-    whatsapp: "+91-8745838382",
-    email: "avchemtirur@gmail.com",
-    website: "https://avchemtirur.github.io/",
-    
-    // GST
-    gstEnabled: true,
-    gstin: "XXXXXXXXXXXX",
-    gstStateCode: "KL",
-    panEnabled: true,
-    pan: "XXXXXXXXXX",
-    
-    // Logos
-    logos: [
-      {
-        id: "logo_001",
-        name: "Main Logo",
-        image: "base64_data",
-        active: true,
-        uploadedAt: "2026-01-01T00:00:00Z"
-      }
-    ],
-    
-    // Signature
-    signature: {
-      id: "sig_001",
-      name: "Authorized Signatory",
-      image: "base64_data",
-      uploadedAt: "2026-01-01T00:00:00Z"
-    },
-    
-    // Bank
-    bankEnabled: true,
-    bank: {
-      name: "ABC Bank",
-      accountName: "AV CHEM PVT LTD",
-      accountNumber: "XXXXXXXXXX",
-      ifsc: "ABCD0000001",
-      branch: "Malappuram",
-      upiId: "xxxx@upi"
-    },
-    
-    // Document Settings
-    terms: "Payment due within 30 days",
-    footerText: "Thank you for your business!",
-    
-    createdAt: "2026-01-01T00:00:00Z",
-    updatedAt: "2026-01-01T00:00:00Z"
-  },
-
-  // ==================== CUSTOMERS ====================
-  "h4_customers": {
-    "cust_001": {
-      id: "cust_001",
-      name: "Customer Name",
-      company: "Company Name",
-      phone: "+91-XXXXXXXXXX",
-      whatsapp: "+91-XXXXXXXXXX",
-      email: "customer@example.com",
-      address: "Address",
-      city: "City",
-      district: "District",
-      state: "State",
-      pin: "PIN",
-      gstin: "XXXXXXXXXXXX",
-      pan: "XXXXXXXX",
-      createdAt: "2026-01-01T00:00:00Z",
-      quotations: 5,
-      invoices: 3,
-      totalValue: 150000
-    }
-  },
-
-  // ==================== PRODUCTS ====================
-  "h4_products": {
-    "prod_001": {
-      id: "prod_001",
-      name: "Tile Adhesive - Standard",
-      sku: "TILE-ADH-001",
-      category: "tile-adhesive",
-      subCategory: "Standard Adhesive",
-      brand: "H4",
-      description: "OPC + RDP based tile adhesive",
-      unit: "kg",
-      purchaseRate: 350,
-      sellingRate: 450,
-      mrp: 500,
-      gst: 18,
-      hsnCode: "6809",
-      active: true,
-      notes: "Popular variant",
-      createdAt: "2026-01-01T00:00:00Z"
-    }
-  },
-
-  // ==================== QUOTATIONS ====================
-  "h4_quotations": {
-    "qtn_001": {
-      id: "qtn_001",
-      number: "H4-QTN-2026-00001",
-      customerId: "cust_001",
-      templateId: "tpl_001",
-      themeId: "theme_001",
-      
-      // Details
-      date: "2026-08-08T00:00:00Z",
-      validUntil: "2026-09-08T00:00:00Z",
-      projectName: "Project Name",
-      siteAddress: "Site Address",
-      reference: "Reference Number",
-      
-      // Items
-      items: [
-        {
-          itemId: "item_001",
-          productId: "prod_001",
-          description: "Tile Adhesive - Standard",
-          quantity: 100,
-          unit: "kg",
-          rate: 450,
-          discount: 0,
-          discountType: "flat", // flat or percentage
-          gst: 18,
-          lineTotal: 54000
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>H4 Billing ERP - Quotation & Invoice Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      ],
-      
-      // Calculation
-      subtotal: 45000,
-      totalDiscount: 0,
-      taxableAmount: 45000,
-      cgst: 4050,
-      sgst: 4050,
-      igst: 0,
-      roundOff: 0,
-      grandTotal: 53100,
-      
-      // Status
-      status: "draft", // draft, sent, accepted, rejected, expired, converted
-      
-      // Relationship
-      convertedToInvoice: null,
-      
-      createdAt: "2026-08-08T00:00:00Z",
-      updatedAt: "2026-08-08T00:00:00Z",
-      
-      // Snapshot (for locked document)
-      companySnapshot: { ...company },
-      customerSnapshot: { ...customer }
-    }
-  },
 
-  // ==================== INVOICES ====================
-  "h4_invoices": {
-    "inv_001": {
-      id: "inv_001",
-      number: "H4-INV-2026-00001",
-      customerId: "cust_001",
-      quotationId: "qtn_001", // optional
-      templateId: "tpl_002",
-      themeId: "theme_001",
-      
-      // Details
-      date: "2026-08-08T00:00:00Z",
-      dueDate: "2026-09-07T00:00:00Z",
-      projectName: "Project Name",
-      reference: "Reference Number",
-      
-      // Items (same structure as quotation)
-      items: [
-        {
-          itemId: "item_001",
-          productId: "prod_001",
-          description: "Tile Adhesive - Standard",
-          quantity: 100,
-          unit: "kg",
-          rate: 450,
-          discount: 0,
-          gst: 18,
-          lineTotal: 54000
+        :root {
+            --primary: #6A3FA0;
+            --secondary: #8A6510;
+            --accent: #00BCD4;
+            --success: #4CAF50;
+            --danger: #F44336;
+            --warning: #FF9800;
+            --bg: #F5F5F5;
+            --surface: #FFFFFF;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border: #E0E0E0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
         }
-      ],
-      
-      // Calculation
-      subtotal: 45000,
-      totalDiscount: 0,
-      taxableAmount: 45000,
-      cgst: 4050,
-      sgst: 4050,
-      igst: 0,
-      roundOff: 0,
-      grandTotal: 53100,
-      
-      // Payment Status
-      status: "unpaid", // unpaid, partially-paid, paid, overdue, cancelled
-      totalAmount: 53100,
-      paidAmount: 0,
-      balanceAmount: 53100,
-      
-      createdAt: "2026-08-08T00:00:00Z",
-      updatedAt: "2026-08-08T00:00:00Z",
-      
-      // Snapshot
-      companySnapshot: { ...company },
-      customerSnapshot: { ...customer }
-    }
-  },
 
-  // ==================== PAYMENTS ====================
-  "h4_payments": {
-    "pay_001": {
-      id: "pay_001",
-      invoiceId: "inv_001",
-      amount: 20000,
-      date: "2026-08-10T00:00:00Z",
-      method: "bank-transfer", // cash, upi, bank-transfer, card, other
-      reference: "TXN12345",
-      notes: "Payment received",
-      recordedAt: "2026-08-10T00:00:00Z"
-    }
-  },
-
-  // ==================== TEMPLATES ====================
-  "h4_templates": {
-    "tpl_001": {
-      id: "tpl_001",
-      name: "H4 Standard Quotation",
-      type: "quotation", // quotation or invoice
-      preset: "standard", // standard, premium, simple, custom
-      
-      // Design elements
-      elements: [
-        {
-          id: "elem_001",
-          type: "text", // text, image, logo, shape, table, qrcode
-          content: "Quotation",
-          x: 50, y: 50,
-          width: 200, height: 30,
-          fontSize: 24,
-          fontFamily: "Arial",
-          fontWeight: "bold",
-          color: "#6A3FA0",
-          alignment: "left"
-        },
-        {
-          id: "elem_002",
-          type: "image",
-          src: "base64_logo",
-          x: 20, y: 20,
-          width: 80, height: 80
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding-bottom: 80px;
         }
-      ],
-      
-      // Layout zones
-      layout: {
-        header: { y: 0, height: 100 },
-        company: { y: 100, height: 50 },
-        customer: { y: 150, height: 80 },
-        items: { y: 230, height: 300 },
-        totals: { y: 530, height: 80 },
-        footer: { y: 610, height: 40 }
-      },
-      
-      themeId: "theme_001",
-      createdAt: "2026-01-01T00:00:00Z"
-    }
-  },
 
-  // ==================== THEMES ====================
-  "h4_themes": {
-    "theme_001": {
-      id: "theme_001",
-      name: "H4 Purple & Gold",
-      preset: "standard",
-      
-      // Colors
-      primary: "#6A3FA0",
-      secondary: "#8A6510",
-      accent: "#00BCD4",
-      background: "#FFFFFF",
-      text: "#212121",
-      header: "#6A3FA0",
-      footer: "#F5F5F5",
-      tableHeader: "#6A3FA0",
-      tableText: "#FFFFFF",
-      border: "#E0E0E0",
-      
-      // Typography
-      fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
-      fontSize: 12,
-      headingSize: 16,
-      
-      createdAt: "2026-01-01T00:00:00Z"
-    }
-  },
+        /* ==================== HEADER ==================== */
+        .app-header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  // ==================== SETTINGS ====================
-  "h4_settings": {
-    // General
-    currency: "INR",
-    dateFormat: "DD/MM/YYYY",
-    language: "en",
-    
-    // GST
-    gstDefault: 18,
-    igstEnabled: true,
-    cgstSgstEnabled: true,
-    
-    // Quotation Numbering
-    quotationPrefix: "H4-QTN",
-    quotationStartNumber: 1,
-    quotationFinancialYear: 2026,
-    quotationValidity: 30, // days
-    quotationTerms: "Standard Payment Terms",
-    
-    // Invoice Numbering
-    invoicePrefix: "H4-INV",
-    invoiceStartNumber: 1,
-    invoiceFinancialYear: 2026,
-    invoiceDueDays: 30,
-    invoiceTerms: "Payment Terms",
-    
-    // Appearance
-    theme: "theme_001",
-    darkMode: false,
-    
-    // Counters
-    quotationCounter: 1,
-    invoiceCounter: 1,
-    
-    updatedAt: "2026-01-01T00:00:00Z"
-  },
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
-  // ==================== ACTIVITY LOG ====================
-  "h4_activityLog": [
-    {
-      id: "log_001",
-      type: "quotation_created",
-      description: "Created quotation H4-QTN-2026-00001",
-      documentId: "qtn_001",
-      timestamp: "2026-08-08T10:00:00Z"
-    }
-  ],
+        .menu-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
 
-  // ==================== BACKUP ====================
-  "h4_backupHistory": [
-    {
-      id: "backup_001",
-      timestamp: "2026-08-08T15:00:00Z",
-      size: "250KB",
-      note: "Daily backup"
-    }
-  ]
-}
+        .app-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            background: var(--surface);
+            box-shadow: var(--shadow-lg);
+            overflow-y: auto;
+            z-index: 99;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0.5rem 0;
+        }
+
+        .sidebar-title {
+            padding: 1rem 1rem 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .sidebar-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            color: var(--text-primary);
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: var(--bg);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        /* ==================== FORMS ==================== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 63, 160, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* ==================== TABLES ==================== */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table tbody tr:hover {
+            background: var(--bg);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* ==================== MODALS ==================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        /* ==================== NOTIFICATIONS ==================== */
+        .notifications {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2000;
+            max-width: 400px;
+        }
+
+        .notification {
+            background: white;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.danger {
+            border-left-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ==================== MODULES ==================== */
+        .module {
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        /* ==================== DASHBOARD STATS ==================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* ==================== IMAGE UPLOAD PREVIEW ==================== */
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 60vh;
+                bottom: 0;
+                left: 0;
+                top: auto;
+                transform: translateY(100%);
+            }
+
+            .sidebar.active {
+                transform: translateY(0);
+            }
+
+            .form-row,
+            .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.5rem;
+            }
+
+            .modal-content {
+                border-radius: 12px 12px 0 0;
+                max-height: 80vh;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+        }
+
+        /* ==================== BOTTOM NAVIGATION ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            z-index: 999;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+            font-size: 0.75rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <div class="app-title">H4 Billing ERP</div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">🏢 H4 Billing ERP</div>
+        <nav class="sidebar-menu">
+            <div class="sidebar-title">Dashboard</div>
+            <div class="sidebar-item active" data-module="dashboard">📊 Dashboard</div>
+
+            <div class="sidebar-title">Setup</div>
+            <div class="sidebar-item" data-module="company">🏭 Company Profile</div>
+            <div class="sidebar-item" data-module="themes">🎨 Themes</div>
+
+            <div class="sidebar-title">Master Data</div>
+            <div class="sidebar-item" data-module="customers">👥 Customers</div>
+            <div class="sidebar-item" data-module="products">📦 Products</div>
+
+            <div class="sidebar-title">Documents</div>
+            <div class="sidebar-item" data-module="quotations">📄 Quotations</div>
+            <div class="sidebar-item" data-module="invoices">🧾 Invoices</div>
+            <div class="sidebar-item" data-module="payments">💰 Payments</div>
+
+            <div class="sidebar-title">Tools</div>
+            <div class="sidebar-item" data-module="templates">📋 Templates</div>
+            <div class="sidebar-item" data-module="backup">💾 Backup</div>
+            <div class="sidebar-item" data-module="settings">⚙️ Settings</div>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- ==================== DASHBOARD ==================== -->
+        <div class="module active" data-module="dashboard">
+            <div class="page-header">
+                <h1>📊 Dashboard</h1>
+                <p>Welcome to H4 Billing ERP - Your quotation & invoice manager</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="todayQuotations">0</div>
+                    <div class="stat-label">Today's Quotations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todayInvoices">0</div>
+                    <div class="stat-label">Today's Invoices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCustomers">0</div>
+                    <div class="stat-label">Total Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalProducts">0</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Quick Actions</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <button class="btn btn-primary" onclick="H4App.navigate('quotations')">➕ New Quotation</button>
+                    <button class="btn btn-secondary" onclick="H4App.navigate('invoices')">➕ New Invoice</button>
+                    <button class="btn btn-outline" onclick="H4App.navigate('customers')">👥 Add Customer</button>
+                    <button class="btn btn-outline" onclick="H4App.navigate('products')">📦 Add Product</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COMPANY PROFILE ==================== -->
+        <div class="module" data-module="company">
+            <div class="page-header">
+                <h1>🏭 Company Profile</h1>
+                <p>Setup your business details for quotations & invoices</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Business Information</h2>
+                </div>
+
+                <form id="companyForm">
+                    <!-- Business Details -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="legalName">Legal Company Name *</label>
+                            <input type="text" id="legalName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="brandName">Brand Name</label>
+                            <input type="text" id="brandName">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessType">Business Type</label>
+                        <select id="businessType">
+                            <option value="">-- Select Type --</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="trading">Trading</option>
+                            <option value="service">Service</option>
+                            <option value="distributor">Distributor</option>
+                        </select>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <textarea id="address" rows="2" required></textarea>
+                    </div>
+
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city">
+                        </div>
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <input type="text" id="district">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" value="Kerala">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pin">PIN</label>
+                            <input type="text" id="pin">
+                        </div>
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="url" id="website">
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone *</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp</label>
+                            <input type="tel" id="whatsapp">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email">
+                    </div>
+
+                    <!-- GST -->
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="gstEnabled"> GST Enabled
+                        </label>
+                    </div>
+
+                    <div id="gstFields" style="display:none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gstin">GSTIN</label>
+                                <input type="text" id="gstin" maxlength="15">
+                            </div>
+                            <div class="form-group">
+                                <label for="gstStateCode">GST State Code</label>
+                                <input type="text" id="gstStateCode" maxlength="2">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PAN -->
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="panEnabled"> PAN Enabled
+                        </label>
+                    </div>
+
+                    <div id="panFields" style="display:none;">
+                        <div class="form-group">
+                            <label for="pan">PAN</label>
+                            <input type="text" id="pan" maxlength="10">
+                        </div>
+                    </div>
+
+                    <!-- Bank -->
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="bankEnabled"> Bank Details
+                        </label>
+                    </div>
+
+                    <div id="bankFields" style="display:none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bankName">Bank Name</label>
+                                <input type="text" id="bankName">
+                            </div>
+                            <div class="form-group">
+                                <label for="accountName">Account Name</label>
+                                <input type="text" id="accountName">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="accountNumber">Account Number</label>
+                                <input type="text" id="accountNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="ifsc">IFSC Code</label>
+                                <input type="text" id="ifsc">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="branch">Branch</label>
+                                <input type="text" id="branch">
+                            </div>
+                            <div class="form-group">
+                                <label for="upiId">UPI ID</label>
+                                <input type="text" id="upiId">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document -->
+                    <div class="form-group">
+                        <label for="terms">Terms & Conditions</label>
+                        <textarea id="terms" rows="3" placeholder="Payment due within 30 days..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="footerText">Footer Text</label>
+                        <input type="text" id="footerText" placeholder="Thank you for your business!">
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="reset" class="btn btn-outline">Clear</button>
+                        <button type="submit" class="btn btn-primary">💾 Save Company Profile</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Logo Manager -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Logo Manager</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="logoUpload">Upload Logo (PNG/JPEG)</label>
+                    <input type="file" id="logoUpload" accept="image/*">
+                    <small style="color: var(--text-secondary);">Upload logo for quotations & invoices</small>
+                </div>
+
+                <div id="logoPreview" style="display:none; margin-top: 1rem;">
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem;">Current Logo</h3>
+                    <div class="image-preview">
+                        <img id="logoImage" src="" alt="Logo">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature Manager -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Signature Manager</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="signatureUpload">Upload Signature (PNG/JPEG)</label>
+                    <input type="file" id="signatureUpload" accept="image/*">
+                    <small style="color: var(--text-secondary);">Upload authorized signatory signature</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="signatoryName">Authorized Signatory Name</label>
+                    <input type="text" id="signatoryName">
+                </div>
+
+                <div id="signaturePreview" style="display:none; margin-top: 1rem;">
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem;">Current Signature</h3>
+                    <div class="image-preview">
+                        <img id="signatureImage" src="" alt="Signature">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CUSTOMERS ==================== -->
+        <div class="module" data-module="customers">
+            <div class="page-header">
+                <h1>👥 Customers</h1>
+                <p>Manage your customer database</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn btn-primary" onclick="H4App.openModal('customerModal')">➕ Add New Customer</button>
+            </div>
+
+            <div class="card">
+                <table class="table" id="customersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Company</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>City</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersBody">
+                        <tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No customers yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== PRODUCTS ==================== -->
+        <div class="module" data-module="products">
+            <div class="page-header">
+                <h1>📦 Products / Materials</h1>
+                <p>Manage your product catalog</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn btn-primary" onclick="H4App.openModal('productModal')">➕ Add New Product</button>
+            </div>
+
+            <div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary category-filter active" data-cat="all">All</button>
+                <button class="btn btn-outline category-filter" data-cat="tile-adhesive">Tile Adhesive</button>
+                <button class="btn btn-outline category-filter" data-cat="waterproofing">Waterproofing</button>
+                <button class="btn btn-outline category-filter" data-cat="epoxy">Epoxy</button>
+            </div>
+
+            <div class="card">
+                <table class="table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Unit</th>
+                            <th>Selling Rate</th>
+                            <th>GST %</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsBody">
+                        <tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No products yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== QUOTATIONS (Placeholder) ==================== -->
+        <div class="module" data-module="quotations">
+            <div class="page-header">
+                <h1>📄 Quotations</h1>
+                <p>Create and manage quotations</p>
+            </div>
+            <div class="card">
+                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 2 - Quotation Builder</p>
+            </div>
+        </div>
+
+        <!-- ==================== INVOICES (Placeholder) ==================== -->
+        <div class="module" data-module="invoices">
+            <div class="page-header">
+                <h1>🧾 Invoices</h1>
+                <p>Create and manage invoices</p>
+            </div>
+            <div class="card">
+                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 2 - Invoice Builder</p>
+            </div>
+        </div>
+
+        <!-- ==================== PAYMENTS (Placeholder) ==================== -->
+        <div class="module" data-module="payments">
+            <div class="page-header">
+                <h1>💰 Payments</h1>
+                <p>Track invoice payments</p>
+            </div>
+            <div class="card">
+                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 3 - Payment Tracking</p>
+            </div>
+        </div>
+
+        <!-- ==================== TEMPLATES (Placeholder) ==================== -->
+        <div class="module" data-module="templates">
+            <div class="page-header">
+                <h1>📋 Template Designer</h1>
+                <p>Design quotation & invoice templates</p>
+            </div>
+            <div class="card">
+                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 3 - WYSIWYG Template Editor</p>
+            </div>
+        </div>
+
+        <!-- ==================== THEMES ==================== -->
+        <div class="module" data-module="themes">
+            <div class="page-header">
+                <h1>🎨 Themes</h1>
+                <p>Customize your document themes</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn btn-primary" onclick="H4App.openModal('themeModal')">➕ Create Theme</button>
+            </div>
+
+            <div class="card" id="themesContainer">
+                <p style="text-align: center; color: var(--text-secondary);">No themes yet</p>
+            </div>
+        </div>
+
+        <!-- ==================== BACKUP ==================== -->
+        <div class="module" data-module="backup">
+            <div class="page-header">
+                <h1>💾 Backup & Restore</h1>
+                <p>Backup your billing data</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Backup Data</h2>
+                </div>
+
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">Download a complete backup of all your company data, customers, products, quotations, and invoices.</p>
+
+                <button class="btn btn-primary btn-block" onclick="H4App.downloadBackup()">📥 Download Backup</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Restore Data</h2>
+                </div>
+
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">Upload a backup file to restore your data. This will replace current data.</p>
+
+                <div class="form-group">
+                    <label for="backupFile">Select Backup File</label>
+                    <input type="file" id="backupFile" accept=".json">
+                </div>
+
+                <button class="btn btn-danger btn-block" onclick="H4App.restoreBackup()">⚠️ Restore Backup</button>
+            </div>
+        </div>
+
+        <!-- ==================== SETTINGS ==================== -->
+        <div class="module" data-module="settings">
+            <div class="page-header">
+                <h1>⚙️ Settings</h1>
+                <p>Configure your H4 Billing ERP</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>General Settings</h2>
+                </div>
+
+                <form id="settingsForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <select id="currency">
+                                <option value="INR">₹ Indian Rupee (INR)</option>
+                                <option value="USD">$ US Dollar (USD)</option>
+                                <option value="EUR">€ Euro (EUR)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateFormat">Date Format</label>
+                            <select id="dateFormat">
+                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="defaultGst">Default GST %</label>
+                        <input type="number" id="defaultGst" step="0.01" value="18">
+                    </div>
+
+                    <div class="form-group">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary);">Quotation Numbering</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quotationPrefix">Prefix</label>
+                                <input type="text" id="quotationPrefix" value="H4-QTN" maxlength="20">
+                            </div>
+                            <div class="form-group">
+                                <label for="quotationYear">Financial Year</label>
+                                <input type="number" id="quotationYear" value="2026">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quotationStart">Starting Number</label>
+                                <input type="number" id="quotationStart" value="1" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="quotationValidity">Default Validity (days)</label>
+                                <input type="number" id="quotationValidity" value="30" min="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary);">Invoice Numbering</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="invoicePrefix">Prefix</label>
+                                <input type="text" id="invoicePrefix" value="H4-INV" maxlength="20">
+                            </div>
+                            <div class="form-group">
+                                <label for="invoiceYear">Financial Year</label>
+                                <input type="number" id="invoiceYear" value="2026">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="invoiceStart">Starting Number</label>
+                                <input type="number" id="invoiceStart" value="1" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="invoiceDueDays">Default Due Days</label>
+                                <input type="number" id="invoiceDueDays" value="30" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="reset" class="btn btn-outline">Reset</button>
+                        <button type="submit" class="btn btn-primary">💾 Save Settings</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Danger Zone</h2>
+                </div>
+
+                <button class="btn btn-danger btn-block" onclick="H4App.resetAllData()">🗑️ Delete All Data</button>
+                <p style="font-size: 0.85rem; color: var(--danger); margin-top: 0.5rem;">⚠️ This action cannot be undone!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVIGATION (Mobile) -->
+    <nav class="bottom-nav" id="bottomNav" style="display: none;">
+        <div class="nav-item active" data-module="dashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+        </div>
+        <div class="nav-item" data-module="quotations">
+            <span class="nav-icon">📄</span>
+            <span>Quotations</span>
+        </div>
+        <div class="nav-item" data-module="invoices">
+            <span class="nav-icon">🧾</span>
+            <span>Invoices</span>
+        </div>
+        <div class="nav-item" data-module="customers">
+            <span class="nav-icon">👥</span>
+            <span>Customers</span>
+        </div>
+        <div class="nav-item" data-module="settings">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+        </div>
+    </nav>
+
+    <!-- NOTIFICATIONS -->
+    <div class="notifications" id="notifications"></div>
+
+    <!-- MODALS -->
+    <!-- Customer Modal -->
+    <div class="modal-overlay" id="customerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Customer</h3>
+                <button class="modal-close" onclick="H4App.closeModal('customerModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="customerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="custName">Customer Name *</label>
+                            <input type="text" id="custName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="custCompany">Company Name</label>
+                            <input type="text" id="custCompany">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="custPhone">Phone *</label>
+                            <input type="tel" id="custPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="custWhatsapp">WhatsApp</label>
+                            <input type="tel" id="custWhatsapp">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="custEmail">Email</label>
+                        <input type="email" id="custEmail">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="custAddress">Address</label>
+                        <textarea id="custAddress" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="custCity">City</label>
+                            <input type="text" id="custCity">
+                        </div>
+                        <div class="form-group">
+                            <label for="custDistrict">District</label>
+                            <input type="text" id="custDistrict">
+                        </div>
+                        <div class="form-group">
+                            <label for="custState">State</label>
+                            <input type="text" id="custState">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="custPin">PIN</label>
+                            <input type="text" id="custPin">
+                        </div>
+                        <div class="form-group">
+                            <label for="custGstin">GSTIN</label>
+                            <input type="text" id="custGstin">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="H4App.closeModal('customerModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="H4App.saveCustomer()">💾 Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Product</h3>
+                <button class="modal-close" onclick="H4App.closeModal('productModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodName">Product Name *</label>
+                            <input type="text" id="prodName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodSku">SKU</label>
+                            <input type="text" id="prodSku">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodCategory">Category *</label>
+                            <select id="prodCategory" required>
+                                <option value="">-- Select --</option>
+                                <option value="tile-adhesive">Tile Adhesive</option>
+                                <option value="waterproofing">Waterproofing</option>
+                                <option value="epoxy">Epoxy Flooring</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodBrand">Brand</label>
+                            <input type="text" id="prodBrand">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prodDescription">Description</label>
+                        <textarea id="prodDescription" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodUnit">Unit *</label>
+                            <input type="text" id="prodUnit" placeholder="kg, liter" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodRate">Selling Rate (₹) *</label>
+                            <input type="number" id="prodRate" step="0.01" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodPurchaseRate">Purchase Rate (₹)</label>
+                            <input type="number" id="prodPurchaseRate" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodMrp">MRP (₹)</label>
+                            <input type="number" id="prodMrp" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodGst">GST %</label>
+                            <input type="number" id="prodGst" step="0.01" value="18">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodHsn">HSN Code</label>
+                            <input type="text" id="prodHsn">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="H4App.closeModal('productModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="H4App.saveProduct()">💾 Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Modal -->
+    <div class="modal-overlay" id="themeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Theme</h3>
+                <button class="modal-close" onclick="H4App.closeModal('themeModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="themeForm">
+                    <div class="form-group">
+                        <label for="themeName">Theme Name *</label>
+                        <input type="text" id="themeName" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="themePrimary">Primary Color</label>
+                            <input type="color" id="themePrimary" value="#6A3FA0">
+                        </div>
+                        <div class="form-group">
+                            <label for="themeSecondary">Secondary Color</label>
+                            <input type="color" id="themeSecondary" value="#8A6510">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="themeAccent">Accent Color</label>
+                            <input type="color" id="themeAccent" value="#00BCD4">
+                        </div>
+                        <div class="form-group">
+                            <label for="themeText">Text Color</label>
+                            <input type="color" id="themeText" value="#212121">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="H4App.closeModal('themeModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="H4App.saveTheme()">💾 Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE JAVASCRIPT -->
+    <script>
+        // ==================== H4 DATABASE ====================
+        const H4DB = {
+            STORAGE_KEY: 'h4_billing_erp_v3',
+
+            init() {
+                if (!localStorage.getItem(this.STORAGE_KEY)) {
+                    this.reset();
+                }
+            },
+
+            reset() {
+                const defaultData = {
+                    company: {
+                        legalName: 'AV CHEM',
+                        brandName: 'H4 Premium Construction Chemicals',
+                        businessType: '',
+                        address: 'Tirur, Malappuram',
+                        city: 'Malappuram',
+                        district: 'Malappuram',
+                        state: 'Kerala',
+                        pin: '676101',
+                        phone: '',
+                        whatsapp: '',
+                        email: '',
+                        website: '',
+                        gstEnabled: true,
+                        gstin: '',
+                        gstStateCode: 'KL',
+                        panEnabled: false,
+                        pan: '',
+                        bankEnabled: false,
+                        bank: {
+                            name: '',
+                            accountName: '',
+                            accountNumber: '',
+                            ifsc: '',
+                            branch: '',
+                            upiId: ''
+                        },
+                        terms: 'Payment due within 30 days',
+                        footerText: 'Thank you for your business!',
+                        logo: '',
+                        signature: '',
+                        signatoryName: '',
+                        updatedAt: new Date().toISOString()
+                    },
+                    customers: {},
+                    products: {
+                        'prod_001': {
+                            id: 'prod_001',
+                            name: 'Tile Adhesive - Standard',
+                            sku: 'TILE-ADH-001',
+                            category: 'tile-adhesive',
+                            brand: 'H4',
+                            description: 'OPC + RDP based tile adhesive',
+                            unit: 'kg',
+                            purchaseRate: 350,
+                            sellingRate: 450,
+                            mrp: 500,
+                            gst: 18,
+                            hsnCode: '6809',
+                            active: true,
+                            createdAt: new Date().toISOString()
+                        },
+                        'prod_002': {
+                            id: 'prod_002',
+                            name: 'Waterproofing Coating',
+                            sku: 'WATER-001',
+                            category: 'waterproofing',
+                            brand: 'H4',
+                            description: 'Acrylic based waterproof coating',
+                            unit: 'liter',
+                            purchaseRate: 900,
+                            sellingRate: 1200,
+                            mrp: 1500,
+                            gst: 18,
+                            hsnCode: '3208',
+                            active: true,
+                            createdAt: new Date().toISOString()
+                        },
+                        'prod_003': {
+                            id: 'prod_003',
+                            name: 'Epoxy Floor - Component A',
+                            sku: 'EPOXY-A-001',
+                            category: 'epoxy',
+                            brand: 'H4',
+                            description: 'Two-part epoxy resin component A',
+                            unit: 'liter',
+                            purchaseRate: 2000,
+                            sellingRate: 2800,
+                            mrp: 3500,
+                            gst: 18,
+                            hsnCode: '3909',
+                            active: true,
+                            createdAt: new Date().toISOString()
+                        }
+                    },
+                    themes: {
+                        'theme_001': {
+                            id: 'theme_001',
+                            name: 'H4 Purple & Gold',
+                            primary: '#6A3FA0',
+                            secondary: '#8A6510',
+                            accent: '#00BCD4',
+                            background: '#FFFFFF',
+                            text: '#212121',
+                            createdAt: new Date().toISOString()
+                        }
+                    },
+                    quotations: {},
+                    invoices: {},
+                    payments: {},
+                    templates: {},
+                    activityLog: [],
+                    settings: {
+                        currency: 'INR',
+                        dateFormat: 'DD/MM/YYYY',
+                        defaultGst: 18,
+                        quotationPrefix: 'H4-QTN',
+                        quotationYear: 2026,
+                        quotationStart: 1,
+                        quotationValidity: 30,
+                        quotationCounter: 1,
+                        invoicePrefix: 'H4-INV',
+                        invoiceYear: 2026,
+                        invoiceStart: 1,
+                        invoiceDueDays: 30,
+                        invoiceCounter: 1
+                    }
+                };
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(defaultData));
+            },
+
+            get(key) {
+                const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+                return key ? data[key] : data;
+            },
+
+            save(key, value) {
+                const data = this.get();
+                data[key] = value;
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+            },
+
+            add(category, item) {
+                const data = this.get(category) || {};
+                data[item.id] = item;
+                this.save(category, data);
+                return item;
+            },
+
+            update(category, id, updates) {
+                const data = this.get(category) || {};
+                if (data[id]) {
+                    data[id] = { ...data[id], ...updates };
+                    this.save(category, data);
+                    return data[id];
+                }
+                return null;
+            },
+
+            delete(category, id) {
+                const data = this.get(category) || {};
+                delete data[id];
+                this.save(category, data);
+            },
+
+            export() {
+                return JSON.stringify(this.get(), null, 2);
+            },
+
+            import(data) {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+            }
+        };
+
+        // ==================== UTILITIES ====================
+        const H4Utils = {
+            generateId(prefix) {
+                return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            },
+
+            formatCurrency(value) {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(value);
+            },
+
+            formatDate(date) {
+                return new Date(date).toLocaleDateString('en-IN');
+            },
+
+            fileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
+        };
+
+        // ==================== NOTIFICATIONS ====================
+        const H4Notify = {
+            show(message, type = 'success') {
+                const container = document.getElementById('notifications');
+                const div = document.createElement('div');
+                div.className = `notification ${type}`;
+                div.textContent = message;
+                container.appendChild(div);
+
+                setTimeout(() => {
+                    div.remove();
+                }, 3000);
+            },
+
+            success(msg) { this.show(msg, 'success'); },
+            danger(msg) { this.show(msg, 'danger'); }
+        };
+
+        // ==================== MAIN APP ====================
+        const H4App = {
+            init() {
+                H4DB.init();
+                this.setupListeners();
+                this.loadData();
+            },
+
+            setupListeners() {
+                // Sidebar toggle
+                document.getElementById('menuToggle').addEventListener('click', () => {
+                    document.getElementById('sidebar').classList.toggle('active');
+                });
+
+                // Navigation
+                document.querySelectorAll('.sidebar-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const module = item.dataset.module;
+                        this.navigate(module);
+                        document.getElementById('sidebar').classList.remove('active');
+                    });
+                });
+
+                // Bottom nav
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const module = item.dataset.module;
+                        this.navigate(module);
+                    });
+                });
+
+                // Forms
+                document.getElementById('companyForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveCompany();
+                });
+
+                document.getElementById('settingsForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveSettings();
+                });
+
+                document.getElementById('customerForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveCustomer();
+                });
+
+                document.getElementById('productForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveProduct();
+                });
+
+                document.getElementById('themeForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveTheme();
+                });
+
+                // Checkboxes
+                document.getElementById('gstEnabled').addEventListener('change', (e) => {
+                    document.getElementById('gstFields').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                document.getElementById('panEnabled').addEventListener('change', (e) => {
+                    document.getElementById('panFields').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                document.getElementById('bankEnabled').addEventListener('change', (e) => {
+                    document.getElementById('bankFields').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // Logo upload
+                document.getElementById('logoUpload').addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const base64 = await H4Utils.fileToBase64(file);
+                        document.getElementById('logoImage').src = base64;
+                        document.getElementById('logoPreview').style.display = 'block';
+                    }
+                });
+
+                // Signature upload
+                document.getElementById('signatureUpload').addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const base64 = await H4Utils.fileToBase64(file);
+                        document.getElementById('signatureImage').src = base64;
+                        document.getElementById('signaturePreview').style.display = 'block';
+                    }
+                });
+
+                // Category filters
+                document.querySelectorAll('.category-filter').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.category-filter').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.loadProducts(btn.dataset.cat === 'all' ? null : btn.dataset.cat);
+                    });
+                });
+            },
+
+            navigate(moduleName) {
+                document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+                document.querySelector(`[data-module="${moduleName}"]`).classList.add('active');
+
+                document.querySelectorAll('.sidebar-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.module === moduleName);
+                });
+
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.module === moduleName);
+                });
+            },
+
+            loadData() {
+                this.loadCompany();
+                this.loadSettings();
+                this.loadCustomers();
+                this.loadProducts();
+                this.loadThemes();
+                this.updateDashboard();
+            },
+
+            loadCompany() {
+                const company = H4DB.get('company');
+                document.getElementById('legalName').value = company.legalName;
+                document.getElementById('brandName').value = company.brandName;
+                document.getElementById('businessType').value = company.businessType;
+                document.getElementById('address').value = company.address;
+                document.getElementById('city').value = company.city;
+                document.getElementById('district').value = company.district;
+                document.getElementById('state').value = company.state;
+                document.getElementById('pin').value = company.pin;
+                document.getElementById('phone').value = company.phone;
+                document.getElementById('whatsapp').value = company.whatsapp;
+                document.getElementById('email').value = company.email;
+                document.getElementById('website').value = company.website;
+
+                document.getElementById('gstEnabled').checked = company.gstEnabled;
+                document.getElementById('gstin').value = company.gstin;
+                document.getElementById('gstStateCode').value = company.gstStateCode;
+                document.getElementById('gstFields').style.display = company.gstEnabled ? 'block' : 'none';
+
+                document.getElementById('panEnabled').checked = company.panEnabled;
+                document.getElementById('pan').value = company.pan;
+                document.getElementById('panFields').style.display = company.panEnabled ? 'block' : 'none';
+
+                document.getElementById('bankEnabled').checked = company.bankEnabled;
+                document.getElementById('bankName').value = company.bank.name;
+                document.getElementById('accountName').value = company.bank.accountName;
+                document.getElementById('accountNumber').value = company.bank.accountNumber;
+                document.getElementById('ifsc').value = company.bank.ifsc;
+                document.getElementById('branch').value = company.bank.branch;
+                document.getElementById('upiId').value = company.bank.upiId;
+                document.getElementById('bankFields').style.display = company.bankEnabled ? 'block' : 'none';
+
+                document.getElementById('terms').value = company.terms;
+                document.getElementById('footerText').value = company.footerText;
+
+                if (company.logo) {
+                    document.getElementById('logoImage').src = company.logo;
+                    document.getElementById('logoPreview').style.display = 'block';
+                }
+
+                if (company.signature) {
+                    document.getElementById('signatureImage').src = company.signature;
+                    document.getElementById('signaturePreview').style.display = 'block';
+                }
+
+                document.getElementById('signatoryName').value = company.signatoryName;
+            },
+
+            saveCompany() {
+                const company = {
+                    legalName: document.getElementById('legalName').value,
+                    brandName: document.getElementById('brandName').value,
+                    businessType: document.getElementById('businessType').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    district: document.getElementById('district').value,
+                    state: document.getElementById('state').value,
+                    pin: document.getElementById('pin').value,
+                    phone: document.getElementById('phone').value,
+                    whatsapp: document.getElementById('whatsapp').value,
+                    email: document.getElementById('email').value,
+                    website: document.getElementById('website').value,
+                    gstEnabled: document.getElementById('gstEnabled').checked,
+                    gstin: document.getElementById('gstin').value,
+                    gstStateCode: document.getElementById('gstStateCode').value,
+                    panEnabled: document.getElementById('panEnabled').checked,
+                    pan: document.getElementById('pan').value,
+                    bankEnabled: document.getElementById('bankEnabled').checked,
+                    bank: {
+                        name: document.getElementById('bankName').value,
+                        accountName: document.getElementById('accountName').value,
+                        accountNumber: document.getElementById('accountNumber').value,
+                        ifsc: document.getElementById('ifsc').value,
+                        branch: document.getElementById('branch').value,
+                        upiId: document.getElementById('upiId').value
+                    },
+                    terms: document.getElementById('terms').value,
+                    footerText: document.getElementById('footerText').value,
+                    logo: document.getElementById('logoImage').src || '',
+                    signature: document.getElementById('signatureImage').src || '',
+                    signatoryName: document.getElementById('signatoryName').value,
+                    updatedAt: new Date().toISOString()
+                };
+
+                H4DB.save('company', company);
+                H4Notify.success('Company profile saved!');
+            },
+
+            loadSettings() {
+                const settings = H4DB.get('settings');
+                document.getElementById('currency').value = settings.currency;
+                document.getElementById('dateFormat').value = settings.dateFormat;
+                document.getElementById('defaultGst').value = settings.defaultGst;
+                document.getElementById('quotationPrefix').value = settings.quotationPrefix;
+                document.getElementById('quotationYear').value = settings.quotationYear;
+                document.getElementById('quotationStart').value = settings.quotationStart;
+                document.getElementById('quotationValidity').value = settings.quotationValidity;
+                document.getElementById('invoicePrefix').value = settings.invoicePrefix;
+                document.getElementById('invoiceYear').value = settings.invoiceYear;
+                document.getElementById('invoiceStart').value = settings.invoiceStart;
+                document.getElementById('invoiceDueDays').value = settings.invoiceDueDays;
+            },
+
+            saveSettings() {
+                const settings = {
+                    currency: document.getElementById('currency').value,
+                    dateFormat: document.getElementById('dateFormat').value,
+                    defaultGst: parseFloat(document.getElementById('defaultGst').value),
+                    quotationPrefix: document.getElementById('quotationPrefix').value,
+                    quotationYear: parseInt(document.getElementById('quotationYear').value),
+                    quotationStart: parseInt(document.getElementById('quotationStart').value),
+                    quotationValidity: parseInt(document.getElementById('quotationValidity').value),
+                    quotationCounter: H4DB.get('settings').quotationCounter,
+                    invoicePrefix: document.getElementById('invoicePrefix').value,
+                    invoiceYear: parseInt(document.getElementById('invoiceYear').value),
+                    invoiceStart: parseInt(document.getElementById('invoiceStart').value),
+                    invoiceDueDays: parseInt(document.getElementById('invoiceDueDays').value),
+                    invoiceCounter: H4DB.get('settings').invoiceCounter
+                };
+
+                H4DB.save('settings', settings);
+                H4Notify.success('Settings saved!');
+            },
+
+            loadCustomers() {
+                const customers = H4DB.get('customers') || {};
+                const tbody = document.getElementById('customersBody');
+
+                if (Object.keys(customers).length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No customers yet</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = Object.values(customers).map(cust => `
+                    <tr>
+                        <td>${cust.name}</td>
+                        <td>${cust.company || '-'}</td>
+                        <td>${cust.phone}</td>
+                        <td>${cust.email || '-'}</td>
+                        <td>${cust.city || '-'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-sm btn-outline" onclick="H4App.editCustomer('${cust.id}')">✏️</button>
+                                <button class="btn btn-sm btn-danger" onclick="H4App.deleteCustomer('${cust.id}')">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            saveCustomer() {
+                const id = H4Utils.generateId('cust');
+                const customer = {
+                    id,
+                    name: document.getElementById('custName').value,
+                    company: document.getElementById('custCompany').value,
+                    phone: document.getElementById('custPhone').value,
+                    whatsapp: document.getElementById('custWhatsapp').value,
+                    email: document.getElementById('custEmail').value,
+                    address: document.getElementById('custAddress').value,
+                    city: document.getElementById('custCity').value,
+                    district: document.getElementById('custDistrict').value,
+                    state: document.getElementById('custState').value,
+                    pin: document.getElementById('custPin').value,
+                    gstin: document.getElementById('custGstin').value,
+                    createdAt: new Date().toISOString()
+                };
+
+                H4DB.add('customers', customer);
+                H4Notify.success('Customer added!');
+                this.closeModal('customerModal');
+                this.loadCustomers();
+                this.updateDashboard();
+                document.getElementById('customerForm').reset();
+            },
+
+            editCustomer(id) {
+                const customers = H4DB.get('customers');
+                const cust = customers[id];
+                if (!cust) return;
+
+                document.getElementById('custName').value = cust.name;
+                document.getElementById('custCompany').value = cust.company;
+                document.getElementById('custPhone').value = cust.phone;
+                document.getElementById('custWhatsapp').value = cust.whatsapp;
+                document.getElementById('custEmail').value = cust.email;
+                document.getElementById('custAddress').value = cust.address;
+                document.getElementById('custCity').value = cust.city;
+                document.getElementById('custDistrict').value = cust.district;
+                document.getElementById('custState').value = cust.state;
+                document.getElementById('custPin').value = cust.pin;
+                document.getElementById('custGstin').value = cust.gstin;
+
+                document.getElementById('customerForm').dataset.customerId = id;
+                this.openModal('customerModal');
+            },
+
+            deleteCustomer(id) {
+                if (confirm('Delete this customer?')) {
+                    H4DB.delete('customers', id);
+                    H4Notify.success('Customer deleted!');
+                    this.loadCustomers();
+                    this.updateDashboard();
+                }
+            },
+
+            loadProducts(category = null) {
+                const products = H4DB.get('products') || {};
+                const tbody = document.getElementById('productsBody');
+
+                let filtered = Object.values(products);
+                if (category) {
+                    filtered = filtered.filter(p => p.category === category);
+                }
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No products found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = filtered.map(prod => `
+                    <tr>
+                        <td><strong>${prod.name}</strong><br><small style="color: var(--text-secondary);">${prod.sku || '-'}</small></td>
+                        <td><span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">${prod.category}</span></td>
+                        <td>${prod.unit}</td>
+                        <td>${H4Utils.formatCurrency(prod.sellingRate)}</td>
+                        <td>${prod.gst}%</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-sm btn-outline" onclick="H4App.editProduct('${prod.id}')">✏️</button>
+                                <button class="btn btn-sm btn-danger" onclick="H4App.deleteProduct('${prod.id}')">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            saveProduct() {
+                const id = H4Utils.generateId('prod');
+                const product = {
+                    id,
+                    name: document.getElementById('prodName').value,
+                    sku: document.getElementById('prodSku').value,
+                    category: document.getElementById('prodCategory').value,
+                    subCategory: '',
+                    brand: document.getElementById('prodBrand').value,
+                    description: document.getElementById('prodDescription').value,
+                    unit: document.getElementById('prodUnit').value,
+                    purchaseRate: parseFloat(document.getElementById('prodPurchaseRate').value) || 0,
+                    sellingRate: parseFloat(document.getElementById('prodRate').value),
+                    mrp: parseFloat(document.getElementById('prodMrp').value) || 0,
+                    gst: parseFloat(document.getElementById('prodGst').value),
+                    hsnCode: document.getElementById('prodHsn').value,
+                    active: true,
+                    createdAt: new Date().toISOString()
+                };
+
+                H4DB.add('products', product);
+                H4Notify.success('Product added!');
+                this.closeModal('productModal');
+                this.loadProducts();
+                this.updateDashboard();
+                document.getElementById('productForm').reset();
+            },
+
+            editProduct(id) {
+                const products = H4DB.get('products');
+                const prod = products[id];
+                if (!prod) return;
+
+                document.getElementById('prodName').value = prod.name;
+                document.getElementById('prodSku').value = prod.sku;
+                document.getElementById('prodCategory').value = prod.category;
+                document.getElementById('prodBrand').value = prod.brand;
+                document.getElementById('prodDescription').value = prod.description;
+                document.getElementById('prodUnit').value = prod.unit;
+                document.getElementById('prodPurchaseRate').value = prod.purchaseRate;
+                document.getElementById('prodRate').value = prod.sellingRate;
+                document.getElementById('prodMrp').value = prod.mrp;
+                document.getElementById('prodGst').value = prod.gst;
+                document.getElementById('prodHsn').value = prod.hsnCode;
+
+                document.getElementById('productForm').dataset.productId = id;
+                this.openModal('productModal');
+            },
+
+            deleteProduct(id) {
+                if (confirm('Delete this product?')) {
+                    H4DB.delete('products', id);
+                    H4Notify.success('Product deleted!');
+                    this.loadProducts();
+                    this.updateDashboard();
+                }
+            },
+
+            loadThemes() {
+                const themes = H4DB.get('themes') || {};
+                const container = document.getElementById('themesContainer');
+
+                if (Object.keys(themes).length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No themes yet</p>';
+                    return;
+                }
+
+                container.innerHTML = Object.values(themes).map(theme => `
+                    <div style="padding: 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${theme.name}</strong>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                <div style="width: 30px; height: 30px; background: ${theme.primary}; border-radius: 4px; border: 1px solid var(--border);"></div>
+                                <div style="width: 30px; height: 30px; background: ${theme.secondary}; border-radius: 4px; border: 1px solid var(--border);"></div>
+                                <div style="width: 30px; height: 30px; background: ${theme.accent}; border-radius: 4px; border: 1px solid var(--border);"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-danger" onclick="H4App.deleteTheme('${theme.id}')">🗑️</button>
+                    </div>
+                `).join('');
+            },
+
+            saveTheme() {
+                const id = H4Utils.generateId('theme');
+                const theme = {
+                    id,
+                    name: document.getElementById('themeName').value,
+                    primary: document.getElementById('themePrimary').value,
+                    secondary: document.getElementById('themeSecondary').value,
+                    accent: document.getElementById('themeAccent').value,
+                    background: '#FFFFFF',
+                    text: document.getElementById('themeText').value,
+                    createdAt: new Date().toISOString()
+                };
+
+                H4DB.add('themes', theme);
+                H4Notify.success('Theme created!');
+                this.closeModal('themeModal');
+                this.loadThemes();
+                document.getElementById('themeForm').reset();
+            },
+
+            deleteTheme(id) {
+                if (confirm('Delete this theme?')) {
+                    H4DB.delete('themes', id);
+                    H4Notify.success('Theme deleted!');
+                    this.loadThemes();
+                }
+            },
+
+            updateDashboard() {
+                const customers = H4DB.get('customers') || {};
+                const products = H4DB.get('products') || {};
+
+                document.getElementById('totalCustomers').textContent = Object.keys(customers).length;
+                document.getElementById('totalProducts').textContent = Object.keys(products).length;
+                document.getElementById('todayQuotations').textContent = '0';
+                document.getElementById('todayInvoices').textContent = '0';
+            },
+
+            downloadBackup() {
+                const data = H4DB.get();
+                const backup = JSON.stringify(data, null, 2);
+                const blob = new Blob([backup], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `H4-Billing-Backup-${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                H4Notify.success('Backup downloaded!');
+            },
+
+            restoreBackup() {
+                const file = document.getElementById('backupFile').files[0];
+                if (!file) {
+                    H4Notify.danger('Please select a backup file');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        H4DB.import(data);
+                        H4Notify.success('Backup restored! Refreshing...');
+                        setTimeout(() => location.reload(), 1000);
+                    } catch (err) {
+                        H4Notify.danger('Invalid backup file!');
+                    }
+                };
+                reader.readAsText(file);
+            },
+
+            resetAllData() {
+                if (confirm('Are you SURE? This will delete ALL data!')) {
+                    if (confirm('This cannot be undone. Confirm again?')) {
+                        H4DB.reset();
+                        H4Notify.success('All data reset! Refreshing...');
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                }
+            },
+
+            openModal(modalId) {
+                document.getElementById(modalId).classList.add('active');
+            },
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            H4App.init();
+        });
+    </script>
+</body>
+</html>
