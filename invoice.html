@@ -97,7 +97,7 @@
         label {
             display: block;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-secondary);
             margin-bottom: 4px;
             text-transform: uppercase;
@@ -363,7 +363,7 @@
         }
 
         /* ============================================================
-           OVERLAY (for sidebar)
+           OVERLAY
            ============================================================ */
         .sidebar-overlay {
             position: fixed;
@@ -475,7 +475,7 @@
         }
 
         /* ============================================================
-           CATEGORY SELECTION (New Invoice)
+           CATEGORY SELECTION
            ============================================================ */
         .category-grid {
             display: grid;
@@ -517,7 +517,7 @@
         }
 
         /* ============================================================
-           ITEMS (Invoice Builder)
+           ITEMS
            ============================================================ */
         .item-card {
             background: var(--bg);
@@ -584,7 +584,7 @@
         }
 
         /* ============================================================
-           CALCULATION BOX
+           CALCULATION
            ============================================================ */
         .calc-box {
             background: var(--bg);
@@ -718,7 +718,7 @@
         }
 
         /* ============================================================
-           TOGGLE SWITCH
+           TOGGLE
            ============================================================ */
         .toggle-group {
             display: flex;
@@ -747,7 +747,7 @@
         }
 
         /* ============================================================
-           TEMPLATE DESIGNER
+           TEMPLATE
            ============================================================ */
         .template-card {
             display: flex;
@@ -923,7 +923,7 @@
         }
         .sidebar::-webkit-scrollbar-thumb,
         .main-content::-webkit-scrollbar-thumb {
-            background: var(--primary-light);
+            background: var(--primary);
             border-radius: 4px;
         }
         .sidebar::-webkit-scrollbar-track,
@@ -989,7 +989,7 @@
         }
 
         /* ============================================================
-           INVOICE LIST FILTERS
+           FILTERS
            ============================================================ */
         .filter-pills {
             display: flex;
@@ -1034,7 +1034,7 @@
         }
 
         /* ============================================================
-           AMOUNT IN WORDS
+           AMOUNT WORDS
            ============================================================ */
         .amount-words {
             font-size: 0.8rem;
@@ -1046,7 +1046,7 @@
         }
 
         /* ============================================================
-           PRINT STYLES
+           PRINT
            ============================================================ */
         @media print {
             body {
@@ -1094,35 +1094,90 @@
         }
 
         /* ============================================================
-           TEMPLATE PREVIEW (small)
+           STATUS BADGE
            ============================================================ */
-        .template-preview-box {
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 12px;
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-draft {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        .status-unpaid {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+        .status-partially-paid {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+        .status-paid {
+            background: #E8F5E9;
+            color: #388E3C;
+        }
+        .status-converted {
+            background: #E0F2F1;
+            color: #00897B;
+        }
+
+        /* ============================================================
+           MODAL OVERLAY
+           ============================================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
             background: #fff;
-            min-height: 120px;
-            font-size: 0.7rem;
-            line-height: 1.4;
+            border-radius: var(--radius);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
         }
-        .template-preview-box .tp-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-align: center;
-        }
-        .template-preview-box .tp-divider {
-            border-top: 2px solid var(--border);
-            margin: 4px 0;
-        }
-        .template-preview-box .tp-row {
+        .modal-header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
             display: flex;
             justify-content: space-between;
-            padding: 2px 0;
+            align-items: center;
+            border-radius: var(--radius) var(--radius) 0 0;
         }
-        .template-preview-box .tp-row .tp-label {
-            color: var(--text-secondary);
-            font-size: 0.6rem;
+        .modal-header h3 {
+            font-size: 1.1rem;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
         }
     </style>
 </head>
@@ -1209,7 +1264,7 @@
         <div class="module active" data-module="dashboard">
             <div class="page-header">
                 <h1>📊 Dashboard</h1>
-                <p>H4 Universal Billing Engine — Invoice, Products, Categories, Payments</p>
+                <p>H4 Universal Billing Engine</p>
             </div>
             <div class="stats-grid" id="dashboardStats">
                 <div class="stat-card"><div class="stat-value" id="statInvoices">0</div><div class="stat-label">Total Invoices</div></div>
@@ -1234,7 +1289,7 @@
 
         <!-- ==================== COMPANY ==================== -->
         <div class="module" data-module="company">
-            <div class="page-header"><h1>🏭 Company Profile</h1><p>Setup your business details</p></div>
+            <div class="page-header"><h1>🏭 Company Profile</h1></div>
             <div class="card">
                 <form id="companyForm">
                     <div class="form-row">
@@ -1259,19 +1314,26 @@
                         <div class="form-group"><label>Website</label><input id="compWebsite"></div>
                         <div class="form-group"><label>GSTIN</label><input id="compGstin"></div>
                     </div>
-                    <div class="form-group"><label><input type="checkbox" id="compGstEnabled" checked> GST Enabled</label></div>
-                    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
-                        <button type="submit" class="btn btn-primary">💾 Save Company</button>
+                    <div class="form-row">
+                        <div class="form-group"><label>Bank Name</label><input id="compBankName"></div>
+                        <div class="form-group"><label>Account Name</label><input id="compAccountName"></div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Account Number</label><input id="compAccountNumber"></div>
+                        <div class="form-group"><label>IFSC</label><input id="compIfsc"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Branch</label><input id="compBranch"></div>
+                        <div class="form-group"><label>UPI</label><input id="compUpi"></div>
+                    </div>
+                    <div class="form-group"><label><input type="checkbox" id="compGstEnabled" checked> GST Enabled</label></div>
+                    <button type="submit" class="btn btn-primary">💾 Save Company</button>
                 </form>
             </div>
             <div class="card">
-                <div class="card-header"><h2>Logo</h2></div>
+                <div class="card-header"><h2>Logo & Signature</h2></div>
                 <div class="form-group"><label>Upload Logo</label><input type="file" id="compLogoUpload" accept="image/*"></div>
                 <div id="compLogoPreview" style="display:none;margin-top:8px;"><img id="compLogoImg" style="max-height:80px;border-radius:8px;border:1px solid var(--border);"></div>
-            </div>
-            <div class="card">
-                <div class="card-header"><h2>Signature</h2></div>
                 <div class="form-group"><label>Upload Signature</label><input type="file" id="compSigUpload" accept="image/*"></div>
                 <div id="compSigPreview" style="display:none;margin-top:8px;"><img id="compSigImg" style="max-height:60px;border-radius:8px;border:1px solid var(--border);"></div>
                 <div class="form-group"><label>Signatory Name</label><input id="compSignatoryName" placeholder="Authorized Signatory"></div>
@@ -1280,18 +1342,18 @@
 
         <!-- ==================== TEMPLATES ==================== -->
         <div class="module" data-module="templates">
-            <div class="page-header"><h1>🎨 Template Designer</h1><p>Customize invoice templates</p></div>
+            <div class="page-header"><h1>🎨 Template Designer</h1></div>
             <div id="templateList"></div>
             <div class="card" id="templateEditor" style="display:none;">
-                <div class="card-header"><h2 id="templateEditorTitle">Edit Template</h2><button class="btn btn-outline btn-sm" onclick="H4Templates.closeEditor()">✕ Close</button></div>
+                <div class="card-header"><h2 id="templateEditorTitle">Edit Template</h2><button class="btn btn-outline btn-sm" onclick="H4Templates.closeEditor()">✕</button></div>
                 <div class="form-row">
-                    <div class="form-group"><label>Template Name</label><input id="tplName"></div>
-                    <div class="form-group"><label>Font Family</label><select id="tplFont"><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="'Times New Roman'">Times New Roman</option><option value="'Segoe UI'">Segoe UI</option></select></div>
+                    <div class="form-group"><label>Name</label><input id="tplName"></div>
+                    <div class="form-group"><label>Font</label><select id="tplFont"><option>Arial</option><option>Georgia</option><option>'Times New Roman'</option><option>'Segoe UI'</option></select></div>
                 </div>
                 <div class="form-row-3">
-                    <div class="form-group"><label>Primary Color</label><input type="color" id="tplPrimary" value="#6A3FA0"></div>
-                    <div class="form-group"><label>Secondary Color</label><input type="color" id="tplSecondary" value="#8A6510"></div>
-                    <div class="form-group"><label>Accent Color</label><input type="color" id="tplAccent" value="#00BCD4"></div>
+                    <div class="form-group"><label>Primary</label><input type="color" id="tplPrimary" value="#6A3FA0"></div>
+                    <div class="form-group"><label>Secondary</label><input type="color" id="tplSecondary" value="#8A6510"></div>
+                    <div class="form-group"><label>Accent</label><input type="color" id="tplAccent" value="#00BCD4"></div>
                 </div>
                 <div class="form-row-3">
                     <div class="form-group"><label>Header BG</label><input type="color" id="tplHeaderBg" value="#6A3FA0"></div>
@@ -1299,8 +1361,8 @@
                     <div class="form-group"><label>Table Header</label><input type="color" id="tplTableHeader" value="#6A3FA0"></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>Font Size (px)</label><input type="number" id="tplFontSize" value="12" min="8" max="18"></div>
-                    <div class="form-group"><label>Heading Size (px)</label><input type="number" id="tplHeadingSize" value="24" min="14" max="40"></div>
+                    <div class="form-group"><label>Font Size</label><input type="number" id="tplFontSize" value="12"></div>
+                    <div class="form-group"><label>Heading Size</label><input type="number" id="tplHeadingSize" value="24"></div>
                 </div>
                 <div class="form-group">
                     <label>Logo Position</label>
@@ -1331,50 +1393,48 @@
                         <button class="toggle-btn" data-value="false">OFF</button>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-block" onclick="H4Templates.saveTemplate()">💾 Save Template</button>
+                <button class="btn btn-primary btn-block" onclick="H4Templates.saveTemplate()">💾 Save</button>
             </div>
         </div>
 
         <!-- ==================== CUSTOMERS ==================== -->
         <div class="module" data-module="customers">
-            <div class="page-header"><h1>👥 Customers</h1><p>Manage your customer database</p></div>
-            <div style="margin-bottom:12px;"><button class="btn btn-primary" onclick="H4Customers.openModal()">➕ Add Customer</button></div>
-            <div class="card"><div id="customersList"></div></div>
+            <div class="page-header"><h1>👥 Customers</h1></div>
+            <button class="btn btn-primary" onclick="H4Customers.openModal()">➕ Add Customer</button>
+            <div class="card" id="customersList"></div>
         </div>
 
         <!-- ==================== PRODUCTS ==================== -->
         <div class="module" data-module="products">
-            <div class="page-header"><h1>📦 Products</h1><p>Product master for invoices</p></div>
-            <div style="margin-bottom:12px;"><button class="btn btn-primary" onclick="H4Products.openModal()">➕ Add Product</button></div>
-            <div class="card"><div id="productsList"></div></div>
+            <div class="page-header"><h1>📦 Products</h1></div>
+            <button class="btn btn-primary" onclick="H4Products.openModal()">➕ Add Product</button>
+            <div class="card" id="productsList"></div>
         </div>
 
         <!-- ==================== CATEGORIES ==================== -->
         <div class="module" data-module="categories">
-            <div class="page-header"><h1>📂 Categories</h1><p>Invoice & Product categories</p></div>
-            <div style="margin-bottom:12px;"><button class="btn btn-primary" onclick="H4Categories.openModal()">➕ Add Category</button></div>
-            <div class="card"><div id="categoriesList"></div></div>
+            <div class="page-header"><h1>📂 Categories</h1></div>
+            <button class="btn btn-primary" onclick="H4Categories.openModal()">➕ Add Category</button>
+            <div class="card" id="categoriesList"></div>
         </div>
 
         <!-- ==================== INVOICES ==================== -->
         <div class="module" data-module="invoices">
             <div class="page-header"><h1>🧾 Invoices</h1><p>Create and manage invoices</p></div>
 
-            <!-- List View -->
+            <!-- LIST VIEW -->
             <div id="invoiceListView">
-                <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">
-                    <button class="btn btn-primary" onclick="H4Invoice.newInvoice()">➕ New Invoice</button>
-                </div>
-                <div class="search-bar">
-                    <input type="text" id="invoiceSearch" placeholder="🔍 Search by number, customer, project..." oninput="H4Invoice.renderList()">
+                <button class="btn btn-primary" onclick="H4Invoice.newInvoice()">➕ New Invoice</button>
+                <div class="search-bar mt-8">
+                    <input type="text" id="invoiceSearch" placeholder="🔍 Search..." oninput="H4Invoice.renderList()">
                 </div>
                 <div class="filter-pills" id="invoiceFilters"></div>
-                <div class="card"><div id="invoicesList"></div></div>
+                <div class="card" id="invoicesList"></div>
             </div>
 
-            <!-- Builder View -->
+            <!-- BUILDER VIEW -->
             <div id="invoiceBuilderView" style="display:none;">
-                <button class="btn btn-outline btn-sm no-print" onclick="H4Invoice.backToList()" style="margin-bottom:12px;">← Back to List</button>
+                <button class="btn btn-outline btn-sm no-print" onclick="H4Invoice.backToList()">← Back to List</button>
 
                 <!-- HEADER -->
                 <div class="card">
@@ -1385,7 +1445,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group"><label>Due Date</label><input type="date" id="invDueDate"></div>
-                        <div class="form-group"><label>Invoice Category</label>
+                        <div class="form-group"><label>Category</label>
                             <select id="invCategory" onchange="H4Invoice.onCategoryChange()"></select>
                         </div>
                     </div>
@@ -1393,7 +1453,7 @@
                         <div class="form-group"><label>Customer</label>
                             <select id="invCustomer" onchange="H4Invoice.onCustomerChange()"></select>
                         </div>
-                        <div class="form-group"><label>Project Name</label><input id="invProject"></div>
+                        <div class="form-group"><label>Project</label><input id="invProject"></div>
                     </div>
                     <div class="form-row">
                         <div class="form-group"><label>Reference</label><input id="invReference"></div>
@@ -1406,7 +1466,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group"><label>Notes / Terms</label><textarea id="invNotes" rows="2"></textarea></div>
+                    <div class="form-group"><label>Notes</label><textarea id="invNotes" rows="2"></textarea></div>
                 </div>
 
                 <!-- ITEMS -->
@@ -1414,7 +1474,7 @@
                     <div class="card-header"><h2>Items</h2>
                         <div style="display:flex;gap:6px;flex-wrap:wrap;">
                             <button class="btn btn-success btn-sm" onclick="H4Invoice.addItem()">➕ Add Item</button>
-                            <button class="btn btn-outline btn-sm" onclick="H4Invoice.clearItems()">🗑️ Clear All</button>
+                            <button class="btn btn-outline btn-sm" onclick="H4Invoice.clearItems()">🗑️ Clear</button>
                         </div>
                     </div>
                     <div id="invoiceItemsContainer"></div>
@@ -1432,7 +1492,7 @@
                             </div>
                         </div>
                         <div class="form-group" id="invDiscountFields" style="display:none;">
-                            <label>Discount Value</label>
+                            <label>Value</label>
                             <div style="display:flex;gap:6px;">
                                 <input type="number" id="invDiscountValue" step="0.01" min="0" value="0" oninput="H4Invoice.calculate()">
                                 <select id="invDiscountType" onchange="H4Invoice.calculate()" style="width:80px;flex:none;">
@@ -1454,8 +1514,8 @@
                             </select>
                         </div>
                         <div class="form-group" id="invCustomGstField" style="display:none;">
-                            <label>Custom GST %</label>
-                            <input type="number" id="invCustomGst" step="0.01" min="0" value="0" oninput="H4Invoice.calculate()">
+                            <label>Custom %</label>
+                            <input type="number" id="invCustomGst" step="0.01" min="0" oninput="H4Invoice.calculate()">
                         </div>
                     </div>
                 </div>
@@ -1466,7 +1526,7 @@
                     <div class="calc-box">
                         <div class="calc-row"><span class="calc-label">Subtotal</span><span class="calc-value">₹ <span id="invSubtotal">0.00</span></span></div>
                         <div class="calc-row"><span class="calc-label">Discount</span><span class="calc-value">₹ <span id="invDiscountAmt">0.00</span></span></div>
-                        <div class="calc-row"><span class="calc-label">Taxable Amount</span><span class="calc-value">₹ <span id="invTaxable">0.00</span></span></div>
+                        <div class="calc-row"><span class="calc-label">Taxable</span><span class="calc-value">₹ <span id="invTaxable">0.00</span></span></div>
                         <div class="calc-row" id="invCgstRow"><span class="calc-label">CGST</span><span class="calc-value">₹ <span id="invCgst">0.00</span></span></div>
                         <div class="calc-row" id="invSgstRow"><span class="calc-label">SGST</span><span class="calc-value">₹ <span id="invSgst">0.00</span></span></div>
                         <div class="calc-row" id="invIgstRow" style="display:none;"><span class="calc-label">IGST</span><span class="calc-value">₹ <span id="invIgst">0.00</span></span></div>
@@ -1478,7 +1538,7 @@
 
                 <!-- PAYMENT -->
                 <div class="card">
-                    <div class="card-header"><h2>Payment Details</h2>
+                    <div class="card-header"><h2>Payment</h2>
                         <div class="toggle-group" id="invPaymentToggle">
                             <button class="toggle-btn active" data-value="off" onclick="H4Invoice.togglePayment('off')">OFF</button>
                             <button class="toggle-btn" data-value="on" onclick="H4Invoice.togglePayment('on')">ON</button>
@@ -1486,18 +1546,18 @@
                     </div>
                     <div id="invPaymentFields" style="display:none;">
                         <div class="form-row">
-                            <div class="form-group"><label>Payment Status</label>
+                            <div class="form-group"><label>Status</label>
                                 <select id="invPaymentStatus" onchange="H4Invoice.calculate()">
                                     <option value="unpaid">Unpaid</option>
                                     <option value="partially-paid">Partially Paid</option>
                                     <option value="paid">Paid</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="invPaidAmount" step="0.01" min="0" value="0" oninput="H4Invoice.calculate()"></div>
+                            <div class="form-group"><label>Amount Paid</label><input type="number" id="invPaidAmount" step="0.01" min="0" value="0" oninput="H4Invoice.calculate()"></div>
                         </div>
                         <div class="form-row">
                             <div class="form-group"><label>Balance</label><strong id="invBalanceDisplay">₹0.00</strong></div>
-                            <div class="form-group"><label>Payment Method</label>
+                            <div class="form-group"><label>Method</label>
                                 <select id="invPaymentMethod">
                                     <option value="cash">Cash</option>
                                     <option value="bank-transfer">Bank Transfer</option>
@@ -1514,14 +1574,14 @@
                 <div class="card no-print">
                     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
                         <button class="btn btn-outline" onclick="H4Invoice.backToList()">↩️ Cancel</button>
-                        <button class="btn btn-danger" id="invDeleteBtn" style="display:none;" onclick="H4Invoice.deleteInvoice()">🗑️ Delete</button>
+                        <button class="btn btn-danger" id="invDeleteBtn" style="display:none;" onclick="H4Invoice.deleteInvoice()">🗑️</button>
                         <button class="btn btn-secondary" onclick="H4Invoice.printInvoice()">🖨️ Print</button>
                         <button class="btn btn-success" onclick="H4Invoice.whatsappInvoice()">📤 WhatsApp</button>
-                        <button class="btn btn-primary" onclick="H4Invoice.saveInvoice()">💾 Save Invoice</button>
+                        <button class="btn btn-primary" onclick="H4Invoice.saveInvoice()">💾 Save</button>
                     </div>
                 </div>
 
-                <!-- LIVE PREVIEW -->
+                <!-- PREVIEW -->
                 <div class="card no-print">
                     <div class="card-header"><h2>👁️ Live Preview</h2></div>
                     <div class="preview-container">
@@ -1533,31 +1593,29 @@
 
         <!-- ==================== QUOTATIONS ==================== -->
         <div class="module" data-module="quotations">
-            <div class="page-header"><h1>📄 Quotations</h1><p>Manage quotations</p></div>
-            <div class="card"><p class="text-muted text-center" style="padding:20px;">Quotation module — convert to invoice</p></div>
+            <div class="page-header"><h1>📄 Quotations</h1></div>
+            <div class="card"><p class="text-muted text-center" style="padding:20px;">Quotation module</p></div>
         </div>
 
         <!-- ==================== PAYMENTS ==================== -->
         <div class="module" data-module="payments">
-            <div class="page-header"><h1>💰 Payments</h1><p>Track invoice payments</p></div>
-            <div class="card"><p class="text-muted text-center" style="padding:20px;">Payment tracking integrated with invoices</p></div>
+            <div class="page-header"><h1>💰 Payments</h1></div>
+            <div class="card"><p class="text-muted text-center" style="padding:20px;">Payment tracking</p></div>
         </div>
 
         <!-- ==================== BACKUP ==================== -->
         <div class="module" data-module="backup">
-            <div class="page-header"><h1>💾 Backup</h1><p>Backup & restore your data</p></div>
+            <div class="page-header"><h1>💾 Backup</h1></div>
+            <div class="card"><button class="btn btn-primary btn-block" onclick="H4App.downloadBackup()">📥 Download Backup</button></div>
             <div class="card">
-                <button class="btn btn-primary btn-block" onclick="H4App.downloadBackup()">📥 Download Backup</button>
-            </div>
-            <div class="card">
-                <div class="form-group"><label>Restore Backup</label><input type="file" id="backupFileInput" accept=".json"></div>
-                <button class="btn btn-danger btn-block" onclick="H4App.restoreBackup()">⚠️ Restore Backup</button>
+                <div class="form-group"><label>Restore</label><input type="file" id="backupFileInput" accept=".json"></div>
+                <button class="btn btn-danger btn-block" onclick="H4App.restoreBackup()">⚠️ Restore</button>
             </div>
         </div>
 
         <!-- ==================== SETTINGS ==================== -->
         <div class="module" data-module="settings">
-            <div class="page-header"><h1>⚙️ Settings</h1><p>App settings</p></div>
+            <div class="page-header"><h1>⚙️ Settings</h1></div>
             <div class="card">
                 <div class="form-row">
                     <div class="form-group"><label>Currency</label><select id="settingsCurrency"><option value="INR">₹ INR</option><option value="USD">$ USD</option><option value="EUR">€ EUR</option></select></div>
@@ -1567,11 +1625,11 @@
                     <div class="form-group"><label>Invoice Prefix</label><input id="settingsInvPrefix" value="H4-INV"></div>
                     <div class="form-group"><label>Invoice Year</label><input type="number" id="settingsInvYear"></div>
                 </div>
-                <button class="btn btn-primary btn-block" onclick="H4App.saveSettings()">💾 Save Settings</button>
+                <button class="btn btn-primary btn-block" onclick="H4App.saveSettings()">💾 Save</button>
             </div>
             <div class="card">
                 <div class="card-header"><h2>Danger Zone</h2></div>
-                <button class="btn btn-danger btn-block" onclick="H4App.resetAllData()">🗑️ Delete All Data</button>
+                <button class="btn btn-danger btn-block" onclick="H4App.resetAllData()">🗑️ Delete All</button>
             </div>
         </div>
 
@@ -1589,20 +1647,20 @@
     </nav>
 
     <!-- ============================================================
-    TOAST CONTAINER
+    TOAST
     ============================================================ -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- ============================================================
     CUSTOMER MODAL
     ============================================================ -->
-    <div class="modal-overlay" id="customerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;padding:16px;">
-        <div class="modal-content" style="background:#fff;border-radius:var(--radius);max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
-            <div class="modal-header" style="padding:16px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:var(--radius) var(--radius) 0 0;">
+    <div class="modal-overlay" id="customerModal">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h3 id="customerModalTitle">Add Customer</h3>
-                <button class="modal-close" onclick="H4Customers.closeModal()" style="background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;">✕</button>
+                <button class="modal-close" onclick="H4Customers.closeModal()">✕</button>
             </div>
-            <div class="modal-body" style="padding:20px;">
+            <div class="modal-body">
                 <form id="customerForm">
                     <div class="form-row"><div class="form-group"><label>Name *</label><input id="cName" required></div><div class="form-group"><label>Company</label><input id="cCompany"></div></div>
                     <div class="form-row"><div class="form-group"><label>Phone *</label><input id="cPhone" required></div><div class="form-group"><label>WhatsApp</label><input id="cWhatsapp"></div></div>
@@ -1612,7 +1670,7 @@
                     <div class="form-row"><div class="form-group"><label>PIN</label><input id="cPin"></div><div class="form-group"><label>GSTIN</label><input id="cGstin"></div></div>
                 </form>
             </div>
-            <div class="modal-footer" style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;">
+            <div class="modal-footer">
                 <button class="btn btn-outline" onclick="H4Customers.closeModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="H4Customers.saveCustomer()">💾 Save</button>
             </div>
@@ -1622,27 +1680,27 @@
     <!-- ============================================================
     PRODUCT MODAL
     ============================================================ -->
-    <div class="modal-overlay" id="productModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;padding:16px;">
-        <div class="modal-content" style="background:#fff;border-radius:var(--radius);max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
-            <div class="modal-header" style="padding:16px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:var(--radius) var(--radius) 0 0;">
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h3 id="productModalTitle">Add Product</h3>
-                <button class="modal-close" onclick="H4Products.closeModal()" style="background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;">✕</button>
+                <button class="modal-close" onclick="H4Products.closeModal()">✕</button>
             </div>
-            <div class="modal-body" style="padding:20px;">
+            <div class="modal-body">
                 <form id="productForm">
                     <div class="form-row"><div class="form-group"><label>Name *</label><input id="pName" required></div><div class="form-group"><label>Category</label><input id="pCategory"></div></div>
-                    <div class="form-row"><div class="form-group"><label>Brand</label><input id="pBrand"></div><div class="form-group"><label>Unit</label><input id="pUnit" placeholder="kg, ltr, nos"></div></div>
+                    <div class="form-row"><div class="form-group"><label>Brand</label><input id="pBrand"></div><div class="form-group"><label>Unit</label><input id="pUnit"></div></div>
                     <div class="form-group"><label>Description</label><textarea id="pDescription" rows="2"></textarea></div>
                     <div class="form-row-3">
-                        <div class="form-group"><label>Purchase Rate</label><input type="number" id="pPurchaseRate" step="0.01" min="0"></div>
-                        <div class="form-group"><label>Selling Rate *</label><input type="number" id="pSellingRate" step="0.01" min="0" required></div>
-                        <div class="form-group"><label>MRP</label><input type="number" id="pMrp" step="0.01" min="0"></div>
+                        <div class="form-group"><label>Purchase Rate</label><input type="number" id="pPurchaseRate" step="0.01"></div>
+                        <div class="form-group"><label>Selling Rate *</label><input type="number" id="pSellingRate" step="0.01" required></div>
+                        <div class="form-group"><label>MRP</label><input type="number" id="pMrp" step="0.01"></div>
                     </div>
                     <div class="form-row"><div class="form-group"><label>GST %</label><input type="number" id="pGst" step="0.01" value="18"></div><div class="form-group"><label>HSN</label><input id="pHsn"></div></div>
                     <div class="form-group"><label><input type="checkbox" id="pActive" checked> Active</label></div>
                 </form>
             </div>
-            <div class="modal-footer" style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;">
+            <div class="modal-footer">
                 <button class="btn btn-outline" onclick="H4Products.closeModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="H4Products.saveProduct()">💾 Save</button>
             </div>
@@ -1652,22 +1710,22 @@
     <!-- ============================================================
     CATEGORY MODAL
     ============================================================ -->
-    <div class="modal-overlay" id="categoryModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;padding:16px;">
-        <div class="modal-content" style="background:#fff;border-radius:var(--radius);max-width:500px;width:100%;box-shadow:var(--shadow-lg);">
-            <div class="modal-header" style="padding:16px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:var(--radius) var(--radius) 0 0;">
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h3 id="categoryModalTitle">Add Category</h3>
-                <button class="modal-close" onclick="H4Categories.closeModal()" style="background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;">✕</button>
+                <button class="modal-close" onclick="H4Categories.closeModal()">✕</button>
             </div>
-            <div class="modal-body" style="padding:20px;">
+            <div class="modal-body">
                 <form id="categoryForm">
-                    <div class="form-group"><label>Category Name *</label><input id="catName" required></div>
+                    <div class="form-group"><label>Name *</label><input id="catName" required></div>
                     <div class="form-group"><label>Type</label>
-                        <select id="catType"><option value="invoice">Invoice</option><option value="product">Product</option><option value="both">Both</option></select>
+                        <select id="catType"><option value="both">Both</option><option value="invoice">Invoice</option><option value="product">Product</option></select>
                     </div>
-                    <div class="form-group"><label>Icon (emoji)</label><input id="catIcon" value="📦"></div>
+                    <div class="form-group"><label>Icon</label><input id="catIcon" value="📦"></div>
                 </form>
             </div>
-            <div class="modal-footer" style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;">
+            <div class="modal-footer">
                 <button class="btn btn-outline" onclick="H4Categories.closeModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="H4Categories.saveCategory()">💾 Save</button>
             </div>
@@ -1921,14 +1979,19 @@
                 const thousand = Math.floor((n % 100000) / 1000);
                 const remainder = n % 1000;
                 let words = '';
-                if (crore > 0) words += this._helper(crore, ones, tens, teens) + ' Crore ';
-                if (lakh > 0) words += this._helper(lakh, ones, tens, teens) + ' Lakh ';
-                if (thousand > 0) words += this._helper(thousand, ones, tens, teens) + ' Thousand ';
-                if (remainder > 0) words += this._helper(remainder, ones, tens, teens);
+                if (crore > 0) words += this._helper(crore) + ' Crore ';
+                if (lakh > 0) words += this._helper(lakh) + ' Lakh ';
+                if (thousand > 0) words += this._helper(thousand) + ' Thousand ';
+                if (remainder > 0) words += this._helper(remainder);
                 return words.trim();
             },
 
-            _helper(n, ones, tens, teens) {
+            _helper(n) {
+                const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+                const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+                const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen',
+                    'Eighteen', 'Nineteen'
+                ];
                 let w = '';
                 const h = Math.floor(n / 100);
                 const t = Math.floor((n % 100) / 10);
@@ -1971,7 +2034,6 @@
                 this.renderInvoiceList();
                 this.populateCustomerSelects();
                 this.populateCategorySelects();
-                this.populateProductSelects();
                 this.loadTemplates();
                 this.setupAutoSave();
             },
@@ -2025,7 +2087,6 @@
                 this.loadSettings();
             },
 
-            // ===== COMPANY =====
             loadCompany() {
                 const c = DB.get('company') || {};
                 document.getElementById('compLegalName').value = c.legalName || '';
@@ -2042,6 +2103,12 @@
                 document.getElementById('compGstin').value = c.gstin || '';
                 document.getElementById('compGstEnabled').checked = c.gstEnabled !== false;
                 document.getElementById('compSignatoryName').value = c.signatoryName || '';
+                document.getElementById('compBankName').value = c.bankName || '';
+                document.getElementById('compAccountName').value = c.accountName || '';
+                document.getElementById('compAccountNumber').value = c.accountNumber || '';
+                document.getElementById('compIfsc').value = c.ifsc || '';
+                document.getElementById('compBranch').value = c.branch || '';
+                document.getElementById('compUpi').value = c.upiId || '';
                 if (c.logo) {
                     document.getElementById('compLogoImg').src = c.logo;
                     document.getElementById('compLogoPreview').style.display = 'block';
@@ -2050,7 +2117,6 @@
                     document.getElementById('compSigImg').src = c.signature;
                     document.getElementById('compSigPreview').style.display = 'block';
                 }
-                // Logo upload
                 document.getElementById('compLogoUpload').onchange = (e) => {
                     const file = e.target.files[0];
                     if (file) {
@@ -2093,18 +2159,17 @@
                     signatoryName: document.getElementById('compSignatoryName').value,
                     logo: document.getElementById('compLogoImg').src || '',
                     signature: document.getElementById('compSigImg').src || '',
-                    bankName: document.getElementById('compBankName')?.value || '',
-                    accountName: document.getElementById('compAccountName')?.value || '',
-                    accountNumber: document.getElementById('compAccountNumber')?.value || '',
-                    ifsc: document.getElementById('compIfsc')?.value || '',
-                    branch: document.getElementById('compBranch')?.value || '',
-                    upiId: document.getElementById('compUpi')?.value || ''
+                    bankName: document.getElementById('compBankName').value,
+                    accountName: document.getElementById('compAccountName').value,
+                    accountNumber: document.getElementById('compAccountNumber').value,
+                    ifsc: document.getElementById('compIfsc').value,
+                    branch: document.getElementById('compBranch').value,
+                    upiId: document.getElementById('compUpi').value
                 };
                 DB.save('company', c);
                 toast('Company saved!');
             },
 
-            // ===== SETTINGS =====
             loadSettings() {
                 const s = DB.get('settings') || {};
                 document.getElementById('settingsCurrency').value = s.currency || 'INR';
@@ -2126,7 +2191,6 @@
                 toast('Settings saved!');
             },
 
-            // ===== DASHBOARD =====
             updateDashboard() {
                 const invoices = DB.getList('invoices');
                 const customers = DB.getList('customers');
@@ -2138,23 +2202,22 @@
                 document.getElementById('statRevenue').textContent = Utils.currency(total);
                 document.getElementById('invoiceCountBadge').textContent = invoices.length;
 
-                // Recent
                 const recent = invoices.slice(-5).reverse();
                 const container = document.getElementById('recentInvoices');
                 if (recent.length === 0) {
                     container.innerHTML =
-                        '<div class="empty-state"><div class="icon">🧾</div><h3>No invoices yet</h3><p class="text-muted">Create your first invoice</p></div>';
+                        '<div class="empty-state"><div class="icon">🧾</div><h3>No invoices yet</h3></div>';
                 } else {
-                    container.innerHTML = recent.map(inv => `
-                        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+                    container.innerHTML = recent.map(inv =>
+                        `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
                             <div><strong>${inv.number}</strong> — ${inv.customerName || 'Unknown'}</div>
                             <div>${Utils.currency(inv.grandTotal || 0)}</div>
-                        </div>
-                    `).join('');
+                        </div>`
+                    ).join('');
                 }
             },
 
-            // ===== CUSTOMERS =====
+            // ----- CUSTOMERS -----
             renderCustomers() {
                 const list = DB.getList('customers');
                 const container = document.getElementById('customersList');
@@ -2163,21 +2226,21 @@
                     '<div class="empty-state"><div class="icon">👥</div><h3>No customers</h3></div>';
                     return;
                 }
-                container.innerHTML = list.map(c => `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+                container.innerHTML = list.map(c =>
+                    `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
                         <div><strong>${Utils.escape(c.name)}</strong><br><span class="text-muted text-sm">${c.phone || ''}</span></div>
                         <div>
                             <button class="btn btn-sm btn-outline" onclick="H4Customers.editCustomer('${c.id}')">✏️</button>
                             <button class="btn btn-sm btn-danger" onclick="H4Customers.deleteCustomer('${c.id}')">🗑️</button>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`
+                ).join('');
             },
 
             populateCustomerSelects() {
                 const list = DB.getList('customers');
                 const options = list.map(c => `<option value="${c.id}">${Utils.escape(c.name)}</option>`).join('');
-                ['invCustomer', 'qtnCustomer', 'invCustomer'].forEach(id => {
+                ['invCustomer'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) {
                         const val = el.value;
@@ -2187,7 +2250,7 @@
                 });
             },
 
-            // ===== PRODUCTS =====
+            // ----- PRODUCTS -----
             renderProducts() {
                 const list = DB.getList('products');
                 const container = document.getElementById('productsList');
@@ -2196,23 +2259,18 @@
                     '<div class="empty-state"><div class="icon">📦</div><h3>No products</h3></div>';
                     return;
                 }
-                container.innerHTML = list.map(p => `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+                container.innerHTML = list.map(p =>
+                    `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
                         <div><strong>${Utils.escape(p.name)}</strong><br><span class="text-muted text-sm">${p.unit || ''} · ₹${p.sellingRate || 0}</span></div>
                         <div>
                             <button class="btn btn-sm btn-outline" onclick="H4Products.editProduct('${p.id}')">✏️</button>
                             <button class="btn btn-sm btn-danger" onclick="H4Products.deleteProduct('${p.id}')">🗑️</button>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`
+                ).join('');
             },
 
-            populateProductSelects() {
-                const list = DB.getList('products');
-                // Dynamic product selects will be created in invoice items
-            },
-
-            // ===== CATEGORIES =====
+            // ----- CATEGORIES -----
             renderCategories() {
                 const list = DB.getList('categories');
                 const container = document.getElementById('categoriesList');
@@ -2221,15 +2279,15 @@
                     '<div class="empty-state"><div class="icon">📂</div><h3>No categories</h3></div>';
                     return;
                 }
-                container.innerHTML = list.map(c => `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+                container.innerHTML = list.map(c =>
+                    `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
                         <div><span style="font-size:1.2rem;">${c.icon || '📦'}</span> <strong>${Utils.escape(c.name)}</strong> <span class="text-muted text-sm">(${c.type || 'both'})</span></div>
                         <div>
                             <button class="btn btn-sm btn-outline" onclick="H4Categories.editCategory('${c.id}')">✏️</button>
                             <button class="btn btn-sm btn-danger" onclick="H4Categories.deleteCategory('${c.id}')">🗑️</button>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`
+                ).join('');
             },
 
             populateCategorySelects() {
@@ -2243,7 +2301,7 @@
                 }
             },
 
-            // ===== BACKUP =====
+            // ----- BACKUP -----
             downloadBackup() {
                 const data = DB.get();
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2287,13 +2345,21 @@
                 setInterval(() => {
                     const inv = document.getElementById('invoiceBuilderView');
                     if (inv && inv.style.display !== 'none') {
-                        // Auto-save draft
                         const data = H4Invoice.collectData();
                         if (data.items && data.items.length > 0) {
                             localStorage.setItem('h4_invoice_draft', JSON.stringify(data));
                         }
                     }
                 }, 10000);
+            },
+
+            renderInvoiceList() {
+                H4Invoice.renderList();
+                H4Invoice.renderFilters();
+            },
+
+            loadTemplates() {
+                H4Templates.loadTemplates();
             }
         };
 
@@ -2325,11 +2391,11 @@
                     document.getElementById('customerForm').reset();
                     document.getElementById('customerModalTitle').textContent = 'Add Customer';
                 }
-                document.getElementById('customerModal').style.display = 'flex';
+                document.getElementById('customerModal').classList.add('active');
             },
 
             closeModal() {
-                document.getElementById('customerModal').style.display = 'none';
+                document.getElementById('customerModal').classList.remove('active');
                 this.editingId = null;
             },
 
@@ -2407,11 +2473,11 @@
                     document.getElementById('productForm').reset();
                     document.getElementById('productModalTitle').textContent = 'Add Product';
                 }
-                document.getElementById('productModal').style.display = 'flex';
+                document.getElementById('productModal').classList.add('active');
             },
 
             closeModal() {
-                document.getElementById('productModal').style.display = 'none';
+                document.getElementById('productModal').classList.remove('active');
                 this.editingId = null;
             },
 
@@ -2442,7 +2508,6 @@
                 }
                 this.closeModal();
                 H4App.renderProducts();
-                H4App.populateProductSelects();
                 H4App.updateDashboard();
             },
 
@@ -2454,7 +2519,6 @@
                 if (confirm('Delete this product?')) {
                     DB.delete('products', id);
                     H4App.renderProducts();
-                    H4App.populateProductSelects();
                     H4App.updateDashboard();
                     toast('Product deleted.');
                 }
@@ -2481,11 +2545,11 @@
                     document.getElementById('categoryForm').reset();
                     document.getElementById('categoryModalTitle').textContent = 'Add Category';
                 }
-                document.getElementById('categoryModal').style.display = 'flex';
+                document.getElementById('categoryModal').classList.add('active');
             },
 
             closeModal() {
-                document.getElementById('categoryModal').style.display = 'none';
+                document.getElementById('categoryModal').classList.remove('active');
                 this.editingId = null;
             },
 
@@ -2545,10 +2609,6 @@
                 document.getElementById('invReference').value = '';
                 document.getElementById('invNotes').value = '';
                 document.getElementById('invDeleteBtn').style.display = 'none';
-                document.getElementById('invDiscountEnabled').checked = false;
-                document.getElementById('invDiscountValue').value = 0;
-                document.getElementById('invPaidAmount').value = 0;
-                document.getElementById('invPaymentStatus').value = 'unpaid';
                 this.toggleDiscount('off');
                 this.togglePayment('off');
                 this.populateCustomerSelects();
@@ -2558,6 +2618,7 @@
                 this.calculate();
                 this.updatePreview();
                 this.loadDraft();
+                toast('New invoice builder opened.');
             },
 
             editInvoice(id) {
@@ -2608,30 +2669,16 @@
             },
 
             populateCustomerSelects() {
-                const list = DB.getList('customers');
-                const options = list.map(c => `<option value="${c.id}">${Utils.escape(c.name)}</option>`).join('');
-                const el = document.getElementById('invCustomer');
-                if (el) {
-                    const val = el.value;
-                    el.innerHTML = `<option value="">-- Select --</option>${options}`;
-                    if (val) el.value = val;
-                }
+                H4App.populateCustomerSelects();
             },
 
             populateCategorySelects() {
-                const list = DB.getList('categories');
-                const options = list.map(c => `<option value="${c.name}">${c.icon || '📦'} ${c.name}</option>`).join('');
-                const el = document.getElementById('invCategory');
-                if (el) {
-                    const val = el.value;
-                    el.innerHTML = `<option value="">-- Select --</option>${options}`;
-                    if (val) el.value = val;
-                }
+                H4App.populateCategorySelects();
             },
 
             onCategoryChange() {
                 const cat = document.getElementById('invCategory').value;
-                // Could show/hide extra fields based on category
+                // Could show/hide extra fields
             },
 
             onCustomerChange() {
@@ -2639,7 +2686,6 @@
                 if (id) {
                     const c = DB.get('customers')[id];
                     if (c) {
-                        // Auto-fill project name if empty
                         const proj = document.getElementById('invProject');
                         if (!proj.value) proj.value = c.name + ' - Project';
                     }
@@ -2675,7 +2721,7 @@
                 const container = document.getElementById('invoiceItemsContainer');
                 if (this.items.length === 0) {
                     container.innerHTML =
-                        '<div class="empty-state"><div class="icon">📋</div><h3>No items</h3><p class="text-muted">Click "Add Item" to start</p></div>';
+                        '<div class="empty-state"><div class="icon">📋</div><h3>No items</h3><p class="text-muted">Click "Add Item"</p></div>';
                     return;
                 }
                 container.innerHTML = this.items.map((item, idx) => {
@@ -2684,7 +2730,6 @@
                     const prodOptions = products.map(p =>
                         `<option value="${p.id}" ${item.productId === p.id ? 'selected' : ''}>${Utils.escape(p.name)}</option>`
                     ).join('');
-                    const isProduct = item.productId && products.find(p => p.id === item.productId);
                     return `
                         <div class="item-card">
                             <div class="item-header">
@@ -2717,13 +2762,13 @@
                                 <div class="form-group"><label>HSN</label>
                                     <input value="${Utils.escape(item.hsn)}" onchange="H4Invoice.updateItem(${idx}, 'hsn', this.value)">
                                 </div>
-                                <div class="form-group"><label>Quantity</label>
+                                <div class="form-group"><label>Qty</label>
                                     <input type="number" step="0.01" min="0" value="${item.quantity}" onchange="H4Invoice.updateItem(${idx}, 'quantity', this.value)">
                                 </div>
                                 <div class="form-group"><label>Unit</label>
                                     <input value="${Utils.escape(item.unit)}" onchange="H4Invoice.updateItem(${idx}, 'unit', this.value)">
                                 </div>
-                                <div class="form-group"><label>Rate (₹)</label>
+                                <div class="form-group"><label>Rate</label>
                                     <input type="number" step="0.01" min="0" value="${item.rate}" onchange="H4Invoice.updateItem(${idx}, 'rate', this.value)">
                                 </div>
                                 <div class="form-group"><label>GST %</label>
@@ -2757,7 +2802,6 @@
             setItemMode(idx, mode) {
                 this.items[idx].mode = mode;
                 if (mode === 'product') {
-                    // Reset fields that will be filled by product
                     this.items[idx].description = '';
                     this.items[idx].rate = 0;
                     this.items[idx].gst = 18;
@@ -2823,7 +2867,7 @@
                 }
             },
 
-            // ----- DISCOUNT TOGGLE -----
+            // ----- DISCOUNT -----
             toggleDiscount(state) {
                 document.getElementById('invDiscountFields').style.display = state === 'on' ? 'block' : 'none';
                 document.querySelectorAll('#invDiscountToggle .toggle-btn').forEach(b => {
@@ -2832,7 +2876,7 @@
                 this.calculate();
             },
 
-            // ----- PAYMENT TOGGLE -----
+            // ----- PAYMENT -----
             togglePayment(state) {
                 document.getElementById('invPaymentFields').style.display = state === 'on' ? 'block' : 'none';
                 document.querySelectorAll('#invPaymentToggle .toggle-btn').forEach(b => {
@@ -2900,7 +2944,6 @@
                 const grandTotal = Math.round(beforeRound);
                 const roundOff = grandTotal - beforeRound;
 
-                // Update display
                 document.getElementById('invSubtotal').textContent = subtotal.toFixed(2);
                 document.getElementById('invDiscountAmt').textContent = discountAmt.toFixed(2);
                 document.getElementById('invTaxable').textContent = taxable.toFixed(2);
@@ -2914,16 +2957,13 @@
                 document.getElementById('invSgstRow').style.display = sgst > 0 ? 'flex' : 'none';
                 document.getElementById('invIgstRow').style.display = igst > 0 ? 'flex' : 'none';
 
-                // Amount in words
                 const words = Utils.numberToWords(grandTotal);
                 document.getElementById('invAmountWords').textContent = 'Rupees ' + words + ' Only';
 
-                // Payment balance
                 const paid = parseFloat(document.getElementById('invPaidAmount').value) || 0;
                 const balance = Math.max(0, grandTotal - paid);
                 document.getElementById('invBalanceDisplay').textContent = Utils.currency(balance);
 
-                // Update preview
                 this.updatePreview();
             },
 
@@ -2935,7 +2975,6 @@
                 return parseFloat(select.value) || 0;
             },
 
-            // ----- GST CUSTOM -----
             setupGstCustom() {
                 const el = document.getElementById('invGstRate');
                 const customField = document.getElementById('invCustomGstField');
@@ -2945,7 +2984,6 @@
                 };
             },
 
-            // ----- COLLECT DATA -----
             collectData() {
                 const customerId = document.getElementById('invCustomer').value;
                 const customer = DB.get('customers')[customerId] || {};
@@ -2978,16 +3016,13 @@
                 };
             },
 
-            // ----- SAVE -----
             saveInvoice() {
                 const data = this.collectData();
                 if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
                 if (this.items.length === 0) { toast('Please add at least one item.', 'error'); return; }
 
-                // Recalculate
                 this.calculate();
                 const finalData = this.collectData();
-                // Add calculated totals
                 const totals = this.getTotals();
                 finalData.subtotal = totals.subtotal;
                 finalData.discountAmount = totals.discountAmt;
@@ -3013,7 +3048,6 @@
             },
 
             getTotals() {
-                // Recalculate from current UI state
                 const subtotal = parseFloat(document.getElementById('invSubtotal').textContent) || 0;
                 const discountAmt = parseFloat(document.getElementById('invDiscountAmt').textContent) || 0;
                 const taxable = parseFloat(document.getElementById('invTaxable').textContent) || 0;
@@ -3025,17 +3059,15 @@
                 return { subtotal, discountAmt, taxable, cgst, sgst, igst, roundOff, grandTotal };
             },
 
-            // ----- DELETE -----
             deleteInvoice() {
                 if (!this.editingId) return;
-                if (confirm('Delete this invoice permanently?')) {
+                if (confirm('Delete this invoice?')) {
                     DB.delete('invoices', this.editingId);
                     toast('Invoice deleted.');
                     this.backToList();
                 }
             },
 
-            // ----- LIST -----
             renderList() {
                 const invoices = DB.getList('invoices');
                 const search = document.getElementById('invoiceSearch')?.value?.toLowerCase() || '';
@@ -3061,8 +3093,8 @@
                     return;
                 }
 
-                container.innerHTML = filtered.map(inv => `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:6px;">
+                container.innerHTML = filtered.map(inv =>
+                    `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:6px;">
                         <div>
                             <strong>${Utils.escape(inv.number)}</strong>
                             <span class="text-muted text-sm">${Utils.escape(inv.customerName || 'Unknown')}</span>
@@ -3076,11 +3108,10 @@
                             <button class="btn btn-sm btn-secondary" onclick="H4Invoice.printExistingInvoice('${inv.id}')">🖨️</button>
                             <button class="btn btn-sm btn-success" onclick="H4Invoice.whatsappExistingInvoice('${inv.id}')">📤</button>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`
+                ).join('');
             },
 
-            // ----- FILTERS -----
             renderFilters() {
                 const categories = DB.getList('categories').filter(c => c.type === 'both' || c.type === 'invoice');
                 const container = document.getElementById('invoiceFilters');
@@ -3096,7 +3127,6 @@
                 this.renderList();
             },
 
-            // ----- PREVIEW -----
             updatePreview() {
                 const container = document.getElementById('invoicePreview');
                 const data = this.collectData();
@@ -3187,16 +3217,15 @@
 
                         ${paymentOn ? `
                             <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.85rem;">
-                                <div><strong>Payment Status:</strong> ${document.getElementById('invPaymentStatus').value}</div>
-                                <div><strong>Amount Paid:</strong> ${Utils.currency(paidAmt)}</div>
+                                <div><strong>Status:</strong> ${document.getElementById('invPaymentStatus').value}</div>
+                                <div><strong>Paid:</strong> ${Utils.currency(paidAmt)}</div>
                                 <div><strong>Balance:</strong> ${Utils.currency(balance)}</div>
-                                ${document.getElementById('invPaymentMethod').value ? `<div><strong>Method:</strong> ${document.getElementById('invPaymentMethod').value}</div>` : ''}
                             </div>
                         ` : ''}
 
                         ${showBank ? `
                             <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.8rem;color:var(--text-secondary);">
-                                <strong>Bank Details:</strong> ${company.bankName || ''} · ${company.accountNumber || ''} · IFSC: ${company.ifsc || ''}
+                                <strong>Bank:</strong> ${company.bankName || ''} · ${company.accountNumber || ''} · IFSC: ${company.ifsc || ''}
                                 ${company.upiId ? `· UPI: ${company.upiId}` : ''}
                             </div>
                         ` : ''}
@@ -3220,7 +3249,6 @@
                 `;
             },
 
-            // ----- PRINT -----
             printInvoice() {
                 const preview = document.getElementById('invoicePreview');
                 const html = preview.innerHTML;
@@ -3240,12 +3268,6 @@
             printExistingInvoice(id) {
                 const inv = DB.get('invoices')[id];
                 if (!inv) { toast('Invoice not found.', 'error'); return; }
-                this.editingId = id;
-                this.items = JSON.parse(JSON.stringify(inv.items || []));
-                this.populateCustomerSelects();
-                this.populateCategorySelects();
-                // Simulate preview
-                const data = { ...inv };
                 const customer = DB.get('customers')[inv.customerId] || {};
                 const company = DB.get('company') || {};
                 const template = H4Templates.getActiveTemplate();
@@ -3265,7 +3287,6 @@
                 const logo = company.logo ? `<img src="${company.logo}" style="max-height:60px;max-width:120px;object-fit:contain;">` :
                     '';
                 const primary = template.primary || '#6A3FA0';
-                const headerBg = template.headerBg || primary;
                 const font = template.font || 'Arial';
                 const fontSize = template.fontSize || 12;
                 const headingSize = template.headingSize || 24;
@@ -3328,7 +3349,6 @@
                 win.document.close();
             },
 
-            // ----- WHATSAPP -----
             whatsappInvoice() {
                 const data = this.collectData();
                 const customer = DB.get('customers')[data.customerId] || {};
@@ -3359,7 +3379,6 @@
                 }
             },
 
-            // ----- DRAFT -----
             autoSaveDraft() {
                 const data = this.collectData();
                 if (data.items && data.items.length > 0) {
@@ -3402,10 +3421,8 @@
 
             getActiveTemplate() {
                 const templates = DB.get('templates') || {};
-                // Return first template or default
                 const keys = Object.keys(templates);
                 if (keys.length === 0) {
-                    // Create default if none
                     const def = {
                         id: 'tpl_premium',
                         name: 'H4 Premium',
@@ -3471,7 +3488,6 @@
                 document.getElementById('tplFontSize').value = t.fontSize || 12;
                 document.getElementById('tplHeadingSize').value = t.headingSize || 24;
 
-                // Logo position
                 document.querySelectorAll('#tplLogoPos .toggle-btn').forEach(b => {
                     b.classList.toggle('active', b.dataset.value === (t.logoPos || 'center'));
                 });
@@ -3530,14 +3546,6 @@
         };
 
         // ============================================================
-        // INVOICE LIST RENDER (external)
-        // ============================================================
-        H4App.renderInvoiceList = function() {
-            H4Invoice.renderList();
-            H4Invoice.renderFilters();
-        };
-
-        // ============================================================
         // INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
@@ -3545,12 +3553,11 @@
             H4Invoice.setupGstCustom();
             H4Invoice.renderFilters();
 
-            // Global key shortcuts
             document.addEventListener('keydown', function(e) {
                 const builder = document.getElementById('invoiceBuilderView');
                 if (builder && builder.style.display !== 'none') {
                     if (e.key === 'Escape') {
-                        if (confirm('Discard changes and go back?')) {
+                        if (confirm('Discard changes?')) {
                             H4Invoice.backToList();
                         }
                     }
