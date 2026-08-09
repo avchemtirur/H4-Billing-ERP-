@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>H4 Billing ERP - Quotation & Invoice Manager</title>
     <style>
         * {
@@ -605,10 +605,10 @@
                     <h2>Quick Actions</h2>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <button class="btn btn-primary" onclick="H4App.navigate('quotations')">➕ New Quotation</button>
-                    <button class="btn btn-secondary" onclick="H4App.navigate('invoices')">➕ New Invoice</button>
-                    <button class="btn btn-outline" onclick="H4App.navigate('customers')">👥 Add Customer</button>
-                    <button class="btn btn-outline" onclick="H4App.navigate('products')">📦 Add Product</button>
+                    <button class="btn btn-primary" onclick="H4App.navigate('quotations')">📄 Quotations</button>
+                    <button class="btn btn-secondary" onclick="H4App.navigate('invoices')">🧾 Invoices</button>
+                    <button class="btn btn-outline" onclick="H4App.navigate('customers')">👥 Customers</button>
+                    <button class="btn btn-outline" onclick="H4App.navigate('products')">📦 Products</button>
                 </div>
             </div>
         </div>
@@ -905,47 +905,47 @@
             </div>
         </div>
 
-        <!-- ==================== QUOTATIONS (Placeholder) ==================== -->
+        <!-- ==================== QUOTATIONS ==================== -->
         <div class="module" data-module="quotations">
             <div class="page-header">
                 <h1>📄 Quotations</h1>
                 <p>Create and manage quotations</p>
             </div>
             <div class="card">
-                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 2 - Quotation Builder</p>
+                <p style="text-align: center; color: var(--text-secondary);">Quotation builder coming in Phase 2</p>
             </div>
         </div>
 
-        <!-- ==================== INVOICES (Placeholder) ==================== -->
+        <!-- ==================== INVOICES ==================== -->
         <div class="module" data-module="invoices">
             <div class="page-header">
                 <h1>🧾 Invoices</h1>
                 <p>Create and manage invoices</p>
             </div>
             <div class="card">
-                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 2 - Invoice Builder</p>
+                <p style="text-align: center; color: var(--text-secondary);">Invoice builder coming in Phase 2</p>
             </div>
         </div>
 
-        <!-- ==================== PAYMENTS (Placeholder) ==================== -->
+        <!-- ==================== PAYMENTS ==================== -->
         <div class="module" data-module="payments">
             <div class="page-header">
                 <h1>💰 Payments</h1>
                 <p>Track invoice payments</p>
             </div>
             <div class="card">
-                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 3 - Payment Tracking</p>
+                <p style="text-align: center; color: var(--text-secondary);">Payment tracking coming in Phase 3</p>
             </div>
         </div>
 
-        <!-- ==================== TEMPLATES (Placeholder) ==================== -->
+        <!-- ==================== TEMPLATES ==================== -->
         <div class="module" data-module="templates">
             <div class="page-header">
                 <h1>📋 Template Designer</h1>
                 <p>Design quotation & invoice templates</p>
             </div>
             <div class="card">
-                <p style="text-align: center; color: var(--text-secondary);">Coming in Phase 3 - WYSIWYG Template Editor</p>
+                <p style="text-align: center; color: var(--text-secondary);">Template designer coming in Phase 3</p>
             </div>
         </div>
 
@@ -1137,7 +1137,7 @@
     <div class="modal-overlay" id="customerModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Add Customer</h3>
+                <h3>Add / Edit Customer</h3>
                 <button class="modal-close" onclick="H4App.closeModal('customerModal')">✕</button>
             </div>
             <div class="modal-body">
@@ -1212,7 +1212,7 @@
     <div class="modal-overlay" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Add Product</h3>
+                <h3>Add / Edit Product</h3>
                 <button class="modal-close" onclick="H4App.closeModal('productModal')">✕</button>
             </div>
             <div class="modal-body">
@@ -1334,8 +1334,101 @@
         </div>
     </div>
 
-    <!-- CORE JAVASCRIPT -->
+    <!-- ==================== JAVASCRIPT ==================== -->
     <script>
+        // ==================== DEFAULT DATA ====================
+        const defaultData = {
+            company: {
+                id: 'default',
+                legalName: 'AV CHEM',
+                brandName: 'H4 Premium Construction Chemicals',
+                businessType: 'Manufacturing',
+                address: 'Tirur',
+                city: 'Malappuram',
+                district: 'Malappuram',
+                state: 'Kerala',
+                pin: '676101',
+                phone: '+91-XXXXXXXXXX',
+                whatsapp: '+91-XXXXXXXXXX',
+                email: 'info@h4chem.com',
+                website: 'https://avchemtirur.github.io/',
+                gstEnabled: true,
+                gstin: 'XXXXXXXXXXXX',
+                gstStateCode: 'KL',
+                panEnabled: true,
+                pan: 'XXXXXXXXXX',
+                logo: '',
+                signature: '',
+                signatoryName: 'Authorized Signatory',
+                bankEnabled: true,
+                bank: {
+                    name: 'ABC Bank',
+                    accountName: 'AV CHEM',
+                    accountNumber: 'XXXXXXXXXX',
+                    ifsc: 'ABCD0000001',
+                    branch: 'Malappuram',
+                    upiId: 'xxxx@upi'
+                },
+                terms: 'Payment due within 30 days',
+                footerText: 'Thank you for your business!',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+
+            customers: {},
+
+            products: {},
+
+            quotations: {},
+
+            invoices: {},
+
+            payments: {},
+
+            templates: {
+                tpl_001: {
+                    id: 'tpl_001',
+                    name: 'H4 Standard Quotation',
+                    type: 'quotation',
+                    preset: 'standard',
+                    createdAt: new Date().toISOString()
+                }
+            },
+
+            themes: {
+                theme_001: {
+                    id: 'theme_001',
+                    name: 'H4 Purple & Gold',
+                    primary: '#6A3FA0',
+                    secondary: '#8A6510',
+                    accent: '#00BCD4',
+                    background: '#FFFFFF',
+                    text: '#212121',
+                    createdAt: new Date().toISOString()
+                }
+            },
+
+            settings: {
+                currency: 'INR',
+                dateFormat: 'DD/MM/YYYY',
+                defaultGst: 18,
+                quotationPrefix: 'H4-QTN',
+                quotationYear: new Date().getFullYear(),
+                quotationStart: 1,
+                quotationValidity: 30,
+                quotationCounter: 1,
+                invoicePrefix: 'H4-INV',
+                invoiceYear: new Date().getFullYear(),
+                invoiceStart: 1,
+                invoiceDueDays: 30,
+                invoiceCounter: 1,
+                updatedAt: new Date().toISOString()
+            },
+
+            activityLog: [],
+            backupHistory: []
+        };
+
         // ==================== H4 DATABASE ====================
         const H4DB = {
             STORAGE_KEY: 'h4_billing_erp_v3',
@@ -1346,616 +1439,9 @@
                 }
             },
 
-            const defaultData = {
-    // ==================== COMPANY ====================
-    company: {
-        id: 'default',
-
-        legalName: 'AV CHEM',
-        brandName: 'H4 Premium Construction Chemicals',
-        businessType: 'Manufacturing',
-
-        address: 'Tirur',
-        city: 'Malappuram',
-        district: 'Malappuram',
-        state: 'Kerala',
-        pin: '676101',
-
-        phone: '+91-XXXXXXXXXX',
-        whatsapp: '+91-XXXXXXXXXX',
-        email: 'info@h4chem.com',
-        website: 'https://avchemtirur.github.io/',
-
-        // GST
-        gstEnabled: true,
-        gstin: 'XXXXXXXXXXXX',
-        gstStateCode: 'KL',
-
-        // PAN
-        panEnabled: true,
-        pan: 'XXXXXXXXXX',
-
-        // Logo
-        logo: '',
-        logos: [
-            {
-                id: 'logo_001',
-                name: 'Main Logo',
-                image: '',
-                active: true,
-                uploadedAt: '2026-01-01T00:00:00Z'
-            }
-        ],
-
-        // Signature
-        signature: '',
-        signatoryName: 'Authorized Signatory',
-
-        signatureData: {
-            id: 'sig_001',
-            name: 'Authorized Signatory',
-            image: '',
-            uploadedAt: '2026-01-01T00:00:00Z'
-        },
-
-        // Bank
-        bankEnabled: true,
-        bank: {
-            name: 'ABC Bank',
-            accountName: 'AV CHEM',
-            accountNumber: 'XXXXXXXXXX',
-            ifsc: 'ABCD0000001',
-            branch: 'Malappuram',
-            upiId: 'xxxx@upi'
-        },
-
-        // Documents
-        terms: 'Payment due within 30 days',
-        footerText: 'Thank you for your business!',
-
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-01-01T00:00:00Z'
-    },
-
-
-    // ==================== CUSTOMERS ====================
-    customers: {
-        cust_001: {
-            id: 'cust_001',
-            name: 'Customer Name',
-            company: 'Company Name',
-            phone: '+91-XXXXXXXXXX',
-            whatsapp: '+91-XXXXXXXXXX',
-            email: 'customer@example.com',
-
-            address: 'Address',
-            city: 'City',
-            district: 'District',
-            state: 'State',
-            pin: 'PIN',
-
-            gstin: 'XXXXXXXXXXXX',
-            pan: 'XXXXXXXX',
-
-            createdAt: '2026-01-01T00:00:00Z',
-
-            quotations: 5,
-            invoices: 3,
-            totalValue: 150000
-        }
-    },
-
-
-    // ==================== PRODUCTS ====================
-    products: {
-        prod_001: {
-            id: 'prod_001',
-            name: 'Tile Adhesive - Standard',
-            sku: 'TILE-ADH-001',
-
-            category: 'tile-adhesive',
-            subCategory: 'Standard Adhesive',
-
-            brand: 'H4',
-
-            description: 'OPC + RDP based tile adhesive',
-
-            unit: 'kg',
-
-            purchaseRate: 350,
-            sellingRate: 450,
-            mrp: 500,
-
-            gst: 18,
-            hsnCode: '6809',
-
-            active: true,
-
-            notes: 'Popular variant',
-
-            createdAt: '2026-01-01T00:00:00Z'
-        },
-
-        prod_002: {
-            id: 'prod_002',
-            name: 'Waterproofing Coating',
-            sku: 'WATER-001',
-
-            category: 'waterproofing',
-            subCategory: 'Waterproof Coating',
-
-            brand: 'H4',
-
-            description: 'H4 waterproofing coating',
-
-            unit: 'liter',
-
-            purchaseRate: 900,
-            sellingRate: 1200,
-            mrp: 1500,
-
-            gst: 18,
-            hsnCode: '3208',
-
-            active: true,
-
-            notes: 'Waterproofing product',
-
-            createdAt: '2026-01-01T00:00:00Z'
-        },
-
-        prod_003: {
-            id: 'prod_003',
-            name: 'Epoxy Flooring - Component A',
-            sku: 'EPOXY-A-001',
-
-            category: 'epoxy',
-            subCategory: 'Epoxy Flooring',
-
-            brand: 'H4 ShieldX',
-
-            description: 'Two-part epoxy resin component A',
-
-            unit: 'liter',
-
-            purchaseRate: 2000,
-            sellingRate: 2800,
-            mrp: 3500,
-
-            gst: 18,
-            hsnCode: '3909',
-
-            active: true,
-
-            notes: 'Epoxy flooring material',
-
-            createdAt: '2026-01-01T00:00:00Z'
-        }
-    },
-
-
-    // ==================== QUOTATIONS ====================
-    quotations: {
-        qtn_001: {
-            id: 'qtn_001',
-
-            number: 'H4-QTN-2026-00001',
-
-            customerId: 'cust_001',
-
-            templateId: 'tpl_001',
-            themeId: 'theme_001',
-
-            date: '2026-08-08T00:00:00Z',
-            validUntil: '2026-09-08T00:00:00Z',
-
-            projectName: 'Project Name',
-            siteAddress: 'Site Address',
-            reference: 'Reference Number',
-
-            items: [
-                {
-                    itemId: 'item_001',
-                    productId: 'prod_001',
-
-                    description: 'Tile Adhesive - Standard',
-
-                    quantity: 100,
-                    unit: 'kg',
-
-                    rate: 450,
-
-                    discount: 0,
-                    discountType: 'flat',
-
-                    gst: 18,
-
-                    lineTotal: 45000
-                }
-            ],
-
-            subtotal: 45000,
-            totalDiscount: 0,
-            taxableAmount: 45000,
-
-            cgst: 4050,
-            sgst: 4050,
-            igst: 0,
-
-            roundOff: 0,
-
-            grandTotal: 53100,
-
-            status: 'draft',
-
-            convertedToInvoice: null,
-
-            createdAt: '2026-08-08T00:00:00Z',
-            updatedAt: '2026-08-08T00:00:00Z',
-
-            // Snapshot placeholders
-            // Actual snapshots will be created when document is generated.
-            companySnapshot: {},
-            customerSnapshot: {}
-        }
-    },
-
-
-    // ==================== INVOICES ====================
-    invoices: {
-        inv_001: {
-            id: 'inv_001',
-
-            number: 'H4-INV-2026-00001',
-
-            customerId: 'cust_001',
-
-            quotationId: 'qtn_001',
-
-            templateId: 'tpl_002',
-            themeId: 'theme_001',
-
-            date: '2026-08-08T00:00:00Z',
-            dueDate: '2026-09-07T00:00:00Z',
-
-            projectName: 'Project Name',
-            reference: 'Reference Number',
-
-            items: [
-                {
-                    itemId: 'item_001',
-                    productId: 'prod_001',
-
-                    description: 'Tile Adhesive - Standard',
-
-                    quantity: 100,
-                    unit: 'kg',
-
-                    rate: 450,
-
-                    discount: 0,
-
-                    gst: 18,
-
-                    lineTotal: 45000
-                }
-            ],
-
-            subtotal: 45000,
-            totalDiscount: 0,
-            taxableAmount: 45000,
-
-            cgst: 4050,
-            sgst: 4050,
-            igst: 0,
-
-            roundOff: 0,
-
-            grandTotal: 53100,
-
-            status: 'unpaid',
-
-            totalAmount: 53100,
-            paidAmount: 0,
-            balanceAmount: 53100,
-
-            createdAt: '2026-08-08T00:00:00Z',
-            updatedAt: '2026-08-08T00:00:00Z',
-
-            companySnapshot: {},
-            customerSnapshot: {}
-        }
-    },
-
-
-    // ==================== PAYMENTS ====================
-    payments: {
-        pay_001: {
-            id: 'pay_001',
-
-            invoiceId: 'inv_001',
-
-            amount: 20000,
-
-            date: '2026-08-10T00:00:00Z',
-
-            method: 'bank-transfer',
-
-            reference: 'TXN12345',
-
-            notes: 'Payment received',
-
-            recordedAt: '2026-08-10T00:00:00Z'
-        }
-    },
-
-
-    // ==================== TEMPLATES ====================
-    templates: {
-        tpl_001: {
-            id: 'tpl_001',
-
-            name: 'H4 Standard Quotation',
-
-            type: 'quotation',
-
-            preset: 'standard',
-
-            elements: [
-                {
-                    id: 'elem_001',
-
-                    type: 'text',
-
-                    content: 'Quotation',
-
-                    x: 50,
-                    y: 50,
-
-                    width: 200,
-                    height: 30,
-
-                    fontSize: 24,
-
-                    fontFamily: 'Arial',
-
-                    fontWeight: 'bold',
-
-                    color: '#6A3FA0',
-
-                    alignment: 'left'
-                },
-
-                {
-                    id: 'elem_002',
-
-                    type: 'image',
-
-                    src: '',
-
-                    x: 20,
-                    y: 20,
-
-                    width: 80,
-                    height: 80
-                }
-            ],
-
-            layout: {
-                header: {
-                    y: 0,
-                    height: 100
-                },
-
-                company: {
-                    y: 100,
-                    height: 50
-                },
-
-                customer: {
-                    y: 150,
-                    height: 80
-                },
-
-                items: {
-                    y: 230,
-                    height: 300
-                },
-
-                totals: {
-                    y: 530,
-                    height: 80
-                },
-
-                footer: {
-                    y: 610,
-                    height: 40
-                }
+            reset() {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(defaultData));
             },
-
-            themeId: 'theme_001',
-
-            createdAt: '2026-01-01T00:00:00Z'
-        },
-
-        tpl_002: {
-            id: 'tpl_002',
-
-            name: 'H4 Standard Invoice',
-
-            type: 'invoice',
-
-            preset: 'standard',
-
-            elements: [],
-
-            layout: {
-                header: {
-                    y: 0,
-                    height: 100
-                },
-
-                company: {
-                    y: 100,
-                    height: 50
-                },
-
-                customer: {
-                    y: 150,
-                    height: 80
-                },
-
-                items: {
-                    y: 230,
-                    height: 300
-                },
-
-                totals: {
-                    y: 530,
-                    height: 80
-                },
-
-                footer: {
-                    y: 610,
-                    height: 40
-                }
-            },
-
-            themeId: 'theme_001',
-
-            createdAt: '2026-01-01T00:00:00Z'
-        }
-    },
-
-
-    // ==================== THEMES ====================
-    themes: {
-        theme_001: {
-            id: 'theme_001',
-
-            name: 'H4 Purple & Gold',
-
-            preset: 'standard',
-
-            primary: '#6A3FA0',
-            secondary: '#8A6510',
-            accent: '#00BCD4',
-
-            background: '#FFFFFF',
-
-            text: '#212121',
-
-            header: '#6A3FA0',
-
-            footer: '#F5F5F5',
-
-            tableHeader: '#6A3FA0',
-
-            tableText: '#FFFFFF',
-
-            border: '#E0E0E0',
-
-            fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
-
-            fontSize: 12,
-
-            headingSize: 16,
-
-            createdAt: '2026-01-01T00:00:00Z'
-        }
-    },
-
-
-    // ==================== SETTINGS ====================
-    settings: {
-        // General
-        currency: 'INR',
-
-        dateFormat: 'DD/MM/YYYY',
-
-        language: 'en',
-
-        // GST
-        defaultGst: 18,
-
-        gstDefault: 18,
-
-        igstEnabled: true,
-
-        cgstSgstEnabled: true,
-
-        // Quotation Numbering
-        quotationPrefix: 'H4-QTN',
-
-        quotationStart: 1,
-
-        quotationStartNumber: 1,
-
-        quotationYear: 2026,
-
-        quotationFinancialYear: 2026,
-
-        quotationValidity: 30,
-
-        quotationTerms: 'Standard Payment Terms',
-
-        quotationCounter: 1,
-
-        // Invoice Numbering
-        invoicePrefix: 'H4-INV',
-
-        invoiceStart: 1,
-
-        invoiceStartNumber: 1,
-
-        invoiceYear: 2026,
-
-        invoiceFinancialYear: 2026,
-
-        invoiceDueDays: 30,
-
-        invoiceTerms: 'Payment Terms',
-
-        invoiceCounter: 1,
-
-        // Appearance
-        theme: 'theme_001',
-
-        darkMode: false,
-
-        updatedAt: '2026-01-01T00:00:00Z'
-    },
-
-
-    // ==================== ACTIVITY LOG ====================
-    activityLog: [
-        {
-            id: 'log_001',
-
-            type: 'quotation_created',
-
-            description: 'Created quotation H4-QTN-2026-00001',
-
-            documentId: 'qtn_001',
-
-            timestamp: '2026-08-08T10:00:00Z'
-        }
-    ],
-
-
-    // ==================== BACKUP HISTORY ====================
-    backupHistory: [
-        {
-            id: 'backup_001',
-
-            timestamp: '2026-08-08T15:00:00Z',
-
-            size: '250KB',
-
-            note: 'Daily backup'
-        }
-    ]
-};
 
             get(key) {
                 const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
@@ -2003,7 +1489,7 @@
         // ==================== UTILITIES ====================
         const H4Utils = {
             generateId(prefix) {
-                return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                return prefix + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             },
 
             formatCurrency(value) {
@@ -2029,54 +1515,56 @@
 
         // ==================== NOTIFICATIONS ====================
         const H4Notify = {
-            show(message, type = 'success') {
+            show(message, type) {
                 const container = document.getElementById('notifications');
                 const div = document.createElement('div');
-                div.className = `notification ${type}`;
+                div.className = 'notification ' + (type || 'success');
                 div.textContent = message;
                 container.appendChild(div);
-
-                setTimeout(() => {
-                    div.remove();
-                }, 3000);
+                setTimeout(() => div.remove(), 3000);
             },
-
             success(msg) { this.show(msg, 'success'); },
             danger(msg) { this.show(msg, 'danger'); }
         };
 
         // ==================== MAIN APP ====================
         const H4App = {
+            // Store editing IDs
+            editingCustomerId: null,
+            editingProductId: null,
+
             init() {
                 H4DB.init();
                 this.setupListeners();
                 this.loadData();
+
+                // Show bottom nav on mobile
+                if (window.innerWidth <= 768) {
+                    document.getElementById('bottomNav').style.display = 'flex';
+                }
+                window.addEventListener('resize', () => {
+                    document.getElementById('bottomNav').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+                });
             },
 
             setupListeners() {
-                // Sidebar toggle
                 document.getElementById('menuToggle').addEventListener('click', () => {
                     document.getElementById('sidebar').classList.toggle('active');
                 });
 
-                // Navigation
                 document.querySelectorAll('.sidebar-item').forEach(item => {
                     item.addEventListener('click', () => {
-                        const module = item.dataset.module;
-                        this.navigate(module);
+                        this.navigate(item.dataset.module);
                         document.getElementById('sidebar').classList.remove('active');
                     });
                 });
 
-                // Bottom nav
                 document.querySelectorAll('.nav-item').forEach(item => {
                     item.addEventListener('click', () => {
-                        const module = item.dataset.module;
-                        this.navigate(module);
+                        this.navigate(item.dataset.module);
                     });
                 });
 
-                // Forms
                 document.getElementById('companyForm').addEventListener('submit', (e) => {
                     e.preventDefault();
                     this.saveCompany();
@@ -2102,7 +1590,7 @@
                     this.saveTheme();
                 });
 
-                // Checkboxes
+                // Toggle fields
                 document.getElementById('gstEnabled').addEventListener('change', (e) => {
                     document.getElementById('gstFields').style.display = e.target.checked ? 'block' : 'none';
                 });
@@ -2140,24 +1628,37 @@
                     btn.addEventListener('click', () => {
                         document.querySelectorAll('.category-filter').forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
-                        this.loadProducts(btn.dataset.cat === 'all' ? null : btn.dataset.cat);
+                        const cat = btn.dataset.cat === 'all' ? null : btn.dataset.cat;
+                        this.loadProducts(cat);
                     });
                 });
             },
 
+            // ==================== NAVIGATION (FIXED) ====================
             navigate(moduleName) {
-                document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
-                document.querySelector(`[data-module="${moduleName}"]`).classList.add('active');
+                // Hide all modules
+                document.querySelectorAll('.module').forEach(m => {
+                    m.classList.remove('active');
+                });
 
+                // Show target module
+                const target = document.querySelector('.module[data-module="' + moduleName + '"]');
+                if (target) {
+                    target.classList.add('active');
+                }
+
+                // Update sidebar items
                 document.querySelectorAll('.sidebar-item').forEach(item => {
                     item.classList.toggle('active', item.dataset.module === moduleName);
                 });
 
+                // Update bottom nav items
                 document.querySelectorAll('.nav-item').forEach(item => {
                     item.classList.toggle('active', item.dataset.module === moduleName);
                 });
             },
 
+            // ==================== LOAD DATA ====================
             loadData() {
                 this.loadCompany();
                 this.loadSettings();
@@ -2167,41 +1668,43 @@
                 this.updateDashboard();
             },
 
+            // ==================== COMPANY ====================
             loadCompany() {
                 const company = H4DB.get('company');
-                document.getElementById('legalName').value = company.legalName;
-                document.getElementById('brandName').value = company.brandName;
-                document.getElementById('businessType').value = company.businessType;
-                document.getElementById('address').value = company.address;
-                document.getElementById('city').value = company.city;
-                document.getElementById('district').value = company.district;
-                document.getElementById('state').value = company.state;
-                document.getElementById('pin').value = company.pin;
-                document.getElementById('phone').value = company.phone;
-                document.getElementById('whatsapp').value = company.whatsapp;
-                document.getElementById('email').value = company.email;
-                document.getElementById('website').value = company.website;
+                document.getElementById('legalName').value = company.legalName || '';
+                document.getElementById('brandName').value = company.brandName || '';
+                document.getElementById('businessType').value = company.businessType || '';
+                document.getElementById('address').value = company.address || '';
+                document.getElementById('city').value = company.city || '';
+                document.getElementById('district').value = company.district || '';
+                document.getElementById('state').value = company.state || '';
+                document.getElementById('pin').value = company.pin || '';
+                document.getElementById('phone').value = company.phone || '';
+                document.getElementById('whatsapp').value = company.whatsapp || '';
+                document.getElementById('email').value = company.email || '';
+                document.getElementById('website').value = company.website || '';
 
-                document.getElementById('gstEnabled').checked = company.gstEnabled;
-                document.getElementById('gstin').value = company.gstin;
-                document.getElementById('gstStateCode').value = company.gstStateCode;
+                document.getElementById('gstEnabled').checked = !!company.gstEnabled;
+                document.getElementById('gstin').value = company.gstin || '';
+                document.getElementById('gstStateCode').value = company.gstStateCode || '';
                 document.getElementById('gstFields').style.display = company.gstEnabled ? 'block' : 'none';
 
-                document.getElementById('panEnabled').checked = company.panEnabled;
-                document.getElementById('pan').value = company.pan;
+                document.getElementById('panEnabled').checked = !!company.panEnabled;
+                document.getElementById('pan').value = company.pan || '';
                 document.getElementById('panFields').style.display = company.panEnabled ? 'block' : 'none';
 
-                document.getElementById('bankEnabled').checked = company.bankEnabled;
-                document.getElementById('bankName').value = company.bank.name;
-                document.getElementById('accountName').value = company.bank.accountName;
-                document.getElementById('accountNumber').value = company.bank.accountNumber;
-                document.getElementById('ifsc').value = company.bank.ifsc;
-                document.getElementById('branch').value = company.bank.branch;
-                document.getElementById('upiId').value = company.bank.upiId;
+                document.getElementById('bankEnabled').checked = !!company.bankEnabled;
+                const bank = company.bank || {};
+                document.getElementById('bankName').value = bank.name || '';
+                document.getElementById('accountName').value = bank.accountName || '';
+                document.getElementById('accountNumber').value = bank.accountNumber || '';
+                document.getElementById('ifsc').value = bank.ifsc || '';
+                document.getElementById('branch').value = bank.branch || '';
+                document.getElementById('upiId').value = bank.upiId || '';
                 document.getElementById('bankFields').style.display = company.bankEnabled ? 'block' : 'none';
 
-                document.getElementById('terms').value = company.terms;
-                document.getElementById('footerText').value = company.footerText;
+                document.getElementById('terms').value = company.terms || '';
+                document.getElementById('footerText').value = company.footerText || '';
 
                 if (company.logo) {
                     document.getElementById('logoImage').src = company.logo;
@@ -2213,11 +1716,12 @@
                     document.getElementById('signaturePreview').style.display = 'block';
                 }
 
-                document.getElementById('signatoryName').value = company.signatoryName;
+                document.getElementById('signatoryName').value = company.signatoryName || '';
             },
 
             saveCompany() {
                 const company = {
+                    id: 'default',
                     legalName: document.getElementById('legalName').value,
                     brandName: document.getElementById('brandName').value,
                     businessType: document.getElementById('businessType').value,
@@ -2256,72 +1760,81 @@
                 H4Notify.success('Company profile saved!');
             },
 
+            // ==================== SETTINGS ====================
             loadSettings() {
                 const settings = H4DB.get('settings');
-                document.getElementById('currency').value = settings.currency;
-                document.getElementById('dateFormat').value = settings.dateFormat;
-                document.getElementById('defaultGst').value = settings.defaultGst;
-                document.getElementById('quotationPrefix').value = settings.quotationPrefix;
-                document.getElementById('quotationYear').value = settings.quotationYear;
-                document.getElementById('quotationStart').value = settings.quotationStart;
-                document.getElementById('quotationValidity').value = settings.quotationValidity;
-                document.getElementById('invoicePrefix').value = settings.invoicePrefix;
-                document.getElementById('invoiceYear').value = settings.invoiceYear;
-                document.getElementById('invoiceStart').value = settings.invoiceStart;
-                document.getElementById('invoiceDueDays').value = settings.invoiceDueDays;
+                document.getElementById('currency').value = settings.currency || 'INR';
+                document.getElementById('dateFormat').value = settings.dateFormat || 'DD/MM/YYYY';
+                document.getElementById('defaultGst').value = settings.defaultGst || 18;
+                document.getElementById('quotationPrefix').value = settings.quotationPrefix || 'H4-QTN';
+                document.getElementById('quotationYear').value = settings.quotationYear || new Date().getFullYear();
+                document.getElementById('quotationStart').value = settings.quotationStart || 1;
+                document.getElementById('quotationValidity').value = settings.quotationValidity || 30;
+                document.getElementById('invoicePrefix').value = settings.invoicePrefix || 'H4-INV';
+                document.getElementById('invoiceYear').value = settings.invoiceYear || new Date().getFullYear();
+                document.getElementById('invoiceStart').value = settings.invoiceStart || 1;
+                document.getElementById('invoiceDueDays').value = settings.invoiceDueDays || 30;
             },
 
             saveSettings() {
                 const settings = {
                     currency: document.getElementById('currency').value,
                     dateFormat: document.getElementById('dateFormat').value,
-                    defaultGst: parseFloat(document.getElementById('defaultGst').value),
+                    defaultGst: parseFloat(document.getElementById('defaultGst').value) || 18,
                     quotationPrefix: document.getElementById('quotationPrefix').value,
-                    quotationYear: parseInt(document.getElementById('quotationYear').value),
-                    quotationStart: parseInt(document.getElementById('quotationStart').value),
-                    quotationValidity: parseInt(document.getElementById('quotationValidity').value),
-                    quotationCounter: H4DB.get('settings').quotationCounter,
+                    quotationYear: parseInt(document.getElementById('quotationYear').value) || new Date().getFullYear(),
+                    quotationStart: parseInt(document.getElementById('quotationStart').value) || 1,
+                    quotationValidity: parseInt(document.getElementById('quotationValidity').value) || 30,
+                    quotationCounter: H4DB.get('settings').quotationCounter || 1,
                     invoicePrefix: document.getElementById('invoicePrefix').value,
-                    invoiceYear: parseInt(document.getElementById('invoiceYear').value),
-                    invoiceStart: parseInt(document.getElementById('invoiceStart').value),
-                    invoiceDueDays: parseInt(document.getElementById('invoiceDueDays').value),
-                    invoiceCounter: H4DB.get('settings').invoiceCounter
+                    invoiceYear: parseInt(document.getElementById('invoiceYear').value) || new Date().getFullYear(),
+                    invoiceStart: parseInt(document.getElementById('invoiceStart').value) || 1,
+                    invoiceDueDays: parseInt(document.getElementById('invoiceDueDays').value) || 30,
+                    invoiceCounter: H4DB.get('settings').invoiceCounter || 1,
+                    updatedAt: new Date().toISOString()
                 };
 
                 H4DB.save('settings', settings);
                 H4Notify.success('Settings saved!');
             },
 
+            // ==================== CUSTOMERS ====================
             loadCustomers() {
                 const customers = H4DB.get('customers') || {};
                 const tbody = document.getElementById('customersBody');
 
-                if (Object.keys(customers).length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No customers yet</td></tr>';
+                const keys = Object.keys(customers);
+                if (keys.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No customers yet</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = Object.values(customers).map(cust => `
-                    <tr>
-                        <td>${cust.name}</td>
-                        <td>${cust.company || '-'}</td>
-                        <td>${cust.phone}</td>
-                        <td>${cust.email || '-'}</td>
-                        <td>${cust.city || '-'}</td>
-                        <td>
-                            <div class="table-actions">
-                                <button class="btn btn-sm btn-outline" onclick="H4App.editCustomer('${cust.id}')">✏️</button>
-                                <button class="btn btn-sm btn-danger" onclick="H4App.deleteCustomer('${cust.id}')">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
+                tbody.innerHTML = keys.map(id => {
+                    const c = customers[id];
+                    return `
+                        <tr>
+                            <td><strong>${c.name || '-'}</strong></td>
+                            <td>${c.company || '-'}</td>
+                            <td>${c.phone || '-'}</td>
+                            <td>${c.email || '-'}</td>
+                            <td>${c.city || '-'}</td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-outline" onclick="H4App.editCustomer('${id}')">✏️</button>
+                                    <button class="btn btn-sm btn-danger" onclick="H4App.deleteCustomer('${id}')">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
             },
 
             saveCustomer() {
-                const id = H4Utils.generateId('cust');
+                const form = document.getElementById('customerForm');
+                const isEdit = this.editingCustomerId !== null;
+
                 const customer = {
-                    id,
                     name: document.getElementById('custName').value,
                     company: document.getElementById('custCompany').value,
                     phone: document.getElementById('custPhone').value,
@@ -2333,15 +1846,30 @@
                     state: document.getElementById('custState').value,
                     pin: document.getElementById('custPin').value,
                     gstin: document.getElementById('custGstin').value,
-                    createdAt: new Date().toISOString()
+                    updatedAt: new Date().toISOString()
                 };
 
-                H4DB.add('customers', customer);
-                H4Notify.success('Customer added!');
+                if (isEdit) {
+                    // Update existing
+                    const existing = H4DB.get('customers')[this.editingCustomerId];
+                    if (existing) {
+                        customer.createdAt = existing.createdAt;
+                        H4DB.update('customers', this.editingCustomerId, customer);
+                        H4Notify.success('Customer updated!');
+                    }
+                    this.editingCustomerId = null;
+                } else {
+                    // New customer
+                    customer.id = H4Utils.generateId('cust');
+                    customer.createdAt = new Date().toISOString();
+                    H4DB.add('customers', customer);
+                    H4Notify.success('Customer added!');
+                }
+
                 this.closeModal('customerModal');
+                form.reset();
                 this.loadCustomers();
                 this.updateDashboard();
-                document.getElementById('customerForm').reset();
             },
 
             editCustomer(id) {
@@ -2349,24 +1877,27 @@
                 const cust = customers[id];
                 if (!cust) return;
 
-                document.getElementById('custName').value = cust.name;
-                document.getElementById('custCompany').value = cust.company;
-                document.getElementById('custPhone').value = cust.phone;
-                document.getElementById('custWhatsapp').value = cust.whatsapp;
-                document.getElementById('custEmail').value = cust.email;
-                document.getElementById('custAddress').value = cust.address;
-                document.getElementById('custCity').value = cust.city;
-                document.getElementById('custDistrict').value = cust.district;
-                document.getElementById('custState').value = cust.state;
-                document.getElementById('custPin').value = cust.pin;
-                document.getElementById('custGstin').value = cust.gstin;
+                this.editingCustomerId = id;
 
-                document.getElementById('customerForm').dataset.customerId = id;
+                document.getElementById('custName').value = cust.name || '';
+                document.getElementById('custCompany').value = cust.company || '';
+                document.getElementById('custPhone').value = cust.phone || '';
+                document.getElementById('custWhatsapp').value = cust.whatsapp || '';
+                document.getElementById('custEmail').value = cust.email || '';
+                document.getElementById('custAddress').value = cust.address || '';
+                document.getElementById('custCity').value = cust.city || '';
+                document.getElementById('custDistrict').value = cust.district || '';
+                document.getElementById('custState').value = cust.state || '';
+                document.getElementById('custPin').value = cust.pin || '';
+                document.getElementById('custGstin').value = cust.gstin || '';
+
+                // Change modal title to "Edit"
+                document.querySelector('#customerModal .modal-header h3').textContent = 'Edit Customer';
                 this.openModal('customerModal');
             },
 
             deleteCustomer(id) {
-                if (confirm('Delete this customer?')) {
+                if (confirm('Delete this customer permanently?')) {
                     H4DB.delete('customers', id);
                     H4Notify.success('Customer deleted!');
                     this.loadCustomers();
@@ -2374,7 +1905,8 @@
                 }
             },
 
-            loadProducts(category = null) {
+            // ==================== PRODUCTS ====================
+            loadProducts(category) {
                 const products = H4DB.get('products') || {};
                 const tbody = document.getElementById('productsBody');
 
@@ -2384,21 +1916,22 @@
                 }
 
                 if (filtered.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No products found</td></tr>';
+                    tbody.innerHTML =
+                        '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No products found</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = filtered.map(prod => `
+                tbody.innerHTML = filtered.map(p => `
                     <tr>
-                        <td><strong>${prod.name}</strong><br><small style="color: var(--text-secondary);">${prod.sku || '-'}</small></td>
-                        <td><span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">${prod.category}</span></td>
-                        <td>${prod.unit}</td>
-                        <td>${H4Utils.formatCurrency(prod.sellingRate)}</td>
-                        <td>${prod.gst}%</td>
+                        <td><strong>${p.name || '-'}</strong><br><small style="color: var(--text-secondary);">${p.sku || '-'}</small></td>
+                        <td><span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">${p.category || '-'}</span></td>
+                        <td>${p.unit || '-'}</td>
+                        <td>${H4Utils.formatCurrency(p.sellingRate || 0)}</td>
+                        <td>${p.gst || 0}%</td>
                         <td>
                             <div class="table-actions">
-                                <button class="btn btn-sm btn-outline" onclick="H4App.editProduct('${prod.id}')">✏️</button>
-                                <button class="btn btn-sm btn-danger" onclick="H4App.deleteProduct('${prod.id}')">🗑️</button>
+                                <button class="btn btn-sm btn-outline" onclick="H4App.editProduct('${p.id}')">✏️</button>
+                                <button class="btn btn-sm btn-danger" onclick="H4App.deleteProduct('${p.id}')">🗑️</button>
                             </div>
                         </td>
                     </tr>
@@ -2406,31 +1939,43 @@
             },
 
             saveProduct() {
-                const id = H4Utils.generateId('prod');
+                const isEdit = this.editingProductId !== null;
+
                 const product = {
-                    id,
                     name: document.getElementById('prodName').value,
                     sku: document.getElementById('prodSku').value,
                     category: document.getElementById('prodCategory').value,
-                    subCategory: '',
                     brand: document.getElementById('prodBrand').value,
                     description: document.getElementById('prodDescription').value,
                     unit: document.getElementById('prodUnit').value,
                     purchaseRate: parseFloat(document.getElementById('prodPurchaseRate').value) || 0,
-                    sellingRate: parseFloat(document.getElementById('prodRate').value),
+                    sellingRate: parseFloat(document.getElementById('prodRate').value) || 0,
                     mrp: parseFloat(document.getElementById('prodMrp').value) || 0,
-                    gst: parseFloat(document.getElementById('prodGst').value),
+                    gst: parseFloat(document.getElementById('prodGst').value) || 0,
                     hsnCode: document.getElementById('prodHsn').value,
                     active: true,
-                    createdAt: new Date().toISOString()
+                    updatedAt: new Date().toISOString()
                 };
 
-                H4DB.add('products', product);
-                H4Notify.success('Product added!');
+                if (isEdit) {
+                    const existing = H4DB.get('products')[this.editingProductId];
+                    if (existing) {
+                        product.createdAt = existing.createdAt;
+                        H4DB.update('products', this.editingProductId, product);
+                        H4Notify.success('Product updated!');
+                    }
+                    this.editingProductId = null;
+                } else {
+                    product.id = H4Utils.generateId('prod');
+                    product.createdAt = new Date().toISOString();
+                    H4DB.add('products', product);
+                    H4Notify.success('Product added!');
+                }
+
                 this.closeModal('productModal');
+                document.getElementById('productForm').reset();
                 this.loadProducts();
                 this.updateDashboard();
-                document.getElementById('productForm').reset();
             },
 
             editProduct(id) {
@@ -2438,24 +1983,26 @@
                 const prod = products[id];
                 if (!prod) return;
 
-                document.getElementById('prodName').value = prod.name;
-                document.getElementById('prodSku').value = prod.sku;
-                document.getElementById('prodCategory').value = prod.category;
-                document.getElementById('prodBrand').value = prod.brand;
-                document.getElementById('prodDescription').value = prod.description;
-                document.getElementById('prodUnit').value = prod.unit;
-                document.getElementById('prodPurchaseRate').value = prod.purchaseRate;
-                document.getElementById('prodRate').value = prod.sellingRate;
-                document.getElementById('prodMrp').value = prod.mrp;
-                document.getElementById('prodGst').value = prod.gst;
-                document.getElementById('prodHsn').value = prod.hsnCode;
+                this.editingProductId = id;
 
-                document.getElementById('productForm').dataset.productId = id;
+                document.getElementById('prodName').value = prod.name || '';
+                document.getElementById('prodSku').value = prod.sku || '';
+                document.getElementById('prodCategory').value = prod.category || '';
+                document.getElementById('prodBrand').value = prod.brand || '';
+                document.getElementById('prodDescription').value = prod.description || '';
+                document.getElementById('prodUnit').value = prod.unit || '';
+                document.getElementById('prodPurchaseRate').value = prod.purchaseRate || '';
+                document.getElementById('prodRate').value = prod.sellingRate || '';
+                document.getElementById('prodMrp').value = prod.mrp || '';
+                document.getElementById('prodGst').value = prod.gst || '';
+                document.getElementById('prodHsn').value = prod.hsnCode || '';
+
+                document.querySelector('#productModal .modal-header h3').textContent = 'Edit Product';
                 this.openModal('productModal');
             },
 
             deleteProduct(id) {
-                if (confirm('Delete this product?')) {
+                if (confirm('Delete this product permanently?')) {
                     H4DB.delete('products', id);
                     H4Notify.success('Product deleted!');
                     this.loadProducts();
@@ -2463,34 +2010,38 @@
                 }
             },
 
+            // ==================== THEMES ====================
             loadThemes() {
                 const themes = H4DB.get('themes') || {};
                 const container = document.getElementById('themesContainer');
 
-                if (Object.keys(themes).length === 0) {
+                const keys = Object.keys(themes);
+                if (keys.length === 0) {
                     container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No themes yet</p>';
                     return;
                 }
 
-                container.innerHTML = Object.values(themes).map(theme => `
-                    <div style="padding: 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong>${theme.name}</strong>
-                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                                <div style="width: 30px; height: 30px; background: ${theme.primary}; border-radius: 4px; border: 1px solid var(--border);"></div>
-                                <div style="width: 30px; height: 30px; background: ${theme.secondary}; border-radius: 4px; border: 1px solid var(--border);"></div>
-                                <div style="width: 30px; height: 30px; background: ${theme.accent}; border-radius: 4px; border: 1px solid var(--border);"></div>
+                container.innerHTML = keys.map(id => {
+                    const t = themes[id];
+                    return `
+                        <div style="padding: 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${t.name || 'Untitled'}</strong>
+                                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <div style="width: 30px; height: 30px; background: ${t.primary || '#6A3FA0'}; border-radius: 4px; border: 1px solid var(--border);"></div>
+                                    <div style="width: 30px; height: 30px; background: ${t.secondary || '#8A6510'}; border-radius: 4px; border: 1px solid var(--border);"></div>
+                                    <div style="width: 30px; height: 30px; background: ${t.accent || '#00BCD4'}; border-radius: 4px; border: 1px solid var(--border);"></div>
+                                </div>
                             </div>
+                            <button class="btn btn-sm btn-danger" onclick="H4App.deleteTheme('${id}')">🗑️</button>
                         </div>
-                        <button class="btn btn-sm btn-danger" onclick="H4App.deleteTheme('${theme.id}')">🗑️</button>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             },
 
             saveTheme() {
-                const id = H4Utils.generateId('theme');
                 const theme = {
-                    id,
+                    id: H4Utils.generateId('theme'),
                     name: document.getElementById('themeName').value,
                     primary: document.getElementById('themePrimary').value,
                     secondary: document.getElementById('themeSecondary').value,
@@ -2503,8 +2054,8 @@
                 H4DB.add('themes', theme);
                 H4Notify.success('Theme created!');
                 this.closeModal('themeModal');
-                this.loadThemes();
                 document.getElementById('themeForm').reset();
+                this.loadThemes();
             },
 
             deleteTheme(id) {
@@ -2515,16 +2066,20 @@
                 }
             },
 
+            // ==================== DASHBOARD ====================
             updateDashboard() {
                 const customers = H4DB.get('customers') || {};
                 const products = H4DB.get('products') || {};
+                const quotations = H4DB.get('quotations') || {};
+                const invoices = H4DB.get('invoices') || {};
 
                 document.getElementById('totalCustomers').textContent = Object.keys(customers).length;
                 document.getElementById('totalProducts').textContent = Object.keys(products).length;
-                document.getElementById('todayQuotations').textContent = '0';
-                document.getElementById('todayInvoices').textContent = '0';
+                document.getElementById('todayQuotations').textContent = Object.keys(quotations).length;
+                document.getElementById('todayInvoices').textContent = Object.keys(invoices).length;
             },
 
+            // ==================== BACKUP ====================
             downloadBackup() {
                 const data = H4DB.get();
                 const backup = JSON.stringify(data, null, 2);
@@ -2532,7 +2087,7 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `H4-Billing-Backup-${new Date().toISOString().slice(0, 10)}.json`;
+                a.download = 'H4-Billing-Backup-' + new Date().toISOString().slice(0, 10) + '.json';
                 a.click();
                 URL.revokeObjectURL(url);
                 H4Notify.success('Backup downloaded!');
@@ -2559,6 +2114,7 @@
                 reader.readAsText(file);
             },
 
+            // ==================== DANGER ====================
             resetAllData() {
                 if (confirm('Are you SURE? This will delete ALL data!')) {
                     if (confirm('This cannot be undone. Confirm again?')) {
@@ -2569,18 +2125,39 @@
                 }
             },
 
+            // ==================== MODALS ====================
             openModal(modalId) {
                 document.getElementById(modalId).classList.add('active');
             },
 
             closeModal(modalId) {
                 document.getElementById(modalId).classList.remove('active');
+                // Reset modal title for customer/product if closed
+                if (modalId === 'customerModal') {
+                    document.querySelector('#customerModal .modal-header h3').textContent = 'Add / Edit Customer';
+                    this.editingCustomerId = null;
+                }
+                if (modalId === 'productModal') {
+                    document.querySelector('#productModal .modal-header h3').textContent = 'Add / Edit Product';
+                    this.editingProductId = null;
+                }
             }
         };
 
-        // Initialize
+        // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
             H4App.init();
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('sidebar');
+                const toggle = document.getElementById('menuToggle');
+                if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                    if (!sidebar.contains(e.target) && e.target !== toggle) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            });
         });
     </script>
 </body>
