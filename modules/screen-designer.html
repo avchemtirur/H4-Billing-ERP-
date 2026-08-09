@@ -1,0 +1,2666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>H4 Screen Designer — Visual Layout Editor</title>
+    <style>
+        /* ============================================================
+           GLOBAL RESET & VARIABLES
+           ============================================================ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            --primary: #5B2D8E;
+            --primary-light: #7B4FA8;
+            --primary-dark: #3E1F63;
+            --gold: #D4AF37;
+            --bg: #f0edf5;
+            --card-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-muted: #6b6b7a;
+            --border: #e2dce8;
+            --shadow: 0 4px 24px rgba(91, 45, 142, 0.10);
+            --radius: 12px;
+            --radius-sm: 6px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --touch: 44px;
+            --sidebar-width: 240px;
+            --header-height: 56px;
+            --toolbar-height: 52px;
+            --panel-width: 320px;
+            --canvas-bg: #e8e4ee;
+            --grid-color: rgba(91, 45, 142, 0.08);
+            --grid-size: 20px;
+            --snap: 10px;
+        }
+        html,
+        body {
+            height: 100%;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.5;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+            border: none;
+            background: none;
+            color: inherit;
+            touch-action: manipulation;
+        }
+        input,
+        select {
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text);
+            background: #fff;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            width: 100%;
+            outline: none;
+            transition: border 0.2s;
+        }
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+        }
+        label {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gap-4 {
+            gap: 4px;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .gap-12 {
+            gap: 12px;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .text-muted {
+            color: var(--text-muted);
+        }
+        .text-sm {
+            font-size: 0.8rem;
+        }
+        .text-xs {
+            font-size: 0.7rem;
+        }
+        .fw-600 {
+            font-weight: 600;
+        }
+        .fw-700 {
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            border: 1.5px solid transparent;
+            background: var(--bg);
+            color: var(--text);
+            min-height: var(--touch);
+            min-width: var(--touch);
+            touch-action: manipulation;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: #1a1a2e;
+            border-color: var(--gold);
+        }
+        .btn-gold:hover {
+            background: #c4a032;
+            border-color: #c4a032;
+        }
+        .btn-outline {
+            background: transparent;
+            border-color: var(--border);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .btn-danger {
+            background: #b91c1c;
+            color: #fff;
+            border-color: #b91c1c;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            min-height: 32px;
+            min-width: 32px;
+        }
+        .btn-icon {
+            width: var(--touch);
+            height: var(--touch);
+            padding: 0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+        .btn.active-tool {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        /* ============================================================
+           APP LAYOUT
+           ============================================================ */
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            flex-shrink: 0;
+            gap: 12px;
+            z-index: 100;
+        }
+        .app-header .logo {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .app-header .logo span {
+            color: var(--gold);
+        }
+        .app-header .spacer {
+            flex: 1;
+        }
+        .app-header .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+        }
+        .app-header .header-actions .btn {
+            min-width: 36px;
+            min-height: 36px;
+            padding: 0 10px;
+            font-size: 0.75rem;
+        }
+        .app-header .device-switcher {
+            display: flex;
+            gap: 2px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 2px;
+        }
+        .app-header .device-switcher .btn {
+            min-height: 30px;
+            min-width: 30px;
+            padding: 0 10px;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            background: transparent;
+            border: none;
+        }
+        .app-header .device-switcher .btn.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ===== BODY ===== */
+        .app-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== SIDEBAR (modules) ===== */
+        .app-sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            flex-shrink: 0;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 50;
+            transition: transform 0.25s ease;
+        }
+        .app-sidebar .sidebar-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            padding: 8px 4px 4px;
+            font-weight: 700;
+        }
+        .app-sidebar .module-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            border: 1px solid transparent;
+            width: 100%;
+            text-align: left;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+            touch-action: manipulation;
+            min-height: 44px;
+        }
+        .app-sidebar .module-btn:hover {
+            background: var(--bg);
+            border-color: var(--border);
+        }
+        .app-sidebar .module-btn .icon {
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .app-sidebar .module-btn .badge {
+            margin-left: auto;
+            font-size: 0.6rem;
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--text-muted);
+        }
+        .app-sidebar .module-btn.dragging {
+            opacity: 0.4;
+        }
+
+        /* ===== CANVAS AREA ===== */
+        .canvas-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            background: var(--canvas-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+        }
+        .canvas-scroll {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+            cursor: grab;
+        }
+        .canvas-scroll:active {
+            cursor: grabbing;
+        }
+        .canvas-container {
+            position: relative;
+            background: #ffffff;
+            box-shadow: 0 8px 48px rgba(0, 0, 0, 0.12);
+            border-radius: 4px;
+            transform-origin: center center;
+            touch-action: none;
+            min-width: 320px;
+            min-height: 480px;
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+        .canvas-container.desktop {
+            width: 1200px;
+            height: 800px;
+        }
+        .canvas-container.tablet {
+            width: 768px;
+            height: 1024px;
+        }
+        .canvas-container.mobile {
+            width: 375px;
+            height: 812px;
+        }
+
+        /* Grid overlay */
+        .canvas-grid {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: var(--grid-size) var(--grid-size);
+            opacity: 0.5;
+            z-index: 0;
+        }
+        .canvas-grid.hidden {
+            opacity: 0;
+        }
+
+        /* ===== CANVAS OBJECTS ===== */
+        .canvas-object {
+            position: absolute;
+            cursor: grab;
+            touch-action: none;
+            border: 2px solid transparent;
+            border-radius: var(--radius-sm);
+            transition: border-color 0.15s, box-shadow 0.15s;
+            z-index: 1;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            will-change: transform, left, top, width, height;
+        }
+        .canvas-object .obj-content {
+            width: 100%;
+            height: 100%;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            pointer-events: none;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .canvas-object .obj-content .obj-icon {
+            font-size: 2.4rem;
+            margin-bottom: 4px;
+        }
+        .canvas-object .obj-content .obj-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .canvas-object .obj-content .obj-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .canvas-object .obj-content .obj-stat {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 4px 0;
+        }
+        .canvas-object .obj-content .obj-btn {
+            margin-top: 6px;
+            padding: 4px 16px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        /* Selection state */
+        .canvas-object.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(91, 45, 142, 0.2), 0 4px 16px rgba(91, 45, 142, 0.12);
+            z-index: 10;
+        }
+        .canvas-object.locked {
+            border-color: #999;
+            opacity: 0.8;
+            cursor: default;
+        }
+        .canvas-object.locked .resize-handle,
+        .canvas-object.locked .rotate-handle {
+            display: none !important;
+        }
+
+        /* ===== RESIZE HANDLES ===== */
+        .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            z-index: 20;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            touch-action: none;
+            pointer-events: all;
+        }
+        .resize-handle:hover {
+            transform: scale(1.2);
+        }
+        .resize-handle.nw {
+            top: -6px;
+            left: -6px;
+            cursor: nw-resize;
+        }
+        .resize-handle.n {
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: n-resize;
+        }
+        .resize-handle.ne {
+            top: -6px;
+            right: -6px;
+            cursor: ne-resize;
+        }
+        .resize-handle.e {
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%);
+            cursor: e-resize;
+        }
+        .resize-handle.se {
+            bottom: -6px;
+            right: -6px;
+            cursor: se-resize;
+        }
+        .resize-handle.s {
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: s-resize;
+        }
+        .resize-handle.sw {
+            bottom: -6px;
+            left: -6px;
+            cursor: sw-resize;
+        }
+        .resize-handle.w {
+            top: 50%;
+            left: -6px;
+            transform: translateY(-50%);
+            cursor: w-resize;
+        }
+
+        /* ===== ROTATE HANDLE ===== */
+        .rotate-handle {
+            position: absolute;
+            top: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            z-index: 20;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            cursor: grab;
+            touch-action: none;
+            pointer-events: all;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+        .rotate-handle::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 12px;
+            background: var(--gold);
+        }
+        .rotate-handle:hover {
+            transform: translateX(-50%) scale(1.15);
+        }
+
+        /* ===== DIMENSION LABEL ===== */
+        .dimension-label {
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 30;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        /* ===== PROPERTIES PANEL ===== */
+        .app-panel {
+            width: var(--panel-width);
+            background: var(--card-bg);
+            border-left: 1px solid var(--border);
+            flex-shrink: 0;
+            overflow-y: auto;
+            padding: 16px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.25s ease;
+        }
+        .app-panel .panel-section {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+        .app-panel .panel-section:last-child {
+            border-bottom: none;
+        }
+        .app-panel .panel-section .section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .app-panel .panel-section .section-title .toggle {
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .app-panel .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .app-panel .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+        }
+        .app-panel .row-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 4px;
+        }
+        .app-panel .color-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .app-panel .color-swatch:hover {
+            border-color: var(--primary);
+        }
+        .app-panel .color-swatch.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(91, 45, 142, 0.2);
+        }
+        .app-panel .panel-input-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .app-panel .panel-input-group label {
+            margin-bottom: 0;
+            font-size: 0.65rem;
+            min-width: 40px;
+        }
+        .app-panel .panel-input-group input,
+        .app-panel .panel-input-group select {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            min-height: 28px;
+        }
+
+        /* ===== NO SELECTION ===== */
+        .no-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 20px;
+        }
+        .no-selection .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 380px;
+            width: 100%;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--primary);
+            animation: slideUp 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            pointer-events: all;
+            font-size: 0.85rem;
+        }
+        .toast.success {
+            border-left-color: #0d7c3f;
+        }
+        .toast.error {
+            border-left-color: #b91c1c;
+        }
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .app-sidebar {
+                position: fixed;
+                left: 0;
+                top: var(--header-height);
+                bottom: 0;
+                transform: translateX(-100%);
+                width: 280px;
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+                z-index: 200;
+            }
+            .app-sidebar.open {
+                transform: translateX(0);
+            }
+            .app-panel {
+                position: fixed;
+                right: 0;
+                top: var(--header-height);
+                bottom: 0;
+                transform: translateX(100%);
+                width: 320px;
+                box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+                z-index: 200;
+                overflow-y: auto;
+            }
+            .app-panel.open {
+                transform: translateX(0);
+            }
+            .canvas-container.desktop {
+                width: 100%;
+                height: auto;
+                min-height: 600px;
+            }
+            .canvas-container.tablet {
+                width: 100%;
+                height: auto;
+                min-height: 600px;
+            }
+            .canvas-container.mobile {
+                width: 100%;
+                height: auto;
+                min-height: 500px;
+            }
+            .app-header .device-switcher .btn {
+                font-size: 0.6rem;
+                padding: 0 6px;
+                min-width: 24px;
+            }
+            .app-header .logo {
+                font-size: 0.9rem;
+            }
+            .app-header .header-actions .btn span.label {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .app-panel {
+                width: 100%;
+                max-width: 100%;
+                border-left: none;
+                border-top: 1px solid var(--border);
+            }
+            .app-header {
+                padding: 0 8px;
+                gap: 6px;
+                flex-wrap: nowrap;
+                height: 48px;
+            }
+            .app-header .logo {
+                font-size: 0.8rem;
+            }
+            .app-header .header-actions .btn {
+                min-width: 32px;
+                min-height: 32px;
+                padding: 0 6px;
+                font-size: 0.7rem;
+            }
+            .app-sidebar {
+                width: 100%;
+                max-width: 320px;
+            }
+            .canvas-container {
+                border-radius: 0;
+                box-shadow: none;
+                min-height: 400px;
+            }
+            .canvas-scroll {
+                padding: 8px;
+            }
+            .resize-handle {
+                width: 16px;
+                height: 16px;
+            }
+            .rotate-handle {
+                width: 28px;
+                height: 28px;
+                top: -38px;
+                font-size: 12px;
+            }
+            .rotate-handle::after {
+                top: 20px;
+                height: 16px;
+            }
+            .dimension-label {
+                font-size: 0.55rem;
+                padding: 2px 8px;
+                bottom: -24px;
+            }
+            .btn {
+                min-height: 40px;
+                min-width: 40px;
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+            .btn-sm {
+                min-height: 32px;
+                min-width: 32px;
+                padding: 4px 8px;
+                font-size: 0.65rem;
+            }
+            .app-panel .row-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .app-panel .row-3 {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            .app-panel .row-4 {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+        }
+
+        /* Scrollbar */
+        .app-sidebar::-webkit-scrollbar,
+        .app-panel::-webkit-scrollbar,
+        .canvas-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .app-sidebar::-webkit-scrollbar-thumb,
+        .app-panel::-webkit-scrollbar-thumb,
+        .canvas-scroll::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+        .app-sidebar::-webkit-scrollbar-track,
+        .app-panel::-webkit-scrollbar-track,
+        .canvas-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* Bottom sheet overlay for mobile */
+        .bottom-sheet-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        .bottom-sheet-overlay.open {
+            display: flex;
+        }
+        .bottom-sheet {
+            background: var(--card-bg);
+            border-radius: var(--radius) var(--radius) 0 0;
+            width: 100%;
+            max-width: 600px;
+            max-height: 70vh;
+            padding: 20px;
+            overflow-y: auto;
+            animation: slideUp 0.25s ease;
+            box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.12);
+        }
+        .bottom-sheet .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 4px;
+            margin: 0 auto 16px;
+        }
+        .bottom-sheet .sheet-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ============================================================
+           THEME PRESETS
+           ============================================================ */
+        .theme-preset {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .theme-preset .preset-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: transparent;
+            transition: all 0.15s;
+            touch-action: manipulation;
+            min-height: 32px;
+        }
+        .theme-preset .preset-btn:hover {
+            border-color: var(--primary);
+        }
+        .theme-preset .preset-btn.active {
+            border-color: var(--primary);
+            background: rgba(91, 45, 142, 0.08);
+            color: var(--primary);
+        }
+
+        /* ============================================================
+           LOADING / EMPTY STATE
+           ============================================================ */
+        .empty-canvas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 40px;
+            pointer-events: none;
+        }
+        .empty-canvas .icon {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 16px;
+        }
+        .empty-canvas h3 {
+            color: var(--text);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================================
+    APP
+    ============================================================ -->
+    <div id="app">
+
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="logo">🎨 H4 <span>Designer</span></div>
+            <div class="spacer"></div>
+            <div class="device-switcher" id="deviceSwitcher">
+                <button class="btn active" data-device="desktop" onclick="setDevice('desktop')">🖥️</button>
+                <button class="btn" data-device="tablet" onclick="setDevice('tablet')">📱</button>
+                <button class="btn" data-device="mobile" onclick="setDevice('mobile')">📲</button>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline btn-sm" onclick="undoHistory()" title="Undo (Ctrl+Z)">↩️</button>
+                <button class="btn btn-outline btn-sm" onclick="redoHistory()" title="Redo (Ctrl+Y)">↪️</button>
+                <button class="btn btn-outline btn-sm" onclick="toggleSidebar()" title="Modules">📦</button>
+                <button class="btn btn-outline btn-sm" onclick="togglePanel()" title="Properties">⚙️</button>
+                <button class="btn btn-gold btn-sm" onclick="saveLayout()">💾 Save</button>
+                <button class="btn btn-outline btn-sm" onclick="exportLayout()">📤</button>
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📥</button>
+                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importLayout(event)">
+            </div>
+        </header>
+
+        <!-- BODY -->
+        <div class="app-body">
+
+            <!-- SIDEBAR - Module Library -->
+            <aside class="app-sidebar" id="appSidebar">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                    <span class="sidebar-title">📦 Modules</span>
+                    <button class="btn btn-sm btn-outline" onclick="toggleSidebar()" style="min-width:28px;min-height:28px;padding:0 8px;">✕</button>
+                </div>
+                <div id="moduleList"></div>
+                <div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--border);">
+                    <button class="btn btn-primary btn-block btn-sm" onclick="addModuleToCanvas()">➕ Add to Canvas</button>
+                </div>
+            </aside>
+
+            <!-- CANVAS -->
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <div class="canvas-scroll" id="canvasScroll">
+                    <div class="canvas-container desktop" id="canvasContainer">
+                        <div class="canvas-grid" id="canvasGrid"></div>
+                        <div id="canvasObjects"></div>
+                        <!-- Selection overlay for handles -->
+                        <div id="selectionOverlay" style="position:absolute;inset:0;pointer-events:none;z-index:5;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROPERTIES PANEL -->
+            <aside class="app-panel" id="appPanel">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                    <span class="sidebar-title" style="font-size:0.7rem;">⚙️ Properties</span>
+                    <button class="btn btn-sm btn-outline" onclick="togglePanel()" style="min-width:28px;min-height:28px;padding:0 8px;">✕</button>
+                </div>
+                <div id="panelContent">
+                    <div class="no-selection">
+                        <div class="icon">👆</div>
+                        <p>Select an object on the canvas to edit its properties.</p>
+                        <p class="text-sm text-muted" style="margin-top:8px;">Click a module card to select it.</p>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- ============================================================
+    BOTTOM SHEET (mobile)
+    ============================================================ -->
+    <div class="bottom-sheet-overlay" id="bottomSheetOverlay" onclick="if(event.target===this)closeBottomSheet()">
+        <div class="bottom-sheet" id="bottomSheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title" id="sheetTitle">Properties</div>
+            <div id="sheetContent"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    JAVASCRIPT — COMPLETE SCREEN DESIGNER ENGINE
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // 1. MODULE REGISTRY
+        // ============================================================
+        const H4_MODULE_REGISTRY = {
+            dashboard: {
+                id: 'dashboard',
+                title: 'Dashboard',
+                icon: '📊',
+                path: 'index.html',
+                category: 'core',
+                defaultVisible: true,
+                color: '#5B2D8E'
+            },
+            quotation: {
+                id: 'quotation',
+                title: 'Quotation',
+                icon: '📄',
+                path: 'modules/quotation.html',
+                category: 'sales',
+                defaultVisible: true,
+                color: '#D4AF37'
+            },
+            invoice: {
+                id: 'invoice',
+                title: 'Invoice',
+                icon: '🧾',
+                path: 'modules/invoice.html',
+                category: 'sales',
+                defaultVisible: true,
+                color: '#0d7c3f'
+            },
+            customer: {
+                id: 'customer',
+                title: 'Customer',
+                icon: '👥',
+                path: 'modules/customer.html',
+                category: 'people',
+                defaultVisible: true,
+                color: '#1e40af'
+            },
+            product: {
+                id: 'product',
+                title: 'Product',
+                icon: '📦',
+                path: 'modules/product.html',
+                category: 'inventory',
+                defaultVisible: true,
+                color: '#b45309'
+            },
+            payment: {
+                id: 'payment',
+                title: 'Payment',
+                icon: '💰',
+                path: 'modules/payment.html',
+                category: 'finance',
+                defaultVisible: true,
+                color: '#0d9488'
+            },
+            rateMaster: {
+                id: 'rateMaster',
+                title: 'Rate Master',
+                icon: '🧮',
+                path: 'modules/rate-master.html',
+                category: 'settings',
+                defaultVisible: true,
+                color: '#7c3aed'
+            },
+            waterproofing: {
+                id: 'waterproofing',
+                title: 'Waterproofing',
+                icon: '💧',
+                path: 'modules/waterproofing.html',
+                category: 'construction',
+                defaultVisible: true,
+                color: '#065f46'
+            },
+            epoxy: {
+                id: 'epoxy',
+                title: 'Epoxy Flooring',
+                icon: '✨',
+                path: 'modules/epoxy.html',
+                category: 'construction',
+                defaultVisible: true,
+                color: '#b91c1c'
+            },
+            reports: {
+                id: 'reports',
+                title: 'Reports',
+                icon: '📈',
+                path: 'modules/reports.html',
+                category: 'analytics',
+                defaultVisible: true,
+                color: '#4f46e5'
+            },
+            settings: {
+                id: 'settings',
+                title: 'Settings',
+                icon: '⚙️',
+                path: 'modules/settings.html',
+                category: 'system',
+                defaultVisible: true,
+                color: '#6b7280'
+            }
+        };
+
+        const H4_SCREEN_LIST = Object.keys(H4_MODULE_REGISTRY);
+
+        // ============================================================
+        // 2. STORAGE HELPERS
+        // ============================================================
+        const H4Storage = {
+            KEYS: {
+                LAYOUT: 'h4_screen_layout_v1',
+                THEME: 'h4_theme_v1',
+                DRAFT: 'h4_screen_draft_v1',
+                HISTORY: 'h4_screen_history_v1'
+            },
+            get(key, def) {
+                try {
+                    const raw = localStorage.getItem(key);
+                    return raw ? JSON.parse(raw) : def;
+                } catch { return def; }
+            },
+            set(key, val) {
+                try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+            },
+            remove(key) {
+                try { localStorage.removeItem(key); } catch {}
+            }
+        };
+
+        // ============================================================
+        // 3. THEME ENGINE
+        // ============================================================
+        const H4ThemeEngine = {
+            current: null,
+            defaults: {
+                primary: '#5B2D8E',
+                secondary: '#D4AF37',
+                accent: '#7B4FA8',
+                background: '#f0edf5',
+                surface: '#ffffff',
+                textPrimary: '#1a1a2e',
+                textSecondary: '#6b6b7a',
+                border: '#e2dce8',
+                header: '#ffffff',
+                button: '#5B2D8E',
+                card: '#ffffff',
+                fontFamily: 'Inter, sans-serif',
+                baseFontSize: '14px',
+                headingSize: '1.2rem',
+                buttonFontSize: '0.8rem',
+                borderRadius: '12px',
+                shadowPreset: 'medium'
+            },
+            presets: {
+                'H4 Purple + Gold': {
+                    primary: '#5B2D8E',
+                    secondary: '#D4AF37',
+                    accent: '#7B4FA8',
+                    background: '#f0edf5',
+                    surface: '#ffffff',
+                    textPrimary: '#1a1a2e',
+                    textSecondary: '#6b6b7a',
+                    border: '#e2dce8'
+                },
+                'Light': {
+                    primary: '#2563eb',
+                    secondary: '#f59e0b',
+                    accent: '#7c3aed',
+                    background: '#f8fafc',
+                    surface: '#ffffff',
+                    textPrimary: '#0f172a',
+                    textSecondary: '#64748b',
+                    border: '#e2e8f0'
+                },
+                'Dark': {
+                    primary: '#818cf8',
+                    secondary: '#fbbf24',
+                    accent: '#a78bfa',
+                    background: '#0f172a',
+                    surface: '#1e293b',
+                    textPrimary: '#f1f5f9',
+                    textSecondary: '#94a3b8',
+                    border: '#334155'
+                },
+                'Professional': {
+                    primary: '#0d9488',
+                    secondary: '#f59e0b',
+                    accent: '#06b6d4',
+                    background: '#f1f5f9',
+                    surface: '#ffffff',
+                    textPrimary: '#0f172a',
+                    textSecondary: '#475569',
+                    border: '#cbd5e1'
+                },
+                'Minimal': {
+                    primary: '#1e293b',
+                    secondary: '#94a3b8',
+                    accent: '#475569',
+                    background: '#f8fafc',
+                    surface: '#ffffff',
+                    textPrimary: '#0f172a',
+                    textSecondary: '#64748b',
+                    border: '#e2e8f0'
+                }
+            },
+            load() {
+                const saved = H4Storage.get(H4Storage.KEYS.THEME, null);
+                if (saved) {
+                    this.current = { ...this.defaults, ...saved };
+                } else {
+                    this.current = { ...this.defaults };
+                }
+                return this.current;
+            },
+            save() {
+                H4Storage.set(H4Storage.KEYS.THEME, this.current);
+            },
+            applyPreset(name) {
+                if (this.presets[name]) {
+                    this.current = { ...this.current, ...this.presets[name] };
+                    this.save();
+                    this.applyToUI();
+                    return true;
+                }
+                return false;
+            },
+            applyToUI() {
+                const t = this.current;
+                document.documentElement.style.setProperty('--primary', t.primary);
+                document.documentElement.style.setProperty('--gold', t.secondary);
+                document.documentElement.style.setProperty('--primary-light', t.accent);
+                document.documentElement.style.setProperty('--bg', t.background);
+                document.documentElement.style.setProperty('--card-bg', t.surface);
+                document.documentElement.style.setProperty('--text', t.textPrimary);
+                document.documentElement.style.setProperty('--text-muted', t.textSecondary);
+                document.documentElement.style.setProperty('--border', t.border);
+                document.documentElement.style.setProperty('--font', t.fontFamily);
+                document.documentElement.style.setProperty('--radius', t.borderRadius);
+                // Update preview objects
+                document.querySelectorAll('.canvas-object .obj-content .obj-stat').forEach(el => {
+                    el.style.color = t.primary;
+                });
+                document.querySelectorAll('.canvas-object .obj-content .obj-btn').forEach(el => {
+                    el.style.background = t.primary;
+                });
+            }
+        };
+
+        // ============================================================
+        // 4. STYLE UTILITIES
+        // ============================================================
+        const H4StyleUtil = {
+            uid() {
+                return 'obj_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+            },
+            shadowCss(preset) {
+                const map = {
+                    none: 'none',
+                    small: '0 2px 8px rgba(0,0,0,0.06)',
+                    medium: '0 4px 24px rgba(0,0,0,0.10)',
+                    large: '0 8px 48px rgba(0,0,0,0.14)'
+                };
+                return map[preset] || map.medium;
+            },
+            backgroundCss(bg) {
+                if (!bg || bg.type === 'transparent') return 'transparent';
+                if (bg.type === 'solid') return bg.color || '#ffffff';
+                if (bg.type === 'gradient') {
+                    return `linear-gradient(${bg.direction || '135deg'}, ${bg.startColor || '#fff'}, ${bg.endColor || '#eee'})`;
+                }
+                if (bg.type === 'image' && bg.url) {
+                    return `url(${bg.url}) ${bg.position || 'center'}/${bg.size || 'cover'}`;
+                }
+                return '#ffffff';
+            },
+            borderCss(border) {
+                if (!border || border.style === 'none') return 'none';
+                return `${border.width || 1}px ${border.style || 'solid'} ${border.color || '#e2dce8'}`;
+            },
+            shapeRadius(radius) {
+                if (typeof radius === 'number') return `${radius}px`;
+                if (typeof radius === 'object') {
+                    const { tl, tr, br, bl } = radius;
+                    return `${tl || 0}px ${tr || 0}px ${br || 0}px ${bl || 0}px`;
+                }
+                return '0px';
+            },
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        };
+
+        // ============================================================
+        // 5. OBJECT ENGINE
+        // ============================================================
+        const H4ObjectEngine = {
+            createObject(moduleId, x, y) {
+                const module = H4_MODULE_REGISTRY[moduleId];
+                if (!module) return null;
+                const id = H4StyleUtil.uid();
+                return {
+                    id,
+                    type: 'module',
+                    moduleId: moduleId,
+                    transform: {
+                        x: x || 0,
+                        y: y || 0,
+                        width: 280,
+                        height: 160,
+                        rotation: 0,
+                        zIndex: 1
+                    },
+                    responsive: {
+                        desktop: {},
+                        tablet: {},
+                        mobile: {}
+                    },
+                    style: {
+                        shape: 'rounded',
+                        borderRadius: 16,
+                        background: {
+                            type: 'solid',
+                            color: '#ffffff'
+                        },
+                        border: {
+                            style: 'solid',
+                            width: 1,
+                            color: '#e2dce8'
+                        },
+                        shadow: {
+                            preset: 'medium'
+                        }
+                    },
+                    content: {
+                        title: module.title,
+                        subtitle: module.category,
+                        icon: module.icon,
+                        showIcon: true,
+                        showTitle: true,
+                        showSubtitle: true,
+                        showStatistic: true,
+                        showButton: true,
+                        statistic: '0',
+                        buttonText: 'Open'
+                    },
+                    visibility: {
+                        desktop: true,
+                        tablet: true,
+                        mobile: true
+                    },
+                    locked: false,
+                    modulePath: module.path,
+                    moduleColor: module.color || '#5B2D8E'
+                };
+            },
+
+            duplicate(obj) {
+                const newObj = JSON.parse(JSON.stringify(obj));
+                newObj.id = H4StyleUtil.uid();
+                newObj.transform.x += 30;
+                newObj.transform.y += 30;
+                newObj.transform.zIndex = (obj.transform.zIndex || 1) + 1;
+                return newObj;
+            },
+
+            getModuleTitle(moduleId) {
+                const m = H4_MODULE_REGISTRY[moduleId];
+                return m ? m.title : moduleId;
+            },
+
+            getModuleIcon(moduleId) {
+                const m = H4_MODULE_REGISTRY[moduleId];
+                return m ? m.icon : '📦';
+            },
+
+            getModulePath(moduleId) {
+                const m = H4_MODULE_REGISTRY[moduleId];
+                return m ? m.path : '#';
+            }
+        };
+
+        // ============================================================
+        // 6. MAIN DESIGNER STATE
+        // ============================================================
+        const Designer = {
+            objects: [],
+            selectedId: null,
+            device: 'desktop',
+            zoom: 1,
+            gridVisible: true,
+            snapEnabled: true,
+            gridSize: 20,
+            history: [],
+            historyIndex: -1,
+            maxHistory: 80,
+            isDragging: false,
+            isResizing: false,
+            isRotating: false,
+            dragData: null,
+            resizeData: null,
+            rotateData: null,
+            clipboard: null,
+            isMultiSelect: false,
+            selectedIds: [],
+            lastSave: null,
+            _dirty: false,
+
+            // DOM refs
+            canvas: null,
+            objectsContainer: null,
+            gridEl: null,
+            selectionOverlay: null,
+            panelContent: null,
+
+            init() {
+                this.canvas = document.getElementById('canvasContainer');
+                this.objectsContainer = document.getElementById('canvasObjects');
+                this.gridEl = document.getElementById('canvasGrid');
+                this.selectionOverlay = document.getElementById('selectionOverlay');
+                this.panelContent = document.getElementById('panelContent');
+
+                // Load theme
+                H4ThemeEngine.load();
+                H4ThemeEngine.applyToUI();
+
+                // Load layout
+                this.loadLayout();
+
+                // Setup events
+                this.setupEvents();
+
+                // Render modules in sidebar
+                this.renderModuleSidebar();
+
+                // Initial render
+                this.renderAll();
+
+                // Auto-save draft
+                this._autoSaveInterval = setInterval(() => this.autoSave(), 5000);
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => this.handleKeydown(e));
+
+                // Window resize
+                window.addEventListener('resize', () => this.updateHandles());
+
+                toast('🎨 Screen Designer ready. Drag modules from sidebar or click +Add.', 'success');
+            },
+
+            // ===== LAYOUT LOAD/SAVE =====
+            loadLayout() {
+                const saved = H4Storage.get(H4Storage.KEYS.LAYOUT, null);
+                if (saved && saved.objects) {
+                    this.objects = saved.objects;
+                    // Check for draft
+                    const draft = H4Storage.get(H4Storage.KEYS.DRAFT, null);
+                    if (draft && draft.objects && draft.objects.length > 0) {
+                        if (confirm('🔄 Unsaved draft found. Continue editing?')) {
+                            this.objects = draft.objects;
+                            toast('Draft loaded.', 'warning');
+                        } else {
+                            H4Storage.remove(H4Storage.KEYS.DRAFT);
+                        }
+                    }
+                    this.lastSave = saved.lastSave || null;
+                } else {
+                    // Default layout: add some modules
+                    this.objects = [];
+                    const defaultModules = ['dashboard', 'quotation', 'invoice', 'customer', 'product', 'payment'];
+                    const positions = [
+                        { x: 40, y: 40 },
+                        { x: 340, y: 40 },
+                        { x: 640, y: 40 },
+                        { x: 40, y: 220 },
+                        { x: 340, y: 220 },
+                        { x: 640, y: 220 }
+                    ];
+                    defaultModules.forEach((mod, i) => {
+                        const obj = H4ObjectEngine.createObject(mod, positions[i]?.x || 0, positions[i]?.y || 0);
+                        if (obj) {
+                            obj.transform.width = 260;
+                            obj.transform.height = 150;
+                            obj.content.statistic = Math.floor(Math.random() * 50 + 1).toString();
+                            this.objects.push(obj);
+                        }
+                    });
+                    this.lastSave = new Date().toISOString();
+                    this.saveLayout();
+                }
+                // Load history
+                const history = H4Storage.get(H4Storage.KEYS.HISTORY, null);
+                if (history && history.states) {
+                    this.history = history.states;
+                    this.historyIndex = history.index || this.history.length - 1;
+                } else {
+                    this.pushHistory();
+                }
+            },
+
+            saveLayout() {
+                const data = {
+                    version: 1,
+                    screen: 'dashboard',
+                    objects: this.objects,
+                    lastSave: new Date().toISOString()
+                };
+                H4Storage.set(H4Storage.KEYS.LAYOUT, data);
+                this.lastSave = data.lastSave;
+                this._dirty = false;
+                toast('💾 Layout saved.', 'success');
+            },
+
+            autoSave() {
+                if (this._dirty) {
+                    H4Storage.set(H4Storage.KEYS.DRAFT, {
+                        objects: this.objects,
+                        lastSave: new Date().toISOString()
+                    });
+                    this._dirty = false;
+                }
+            },
+
+            // ===== HISTORY =====
+            pushHistory() {
+                const state = JSON.stringify(this.objects);
+                // Trim history
+                if (this.historyIndex < this.history.length - 1) {
+                    this.history = this.history.slice(0, this.historyIndex + 1);
+                }
+                this.history.push(state);
+                this.historyIndex = this.history.length - 1;
+                if (this.history.length > this.maxHistory) {
+                    this.history.shift();
+                    this.historyIndex--;
+                }
+                this._dirty = true;
+                // Save history
+                H4Storage.set(H4Storage.KEYS.HISTORY, {
+                    states: this.history,
+                    index: this.historyIndex
+                });
+            },
+
+            undoHistory() {
+                if (this.historyIndex > 0) {
+                    this.historyIndex--;
+                    const state = this.history[this.historyIndex];
+                    this.objects = JSON.parse(state);
+                    this.selectedId = null;
+                    this.selectedIds = [];
+                    this.renderAll();
+                    this.updatePanel();
+                    this._dirty = true;
+                    toast('↩️ Undo');
+                    return true;
+                }
+                toast('Nothing to undo.', 'warning');
+                return false;
+            },
+
+            redoHistory() {
+                if (this.historyIndex < this.history.length - 1) {
+                    this.historyIndex++;
+                    const state = this.history[this.historyIndex];
+                    this.objects = JSON.parse(state);
+                    this.selectedId = null;
+                    this.selectedIds = [];
+                    this.renderAll();
+                    this.updatePanel();
+                    this._dirty = true;
+                    toast('↪️ Redo');
+                    return true;
+                }
+                toast('Nothing to redo.', 'warning');
+                return false;
+            },
+
+            // ===== EVENTS =====
+            setupEvents() {
+                // Canvas click to deselect
+                this.canvas.addEventListener('pointerdown', (e) => {
+                    if (e.target === this.canvas || e.target === this.objectsContainer || e.target === this
+                        .gridEl || e.target === this.selectionOverlay) {
+                        this.deselectAll();
+                        this.renderAll();
+                        this.updatePanel();
+                    }
+                });
+
+                // Touch events for canvas scroll
+                let scrollStart = null;
+                this.canvas.addEventListener('touchstart', (e) => {
+                    if (e.target === this.canvas || e.target === this.objectsContainer) {
+                        scrollStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                    }
+                }, { passive: true });
+
+                // Keyboard delete
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Delete' || e.key === 'Backspace') {
+                        if (this.selectedId) {
+                            e.preventDefault();
+                            this.deleteSelected();
+                        }
+                    }
+                    if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
+                        e.preventDefault();
+                        if (e.shiftKey) this.redoHistory();
+                        else this.undoHistory();
+                    }
+                    if (e.key === 'y' && (e.ctrlKey || e.metaKey)) {
+                        e.preventDefault();
+                        this.redoHistory();
+                    }
+                    if (e.key === 'd' && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+                        e.preventDefault();
+                        this.duplicateSelected();
+                    }
+                    if (e.key === 'Escape') {
+                        this.deselectAll();
+                        this.renderAll();
+                        this.updatePanel();
+                    }
+                });
+            },
+
+            handleKeydown(e) {
+                // Already handled in setupEvents
+            },
+
+            // ===== RENDER =====
+            renderAll() {
+                this.renderObjects();
+                this.updateHandles();
+                this.updateGrid();
+                this.updatePanel();
+            },
+
+            renderObjects() {
+                const container = this.objectsContainer;
+                container.innerHTML = '';
+                // Sort by zIndex
+                const sorted = [...this.objects].sort((a, b) => (a.transform.zIndex || 1) - (b.transform.zIndex || 1));
+
+                sorted.forEach((obj, idx) => {
+                    const el = this.createObjectElement(obj);
+                    container.appendChild(el);
+                });
+
+                // Update selection overlay
+                this.updateHandles();
+            },
+
+            createObjectElement(obj) {
+                const el = document.createElement('div');
+                el.className = 'canvas-object';
+                el.dataset.id = obj.id;
+                el.style.left = obj.transform.x + 'px';
+                el.style.top = obj.transform.y + 'px';
+                el.style.width = obj.transform.width + 'px';
+                el.style.height = obj.transform.height + 'px';
+                el.style.transform = `rotate(${obj.transform.rotation || 0}deg)`;
+                el.style.zIndex = obj.transform.zIndex || 1;
+
+                // Apply styles
+                const style = obj.style || {};
+                const bg = H4StyleUtil.backgroundCss(style.background);
+                const border = H4StyleUtil.borderCss(style.border);
+                const shadow = H4StyleUtil.shadowCss(style.shadow?.preset || 'medium');
+                const radius = style.shape === 'circle' ? '50%' :
+                    style.shape === 'pill' ? '9999px' :
+                    H4StyleUtil.shapeRadius(style.borderRadius || 16);
+
+                el.style.background = bg;
+                el.style.border = border;
+                el.style.boxShadow = shadow;
+                el.style.borderRadius = radius;
+
+                if (obj.locked) {
+                    el.classList.add('locked');
+                }
+
+                // Content
+                const content = obj.content || {};
+                const icon = content.icon || '📦';
+                const title = content.title || obj.moduleId || 'Module';
+                const subtitle = content.subtitle || '';
+                const statistic = content.statistic || '0';
+                const btnText = content.buttonText || 'Open';
+
+                const showIcon = content.showIcon !== false;
+                const showTitle = content.showTitle !== false;
+                const showSubtitle = content.showSubtitle !== false;
+                const showStatistic = content.showStatistic !== false;
+                const showButton = content.showButton !== false;
+
+                let html = `<div class="obj-content">`;
+                if (showIcon) html += `<div class="obj-icon">${H4StyleUtil.escapeHtml(icon)}</div>`;
+                if (showTitle) html += `<div class="obj-title">${H4StyleUtil.escapeHtml(title)}</div>`;
+                if (showSubtitle) html += `<div class="obj-subtitle">${H4StyleUtil.escapeHtml(subtitle)}</div>`;
+                if (showStatistic) html += `<div class="obj-stat">${H4StyleUtil.escapeHtml(statistic)}</div>`;
+                if (showButton) html += `<div class="obj-btn">${H4StyleUtil.escapeHtml(btnText)}</div>`;
+                html += `</div>`;
+                el.innerHTML = html;
+
+                // Selection
+                if (this.selectedId === obj.id || (this.selectedIds && this.selectedIds.includes(obj.id))) {
+                    el.classList.add('selected');
+                }
+
+                // Pointer events for selection
+                el.addEventListener('pointerdown', (e) => {
+                    e.stopPropagation();
+                    if (obj.locked) {
+                        this.selectObject(obj.id);
+                        this.renderAll();
+                        this.updatePanel();
+                        return;
+                    }
+                    // Check if clicked on handle
+                    if (e.target.closest('.resize-handle') || e.target.closest('.rotate-handle')) return;
+
+                    if (e.shiftKey) {
+                        this.toggleSelection(obj.id);
+                    } else {
+                        this.selectObject(obj.id);
+                    }
+                    this.renderAll();
+                    this.updatePanel();
+
+                    // Start drag
+                    this.startDrag(e, obj.id);
+                });
+
+                // Double click to navigate
+                el.addEventListener('dblclick', () => {
+                    if (obj.modulePath) {
+                        toast(`🔗 Navigating to ${obj.content.title || obj.moduleId}...`);
+                        // In real ERP, would navigate. Here we just simulate.
+                    }
+                });
+
+                // Resize handles
+                if (!obj.locked) {
+                    const positions = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
+                    positions.forEach(pos => {
+                        const handle = document.createElement('div');
+                        handle.className = `resize-handle ${pos}`;
+                        handle.dataset.handle = pos;
+                        handle.addEventListener('pointerdown', (e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            this.startResize(e, obj.id, pos);
+                        });
+                        el.appendChild(handle);
+                    });
+
+                    // Rotate handle
+                    const rotHandle = document.createElement('div');
+                    rotHandle.className = 'rotate-handle';
+                    rotHandle.textContent = '↻';
+                    rotHandle.addEventListener('pointerdown', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        this.startRotate(e, obj.id);
+                    });
+                    el.appendChild(rotHandle);
+                }
+
+                // Dimension label (show when selected)
+                if (this.selectedId === obj.id) {
+                    const label = document.createElement('div');
+                    label.className = 'dimension-label';
+                    label.textContent = `${Math.round(obj.transform.width)} × ${Math.round(obj.transform.height)}`;
+                    el.appendChild(label);
+                }
+
+                return el;
+            },
+
+            updateGrid() {
+                if (this.gridEl) {
+                    this.gridEl.classList.toggle('hidden', !this.gridVisible);
+                    this.gridEl.style.backgroundSize = `${this.gridSize}px ${this.gridSize}px`;
+                }
+            },
+
+            updateHandles() {
+                // Handles are re-created on each render via createObjectElement
+                // No additional action needed
+            },
+
+            // ===== SELECTION =====
+            selectObject(id) {
+                this.selectedId = id;
+                this.selectedIds = [id];
+                this.updatePanel();
+            },
+
+            toggleSelection(id) {
+                if (this.selectedIds.includes(id)) {
+                    this.selectedIds = this.selectedIds.filter(s => s !== id);
+                    if (this.selectedId === id) this.selectedId = this.selectedIds[0] || null;
+                } else {
+                    this.selectedIds.push(id);
+                    this.selectedId = id;
+                }
+                this.updatePanel();
+            },
+
+            deselectAll() {
+                this.selectedId = null;
+                this.selectedIds = [];
+                this.updatePanel();
+            },
+
+            getSelectedObject() {
+                return this.objects.find(o => o.id === this.selectedId) || null;
+            },
+
+            getSelectedObjects() {
+                if (this.selectedIds.length > 0) {
+                    return this.objects.filter(o => this.selectedIds.includes(o.id));
+                }
+                if (this.selectedId) {
+                    const obj = this.objects.find(o => o.id === this.selectedId);
+                    return obj ? [obj] : [];
+                }
+                return [];
+            },
+
+            // ===== DRAG =====
+            startDrag(e, id) {
+                const obj = this.objects.find(o => o.id === id);
+                if (!obj || obj.locked) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = this.canvas.offsetWidth / rect.width;
+                const scaleY = this.canvas.offsetHeight / rect.height;
+
+                this.isDragging = true;
+                this.dragData = {
+                    id,
+                    startX: (e.clientX - rect.left) * scaleX,
+                    startY: (e.clientY - rect.top) * scaleY,
+                    origX: obj.transform.x,
+                    origY: obj.transform.y,
+                    moved: false
+                };
+
+                const onMove = (ev) => {
+                    if (!this.isDragging || !this.dragData) return;
+                    const r = this.canvas.getBoundingClientRect();
+                    const sx = this.canvas.offsetWidth / r.width;
+                    const sy = this.canvas.offsetHeight / r.height;
+                    let nx = (ev.clientX - r.left) * sx;
+                    let ny = (ev.clientY - r.top) * sy;
+
+                    const dx = nx - this.dragData.startX;
+                    const dy = ny - this.dragData.startY;
+
+                    let newX = this.dragData.origX + dx;
+                    let newY = this.dragData.origY + dy;
+
+                    // Snap
+                    if (this.snapEnabled) {
+                        newX = Math.round(newX / this.gridSize) * this.gridSize;
+                        newY = Math.round(newY / this.gridSize) * this.gridSize;
+                    }
+
+                    // Clamp
+                    newX = Math.max(0, newX);
+                    newY = Math.max(0, newY);
+                    const maxX = this.canvas.offsetWidth - (obj.transform.width || 100);
+                    const maxY = this.canvas.offsetHeight - (obj.transform.height || 100);
+                    newX = Math.min(newX, maxX);
+                    newY = Math.min(newY, maxY);
+
+                    obj.transform.x = newX;
+                    obj.transform.y = newY;
+                    this.dragData.moved = true;
+                    this._dirty = true;
+                    this.renderAll();
+                };
+
+                const onUp = () => {
+                    if (this.isDragging && this.dragData && this.dragData.moved) {
+                        this.pushHistory();
+                    }
+                    this.isDragging = false;
+                    this.dragData = null;
+                    document.removeEventListener('pointermove', onMove);
+                    document.removeEventListener('pointerup', onUp);
+                    document.removeEventListener('pointercancel', onUp);
+                };
+
+                document.addEventListener('pointermove', onMove);
+                document.addEventListener('pointerup', onUp);
+                document.addEventListener('pointercancel', onUp);
+            },
+
+            // ===== RESIZE =====
+            startResize(e, id, handle) {
+                const obj = this.objects.find(o => o.id === id);
+                if (!obj || obj.locked) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = this.canvas.offsetWidth / rect.width;
+                const scaleY = this.canvas.offsetHeight / rect.height;
+
+                this.isResizing = true;
+                this.resizeData = {
+                    id,
+                    handle,
+                    startX: (e.clientX - rect.left) * scaleX,
+                    startY: (e.clientY - rect.top) * scaleY,
+                    origX: obj.transform.x,
+                    origY: obj.transform.y,
+                    origW: obj.transform.width,
+                    origH: obj.transform.height,
+                    minW: 80,
+                    minH: 60,
+                    moved: false
+                };
+
+                const onMove = (ev) => {
+                    if (!this.isResizing || !this.resizeData) return;
+                    const r = this.canvas.getBoundingClientRect();
+                    const sx = this.canvas.offsetWidth / r.width;
+                    const sy = this.canvas.offsetHeight / r.height;
+                    let nx = (ev.clientX - r.left) * sx;
+                    let ny = (ev.clientY - r.top) * sy;
+
+                    const dx = nx - this.resizeData.startX;
+                    const dy = ny - this.resizeData.startY;
+                    const h = this.resizeData.handle;
+
+                    let newW = this.resizeData.origW;
+                    let newH = this.resizeData.origH;
+                    let newX = this.resizeData.origX;
+                    let newY = this.resizeData.origY;
+
+                    // Horizontal
+                    if (h.includes('e')) newW = Math.max(this.resizeData.minW, this.resizeData.origW + dx);
+                    if (h.includes('w')) {
+                        newW = Math.max(this.resizeData.minW, this.resizeData.origW - dx);
+                        newX = this.resizeData.origX + (this.resizeData.origW - newW);
+                    }
+                    // Vertical
+                    if (h.includes('s')) newH = Math.max(this.resizeData.minH, this.resizeData.origH + dy);
+                    if (h.includes('n')) {
+                        newH = Math.max(this.resizeData.minH, this.resizeData.origH - dy);
+                        newY = this.resizeData.origY + (this.resizeData.origH - newH);
+                    }
+
+                    // Snap
+                    if (this.snapEnabled) {
+                        newW = Math.round(newW / this.gridSize) * this.gridSize;
+                        newH = Math.round(newH / this.gridSize) * this.gridSize;
+                        newX = Math.round(newX / this.gridSize) * this.gridSize;
+                        newY = Math.round(newY / this.gridSize) * this.gridSize;
+                    }
+
+                    newW = Math.max(this.resizeData.minW, newW);
+                    newH = Math.max(this.resizeData.minH, newH);
+                    newX = Math.max(0, newX);
+                    newY = Math.max(0, newY);
+                    const maxX = this.canvas.offsetWidth - newW;
+                    const maxY = this.canvas.offsetHeight - newH;
+                    newX = Math.min(newX, maxX);
+                    newY = Math.min(newY, maxY);
+
+                    obj.transform.x = newX;
+                    obj.transform.y = newY;
+                    obj.transform.width = newW;
+                    obj.transform.height = newH;
+                    this.resizeData.moved = true;
+                    this._dirty = true;
+                    this.renderAll();
+                };
+
+                const onUp = () => {
+                    if (this.isResizing && this.resizeData && this.resizeData.moved) {
+                        this.pushHistory();
+                    }
+                    this.isResizing = false;
+                    this.resizeData = null;
+                    document.removeEventListener('pointermove', onMove);
+                    document.removeEventListener('pointerup', onUp);
+                    document.removeEventListener('pointercancel', onUp);
+                };
+
+                document.addEventListener('pointermove', onMove);
+                document.addEventListener('pointerup', onUp);
+                document.addEventListener('pointercancel', onUp);
+            },
+
+            // ===== ROTATE =====
+            startRotate(e, id) {
+                const obj = this.objects.find(o => o.id === id);
+                if (!obj || obj.locked) return;
+                const rect = this.canvas.getBoundingClientRect();
+
+                this.isRotating = true;
+                const cx = obj.transform.x + obj.transform.width / 2;
+                const cy = obj.transform.y + obj.transform.height / 2;
+                const startAngle = Math.atan2(
+                    (e.clientY - rect.top) - cy,
+                    (e.clientX - rect.left) - cx
+                );
+
+                this.rotateData = {
+                    id,
+                    cx,
+                    cy,
+                    startAngle,
+                    origRotation: obj.transform.rotation || 0,
+                    moved: false
+                };
+
+                const onMove = (ev) => {
+                    if (!this.isRotating || !this.rotateData) return;
+                    const r = this.canvas.getBoundingClientRect();
+                    const angle = Math.atan2(
+                        (ev.clientY - r.top) - this.rotateData.cy,
+                        (ev.clientX - r.left) - this.rotateData.cx
+                    );
+                    let delta = angle - this.rotateData.startAngle;
+                    let newRot = this.rotateData.origRotation + (delta * (180 / Math.PI));
+
+                    // Snap to 0, 45, 90, 180, 270
+                    const snapAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+                    let snapped = false;
+                    for (const sa of snapAngles) {
+                        if (Math.abs(newRot - sa) < 5) {
+                            newRot = sa;
+                            snapped = true;
+                            break;
+                        }
+                    }
+
+                    obj.transform.rotation = newRot;
+                    this.rotateData.moved = true;
+                    this._dirty = true;
+                    this.renderAll();
+                };
+
+                const onUp = () => {
+                    if (this.isRotating && this.rotateData && this.rotateData.moved) {
+                        this.pushHistory();
+                    }
+                    this.isRotating = false;
+                    this.rotateData = null;
+                    document.removeEventListener('pointermove', onMove);
+                    document.removeEventListener('pointerup', onUp);
+                    document.removeEventListener('pointercancel', onUp);
+                };
+
+                document.addEventListener('pointermove', onMove);
+                document.addEventListener('pointerup', onUp);
+                document.addEventListener('pointercancel', onUp);
+            },
+
+            // ===== OBJECT OPERATIONS =====
+            addObject(obj) {
+                this.objects.push(obj);
+                this.pushHistory();
+                this.renderAll();
+                this.selectObject(obj.id);
+                this.updatePanel();
+                toast(`➕ Added ${obj.content.title || obj.moduleId}`);
+            },
+
+            deleteSelected() {
+                const ids = this.selectedIds.length > 0 ? this.selectedIds : (this.selectedId ? [this.selectedId] : []);
+                if (ids.length === 0) return;
+                if (!confirm(`Delete ${ids.length} object(s)?`)) return;
+                this.objects = this.objects.filter(o => !ids.includes(o.id));
+                this.selectedId = null;
+                this.selectedIds = [];
+                this.pushHistory();
+                this.renderAll();
+                this.updatePanel();
+                toast(`🗑️ Deleted ${ids.length} object(s)`);
+            },
+
+            duplicateSelected() {
+                const objs = this.getSelectedObjects();
+                if (objs.length === 0) return;
+                const newObjs = objs.map(o => H4ObjectEngine.duplicate(o));
+                newObjs.forEach(o => this.objects.push(o));
+                this.pushHistory();
+                this.selectedId = newObjs[0]?.id || null;
+                this.selectedIds = newObjs.map(o => o.id);
+                this.renderAll();
+                this.updatePanel();
+                toast(`📋 Duplicated ${newObjs.length} object(s)`);
+            },
+
+            lockSelected() {
+                const objs = this.getSelectedObjects();
+                if (objs.length === 0) return;
+                objs.forEach(o => o.locked = !o.locked);
+                this.pushHistory();
+                this.renderAll();
+                toast(objs[0].locked ? '🔒 Locked' : '🔓 Unlocked');
+            },
+
+            bringForward() {
+                const obj = this.getSelectedObject();
+                if (!obj) return;
+                const maxZ = Math.max(...this.objects.map(o => o.transform.zIndex || 1));
+                if ((obj.transform.zIndex || 1) < maxZ) {
+                    obj.transform.zIndex = (obj.transform.zIndex || 1) + 1;
+                    this.pushHistory();
+                    this.renderAll();
+                }
+            },
+
+            sendBackward() {
+                const obj = this.getSelectedObject();
+                if (!obj) return;
+                const minZ = Math.min(...this.objects.map(o => o.transform.zIndex || 1));
+                if ((obj.transform.zIndex || 1) > minZ) {
+                    obj.transform.zIndex = (obj.transform.zIndex || 1) - 1;
+                    this.pushHistory();
+                    this.renderAll();
+                }
+            },
+
+            // ===== MODULE SIDEBAR =====
+            renderModuleSidebar() {
+                const container = document.getElementById('moduleList');
+                container.innerHTML = '';
+                const categories = {};
+                Object.values(H4_MODULE_REGISTRY).forEach(m => {
+                    if (!categories[m.category]) categories[m.category] = [];
+                    categories[m.category].push(m);
+                });
+
+                Object.keys(categories).forEach(cat => {
+                    const catEl = document.createElement('div');
+                    catEl.innerHTML =
+                        `<div class="sidebar-title" style="margin-top:8px;">${cat.charAt(0).toUpperCase()+cat.slice(1)}</div>`;
+                    container.appendChild(catEl);
+                    categories[cat].forEach(m => {
+                        const btn = document.createElement('button');
+                        btn.className = 'module-btn';
+                        btn.innerHTML =
+                            `<span class="icon">${m.icon}</span> ${m.title} <span class="badge">${m.id}</span>`;
+                        btn.dataset.moduleId = m.id;
+                        btn.addEventListener('click', () => {
+                            // Add to canvas at a random position
+                            const x = 40 + Math.random() * 200;
+                            const y = 40 + Math.random() * 200;
+                            const obj = H4ObjectEngine.createObject(m.id, x, y);
+                            if (obj) {
+                                obj.transform.width = 260;
+                                obj.transform.height = 150;
+                                obj.content.statistic = '0';
+                                this.addObject(obj);
+                            }
+                        });
+                        // Drag to canvas
+                        btn.addEventListener('pointerdown', (e) => {
+                            e.preventDefault();
+                            // For touch drag, we use a ghost
+                            const ghost = document.createElement('div');
+                            ghost.style.cssText =
+                                'position:fixed;pointer-events:none;z-index:999;padding:8px 16px;background:var(--primary);color:#fff;border-radius:8px;font-weight:600;font-size:0.8rem;';
+                            ghost.textContent = `${m.icon} ${m.title}`;
+                            document.body.appendChild(ghost);
+
+                            const onMove = (ev) => {
+                                ghost.style.left = (ev.clientX - 60) + 'px';
+                                ghost.style.top = (ev.clientY - 20) + 'px';
+                            };
+                            const onUp = (ev) => {
+                                ghost.remove();
+                                document.removeEventListener('pointermove', onMove);
+                                document.removeEventListener('pointerup', onUp);
+                                // Check if dropped on canvas
+                                const rect = this.canvas.getBoundingClientRect();
+                                const sx = this.canvas.offsetWidth / rect.width;
+                                const sy = this.canvas.offsetHeight / rect.height;
+                                const cx = (ev.clientX - rect.left) * sx;
+                                const cy = (ev.clientY - rect.top) * sy;
+                                if (cx > 0 && cy > 0 && cx < this.canvas.offsetWidth && cy < this.canvas
+                                    .offsetHeight) {
+                                    const obj = H4ObjectEngine.createObject(m.id, cx - 130, cy - 75);
+                                    if (obj) {
+                                        obj.transform.width = 260;
+                                        obj.transform.height = 150;
+                                        obj.content.statistic = '0';
+                                        this.addObject(obj);
+                                    }
+                                }
+                            };
+                            document.addEventListener('pointermove', onMove);
+                            document.addEventListener('pointerup', onUp);
+                        });
+                        container.appendChild(btn);
+                    });
+                });
+            },
+
+            // ===== PANEL =====
+            updatePanel() {
+                const container = this.panelContent;
+                const obj = this.getSelectedObject();
+                if (!obj) {
+                    container.innerHTML = `
+                <div class="no-selection">
+                  <div class="icon">👆</div>
+                  <p>Select an object on the canvas to edit its properties.</p>
+                  <p class="text-sm text-muted" style="margin-top:8px;">Click a module card to select it.</p>
+                </div>
+              `;
+                    return;
+                }
+
+                // Build properties panel
+                const t = obj.transform;
+                const s = obj.style || {};
+                const c = obj.content || {};
+
+                let html = `
+              <div class="panel-section">
+                <div class="section-title">📌 Object</div>
+                <div class="row-2">
+                  <div><label>ID</label><input value="${obj.id}" readonly style="background:#f5f3f8;font-size:0.7rem;"></div>
+                  <div><label>Module</label><input value="${obj.moduleId}" readonly style="background:#f5f3f8;font-size:0.7rem;"></div>
+                </div>
+                <div class="flex gap-8 mt-8">
+                  <button class="btn btn-sm btn-outline" onclick="Designer.lockSelected()">${obj.locked?'🔓 Unlock':'🔒 Lock'}</button>
+                  <button class="btn btn-sm btn-outline" onclick="Designer.duplicateSelected()">📋 Duplicate</button>
+                  <button class="btn btn-sm btn-danger" onclick="Designer.deleteSelected()">🗑️</button>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="section-title">📐 Position</div>
+                <div class="row-2">
+                  <div><label>X</label><input type="number" value="${Math.round(t.x)}" onchange="Designer.updateObjectProp('transform.x', parseFloat(this.value)||0)"></div>
+                  <div><label>Y</label><input type="number" value="${Math.round(t.y)}" onchange="Designer.updateObjectProp('transform.y', parseFloat(this.value)||0)"></div>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="section-title">📏 Size</div>
+                <div class="row-2">
+                  <div><label>Width</label><input type="number" value="${Math.round(t.width)}" onchange="Designer.updateObjectProp('transform.width', Math.max(80, parseFloat(this.value)||80))"></div>
+                  <div><label>Height</label><input type="number" value="${Math.round(t.height)}" onchange="Designer.updateObjectProp('transform.height', Math.max(60, parseFloat(this.value)||60))"></div>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="section-title">🔄 Rotation</div>
+                <div><label>Degrees</label><input type="number" value="${Math.round(t.rotation||0)}" onchange="Designer.updateObjectProp('transform.rotation', parseFloat(this.value)||0)"></div>
+              </div>
+
+              <div class="panel-section">
+                <div class="section-title">🎨 Style</div>
+                <div><label>Shape</label>
+                  <select onchange="Designer.updateObjectProp('style.shape', this.value)">
+                    <option value="square" ${s.shape==='square'?'selected':''}>Square</option>
+                    <option value="rounded" ${s.shape==='rounded'?'selected':''}>Rounded</option>
+                    <option value="circle" ${s.shape==='circle'?'selected':''}>Circle</option>
+                    <option value="pill" ${s.shape==='pill'?'selected':''}>Pill</option>
+                  </select>
+                </div>
+                <div><label>Border Radius</label>
+                  <input type="number" value="${s.borderRadius||16}" onchange="Designer.updateObjectProp('style.borderRadius', parseFloat(this.value)||0)">
+                </div>
+                <div><label>Background Color</label>
+                  <input type="color" value="${s.background?.color||'#ffffff'}" onchange="Designer.updateObjectProp('style.background.color', this.value)">
+                </div>
+                <div><label>Border</label>
+                  <div class="row-2">
+                    <select onchange="Designer.updateObjectProp('style.border.style', this.value)">
+                      <option value="none" ${s.border?.style==='none'?'selected':''}>None</option>
+                      <option value="solid" ${s.border?.style==='solid'?'selected':''}>Solid</option>
+                      <option value="dashed" ${s.border?.style==='dashed'?'selected':''}>Dashed</option>
+                      <option value="dotted" ${s.border?.style==='dotted'?'selected':''}>Dotted</option>
+                    </select>
+                    <input type="color" value="${s.border?.color||'#e2dce8'}" onchange="Designer.updateObjectProp('style.border.color', this.value)">
+                  </div>
+                </div>
+                <div><label>Shadow</label>
+                  <select onchange="Designer.updateObjectProp('style.shadow.preset', this.value)">
+                    <option value="none" ${s.shadow?.preset==='none'?'selected':''}>None</option>
+                    <option value="small" ${s.shadow?.preset==='small'?'selected':''}>Small</option>
+                    <option value="medium" ${s.shadow?.preset==='medium'?'selected':''}>Medium</option>
+                    <option value="large" ${s.shadow?.preset==='large'?'selected':''}>Large</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="section-title">📝 Content</div>
+                <div><label>Title</label><input value="${c.title||''}" onchange="Designer.updateObjectProp('content.title', this.value)"></div>
+                <div><label>Subtitle</label><input value="${c.subtitle||''}" onchange="Designer.updateObjectProp('content.subtitle', this.value)"></div>
+                <div><label>Icon</label><input value="${c.icon||'📦'}" onchange="Designer.updateObjectProp('content.icon', this.value)"></div>
+                <div><label>Statistic</label><input value="${c.statistic||'0'}" onchange="Designer.updateObjectProp('content.statistic', this.value)"></div>
+                <div><label>Button Text</label><input value="${c.buttonText||'Open'}" onchange="Designer.updateObjectProp('content.buttonText', this.value)"></div>
+                <div class="row-2 mt-8">
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.75rem;">
+                    <input type="checkbox" ${c.showIcon!==false?'checked':''} onchange="Designer.updateObjectProp('content.showIcon', this.checked)"> Icon
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.75rem;">
+                    <input type="checkbox" ${c.showTitle!==false?'checked':''} onchange="Designer.updateObjectProp('content.showTitle', this.checked)"> Title
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.75rem;">
+                    <input type="checkbox" ${c.showSubtitle!==false?'checked':''} onchange="Designer.updateObjectProp('content.showSubtitle', this.checked)"> Subtitle
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.75rem;">
+                    <input type="checkbox" ${c.showStatistic!==false?'checked':''} onchange="Designer.updateObjectProp('content.showStatistic', this.checked)"> Statistic
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.75rem;">
+                    <input type="checkbox" ${c.showButton!==false?'checked':''} onchange="Designer.updateObjectProp('content.showButton', this.checked)"> Button
+                  </label>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="section-title">👁️ Visibility</div>
+                <div class="row-3">
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.7rem;">
+                    <input type="checkbox" ${obj.visibility?.desktop!==false?'checked':''} onchange="Designer.updateObjectProp('visibility.desktop', this.checked)"> Desktop
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.7rem;">
+                    <input type="checkbox" ${obj.visibility?.tablet!==false?'checked':''} onchange="Designer.updateObjectProp('visibility.tablet', this.checked)"> Tablet
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:0.7rem;">
+                    <input type="checkbox" ${obj.visibility?.mobile!==false?'checked':''} onchange="Designer.updateObjectProp('visibility.mobile', this.checked)"> Mobile
+                  </label>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="section-title">🔗 Action</div>
+                <div><label>Module Path</label><input value="${obj.modulePath||''}" readonly style="background:#f5f3f8;font-size:0.7rem;"></div>
+                <button class="btn btn-sm btn-outline btn-block mt-8" onclick="toast('🔗 Navigate to ${obj.modulePath||'#'}')">Go to Module</button>
+              </div>
+            `;
+
+                container.innerHTML = html;
+            },
+
+            updateObjectProp(path, value) {
+                const obj = this.getSelectedObject();
+                if (!obj) return;
+                const parts = path.split('.');
+                let target = obj;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (!target[parts[i]]) target[parts[i]] = {};
+                    target = target[parts[i]];
+                }
+                target[parts[parts.length - 1]] = value;
+                this._dirty = true;
+                this.pushHistory();
+                this.renderAll();
+                this.updatePanel();
+            },
+
+            // ===== DEVICE =====
+            setDevice(device) {
+                this.device = device;
+                const container = this.canvas;
+                container.className = `canvas-container ${device}`;
+                document.querySelectorAll('#deviceSwitcher .btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.device === device);
+                });
+                // Update visibility based on device
+                this.objects.forEach(obj => {
+                    const vis = obj.visibility || { desktop: true, tablet: true, mobile: true };
+                    const visible = vis[device] !== false;
+                    // We re-render to show/hide
+                });
+                this.renderAll();
+                toast(`📱 Switched to ${device}`);
+            },
+
+            // ===== GRID =====
+            toggleGrid() {
+                this.gridVisible = !this.gridVisible;
+                this.updateGrid();
+                toast(this.gridVisible ? 'Grid shown' : 'Grid hidden');
+            },
+
+            toggleSnap() {
+                this.snapEnabled = !this.snapEnabled;
+                toast(this.snapEnabled ? 'Snap enabled' : 'Snap disabled');
+            },
+
+            // ===== EXPORT / IMPORT =====
+            exportLayout() {
+                const data = {
+                    version: 1,
+                    screen: 'dashboard',
+                    objects: this.objects,
+                    theme: H4ThemeEngine.current,
+                    exportedAt: new Date().toISOString()
+                };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `h4-layout-${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                toast('📤 Layout exported');
+            },
+
+            importLayout(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.objects && Array.isArray(data.objects)) {
+                            if (confirm('Import will replace current layout. Continue?')) {
+                                this.objects = data.objects;
+                                if (data.theme) {
+                                    H4ThemeEngine.current = { ...H4ThemeEngine.current, ...data.theme };
+                                    H4ThemeEngine.save();
+                                    H4ThemeEngine.applyToUI();
+                                }
+                                this.pushHistory();
+                                this.renderAll();
+                                this.updatePanel();
+                                toast('📥 Layout imported successfully!');
+                            }
+                        } else {
+                            toast('Invalid layout file.', 'error');
+                        }
+                    } catch (err) {
+                        toast('Error parsing file.', 'error');
+                    }
+                };
+                reader.readAsText(file);
+                event.target.value = '';
+            }
+        };
+
+        // ============================================================
+        // 7. GLOBAL FUNCTIONS (for inline onclick)
+        // ============================================================
+        function toggleSidebar() {
+            document.getElementById('appSidebar').classList.toggle('open');
+        }
+
+        function togglePanel() {
+            document.getElementById('appPanel').classList.toggle('open');
+        }
+
+        function setDevice(device) {
+            Designer.setDevice(device);
+        }
+
+        function undoHistory() {
+            Designer.undoHistory();
+        }
+
+        function redoHistory() {
+            Designer.redoHistory();
+        }
+
+        function saveLayout() {
+            Designer.saveLayout();
+        }
+
+        function exportLayout() {
+            Designer.exportLayout();
+        }
+
+        function importLayout(event) {
+            Designer.importLayout(event);
+        }
+
+        function addModuleToCanvas() {
+            const modules = Object.keys(H4_MODULE_REGISTRY);
+            const randomModule = modules[Math.floor(Math.random() * modules.length)];
+            const x = 40 + Math.random() * 200;
+            const y = 40 + Math.random() * 200;
+            const obj = H4ObjectEngine.createObject(randomModule, x, y);
+            if (obj) {
+                obj.transform.width = 260;
+                obj.transform.height = 150;
+                obj.content.statistic = Math.floor(Math.random() * 50 + 1).toString();
+                Designer.addObject(obj);
+            }
+        }
+
+        function toast(msg, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            const icons = { success: '✅', error: '❌', warning: '⚠️' };
+            el.innerHTML = `
+            <span>${icons[type] || 'ℹ️'}</span>
+            <span style="flex:1;">${msg}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+          `;
+            container.appendChild(el);
+            setTimeout(() => { if (el.parentElement) el.remove(); }, 4000);
+        }
+
+        // ============================================================
+        // 8. INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            Designer.init();
+
+            // Close sidebar/panel on outside click (mobile)
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('appSidebar');
+                const panel = document.getElementById('appPanel');
+                if (window.innerWidth <= 1024) {
+                    if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !e.target.closest(
+                            '.header-actions')) {
+                        sidebar.classList.remove('open');
+                    }
+                    if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.closest(
+                            '.header-actions')) {
+                        panel.classList.remove('open');
+                    }
+                }
+            });
+
+            // Close bottom sheet on backdrop click
+            document.getElementById('bottomSheetOverlay').addEventListener('click', function(e) {
+                if (e.target === this) closeBottomSheet();
+            });
+        });
+
+        function closeBottomSheet() {
+            document.getElementById('bottomSheetOverlay').classList.remove('open');
+        }
+
+        // ============================================================
+        // 9. EXPOSE FOR CONSOLE DEBUG
+        // ============================================================
+        window.Designer = Designer;
+        window.H4_MODULE_REGISTRY = H4_MODULE_REGISTRY;
+        window.H4ThemeEngine = H4ThemeEngine;
+        window.H4Storage = H4Storage;
+        window.H4ObjectEngine = H4ObjectEngine;
+        window.H4StyleUtil = H4StyleUtil;
+
+        console.log('🎨 H4 Screen Designer loaded.');
+        console.log(`📦 ${Object.keys(H4_MODULE_REGISTRY).length} modules available.`);
+        console.log(`📐 ${Designer.objects.length} objects on canvas.`);
+        console.log('💡 Click a module card to select and edit properties.');
+    </script>
+
+</body>
+</html>
