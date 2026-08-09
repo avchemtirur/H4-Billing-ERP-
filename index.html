@@ -2,981 +2,899 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>H4 Universal Billing Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, https://avchemtirur.github.io/H4-Billing-ERP-/
+    <title>H4 Billing ERP - Quotation & Invoice Manager</title>
     <style>
-        /* ============================================================
-           GLOBAL RESET & VARIABLES
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         :root {
             --primary: #6A3FA0;
-            --primary-dark: #4E2A7A;
             --secondary: #8A6510;
             --accent: #00BCD4;
-            --success: #2E7D32;
-            --danger: #C62828;
-            --warning: #E65100;
+            --success: #4CAF50;
+            --danger: #F44336;
+            --warning: #FF9800;
             --bg: #F5F5F5;
             --surface: #FFFFFF;
             --text-primary: #212121;
             --text-secondary: #757575;
             --border: #E0E0E0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --touch: 44px;
-            --header-height: 56px;
-            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
         }
-        html,
+
         body {
-            height: 100%;
-            font-family: var(--font);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text-primary);
-            font-size: 14px;
             line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            touch-action: manipulation;
-        }
-        button {
-            cursor: pointer;
-            font-family: inherit;
-            font-size: inherit;
-            border: none;
-            background: none;
-            color: inherit;
-            touch-action: manipulation;
-        }
-        input,
-        select,
-        textarea {
-            font-family: inherit;
-            font-size: 14px;
-            color: var(--text-primary);
-            background: #fff;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 10px 12px;
-            width: 100%;
-            outline: none;
-            transition: border 0.2s;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(106, 63, 160, 0.12);
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b7a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .flex {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .flex-wrap {
-            flex-wrap: wrap;
-        }
-        .gap-4 {
-            gap: 4px;
-        }
-        .gap-8 {
-            gap: 8px;
-        }
-        .gap-12 {
-            gap: 12px;
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mb-8 {
-            margin-bottom: 8px;
-        }
-        .mt-16 {
-            margin-top: 16px;
-        }
-        .mb-16 {
-            margin-bottom: 16px;
-        }
-        .w-full {
-            width: 100%;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-muted {
-            color: var(--text-secondary);
-        }
-        .text-sm {
-            font-size: 0.8rem;
-        }
-        .text-xs {
-            font-size: 0.7rem;
-        }
-        .fw-600 {
-            font-weight: 600;
-        }
-        .fw-700 {
-            font-weight: 700;
+            padding-bottom: 80px;
         }
 
-        /* ============================================================
-           BUTTONS
-           ============================================================ */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 10px 18px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            border: 1.5px solid transparent;
-            background: var(--bg);
-            color: var(--text-primary);
-            min-height: var(--touch);
-            min-width: var(--touch);
-            touch-action: manipulation;
-            user-select: none;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff;
-            border-color: transparent;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-        .btn-secondary {
-            background: var(--accent);
-            color: #fff;
-        }
-        .btn-success {
-            background: var(--success);
-            color: #fff;
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: #fff;
-        }
-        .btn-outline {
-            background: transparent;
-            border-color: var(--border);
-            color: var(--text-primary);
-        }
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .btn-gold {
-            background: #D4AF37;
-            color: #1a1a2e;
-        }
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.75rem;
-            min-height: 32px;
-            min-width: 32px;
-        }
-        .btn-block {
-            width: 100%;
-            justify-content: center;
-        }
-        .btn-icon {
-            width: var(--touch);
-            height: var(--touch);
-            padding: 0;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        /* ============================================================
-           HEADER
-           ============================================================ */
+        /* ==================== HEADER ==================== */
         .app-header {
-            height: var(--header-height);
-            background: linear-gradient(135deg, var(--accent), var(--primary));
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 12px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            padding: 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-            flex-shrink: 0;
-        }
-        .app-header .left {
+            box-shadow: var(--shadow);
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-        }
-        .app-header .left .menu-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            color: #fff;
-            font-size: 1.4rem;
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .app-header .left .title {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-        .app-header .right {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .app-header .right .btn {
-            min-height: 36px;
-            min-width: 36px;
-            padding: 0 10px;
-            font-size: 0.75rem;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.12);
-            border: none;
-        }
-        .app-header .right .btn:hover {
-            background: rgba(255, 255, 255, 0.25);
         }
 
-        /* ============================================================
-           SIDEBAR
-           ============================================================ */
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .app-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* ==================== SIDEBAR ==================== */
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
-            bottom: 0;
-            width: 280px;
+            height: 100vh;
+            width: 260px;
             background: var(--surface);
             box-shadow: var(--shadow-lg);
-            z-index: 200;
+            overflow-y: auto;
+            z-index: 99;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
-            overflow-y: auto;
-            padding-top: var(--header-height);
         }
-        .sidebar.open {
+
+        .sidebar.active {
             transform: translateX(0);
         }
-        .sidebar .sidebar-inner {
-            padding: 12px 0;
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
         }
-        .sidebar .sidebar-section {
-            padding: 0 12px;
-            margin-bottom: 8px;
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0.5rem 0;
         }
-        .sidebar .sidebar-section .section-title {
-            font-size: 0.65rem;
+
+        .sidebar-title {
+            padding: 1rem 1rem 0.5rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             color: var(--text-secondary);
-            font-weight: 700;
-            padding: 8px 8px 4px;
-            letter-spacing: 0.06em;
+            font-weight: 600;
         }
-        .sidebar .sidebar-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
+
+        .sidebar-item {
+            padding: 0.75rem 1rem;
             cursor: pointer;
-            transition: all 0.15s;
-            font-weight: 500;
-            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            color: var(--text-primary);
         }
-        .sidebar .sidebar-item:hover {
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
             background: var(--bg);
-        }
-        .sidebar .sidebar-item.active {
-            background: rgba(106, 63, 160, 0.08);
+            border-left-color: var(--primary);
             color: var(--primary);
-            border-left: 3px solid var(--primary);
-        }
-        .sidebar .sidebar-item .icon {
-            font-size: 1.2rem;
-            width: 28px;
-            text-align: center;
-        }
-        .sidebar .sidebar-item .badge {
-            margin-left: auto;
-            background: var(--bg);
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        /* ============================================================
-           OVERLAY
-           ============================================================ */
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 150;
-            display: none;
-        }
-        .sidebar-overlay.open {
-            display: block;
-        }
-
-        /* ============================================================
-           MAIN CONTENT
-           ============================================================ */
+        /* ==================== MAIN CONTENT ==================== */
         .main-content {
-            padding: 12px;
-            max-width: 1400px;
+            padding: 1.5rem;
+            max-width: 1200px;
             margin: 0 auto;
-            padding-bottom: 80px;
         }
 
-        /* ============================================================
-           PAGE HEADER
-           ============================================================ */
         .page-header {
             background: linear-gradient(135deg, var(--accent), var(--primary));
-            color: #fff;
-            padding: 20px 24px;
-            border-radius: var(--radius);
-            margin-bottom: 16px;
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
         }
+
         .page-header h1 {
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
+
         .page-header p {
-            font-size: 0.85rem;
-            opacity: 0.85;
-            margin-top: 4px;
+            font-size: 0.95rem;
+            opacity: 0.9;
         }
 
-        /* ============================================================
-           MODULES
-           ============================================================ */
-        .module {
-            display: none;
-        }
-        .module.active {
-            display: block;
-        }
-
-        /* ============================================================
-           CARDS
-           ============================================================ */
+        /* ==================== CARDS ==================== */
         .card {
             background: var(--surface);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 16px;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
         }
+
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
             border-bottom: 2px solid var(--border);
         }
+
         .card-header h2 {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             color: var(--primary);
-            font-weight: 700;
-        }
-        .card-header .badge {
-            font-size: 0.7rem;
-            background: var(--bg);
-            padding: 2px 12px;
-            border-radius: 12px;
-            color: var(--text-secondary);
         }
 
-        /* ============================================================
-           FORM ROWS
-           ============================================================ */
+        /* ==================== FORMS ==================== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 63, 160, 0.1);
+        }
+
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 1rem;
         }
+
         .form-row-3 {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-        }
-        .form-group {
-            margin-bottom: 12px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
         }
 
-        /* ============================================================
-           CATEGORY SELECTION
-           ============================================================ */
-        .category-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .category-card {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .category-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-        .category-card .icon {
-            font-size: 2.2rem;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .category-card .name {
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-        .category-card .desc {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-        @media (max-width: 480px) {
-            .category-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        /* ============================================================
-           ITEMS
-           ============================================================ */
-        .item-card {
-            background: var(--bg);
-            border-radius: var(--radius-sm);
-            padding: 12px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border);
-        }
-        .item-card .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .item-card .item-header .item-title {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .item-card .item-header .item-actions {
-            display: flex;
-            gap: 4px;
-        }
-        .item-card .item-header .item-actions .btn {
-            min-height: 28px;
-            min-width: 28px;
-            padding: 0 8px;
-            font-size: 0.7rem;
-        }
-        .item-card .item-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-        }
-        .item-card .item-grid .form-group {
-            margin-bottom: 4px;
-        }
-        .item-card .item-grid .form-group label {
-            font-size: 0.6rem;
-        }
-        .item-card .item-total {
-            display: flex;
-            justify-content: flex-end;
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-top: 6px;
-            padding-top: 6px;
-            border-top: 1px solid var(--border);
-            color: var(--primary);
-        }
-        .item-card .mode-toggle {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 6px;
-        }
-        .item-card .mode-toggle .btn {
-            font-size: 0.7rem;
-            padding: 4px 12px;
-            min-height: 28px;
-            border-radius: 4px;
-        }
-        .item-card .mode-toggle .btn.active-mode {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        /* ============================================================
-           CALCULATION
-           ============================================================ */
-        .calc-box {
-            background: var(--bg);
-            padding: 14px;
-            border-radius: var(--radius-sm);
-            border-left: 4px solid var(--primary);
-        }
-        .calc-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .calc-row:last-child {
-            border-bottom: none;
-        }
-        .calc-row.total {
-            font-weight: 700;
-            font-size: 1.05rem;
-            border-bottom: 2px solid var(--primary);
-            padding: 8px 0;
-            color: var(--primary);
-        }
-        .calc-label {
-            color: var(--text-secondary);
-        }
-        .calc-value {
-            font-weight: 600;
-            text-align: right;
-        }
-
-        /* ============================================================
-           PREVIEW
-           ============================================================ */
-        .preview-container {
-            background: #f0ece6;
-            padding: 12px;
-            border-radius: var(--radius);
-            min-height: 400px;
-        }
-        .preview-container .preview-inner {
-            background: #fff;
-            border-radius: var(--radius-sm);
-            padding: 24px 20px;
-            max-width: 794px;
-            margin: 0 auto;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            font-size: 12px;
-            line-height: 1.6;
-            color: #1a1a2e;
-            min-height: 300px;
-        }
-        .preview-container .preview-inner .preview-title {
-            text-align: center;
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -0.02em;
-            margin-bottom: 4px;
-        }
-        .preview-container .preview-inner .preview-number {
-            text-align: center;
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-        }
-        .preview-container .preview-inner .preview-divider {
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-top: 2px solid var(--border);
-            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        .preview-container .preview-inner .preview-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4px 16px;
-            font-size: 0.8rem;
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
         }
-        .preview-container .preview-inner .preview-grid .label {
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.65rem;
-            text-transform: uppercase;
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
-        .preview-container .preview-inner .preview-table {
+
+        .btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* ==================== TABLES ==================== */
+        .table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.75rem;
-            margin-top: 6px;
+            font-size: 0.95rem;
         }
-        .preview-container .preview-inner .preview-table th {
+
+        .table thead {
             background: var(--primary);
-            color: #fff;
-            padding: 6px 8px;
+            color: white;
+        }
+
+        .table th {
+            padding: 1rem;
             text-align: left;
             font-weight: 600;
         }
-        .preview-container .preview-inner .preview-table td {
-            padding: 6px 8px;
+
+        .table td {
+            padding: 1rem;
             border-bottom: 1px solid var(--border);
         }
-        .preview-container .preview-inner .preview-table .total-row {
-            font-weight: 700;
-            border-top: 2px solid var(--primary);
+
+        .table tbody tr:hover {
+            background: var(--bg);
         }
-        .preview-container .preview-inner .preview-footer {
-            margin-top: 12px;
-            border-top: 1px solid var(--border);
-            padding-top: 12px;
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* ==================== MODALS ==================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            gap: 8px;
-            font-size: 0.75rem;
-        }
-        .preview-container .preview-inner .preview-footer .sig-area {
-            text-align: center;
-        }
-        .preview-container .preview-inner .preview-footer .sig-area .sig-line {
-            width: 140px;
-            border-top: 1px solid #777;
-            margin-top: 6px;
-        }
-        .preview-container .preview-inner .preview-words {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-top: 6px;
-            padding-top: 6px;
-            border-top: 1px solid var(--border);
+            align-items: center;
+            border-radius: 12px 12px 0 0;
         }
 
-        /* ============================================================
-           TOGGLE
-           ============================================================ */
-        .toggle-group {
-            display: flex;
-            gap: 6px;
-            align-items: center;
+        .modal-header h3 {
+            font-size: 1.25rem;
         }
-        .toggle-group .toggle-btn {
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            border: 2px solid var(--border);
-            background: transparent;
-            color: var(--text-secondary);
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.2s;
-            min-height: 30px;
-        }
-        .toggle-group .toggle-btn.active {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-        .toggle-group .toggle-btn:hover {
-            border-color: var(--primary);
         }
 
-        /* ============================================================
-           TEMPLATE
-           ============================================================ */
-        .template-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-            background: var(--surface);
-        }
-        .template-card .preview-colors {
-            display: flex;
-            gap: 4px;
-        }
-        .template-card .preview-colors .dot {
-            width: 28px;
-            height: 28px;
-            border-radius: 4px;
-            border: 1px solid var(--border);
-        }
-        .template-card .template-name {
-            font-weight: 600;
-            flex: 1;
+        .modal-body {
+            padding: 2rem;
         }
 
-        /* ============================================================
-           STATS
-           ============================================================ */
+        .modal-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        /* ==================== NOTIFICATIONS ==================== */
+        .notifications {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2000;
+            max-width: 400px;
+        }
+
+        .notification {
+            background: white;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.danger {
+            border-left-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ==================== MODULES ==================== */
+        .module {
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        /* ==================== DASHBOARD STATS ==================== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-        .stat-card {
-            background: var(--surface);
-            padding: 14px;
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        .stat-card .stat-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-        .stat-card .stat-label {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-        }
-        @media (max-width: 600px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
-        .toast-container {
-            position: fixed;
-            bottom: 80px;
-            right: 12px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 380px;
-            width: 100%;
-            pointer-events: none;
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
         }
-        .toast {
-            background: var(--surface);
-            border-radius: var(--radius-sm);
-            padding: 12px 16px;
-            box-shadow: var(--shadow-lg);
-            border-left: 4px solid var(--primary);
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* ==================== IMAGE UPLOAD PREVIEW ==================== */
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            pointer-events: all;
-            font-size: 0.85rem;
-            animation: slideUp 0.25s ease;
-        }
-        .toast.success {
-            border-left-color: var(--success);
-        }
-        .toast.error {
-            border-left-color: var(--danger);
-        }
-        .toast .toast-close {
-            margin-left: auto;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 4px;
-        }
-        @keyframes slideUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            justify-content: center;
+            overflow: hidden;
+            background: var(--bg);
         }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
         @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .form-row-3 {
-                grid-template-columns: 1fr 1fr;
-            }
-            .item-card .item-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .preview-container .preview-inner .preview-grid {
-                grid-template-columns: 1fr;
-            }
-            .category-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .app-header .left .title {
-                font-size: 0.85rem;
-            }
-            .app-header .right .btn span.label {
-                display: none;
-            }
             .sidebar {
                 width: 100%;
-                max-width: 320px;
+                height: auto;
+                max-height: 60vh;
+                bottom: 0;
+                left: 0;
+                top: auto;
+                transform: translateY(100%);
             }
-        }
-        @media (max-width: 480px) {
-            .category-grid {
-                grid-template-columns: 1fr 1fr;
+
+            .sidebar.active {
+                transform: translateY(0);
             }
-            .item-card .item-grid {
-                grid-template-columns: 1fr;
-            }
+
+            .form-row,
             .form-row-3 {
                 grid-template-columns: 1fr;
             }
-            .btn {
-                font-size: 0.75rem;
-                padding: 8px 12px;
-                min-height: 38px;
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
-            .card {
-                padding: 12px;
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.5rem;
+            }
+
+            .modal-content {
+                border-radius: 12px 12px 0 0;
+                max-height: 80vh;
+            }
+
+            .main-content {
+                padding: 1rem;
             }
         }
 
-        /* ============================================================
-           SCROLLBAR
-           ============================================================ */
-        .sidebar::-webkit-scrollbar,
-        .main-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        .sidebar::-webkit-scrollbar-thumb,
-        .main-content::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-        .sidebar::-webkit-scrollbar-track,
-        .main-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        /* ============================================================
-           EMPTY STATE
-           ============================================================ */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-        .empty-state .icon {
-            font-size: 3rem;
-            opacity: 0.4;
-            margin-bottom: 12px;
-        }
-        .empty-state h3 {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        /* ============================================================
-           BOTTOM NAV
-           ============================================================ */
+        /* ==================== BOTTOM NAVIGATION ==================== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--surface);
+            background: white;
             border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-around;
-            z-index: 90;
-            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
-            padding: 4px 0;
+            z-index: 999;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
         }
-        .bottom-nav .nav-item {
+
+        .nav-item {
             flex: 1;
+            padding: 0.75rem;
             text-align: center;
-            padding: 4px 0;
             cursor: pointer;
             color: var(--text-secondary);
-            font-size: 0.6rem;
-            transition: color 0.2s;
+            transition: color 0.2s ease;
+            font-size: 0.75rem;
         }
-        .bottom-nav .nav-item.active {
+
+        .nav-item.active {
             color: var(--primary);
             font-weight: 600;
         }
-        .bottom-nav .nav-item .nav-icon {
-           
+
+        .nav-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <div class="app-title">H4 Billing ERP</div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">🏢 H4 Billing ERP</div>
+        <nav class="sidebar-menu">
+            <div class="sidebar-title">Dashboard</div>
+            <div class="sidebar-item active" data-module="dashboard">📊 Dashboard</div>
+
+            <div class="sidebar-title">Setup</div>
+            <div class="sidebar-item" data-module="company">🏭 Company Profile</div>
+            <div class="sidebar-item" data-module="themes">🎨 Themes</div>
+
+            <div class="sidebar-title">Master Data</div>
+            <div class="sidebar-item" data-module="customers">👥 Customers</div>
+            <div class="sidebar-item" data-module="products">📦 Products</div>
+
+            <div class="sidebar-title">Documents</div>
+            <div class="sidebar-item" data-module="quotations">📄 Quotations</div>
+            <div class="sidebar-item" data-module="invoices">🧾 Invoices</div>
+            <div class="sidebar-item" data-module="payments">💰 Payments</div>
+
+            <div class="sidebar-title">Tools</div>
+            <div class="sidebar-item" data-module="templates">📋 Templates</div>
+            <div class="sidebar-item" data-module="backup">💾 Backup</div>
+            <div class="sidebar-item" data-module="settings">⚙️ Settings</div>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- ==================== DASHBOARD ==================== -->
+        <div class="module active" data-module="dashboard">
+            <div class="page-header">
+                <h1>📊 Dashboard</h1>
+                <p>Welcome to H4 Billing ERP - Your quotation & invoice manager</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="todayQuotations">0</div>
+                    <div class="stat-label">Today's Quotations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todayInvoices">0</div>
+                    <div class="stat-label">Today's Invoices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCustomers">0</div>
+                    <div class="stat-label">Total Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalProducts">0</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Quick Actions</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <button class="btn btn-primary" onclick="H4App.navigate('quotations')">➕ New Quotation</button>
+                    <button class="btn btn-secondary" onclick="H4App.navigate('invoices')">➕ New Invoice</button>
+                    <button class="btn btn-outline" onclick="H4App.navigate('customers')">👥 Add Customer</button>
+                    <button class="btn btn-outline" onclick="H4App.navigate('products')">📦 Add Product</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COMPANY PROFILE ==================== -->
+        <div class="module" data-module="company">
+            <div class="page-header">
+                <h1>🏭 Company Profile</h1>
+                <p>Setup your business details for quotations & invoices</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Business Information</h2>
+                </div>
+
+                <form id="companyForm">
+                    <!-- Business Details -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="legalName">Legal Company Name *</label>
+                            <input type="text" id="legalName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="brandName">Brand Name</label>
+                            <input type="text" id="brandName">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessType">Business Type</label>
+                        <select id="businessType">
+                            <option value="">-- Select Type --</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="trading">Trading</option>
+                            <option value="service">Service</option>
+                            <option value="distributor">Distributor</option>
+                        </select>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <textarea id="address" rows="2" required></textarea>
+                    </div>
+
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city">
+                        </div>
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <input type="text" id="district">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" value="Kerala">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pin">PIN</label>
+                            <input type="text" id="pin">
+                        </div>
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="url" id="website">
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone *</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp</label>
+                            <input type="tel" id="whatsapp">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email">
+                    </div>
+
+                    <!-- GST -->
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="gstEnabled"> GST Enabled
+                        </label>
+                    </div>
+
+                    <div id="gstFields" style="display:none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gstin">GSTIN</label>
+                                <input type="text" id="gstin" maxlength="15">
+                            </div>
+                            <div class="form-group">
+                                <label for="gstStateCode">GST State Code</label>
+                                <input type="text" id="gstStateCode" maxlength="2">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PAN -->
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="panEnabled"> PAN Enabled
+                        </label>
+                    </div>
+
+                    <div id="panFields" style="display:none;">
+                        <div class="form-group">
+                            <label for="pan">PAN</label>
+                            <input type="text" id="pan" maxlength="10">
+                        </div>
+                    </div>
+
+                    <!-- Bank -->
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="bankEnabled"> Bank Details
+                        </label>
+                    </div>
+
+                    <div id="bankFields" style="display:none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bankName">Bank Name</label>
+                                <input type="text" id="bankName">
+                            </div>
+                            <div class="form-group">
+                                <label for="accountName">Account Name</label>
+                                <input type="text" id="accountName">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="accountNumber">Account Number</label>
+                                <input type="text" id="accountNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="ifsc">IFSC Code</label>
+                                <input type="text" id="ifsc">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="branch">Branch</label>
+                                <input type="text" id="branch">
+                            </div>
+                            <div class="form-group">
+                                <label for="upiId">UPI ID</label>
+                                <input type="text" id="upiId">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document -->
+                    <div class="form-group">
+                        <label for="terms">Terms & Conditions</label>
+                        <textarea id="terms" rows="3" placeholder="Payment due within 30 days..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="footerText">Footer Text</label>
+                        <input type="text" id="footerText" placeholder="Thank you for your business!">
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="reset" class="btn btn-outline">Clear</button>
+                        <button type="submit" class="btn btn-primary">💾 Save Company Profile</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Logo Manager -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Logo Manager</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="logoUpload">Upload Logo (PNG/JPEG)</label>
+                    <input type="file" id="logoUpload" accept="image/*">
+                    <small style="color: var(--text-secondary);">Upload logo for quotations & invoices</small>
+                </div>
+
+                <div id="logoPreview" style="display:none; margin-top: 1rem;">
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem;">Current Logo</h3>
+                    <div class="image-preview">
+                        <img id="logoImage" src="" alt="Logo">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature Manager -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Signature Manager</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="signatureUpload">Upload Signature (PNG/JPEG)</label>
+                    <input type="file" id="signatureUpload" accept="image/*">
+                    <small style="color: var(--text-secondary);">Upload authorized signatory signature</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="signatoryName">Authorized Signatory Name</label>
+                    <input type="text" id="signatoryName">
+                </div>
+
+                <div id="signaturePreview" style="display:none; margin-top: 1rem;">
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem;">Current Signature</h3>
+                    <div class="image-preview">
+                        <img id="signatureImage" src="" alt="Signature">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CUSTOMERS ==================== -->
+        <div class="module" data-module="customers">
+            <div class="page-header">
+                <h1>👥 Customers</h1>
+                <p>Manage your customer database</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn btn-primary" onclick="H4App.openModal('customerModal')">➕ Add New Customer</button>
+            </div>
+
+            <div class="card">
+                <table class="table" id="customersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Company</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>City</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersBody">
+                        <tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No customers yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== PRODUCTS ==================== -->
+        <div class="module" data-module="products">
+            <div class="page-header">
+                <h1>📦 Products / Materials</h1>
+                <p>Manage your product catalog</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn btn-primary" onclick="H4App.openModal('productModal')">➕ Add New Product</button>
+            </div>
+
+            <div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary category-filter active" data-cat="all">All</button>
+                <button class="btn btn-outline category-filter" data-cat="tile-adhesive">Tile Adhesive</button>
+                <button class="btn btn-outline category-filter" data-cat="waterproofing">Waterproofing</button>
+                <button class="btn btn-outline category-filter" data-cat="epoxy">Epoxy</button>
+            </div>
+
+            <div class="card">
+                <table class="table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Unit</th>
+                            <th>Selling Rate</th>
+                            <th>GST %</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
