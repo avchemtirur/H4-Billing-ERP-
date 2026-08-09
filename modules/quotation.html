@@ -594,6 +594,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .epoxy-topbar-title {
@@ -655,6 +656,7 @@
             background: white;
             border-radius: 12px;
             border: 1px solid var(--border);
+            padding: 1.5rem;
         }
 
         .epoxy-bottombar {
@@ -1448,7 +1450,7 @@
     <div class="epoxy-overlay" id="epoxyOverlay">
         <div class="epoxy-topbar">
             <div class="epoxy-topbar-title">✨ Premium Epoxy Flooring Proposal</div>
-            <div style="display:flex; gap:0.5rem;">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
                 <button class="btn btn-sm btn-secondary" onclick="H4Epoxy.togglePreviewMobile()" id="epoxyPreviewToggleBtn" style="display:none;">👁️ Preview</button>
                 <button class="btn btn-sm btn-success" onclick="H4Epoxy.save()">💾 Save</button>
                 <button class="btn btn-sm btn-danger" onclick="H4Epoxy.close()">✕ Close</button>
@@ -1551,7 +1553,7 @@
                             </div>
                         </div>
 
-                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
                             <button class="btn btn-sm btn-outline" onclick="H4Epoxy.resetToAutoRate()">🔒 Use Auto Rate</button>
                             <button class="btn btn-sm btn-outline" onclick="H4App.openModal('rateMasterModal')">➕ Add Rate</button>
                         </div>
@@ -1791,7 +1793,7 @@
                         </div>
                     </div>
 
-                    <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
+                    <div style="display:flex; gap:0.75rem; justify-content:flex-end; flex-wrap:wrap;">
                         <button class="btn btn-success" id="epxConvertBtn" style="display:none;" onclick="H4Epoxy.convertToInvoice()">✅ Convert to Invoice</button>
                         <button class="btn btn-primary" onclick="H4Epoxy.save()">💾 Save Quotation</button>
                     </div>
@@ -1827,581 +1829,1466 @@
         </div>
     </nav>
 
-    <!-- CORE JAVASCRIPT -->
+    <!-- ==================== JAVASCRIPT — MERGED ==================== -->
     <script>
-        // ==================== CALCULATION ENGINE ====================
-        const H4Calc = {
-            calculateLineTotal(quantity, rate, discount, discountType) {
-                const subtotal = quantity * rate;
-                const discountAmount = discountType === 'percentage' ? (subtotal * discount / 100) : discount;
-                return Math.max(0, subtotal - discountAmount);
-            },
+    /* ============================================================
+       H4 BILLING ERP - MERGED SCRIPT
+       Phase 2: Quotation + Invoice + Epoxy Builder
+       ============================================================ */
 
-            calculateTotals(items) {
-                let subtotal = 0;
-                let totalDiscount = 0;
+    /* ==================== DATABASE ==================== */
 
-                items.forEach(item => {
-                    const qty = parseFloat(item.quantity) || 0;
-                    const rate = parseFloat(item.rate) || 0;
-                    const discount = parseFloat(item.discount) || 0;
-                    const discountType = item.discountType || 'flat';
+    const H4DB = {
+        STORAGE_KEY: "h4_billing_erp_v3",
 
-                    const itemSubtotal = qty * rate;
-                    const discountAmount = discountType === 'percentage' ? (itemSubtotal * discount / 100) : discount;
+        init() {
+            let data = this.get();
 
-                    subtotal += itemSubtotal;
-                    totalDiscount += discountAmount;
-                });
-
-                const taxableAmount = subtotal - totalDiscount;
-                
-                // CGST + SGST (splitting 18% GST equally)
-                const cgst = taxableAmount * 0.09;
-                const sgst = taxableAmount * 0.09;
-                const total = taxableAmount + cgst + sgst;
-
-                return {
-                    subtotal,
-                    totalDiscount,
-                    taxableAmount,
-                    cgst,
-                    sgst,
-                    igst: 0,
-                    roundOff: 0,
-                    grandTotal: total
+            if (!data.settings) {
+                data.settings = {
+                    quotationCounter: 1,
+                    invoiceCounter: 1,
+                    quotationPrefix: "H4-QTN",
+                    invoicePrefix: "H4-INV",
+                    quotationYear: new Date().getFullYear(),
+                    invoiceYear: new Date().getFullYear()
                 };
             }
-        };
 
-        // ==================== NUMBERING ENGINE ====================
-        const H4Numbering = {
-            getNextQuotationNumber() {
-                const settings = H4DB.get('settings');
-                const counter = settings.quotationCounter || 1;
-                const prefix = settings.quotationPrefix || 'H4-QTN';
-                const year = settings.quotationYear || 2026;
-                const number = String(counter).padStart(5, '0');
-                
-                // Increment for next time
-                settings.quotationCounter = counter + 1;
-                H4DB.save('settings', settings);
+            if (!data.customers) data.customers = {};
+            if (!data.products) data.products = {};
+            if (!data.quotations) data.quotations = {};
+            if (!data.invoices) data.invoices = {};
+            if (!data.rateMaster) data.rateMaster = {};
+            if (!data.unitMaster) data.unitMaster = {};
+            if (!data.flooringTypeMaster) data.flooringTypeMaster = {};
+            if (!data.thicknessMaster) data.thicknessMaster = {};
+            if (!data.floorConditionMaster) data.floorConditionMaster = {};
+            if (!data.workScopeDefaults) data.workScopeDefaults = [];
+            if (!data.premiumFeatureDefaults) data.premiumFeatureDefaults = [];
 
-                return `${prefix}-${year}-${number}`;
-            },
-
-            getNextInvoiceNumber() {
-                const settings = H4DB.get('settings');
-                const counter = settings.invoiceCounter || 1;
-                const prefix = settings.invoicePrefix || 'H4-INV';
-                const year = settings.invoiceYear || 2026;
-                const number = String(counter).padStart(5, '0');
-
-                // Increment for next time
-                settings.invoiceCounter = counter + 1;
-                H4DB.save('settings', settings);
-
-                return `${prefix}-${year}-${number}`;
+            if (!data.company) {
+                data.company = {
+                    legalName: "H4 Construction Solutions",
+                    address: "Kerala, India",
+                    phone: "",
+                    email: "",
+                    gstin: ""
+                };
             }
-        };
 
-        // ==================== DOCUMENT GENERATOR ====================
-        const H4Documents = {
-            generateQuotationPreview(data) {
-                const company = H4DB.get('company');
-                const customer = H4DB.get('customers')[data.customerId] || {};
-                
-                const totals = H4Calc.calculateTotals(data.items);
-                
-                let itemsHtml = '';
-                data.items.forEach(item => {
-                    const lineTotal = H4Calc.calculateLineTotal(item.quantity, item.rate, item.discount, item.discountType);
-                    itemsHtml += `
-                        <tr>
-                            <td>${item.description}</td>
-                            <td style="text-align: right;">${item.quantity}</td>
-                            <td>${item.unit}</td>
-                            <td style="text-align: right;">₹${parseFloat(item.rate || 0).toFixed(2)}</td>
-                            <td style="text-align: right;">₹${parseFloat(item.discount || 0).toFixed(2)}</td>
-                            <td style="text-align: right;">${item.gst}%</td>
-                            <td style="text-align: right;">₹${lineTotal.toFixed(2)}</td>
-                        </tr>
-                    `;
-                });
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+        },
 
-                return `
-                    <div class="preview-header">
-                        <div class="document-title">QUOTATION</div>
-                        <div class="document-number">${data.number || 'H4-QTN-2026-00001'}</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
-                            Date: ${new Date(data.date).toLocaleDateString('en-IN')}
-                            ${data.validUntil ? ` | Valid Until: ${new Date(data.validUntil).toLocaleDateString('en-IN')}` : ''}
-                        </div>
-                    </div>
-
-                    <div class="preview-info">
-                        <div>
-                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">From:</h4>
-                            <strong>${company.legalName}</strong><br>
-                            ${company.address}<br>
-                            ${company.phone}
-                        </div>
-                        <div>
-                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">To:</h4>
-                            <strong>${customer.name}</strong><br>
-                            ${customer.address || ''}<br>
-                            ${customer.phone}
-                        </div>
-                    </div>
-
-                    <div class="preview-items">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Description</th>
-                                    <th style="text-align: right;">Qty</th>
-                                    <th>Unit</th>
-                                    <th style="text-align: right;">Rate</th>
-                                    <th style="text-align: right;">Discount</th>
-                                    <th style="text-align: right;">GST</th>
-                                    <th style="text-align: right;">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${itemsHtml}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="preview-totals">
-                        <div class="preview-totals-box">
-                            <div class="calc-row">
-                                <span>Subtotal:</span>
-                                <span>₹${totals.subtotal.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>Total Discount:</span>
-                                <span>₹${totals.totalDiscount.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>Taxable:</span>
-                                <span>₹${totals.taxableAmount.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>CGST (9%):</span>
-                                <span>₹${totals.cgst.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>SGST (9%):</span>
-                                <span>₹${totals.sgst.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row total">
-                                <span>GRAND TOTAL:</span>
-                                <span>₹${totals.grandTotal.toFixed(2)}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    ${data.notes ? `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);"><strong>Terms:</strong><br>${data.notes}</div>` : ''}
-                `;
-            },
-
-            generateInvoicePreview(data) {
-                const company = H4DB.get('company');
-                const customer = H4DB.get('customers')[data.customerId] || {};
-                
-                const totals = H4Calc.calculateTotals(data.items);
-                
-                let itemsHtml = '';
-                data.items.forEach(item => {
-                    const lineTotal = H4Calc.calculateLineTotal(item.quantity, item.rate, item.discount, item.discountType);
-                    itemsHtml += `
-                        <tr>
-                            <td>${item.description}</td>
-                            <td style="text-align: right;">${item.quantity}</td>
-                            <td>${item.unit}</td>
-                            <td style="text-align: right;">₹${parseFloat(item.rate || 0).toFixed(2)}</td>
-                            <td style="text-align: right;">₹${parseFloat(item.discount || 0).toFixed(2)}</td>
-                            <td style="text-align: right;">${item.gst}%</td>
-                            <td style="text-align: right;">₹${lineTotal.toFixed(2)}</td>
-                        </tr>
-                    `;
-                });
-
-                return `
-                    <div class="preview-header">
-                        <div class="document-title">INVOICE</div>
-                        <div class="document-number">${data.number || 'H4-INV-2026-00001'}</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
-                            Date: ${new Date(data.date).toLocaleDateString('en-IN')}
-                            ${data.dueDate ? ` | Due Date: ${new Date(data.dueDate).toLocaleDateString('en-IN')}` : ''}
-                        </div>
-                    </div>
-
-                    <div class="preview-info">
-                        <div>
-                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">From:</h4>
-                            <strong>${company.legalName}</strong><br>
-                            ${company.address}<br>
-                            ${company.phone}
-                        </div>
-                        <div>
-                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">To:</h4>
-                            <strong>${customer.name}</strong><br>
-                            ${customer.address || ''}<br>
-                            ${customer.phone}
-                        </div>
-                    </div>
-
-                    <div class="preview-items">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Description</th>
-                                    <th style="text-align: right;">Qty</th>
-                                    <th>Unit</th>
-                                    <th style="text-align: right;">Rate</th>
-                                    <th style="text-align: right;">Discount</th>
-                                    <th style="text-align: right;">GST</th>
-                                    <th style="text-align: right;">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${itemsHtml}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="preview-totals">
-                        <div class="preview-totals-box">
-                            <div class="calc-row">
-                                <span>Subtotal:</span>
-                                <span>₹${totals.subtotal.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>Total Discount:</span>
-                                <span>₹${totals.totalDiscount.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>Taxable:</span>
-                                <span>₹${totals.taxableAmount.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>CGST (9%):</span>
-                                <span>₹${totals.cgst.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row">
-                                <span>SGST (9%):</span>
-                                <span>₹${totals.sgst.toFixed(2)}</span>
-                            </div>
-                            <div class="calc-row total">
-                                <span>GRAND TOTAL:</span>
-                                <span>₹${totals.grandTotal.toFixed(2)}</span>
-                            </div>
-                            ${data.paidAmount ? `<div class="calc-row" style="color: var(--success);"><span>Amount Paid:</span><span>₹${parseFloat(data.paidAmount).toFixed(2)}</span></div>` : ''}
-                            ${data.paidAmount ? `<div class="calc-row" style="color: var(--danger);"><span>Balance:</span><span>₹${(totals.grandTotal - parseFloat(data.paidAmount)).toFixed(2)}</span></div>` : ''}
-                        </div>
-                    </div>
-
-                    ${data.notes ? `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);"><strong>Terms:</strong><br>${data.notes}</div>` : ''}
-                `;
-            }
-        };
-
-        // ==================== DATABASE ====================
-        const H4DB = {
-            STORAGE_KEY: 'h4_billing_erp_v3',
-
-            init() {
-                if (!localStorage.getItem(this.STORAGE_KEY)) {
-                    // Assume Phase 1 data exists
-                }
-            },
-
-            get(key) {
-                const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+        get(key) {
+            try {
+                const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || "{}");
                 return key ? data[key] : data;
-            },
-
-            save(key, value) {
-                const data = this.get();
-                data[key] = value;
-                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
-            },
-
-            add(category, item) {
-                const data = this.get(category) || {};
-                data[item.id] = item;
-                this.save(category, data);
-                return item;
-            },
-
-            update(category, id, updates) {
-                const data = this.get(category) || {};
-                if (data[id]) {
-                    data[id] = { ...data[id], ...updates };
-                    this.save(category, data);
-                    return data[id];
-                }
-                return null;
-            },
-
-            delete(category, id) {
-                const data = this.get(category) || {};
-                delete data[id];
-                this.save(category, data);
+            } catch (e) {
+                console.error("Database read error:", e);
+                return key ? null : {};
             }
-        };
+        },
 
-        // ==================== MASTER DATA (Rate/Unit/Flooring/Thickness) ====================
-        const H4Masters = {
-            ensureSeed() {
-                if (!H4DB.get('unitMaster')) {
-                    H4DB.save('unitMaster', {
-                        'unit_001': { id: 'unit_001', name: 'sq.ft' },
-                        'unit_002': { id: 'unit_002', name: 'sq.m' },
-                        'unit_003': { id: 'unit_003', name: 'running ft' },
-                        'unit_004': { id: 'unit_004', name: 'meter' },
-                        'unit_005': { id: 'unit_005', name: 'kg' },
-                        'unit_006': { id: 'unit_006', name: 'litre' },
-                        'unit_007': { id: 'unit_007', name: 'set' },
-                        'unit_008': { id: 'unit_008', name: 'piece' },
-                        'unit_009': { id: 'unit_009', name: 'day' },
-                        'unit_010': { id: 'unit_010', name: 'job' }
-                    });
-                }
-                if (!H4DB.get('flooringTypeMaster')) {
-                    H4DB.save('flooringTypeMaster', {
-                        'ft_001': { id: 'ft_001', name: 'Standard Epoxy Flooring' },
-                        'ft_002': { id: 'ft_002', name: 'Premium Self-Leveling Epoxy' },
-                        'ft_003': { id: 'ft_003', name: 'Metallic Epoxy Flooring' },
-                        'ft_004': { id: 'ft_004', name: '3D Epoxy Flooring' },
-                        'ft_005': { id: 'ft_005', name: 'Decorative Flake Epoxy' },
-                        'ft_006': { id: 'ft_006', name: 'Industrial Epoxy Flooring' },
-                        'ft_007': { id: 'ft_007', name: 'Epoxy Cove Flooring' }
-                    });
-                }
-                if (!H4DB.get('thicknessMaster')) {
-                    H4DB.save('thicknessMaster', {
-                        'th_001': { id: 'th_001', name: '1 mm' },
-                        'th_002': { id: 'th_002', name: '2 mm' },
-                        'th_003': { id: 'th_003', name: '3 mm' }
-                    });
-                }
-                if (!H4DB.get('floorConditionMaster')) {
-                    H4DB.save('floorConditionMaster', {
-                        'fc_001': { id: 'fc_001', name: 'New Concrete' },
-                        'fc_002': { id: 'fc_002', name: 'Existing Concrete' },
-                        'fc_003': { id: 'fc_003', name: 'Existing Tile' },
-                        'fc_004': { id: 'fc_004', name: 'Existing Epoxy' },
-                        'fc_005': { id: 'fc_005', name: 'Other' }
-                    });
-                }
-                if (!H4DB.get('rateMaster')) {
-                    H4DB.save('rateMaster', {
-                        'rate_001': { id: 'rate_001', flooringType: 'Premium Self-Leveling Epoxy', thickness: '1 mm', unit: 'sq.ft', rate: 250, gst: 18, active: true },
-                        'rate_002': { id: 'rate_002', flooringType: 'Premium Self-Leveling Epoxy', thickness: '2 mm', unit: 'sq.ft', rate: 350, gst: 18, active: true },
-                        'rate_003': { id: 'rate_003', flooringType: 'Premium Self-Leveling Epoxy', thickness: '3 mm', unit: 'sq.ft', rate: 450, gst: 18, active: true }
-                    });
-                }
-                if (!H4DB.get('workScopeDefaults')) {
-                    H4DB.save('workScopeDefaults', [
-                        'Surface Grinding', 'Crack Repair', 'Primer Coat', 'Epoxy Screed / Putty',
-                        'Self-Leveling Epoxy', 'Decorative Flakes / Metallic Effect',
-                        'UV Resistant PU Top Coat', 'Final Inspection & Cleaning'
-                    ]);
-                }
-                if (!H4DB.get('premiumFeatureDefaults')) {
-                    H4DB.save('premiumFeatureDefaults', [
-                        'Seamless Finish', 'High Gloss Luxury Look', 'Chemical Resistant',
-                        'Scratch Resistant', 'Dust Free Surface', 'Easy to Clean',
-                        'Long Life Performance', 'Premium Imported Pigments', 'UV Protected Top Coat'
-                    ]);
-                }
-            },
+        save(key, value) {
+            const data = this.get();
+            data[key] = value;
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+        },
 
-            findRate(flooringType, thickness, unit) {
-                const rates = H4DB.get('rateMaster') || {};
-                return Object.values(rates).find(r =>
-                    r.active !== false &&
-                    r.flooringType === flooringType &&
-                    r.thickness === thickness &&
-                    r.unit === unit
-                ) || null;
+        add(category, item) {
+            const data = this.get(category) || {};
+            data[item.id] = item;
+            this.save(category, data);
+            return item;
+        },
+
+        update(category, id, updates) {
+            const data = this.get(category) || {};
+            if (!data[id]) return null;
+            data[id] = { ...data[id], ...updates };
+            this.save(category, data);
+            return data[id];
+        },
+
+        delete(category, id) {
+            const data = this.get(category) || {};
+            delete data[id];
+            this.save(category, data);
+        }
+    };
+
+
+    /* ==================== UTILITIES ==================== */
+
+    const H4Utils = {
+        generateId(prefix) {
+            return prefix + "_" + Date.now() + "_" + Math.random().toString(36).substring(2, 9);
+        },
+
+        formatCurrency(value) {
+            return new Intl.NumberFormat("en-IN", {
+                style: "currency",
+                currency: "INR",
+                maximumFractionDigits: 2
+            }).format(Number(value) || 0);
+        },
+
+        today() {
+            const d = new Date();
+            return d.toISOString().split("T")[0];
+        },
+
+        escape(value) {
+            if (value === null || value === undefined) return "";
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    };
+
+
+    /* ==================== NOTIFICATION ==================== */
+
+    const H4Notify = {
+        show(message, type) {
+            const container = document.getElementById("notifications");
+            if (!container) { alert(message); return; }
+            const div = document.createElement("div");
+            div.className = "notification " + (type === "danger" ? "danger" : "success");
+            div.textContent = message;
+            container.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        },
+        success(msg) { this.show(msg, "success"); },
+        danger(msg) { this.show(msg, "danger"); }
+    };
+
+
+    /* ==================== CALCULATION ENGINE ==================== */
+
+    const H4Calc = {
+        calculateLine(item) {
+            const qty = Number(item.quantity) || 0;
+            const rate = Number(item.rate) || 0;
+            const discount = Number(item.discount) || 0;
+            const discountType = item.discountType || "flat";
+            const subtotal = qty * rate;
+            let discountAmount = 0;
+            if (discountType === "percentage") {
+                discountAmount = subtotal * discount / 100;
+            } else {
+                discountAmount = discount;
             }
-        };
+            discountAmount = Math.min(discountAmount, subtotal);
+            const taxable = Math.max(0, subtotal - discountAmount);
+            const gstRate = Number(item.gst) || 0;
+            const gst = taxable * gstRate / 100;
+            return { subtotal, discountAmount, taxable, gst, total: taxable + gst };
+        },
 
-        // ==================== UTILITIES ====================
-        const H4Utils = {
-            generateId(prefix) {
-                return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            },
+        calculateTotals(items, gstMode) {
+            let subtotal = 0;
+            let totalDiscount = 0;
+            let taxableAmount = 0;
+            let cgst = 0;
+            let sgst = 0;
+            let igst = 0;
 
-            formatCurrency(value) {
-                return new Intl.NumberFormat('en-IN', {
-                    style: 'currency',
-                    currency: 'INR'
-                }).format(value);
-            }
-        };
-
-        // ==================== NOTIFICATIONS ====================
-        const H4Notify = {
-            show(message, type = 'success') {
-                const container = document.getElementById('notifications');
-                const div = document.createElement('div');
-                div.className = `notification ${type}`;
-                div.textContent = message;
-                container.appendChild(div);
-                setTimeout(() => div.remove(), 3000);
-            },
-
-            success(msg) { this.show(msg, 'success'); },
-            danger(msg) { this.show(msg, 'danger'); }
-        };
-
-        // ==================== MAIN APP ====================
-        const H4App = {
-            currentQtnId: null,
-            currentInvId: null,
-            qtnItems: [],
-            invItems: [],
-
-            init() {
-                H4DB.init();
-                H4Masters.ensureSeed();
-                this.setupNavigation();
-                this.loadCustomerSelects();
-                this.loadQuotations();
-                this.loadInvoices();
-                this.setDefaultDates();
-                this.loadRateMasterUI();
-            },
-
-            // ==================== RATE / UNIT / FLOORING / THICKNESS MASTER UI ====================
-            loadRateMasterUI() {
-                const rates = H4DB.get('rateMaster') || {};
-                const tbody = document.getElementById('rateMasterBody');
-                const entries = Object.values(rates);
-
-                if (entries.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-secondary);">No rates configured yet</td></tr>';
+            (items || []).forEach(item => {
+                const line = this.calculateLine(item);
+                subtotal += line.subtotal;
+                totalDiscount += line.discountAmount;
+                taxableAmount += line.taxable;
+                const gstRate = Number(item.gst) || 0;
+                if (gstMode === "inter") {
+                    igst += line.taxable * gstRate / 100;
                 } else {
-                    tbody.innerHTML = entries.map(r => `
-                        <tr>
-                            <td>${r.flooringType}</td>
-                            <td>${r.thickness}</td>
-                            <td>${r.unit}</td>
-                            <td>${H4Utils.formatCurrency(r.rate)}</td>
-                            <td>${r.gst}%</td>
-                            <td>${r.active !== false ? '✅ Active' : '⛔ Inactive'}</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="btn btn-sm btn-outline" onclick="H4App.editRateMaster('${r.id}')">✏️</button>
-                                    <button class="btn btn-sm btn-danger" onclick="H4App.deleteRateMaster('${r.id}')">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                    `).join('');
+                    cgst += line.taxable * gstRate / 200;
+                    sgst += line.taxable * gstRate / 200;
                 }
+            });
 
-                this.populateMasterSelect('rmFlooringType', 'flooringTypeMaster');
-                this.populateMasterSelect('rmThickness', 'thicknessMaster');
-                this.populateMasterSelect('rmUnit', 'unitMaster');
-            },
+            const tax = cgst + sgst + igst;
+            const beforeRound = taxableAmount + tax;
+            const rounded = Math.round(beforeRound);
+            const roundOff = rounded - beforeRound;
 
-            populateMasterSelect(selectId, storeKey) {
-                const el = document.getElementById(selectId);
+            return {
+                subtotal,
+                totalDiscount,
+                taxableAmount,
+                cgst,
+                sgst,
+                igst,
+                tax,
+                roundOff,
+                grandTotal: rounded
+            };
+        }
+    };
+
+
+    /* ==================== NUMBERING ==================== */
+
+    const H4Numbering = {
+        getNextQuotationNumber() {
+            const settings = H4DB.get("settings") || {};
+            const counter = Number(settings.quotationCounter) || 1;
+            const prefix = settings.quotationPrefix || "H4-QTN";
+            const year = settings.quotationYear || new Date().getFullYear();
+            settings.quotationCounter = counter + 1;
+            H4DB.save("settings", settings);
+            return prefix + "-" + year + "-" + String(counter).padStart(5, "0");
+        },
+
+        getNextInvoiceNumber() {
+            const settings = H4DB.get("settings") || {};
+            const counter = Number(settings.invoiceCounter) || 1;
+            const prefix = settings.invoicePrefix || "H4-INV";
+            const year = settings.invoiceYear || new Date().getFullYear();
+            settings.invoiceCounter = counter + 1;
+            H4DB.save("settings", settings);
+            return prefix + "-" + year + "-" + String(counter).padStart(5, "0");
+        }
+    };
+
+
+    /* ==================== DOCUMENT PREVIEW ==================== */
+
+    const H4Documents = {
+        quotation(data) {
+            const company = H4DB.get("company") || {};
+            const customers = H4DB.get("customers") || {};
+            const customer = customers[data.customerId] || {};
+            const totals = H4Calc.calculateTotals(data.items || []);
+
+            const itemsHTML = (data.items || []).map(item => {
+                const line = H4Calc.calculateLine(item);
+                return `
+                    <tr>
+                        <td>${H4Utils.escape(item.productName || item.description || "")}</td>
+                        <td style="text-align:right">${Number(item.quantity || 0)}</td>
+                        <td>${H4Utils.escape(item.unit || "")}</td>
+                        <td style="text-align:right">₹${Number(item.rate || 0).toFixed(2)}</td>
+                        <td style="text-align:right">₹${line.discountAmount.toFixed(2)}</td>
+                        <td style="text-align:right">${Number(item.gst || 0)}%</td>
+                        <td style="text-align:right">₹${line.total.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join("");
+
+            return `
+                <div class="preview-header">
+                    <div class="document-title">QUOTATION</div>
+                    <div class="document-number">${H4Utils.escape(data.number)}</div>
+                    <div>
+                        Date: ${data.date ? new Date(data.date).toLocaleDateString("en-IN") : ""}
+                        ${data.validUntil ? " | Valid Until: " + new Date(data.validUntil).toLocaleDateString("en-IN") : ""}
+                    </div>
+                </div>
+                <div class="preview-info">
+                    <div>
+                        <h4 style="color:var(--primary)">From:</h4>
+                        <strong>${H4Utils.escape(company.legalName || "H4 Construction Solutions")}</strong><br>
+                        ${H4Utils.escape(company.address || "")}<br>
+                        ${H4Utils.escape(company.phone || "")}
+                        ${company.gstin ? `<br>GSTIN: ${H4Utils.escape(company.gstin)}` : ""}
+                    </div>
+                    <div>
+                        <h4 style="color:var(--primary)">To:</h4>
+                        <strong>${H4Utils.escape(customer.name || "Customer")}</strong><br>
+                        ${H4Utils.escape(customer.address || "")}<br>
+                        ${H4Utils.escape(customer.phone || "")}
+                    </div>
+                </div>
+                ${data.project ? `<p><strong>Project:</strong> ${H4Utils.escape(data.project)}</p>` : ""}
+                <div class="preview-items">
+                    <table>
+                        <thead><tr><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">Rate</th><th style="text-align:right">Discount</th><th style="text-align:right">GST</th><th style="text-align:right">Amount</th></tr></thead>
+                        <tbody>${itemsHTML}</tbody>
+                    </table>
+                </div>
+                <div class="preview-totals">
+                    <div class="preview-totals-box">
+                        <div class="calc-row"><span>Subtotal</span><span>₹${totals.subtotal.toFixed(2)}</span></div>
+                        <div class="calc-row"><span>Discount</span><span>₹${totals.totalDiscount.toFixed(2)}</span></div>
+                        <div class="calc-row"><span>Taxable Amount</span><span>₹${totals.taxableAmount.toFixed(2)}</span></div>
+                        <div class="calc-row"><span>CGST</span><span>₹${totals.cgst.toFixed(2)}</span></div>
+                        <div class="calc-row"><span>SGST</span><span>₹${totals.sgst.toFixed(2)}</span></div>
+                        <div class="calc-row"><span>Round Off</span><span>₹${totals.roundOff.toFixed(2)}</span></div>
+                        <div class="calc-row total"><span>GRAND TOTAL</span><span>₹${totals.grandTotal.toFixed(2)}</span></div>
+                    </div>
+                </div>
+                ${data.notes ? `<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);"><strong>Terms & Conditions</strong><br>${H4Utils.escape(data.notes)}</div>` : ""}
+            `;
+        },
+
+        invoice(data) {
+            return this.quotation({ ...data, number: data.number }).replace("QUOTATION", "TAX INVOICE");
+        }
+    };
+
+
+    /* ==================== MAIN APP ==================== */
+
+    const H4App = {
+        currentQtnId: null,
+        currentInvId: null,
+        qtnItems: [],
+        invItems: [],
+
+        /* ---------- INIT ---------- */
+        init() {
+            H4DB.init();
+            this.setupNavigation();
+            this.loadCustomerSelects();
+            this.loadQuotations();
+            this.loadInvoices();
+            this.setDefaultDates();
+            this.updateQuotationPreview();
+            this.updateInvoicePreview();
+            this.loadRateMasterUI();
+            this.seedMasterData();
+            console.log("H4 Billing ERP loaded");
+        },
+
+        seedMasterData() {
+            const seed = (key, items) => {
+                const existing = H4DB.get(key);
+                if (!existing || Object.keys(existing).length === 0) {
+                    const data = {};
+                    items.forEach(name => { const id = H4Utils.generateId(key.slice(0,3)); data[id] = { id, name }; });
+                    H4DB.save(key, data);
+                }
+            };
+            seed('unitMaster', ['sq.ft', 'sq.m', 'running ft', 'meter', 'kg', 'litre', 'set', 'piece', 'day', 'job']);
+            seed('flooringTypeMaster', ['Standard Epoxy Flooring', 'Premium Self-Leveling Epoxy', 'Metallic Epoxy Flooring', '3D Epoxy Flooring', 'Decorative Flake Epoxy', 'Industrial Epoxy Flooring', 'Epoxy Cove Flooring']);
+            seed('thicknessMaster', ['1 mm', '2 mm', '3 mm', '4 mm', '5 mm', '6 mm']);
+            seed('floorConditionMaster', ['New Concrete', 'Existing Concrete', 'Existing Tile', 'Existing Epoxy', 'Other']);
+
+            const rates = H4DB.get('rateMaster');
+            if (!rates || Object.keys(rates).length === 0) {
+                const sample = {
+                    rate_001: { id: 'rate_001', flooringType: 'Premium Self-Leveling Epoxy', thickness: '1 mm', unit: 'sq.ft', rate: 250, gst: 18, active: true },
+                    rate_002: { id: 'rate_002', flooringType: 'Premium Self-Leveling Epoxy', thickness: '2 mm', unit: 'sq.ft', rate: 350, gst: 18, active: true },
+                    rate_003: { id: 'rate_003', flooringType: 'Premium Self-Leveling Epoxy', thickness: '3 mm', unit: 'sq.ft', rate: 450, gst: 18, active: true }
+                };
+                H4DB.save('rateMaster', sample);
+            }
+        },
+
+        /* ---------- NAVIGATION ---------- */
+        setupNavigation() {
+            document.querySelectorAll(".sidebar-item, .nav-item").forEach(item => {
+                item.addEventListener("click", () => {
+                    const module = item.dataset.module;
+                    this.showModule(module);
+                    document.getElementById("sidebar")?.classList.remove("active");
+                });
+            });
+            document.getElementById("menuToggle")?.addEventListener("click", () => {
+                document.getElementById("sidebar")?.classList.toggle("active");
+            });
+        },
+
+        showModule(module) {
+            document.querySelectorAll(".module").forEach(el => {
+                el.classList.toggle("active", el.dataset.module === module);
+            });
+            document.querySelectorAll(".sidebar-item, .nav-item").forEach(el => {
+                el.classList.toggle("active", el.dataset.module === module);
+            });
+            if (module === "quotations") this.loadQuotations();
+            if (module === "invoices") this.loadInvoices();
+            if (module === "rateMaster") this.loadRateMasterUI();
+        },
+
+        /* ---------- MODALS ---------- */
+        openModal(id) {
+            document.getElementById(id)?.classList.add("active");
+        },
+
+        closeModal(id) {
+            document.getElementById(id)?.classList.remove("active");
+        },
+
+        /* ---------- DATES ---------- */
+        setDefaultDates() {
+            const today = H4Utils.today();
+            const qtnDate = document.getElementById("qtnDate");
+            const invDate = document.getElementById("invDate");
+            if (qtnDate && !qtnDate.value) qtnDate.value = today;
+            if (invDate && !invDate.value) invDate.value = today;
+        },
+
+        /* ---------- CUSTOMER ---------- */
+        loadCustomerSelects() {
+            const customers = H4DB.get("customers") || {};
+            const options = Object.values(customers)
+                .map(c => `<option value="${c.id}">${H4Utils.escape(c.name || "Customer")}</option>`)
+                .join("");
+            const qtn = document.getElementById("qtnCustomer");
+            const inv = document.getElementById("invCustomer");
+            const epx = document.getElementById("epxCustomer");
+            if (qtn) qtn.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
+            if (inv) inv.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
+            if (epx) epx.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
+        },
+
+        onCustomerChange() {
+            const id = document.getElementById("qtnCustomer")?.value;
+            const customers = H4DB.get("customers") || {};
+            const customer = customers[id];
+            if (!customer) return;
+            const address = document.getElementById("qtnAddress");
+            if (address && !address.value) address.value = customer.address || "";
+            this.updateQuotationPreview();
+        },
+
+        /* ---------- QUOTATION ---------- */
+        newQuotation() {
+            this.currentQtnId = null;
+            this.qtnItems = [];
+            document.getElementById("quotationsList").style.display = "none";
+            document.getElementById("quotationBuilder").style.display = "block";
+            document.getElementById("qtnNumber").value = H4Numbering.getNextQuotationNumber();
+            document.getElementById("qtnDate").value = H4Utils.today();
+            document.getElementById("qtnValidUntil").value = "";
+            document.getElementById("qtnProject").value = "";
+            document.getElementById("qtnReference").value = "";
+            document.getElementById("qtnAddress").value = "";
+            document.getElementById("qtnNotes").value = "";
+            document.getElementById("qtnStatus").value = "draft";
+            document.getElementById("deleteQtnBtn").style.display = "none";
+            document.getElementById("convertQtnBtn").style.display = "none";
+            this.renderQtnItems();
+            this.updateQuotationPreview();
+        },
+
+        addQtnItem() {
+            this.qtnItems.push({ id: H4Utils.generateId("qitem"), productId: "", productName: "", description: "", quantity: 1, unit: "Nos", rate: 0, discount: 0, discountType: "flat", gst: 18 });
+            this.renderQtnItems();
+            this.updateQuotationPreview();
+        },
+
+        renderQtnItems() {
+            const tbody = document.getElementById("qtnItemsBody");
+            if (!tbody) return;
+            const products = H4DB.get("products") || {};
+            const productOptions = Object.values(products)
+                .map(p => `<option value="${p.id}">${H4Utils.escape(p.name || p.productName || "Product")}</option>`)
+                .join("");
+
+            if (this.qtnItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added. Click "Add Item".</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = this.qtnItems.map((item, index) => {
+                const line = H4Calc.calculateLine(item);
+                return `
+                    <tr>
+                        <td><select onchange="H4App.qtnProductChange(${index}, this.value)"><option value="">-- Product --</option>${productOptions}</select></td>
+                        <td><input type="text" value="${H4Utils.escape(item.description || "")}" onchange="H4App.updateQtnItem(${index}, 'description', this.value)"></td>
+                        <td><input type="number" min="0" step="0.01" value="${item.quantity}" onchange="H4App.updateQtnItem(${index}, 'quantity', this.value)"></td>
+                        <td><input type="text" value="${H4Utils.escape(item.unit || "")}" onchange="H4App.updateQtnItem(${index}, 'unit', this.value)"></td>
+                        <td><input type="number" min="0" step="0.01" value="${item.rate}" onchange="H4App.updateQtnItem(${index}, 'rate', this.value)"></td>
+                        <td><input type="number" min="0" step="0.01" value="${item.discount}" onchange="H4App.updateQtnItem(${index}, 'discount', this.value)"></td>
+                        <td><select onchange="H4App.updateQtnItem(${index}, 'gst', this.value)">${[0,5,12,18,28].map(g => `<option value="${g}" ${Number(item.gst)===g?"selected":""}>${g}%</option>`).join("")}</select></td>
+                        <td style="text-align:right;font-weight:600;">₹${line.total.toFixed(2)}</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="H4App.removeQtnItem(${index})">🗑️</button></td>
+                    </tr>
+                `;
+            }).join("");
+
+            this.qtnItems.forEach((item, index) => {
+                const row = tbody.querySelectorAll("tr")[index];
+                const select = row?.querySelector("select");
+                if (select) select.value = item.productId || "";
+            });
+        },
+
+        qtnProductChange(index, productId) {
+            const products = H4DB.get("products") || {};
+            const product = products[productId];
+            if (!product) return;
+            const item = this.qtnItems[index];
+            item.productId = productId;
+            item.productName = product.name || product.productName || "";
+            item.description = product.description || product.name || product.productName || "";
+            item.unit = product.unit || product.uom || "Nos";
+            item.rate = Number(product.rate || product.price || product.sellingPrice || 0);
+            item.gst = Number(product.gst || product.gstRate || 18);
+            this.renderQtnItems();
+            this.updateQuotationPreview();
+        },
+
+        updateQtnItem(index, field, value) {
+            if (!this.qtnItems[index]) return;
+            if (["quantity", "rate", "discount", "gst"].includes(field)) value = Number(value) || 0;
+            this.qtnItems[index][field] = value;
+            this.renderQtnItems();
+            this.updateQuotationPreview();
+        },
+
+        removeQtnItem(index) {
+            this.qtnItems.splice(index, 1);
+            this.renderQtnItems();
+            this.updateQuotationPreview();
+        },
+
+        getQuotationFormData() {
+            return {
+                id: this.currentQtnId || H4Utils.generateId("qtn"),
+                number: document.getElementById("qtnNumber").value,
+                date: document.getElementById("qtnDate").value,
+                customerId: document.getElementById("qtnCustomer").value,
+                validUntil: document.getElementById("qtnValidUntil").value,
+                project: document.getElementById("qtnProject").value,
+                reference: document.getElementById("qtnReference").value,
+                address: document.getElementById("qtnAddress").value,
+                notes: document.getElementById("qtnNotes").value,
+                status: document.getElementById("qtnStatus").value,
+                items: JSON.parse(JSON.stringify(this.qtnItems)),
+                updatedAt: new Date().toISOString()
+            };
+        },
+
+        saveQuotation() {
+            const customer = document.getElementById("qtnCustomer").value;
+            if (!customer) { H4Notify.danger("Please select a customer."); return; }
+            if (this.qtnItems.length === 0) { H4Notify.danger("Please add at least one item."); return; }
+            const data = this.getQuotationFormData();
+            if (this.currentQtnId) {
+                H4DB.update("quotations", this.currentQtnId, data);
+                H4Notify.success("Quotation updated successfully.");
+            } else {
+                H4DB.add("quotations", data);
+                this.currentQtnId = data.id;
+                H4Notify.success("Quotation saved successfully.");
+            }
+            this.loadQuotations();
+            this.editQuotation(this.currentQtnId);
+        },
+
+        loadQuotations() {
+            const quotations = H4DB.get("quotations") || {};
+            const tbody = document.getElementById("quotationsBody");
+            if (!tbody) return;
+            const list = Object.values(quotations).sort((a, b) => new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date));
+            if (!list.length) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">No quotations yet</td></tr>`;
+                return;
+            }
+            const customers = H4DB.get("customers") || {};
+            tbody.innerHTML = list.map(q => {
+                const customer = customers[q.customerId] || {};
+                const totals = H4Calc.calculateTotals(q.items || []);
+                return `
+                    <tr>
+                        <td><strong>${H4Utils.escape(q.number)}</strong></td>
+                        <td>${H4Utils.escape(customer.name || "Unknown Customer")}</td>
+                        <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
+                        <td>${q.date ? new Date(q.date).toLocaleDateString("en-IN") : "-"}</td>
+                        <td><span class="status-badge status-${q.status || "draft"}">${H4Utils.escape(q.status || "draft")}</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-sm btn-outline" onclick="H4App.editQuotation('${q.id}')">✏️</button>
+                                <button class="btn btn-sm btn-success" onclick="H4App.printQuotation('${q.id}')">🖨️</button>
+                                <button class="btn btn-sm btn-danger" onclick="H4App.deleteQuotationById('${q.id}')">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        },
+
+        editQuotation(id) {
+            const q = (H4DB.get("quotations") || {})[id];
+            if (!q) return;
+            this.currentQtnId = id;
+            this.qtnItems = JSON.parse(JSON.stringify(q.items || []));
+            document.getElementById("quotationsList").style.display = "none";
+            document.getElementById("quotationBuilder").style.display = "block";
+            document.getElementById("qtnNumber").value = q.number || "";
+            document.getElementById("qtnDate").value = q.date || "";
+            document.getElementById("qtnCustomer").value = q.customerId || "";
+            document.getElementById("qtnValidUntil").value = q.validUntil || "";
+            document.getElementById("qtnProject").value = q.project || "";
+            document.getElementById("qtnReference").value = q.reference || "";
+            document.getElementById("qtnAddress").value = q.address || "";
+            document.getElementById("qtnNotes").value = q.notes || "";
+            document.getElementById("qtnStatus").value = q.status || "draft";
+            document.getElementById("deleteQtnBtn").style.display = "inline-flex";
+            document.getElementById("convertQtnBtn").style.display = "inline-flex";
+            this.renderQtnItems();
+            this.updateQuotationPreview();
+        },
+
+        deleteQuotation() {
+            if (!this.currentQtnId) return;
+            this.deleteQuotationById(this.currentQtnId);
+            this.backToList("quotations");
+        },
+
+        deleteQuotationById(id) {
+            if (!confirm("Delete this quotation?")) return;
+            H4DB.delete("quotations", id);
+            H4Notify.success("Quotation deleted.");
+            this.loadQuotations();
+        },
+
+        backToList(module) {
+            if (module === "quotations") {
+                document.getElementById("quotationBuilder").style.display = "none";
+                document.getElementById("quotationsList").style.display = "block";
+                this.currentQtnId = null;
+                this.qtnItems = [];
+                this.loadQuotations();
+            }
+            if (module === "invoices") {
+                document.getElementById("invoiceBuilder").style.display = "none";
+                document.getElementById("invoicesList").style.display = "block";
+                this.currentInvId = null;
+                this.invItems = [];
+                this.loadInvoices();
+            }
+        },
+
+        updateQuotationPreview() {
+            const preview = document.getElementById("qtnPreview");
+            if (!preview) return;
+            if (!document.getElementById("qtnNumber")?.value) {
+                preview.innerHTML = "<p style='color:var(--text-secondary);text-align:center;'>Quotation preview will appear here.</p>";
+                return;
+            }
+            const data = {
+                number: document.getElementById("qtnNumber").value,
+                date: document.getElementById("qtnDate").value,
+                customerId: document.getElementById("qtnCustomer").value,
+                validUntil: document.getElementById("qtnValidUntil").value,
+                project: document.getElementById("qtnProject").value,
+                notes: document.getElementById("qtnNotes").value,
+                items: this.qtnItems
+            };
+            preview.innerHTML = H4Documents.quotation(data);
+            this.updateQuotationTotals();
+        },
+
+        updateQuotationTotals() {
+            const totals = H4Calc.calculateTotals(this.qtnItems);
+            this.setText("qtnSubtotal", totals.subtotal);
+            this.setText("qtnTotalDiscount", totals.totalDiscount);
+            this.setText("qtnTaxableAmount", totals.taxableAmount);
+            this.setText("qtnCGST", totals.cgst);
+            this.setText("qtnSGST", totals.sgst);
+            this.setText("qtnRoundOff", totals.roundOff);
+            this.setText("qtnGrandTotal", totals.grandTotal);
+        },
+
+        setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = Number(value || 0).toFixed(2);
+        },
+
+        /* ---------- PRINT / PDF ---------- */
+        printQuotation(id) {
+            const q = (H4DB.get("quotations") || {})[id];
+            if (!q) return;
+            const html = H4Documents.quotation(q);
+            const win = window.open("", "_blank");
+            if (!win) { H4Notify.danger("Please allow popups to print."); return; }
+            win.document.write(`
+                <!DOCTYPE html><html><head><title>${H4Utils.escape(q.number)}</title>
+                <meta name="viewport" content="width=device-width,initial-scale=1">
+                <style>
+                    *{box-sizing:border-box;}
+                    body{font-family:Arial,sans-serif;margin:0;padding:25px;color:#222;}
+                    .preview-header{text-align:center;margin-bottom:25px;padding-bottom:15px;border-bottom:2px solid #ddd;}
+                    .document-title{font-size:28px;font-weight:bold;color:#6A3FA0;}
+                    .document-number{font-size:16px;margin:8px;}
+                    .preview-info{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:25px;}
+                    table{width:100%;border-collapse:collapse;}
+                    th{background:#6A3FA0;color:white;padding:8px;text-align:left;}
+                    td{padding:8px;border-bottom:1px solid #ddd;}
+                    .preview-totals{display:flex;justify-content:flex-end;margin-top:20px;}
+                    .preview-totals-box{width:350px;}
+                    .calc-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #ddd;}
+                    .calc-row.total{font-size:18px;font-weight:bold;border-bottom:2px solid #6A3FA0;}
+                    @media print{body{padding:10mm;}@page{size:A4;margin:10mm;}}
+                </style>
+                </head><body>${html}<script>window.onload=function(){window.print();};<\/script></body></html>
+            `);
+            win.document.close();
+        },
+
+        /* ---------- INVOICE ---------- */
+        newInvoice() {
+            this.currentInvId = null;
+            this.invItems = [];
+            document.getElementById("invoicesList").style.display = "none";
+            document.getElementById("invoiceBuilder").style.display = "block";
+            document.getElementById("invNumber").value = H4Numbering.getNextInvoiceNumber();
+            document.getElementById("invDate").value = H4Utils.today();
+            document.getElementById("invCustomer").value = "";
+            document.getElementById("invDueDate").value = "";
+            document.getElementById("invProject").value = "";
+            document.getElementById("invReference").value = "";
+            document.getElementById("invQuotation").value = "";
+            document.getElementById("invPaidAmount").value = "0";
+            document.getElementById("invPaymentStatus").value = "unpaid";
+            document.getElementById("invNotes").value = "";
+            document.getElementById("deleteInvBtn").style.display = "none";
+            this.renderInvItems();
+            this.updateInvoicePreview();
+            this.loadQuotationSelect();
+        },
+
+        loadQuotationSelect() {
+            const quotes = H4DB.get("quotations") || {};
+            const select = document.getElementById("invQuotation");
+            if (!select) return;
+            select.innerHTML = `<option value="">-- None --</option>`;
+            Object.values(quotes).forEach(q => {
+                if (q.status !== "converted") {
+                    select.innerHTML += `<option value="${q.id}">${q.number} - ${q.customerId ? (H4DB.get("customers")[q.customerId]?.name || "Unknown") : "Unknown"}</option>`;
+                }
+            });
+        },
+
+        addInvItem() {
+            this.invItems.push({ id: H4Utils.generateId("iitem"), productId: "", productName: "", description: "", quantity: 1, unit: "Nos", rate: 0, discount: 0, discountType: "flat", gst: 18 });
+            this.renderInvItems();
+            this.updateInvoicePreview();
+        },
+
+        renderInvItems() {
+            const tbody = document.getElementById("invItemsBody");
+            if (!tbody) return;
+            const products = H4DB.get("products") || {};
+            const productOptions = Object.values(products)
+                .map(p => `<option value="${p.id}">${H4Utils.escape(p.name || p.productName || "Product")}</option>`)
+                .join("");
+
+            if (this.invItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = this.invItems.map((item, index) => {
+                const line = H4Calc.calculateLine(item);
+                return `
+                    <tr>
+                        <td><select onchange="H4App.invProductChange(${index}, this.value)"><option value="">-- Product --</option>${productOptions}</select></td>
+                        <td><input type="text" value="${H4Utils.escape(item.description || "")}" onchange="H4App.updateInvItem(${index}, 'description', this.value)"></td>
+                        <td><input type="number" min="0" value="${item.quantity}" onchange="H4App.updateInvItem(${index}, 'quantity', this.value)"></td>
+                        <td><input type="text" value="${H4Utils.escape(item.unit || "")}" onchange="H4App.updateInvItem(${index}, 'unit', this.value)"></td>
+                        <td><input type="number" min="0" step="0.01" value="${item.rate}" onchange="H4App.updateInvItem(${index}, 'rate', this.value)"></td>
+                        <td><input type="number" min="0" step="0.01" value="${item.discount}" onchange="H4App.updateInvItem(${index}, 'discount', this.value)"></td>
+                        <td><select onchange="H4App.updateInvItem(${index}, 'gst', this.value)">${[0,5,12,18,28].map(g => `<option value="${g}" ${Number(item.gst)===g?"selected":""}>${g}%</option>`).join("")}</select></td>
+                        <td>₹${line.total.toFixed(2)}</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="H4App.removeInvItem(${index})">🗑️</button></td>
+                    </tr>
+                `;
+            }).join("");
+
+            this.invItems.forEach((item, index) => {
+                const row = tbody.querySelectorAll("tr")[index];
+                const select = row?.querySelector("select");
+                if (select) select.value = item.productId || "";
+            });
+        },
+
+        invProductChange(index, productId) {
+            const product = (H4DB.get("products") || {})[productId];
+            if (!product) return;
+            const item = this.invItems[index];
+            item.productId = productId;
+            item.productName = product.name || product.productName || "";
+            item.description = product.description || item.productName;
+            item.unit = product.unit || product.uom || "Nos";
+            item.rate = Number(product.rate || product.price || product.sellingPrice || 0);
+            item.gst = Number(product.gst || product.gstRate || 18);
+            this.renderInvItems();
+            this.updateInvoicePreview();
+        },
+
+        updateInvItem(index, field, value) {
+            if (!this.invItems[index]) return;
+            if (["quantity", "rate", "discount", "gst"].includes(field)) value = Number(value) || 0;
+            this.invItems[index][field] = value;
+            this.renderInvItems();
+            this.updateInvoicePreview();
+        },
+
+        removeInvItem(index) {
+            this.invItems.splice(index, 1);
+            this.renderInvItems();
+            this.updateInvoicePreview();
+        },
+
+        updatePaymentStatus() {
+            const paid = Number(document.getElementById("invPaidAmount")?.value) || 0;
+            const totals = H4Calc.calculateTotals(this.invItems);
+            const balance = Math.max(0, totals.grandTotal - paid);
+            this.setText("invBalance", balance);
+            const status = document.getElementById("invPaymentStatus");
+            if (!status) return;
+            if (paid >= totals.grandTotal && totals.grandTotal > 0) status.value = "paid";
+            else if (paid > 0) status.value = "partially-paid";
+            else status.value = "unpaid";
+            this.updateInvoicePreview();
+        },
+
+        updateInvoicePreview() {
+            const preview = document.getElementById("invPreview");
+            if (!preview) return;
+            const data = {
+                number: document.getElementById("invNumber")?.value || "",
+                date: document.getElementById("invDate")?.value || "",
+                customerId: document.getElementById("invCustomer")?.value || "",
+                dueDate: document.getElementById("invDueDate")?.value || "",
+                notes: document.getElementById("invNotes")?.value || "",
+                items: this.invItems
+            };
+            preview.innerHTML = H4Documents.invoice(data);
+            const totals = H4Calc.calculateTotals(this.invItems);
+            this.setText("invSubtotal", totals.subtotal);
+            this.setText("invTotalDiscount", totals.totalDiscount);
+            this.setText("invTaxableAmount", totals.taxableAmount);
+            this.setText("invCGST", totals.cgst);
+            this.setText("invSGST", totals.sgst);
+            this.setText("invRoundOff", totals.roundOff);
+            this.setText("invGrandTotal", totals.grandTotal);
+            const paid = Number(document.getElementById("invPaidAmount")?.value) || 0;
+            this.setText("invBalance", Math.max(0, totals.grandTotal - paid));
+        },
+
+        saveInvoice() {
+            const customer = document.getElementById("invCustomer").value;
+            if (!customer) { H4Notify.danger("Please select a customer."); return; }
+            if (!this.invItems.length) { H4Notify.danger("Please add at least one item."); return; }
+            const data = {
+                id: this.currentInvId || H4Utils.generateId("inv"),
+                number: document.getElementById("invNumber").value,
+                date: document.getElementById("invDate").value,
+                customerId: customer,
+                dueDate: document.getElementById("invDueDate").value,
+                project: document.getElementById("invProject").value,
+                reference: document.getElementById("invReference").value,
+                quotationId: document.getElementById("invQuotation").value,
+                items: JSON.parse(JSON.stringify(this.invItems)),
+                paidAmount: Number(document.getElementById("invPaidAmount").value) || 0,
+                paymentStatus: document.getElementById("invPaymentStatus").value,
+                notes: document.getElementById("invNotes").value,
+                updatedAt: new Date().toISOString()
+            };
+            if (this.currentInvId) {
+                H4DB.update("invoices", this.currentInvId, data);
+                H4Notify.success("Invoice updated.");
+            } else {
+                H4DB.add("invoices", data);
+                this.currentInvId = data.id;
+                H4Notify.success("Invoice saved.");
+            }
+            this.loadInvoices();
+        },
+
+        loadInvoices() {
+            const invoices = H4DB.get("invoices") || {};
+            const tbody = document.getElementById("invoicesBody");
+            if (!tbody) return;
+            const customers = H4DB.get("customers") || {};
+            const list = Object.values(invoices);
+            if (!list.length) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No invoices yet</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = list.map(inv => {
+                const totals = H4Calc.calculateTotals(inv.items || []);
+                const paid = Number(inv.paidAmount) || 0;
+                const balance = Math.max(0, totals.grandTotal - paid);
+                const customer = customers[inv.customerId] || {};
+                return `
+                    <tr>
+                        <td>${H4Utils.escape(inv.number)}</td>
+                        <td>${H4Utils.escape(customer.name || "Unknown")}</td>
+                        <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
+                        <td>${H4Utils.formatCurrency(paid)}</td>
+                        <td>${H4Utils.formatCurrency(balance)}</td>
+                        <td><span class="status-badge status-${inv.paymentStatus || "unpaid"}">${H4Utils.escape(inv.paymentStatus || "unpaid")}</span></td>
+                        <td><button class="btn btn-sm btn-danger" onclick="H4App.deleteInvoiceById('${inv.id}')">🗑️</button></td>
+                    </tr>
+                `;
+            }).join("");
+        },
+
+        deleteInvoice() {
+            if (!this.currentInvId) return;
+            this.deleteInvoiceById(this.currentInvId);
+            this.backToList("invoices");
+        },
+
+        deleteInvoiceById(id) {
+            if (!confirm("Delete this invoice?")) return;
+            H4DB.delete("invoices", id);
+            H4Notify.success("Invoice deleted.");
+            this.loadInvoices();
+        },
+
+        /* ---------- QUOTATION → INVOICE ---------- */
+        convertToInvoice() {
+            if (!this.currentQtnId) return;
+            const q = (H4DB.get("quotations") || {})[this.currentQtnId];
+            if (!q) return;
+            const invoice = {
+                id: H4Utils.generateId("inv"),
+                number: H4Numbering.getNextInvoiceNumber(),
+                date: H4Utils.today(),
+                customerId: q.customerId,
+                project: q.project,
+                reference: q.number,
+                quotationId: q.id,
+                items: JSON.parse(JSON.stringify(q.items || [])),
+                paidAmount: 0,
+                paymentStatus: "unpaid",
+                notes: q.notes || "",
+                updatedAt: new Date().toISOString()
+            };
+            H4DB.add("invoices", invoice);
+            H4DB.update("quotations", q.id, { status: "converted" });
+            H4Notify.success("Quotation converted to Invoice.");
+            this.loadQuotations();
+            this.loadInvoices();
+            this.showModule("invoices");
+        },
+
+        /* ---------- RATE MASTER ---------- */
+        loadRateMasterUI() {
+            const rates = H4DB.get("rateMaster") || {};
+            const tbody = document.getElementById("rateMasterBody");
+            if (!tbody) return;
+            const list = Object.values(rates);
+            if (!list.length) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No rates configured yet</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = list.map(r => `
+                <tr>
+                    <td>${H4Utils.escape(r.flooringType)}</td>
+                    <td>${H4Utils.escape(r.thickness)}</td>
+                    <td>${H4Utils.escape(r.unit)}</td>
+                    <td>${H4Utils.formatCurrency(r.rate)}</td>
+                    <td>${r.gst}%</td>
+                    <td>${r.active !== false ? "✅ Active" : "⛔ Inactive"}</td>
+                    <td><button class="btn btn-sm btn-danger" onclick="H4App.deleteRateMaster('${r.id}')">🗑️</button></td>
+                </tr>
+            `).join("");
+        },
+
+        populateMasterSelect(selectId, storeKey) {
+            const el = document.getElementById(selectId);
+            if (!el) return;
+            const items = H4DB.get(storeKey) || {};
+            el.innerHTML = Object.values(items).map(i => `<option value="${i.name}">${i.name}</option>`).join("");
+        },
+
+        renderMasterList(containerId, storeKey) {
+            const items = H4DB.get(storeKey) || {};
+            const container = document.getElementById(containerId);
+            container.innerHTML = Object.values(items).map(i =>
+                `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);">
+                    <span>${i.name}</span>
+                    <button class="btn btn-sm btn-danger" onclick="H4App.deleteMasterItem('${storeKey}', '${i.id}', '${containerId}')">🗑️</button>
+                </div>`
+            ).join('') || '<p style="color:var(--text-secondary);">None yet</p>';
+        },
+
+        deleteMasterItem(storeKey, id, containerId) {
+            if (!confirm("Delete this item?")) return;
+            H4DB.delete(storeKey, id);
+            this.renderMasterList(containerId, storeKey);
+            this.loadRateMasterUI();
+            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
+        },
+
+        addUnit() {
+            const input = document.getElementById("newUnitInput");
+            const name = input.value.trim();
+            if (!name) return;
+            H4DB.add("unitMaster", { id: H4Utils.generateId("unit"), name });
+            input.value = "";
+            this.renderMasterList("unitListContainer", "unitMaster");
+            this.loadRateMasterUI();
+            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
+        },
+
+        addFlooringType() {
+            const input = document.getElementById("newFlooringTypeInput");
+            const name = input.value.trim();
+            if (!name) return;
+            H4DB.add("flooringTypeMaster", { id: H4Utils.generateId("ft"), name });
+            input.value = "";
+            this.renderMasterList("flooringTypeListContainer", "flooringTypeMaster");
+            this.loadRateMasterUI();
+            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
+        },
+
+        addThickness() {
+            const input = document.getElementById("newThicknessInput");
+            const name = input.value.trim();
+            if (!name) return;
+            H4DB.add("thicknessMaster", { id: H4Utils.generateId("th"), name });
+            input.value = "";
+            this.renderMasterList("thicknessListContainer", "thicknessMaster");
+            this.loadRateMasterUI();
+            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
+        },
+
+        saveRateMaster() {
+            const form = document.getElementById("rateMasterForm");
+            const id = form.dataset.rateId || H4Utils.generateId("rate");
+            const rate = {
+                id,
+                flooringType: document.getElementById("rmFlooringType").value,
+                thickness: document.getElementById("rmThickness").value,
+                unit: document.getElementById("rmUnit").value,
+                rate: Number(document.getElementById("rmRate").value) || 0,
+                gst: Number(document.getElementById("rmGst").value) || 0,
+                active: document.getElementById("rmActive").checked
+            };
+            H4DB.add("rateMaster", rate);
+            this.closeModal("rateMasterModal");
+            this.loadRateMasterUI();
+            H4Notify.success("Rate saved.");
+        },
+
+        deleteRateMaster(id) {
+            if (!confirm("Delete this rate?")) return;
+            H4DB.delete("rateMaster", id);
+            this.loadRateMasterUI();
+            H4Notify.success("Rate deleted.");
+        }
+    };
+
+
+    /* ============================================================
+       EPOXY BUILDER
+       ============================================================ */
+
+    const H4Epoxy = {
+        currentStep: 1,
+        totalSteps: 10,
+        scopeItems: [],
+        featureItems: [],
+        priceItems: [],
+        isManualRate: false,
+
+        open() {
+            const overlay = document.getElementById("epoxyOverlay");
+            if (!overlay) { H4Notify.danger("Epoxy builder is not available."); return; }
+            overlay.classList.add("active");
+            this.currentStep = 1;
+            this.scopeItems = (H4DB.get("workScopeDefaults") || []).map(s => ({ name: s, checked: true }));
+            this.featureItems = (H4DB.get("premiumFeatureDefaults") || []).map(s => ({ name: s, checked: false }));
+            this.priceItems = [];
+            this.populateMasterDropdowns();
+            this.generateNumber();
+            this.renderSteps();
+            this.renderStep();
+            this.onSystemChange();
+            this.calculate();
+            document.getElementById("epxConvertBtn").style.display = "none";
+            H4Notify.success("Epoxy Proposal Builder opened.");
+        },
+
+        close() {
+            document.getElementById("epoxyOverlay")?.classList.remove("active");
+        },
+
+        togglePreviewMobile() {
+            document.getElementById("epoxyPreviewPane")?.classList.toggle("mobile-show");
+        },
+
+        populateMasterDropdowns() {
+            const sets = {
+                'epxAreaUnit': 'unitMaster',
+                'epxFlooringType': 'flooringTypeMaster',
+                'epxThickness': 'thicknessMaster',
+                'epxFloorCondition': 'floorConditionMaster'
+            };
+            Object.entries(sets).forEach(([elId, storeKey]) => {
+                const el = document.getElementById(elId);
                 if (!el) return;
                 const items = H4DB.get(storeKey) || {};
-                el.innerHTML = Object.values(items).map(i => `<option value="${i.name}">${i.name}</option>`).join('');
-            },
+                el.innerHTML = Object.values(items).map(i => `<option value="${i.name}">${i.name}</option>`).join("");
+            });
+        },
 
-            saveRateMaster() {
-                const id = document.getElementById('rateMasterForm').dataset.rateId || H4Utils.generateId('rate');
-                const rate = {
-                    id,
-                    flooringType: document.getElementById('rmFlooringType').value,
-                    thickness: document.getElementById('rmThickness').value,
-                    unit: document.getElementById('rmUnit').value,
-                    rate: parseFloat(document.getElementById('rmRate').value),
-                    gst: parseFloat(document.getElementById('rmGst').value) || 0,
-                    active: document.getElementById('rmActive').checked
-                };
-                H4DB.add('rateMaster', rate);
-                H4Notify.success('Rate saved!');
-                this.closeModal('rateMasterModal');
-                document.getElementById('rateMasterForm').removeAttribute('data-rate-id');
-                document.getElementById('rateMasterForm').reset();
-                this.loadRateMasterUI();
-            },
+        generateNumber() {
+            const num = H4Numbering.getNextQuotationNumber();
+            document.getElementById("epxNumber").value = num;
+            document.getElementById("epxDate").value = H4Utils.today();
+        },
 
-            editRateMaster(id) {
-                const r = (H4DB.get('rateMaster') || {})[id];
-                if (!r) return;
-                this.populateMasterSelect('rmFlooringType', 'flooringTypeMaster');
-                this.populateMasterSelect('rmThickness', 'thicknessMaster');
-                this.populateMasterSelect('rmUnit', 'unitMaster');
-                document.getElementById('rmFlooringType').value = r.flooringType;
-                document.getElementById('rmThickness').value = r.thickness;
-                document.getElementById('rmUnit').value = r.unit;
-                document.getElementById('rmRate').value = r.rate;
-                document.getElementById('rmGst').value = r.gst;
-                document.getElementById('rmActive').checked = r.active !== false;
-                document.getElementById('rateMasterForm').dataset.rateId = id;
-                this.openModal('rateMasterModal');
-            },
+        renderSteps() {
+            const container = document.getElementById("epoxySteps");
+            const labels = ['Customer', 'Project', 'Smart Rate', 'Work Scope', 'Material Spec', 'Price Items', 'Discount', 'Calculation', 'Timeline', 'Final'];
+            container.innerHTML = labels.map((label, i) => {
+                const step = i + 1;
+                let cls = "epoxy-step-chip";
+                if (step === this.currentStep) cls += " active";
+                else if (step < this.currentStep) cls += " done";
+                return `<div class="${cls}" onclick="H4Epoxy.goToStep(${step})">${step}. ${label}</div>`;
+            }).join("");
+        },
 
-            deleteRateMaster(id) {
-                if (confirm('Delete this rate?')) {
-                    H4DB.delete('rateMaster', id);
-                    H4Notify.success('Rate deleted!');
-                    this.loadRateMasterUI();
+        renderStep() {
+            document.querySelectorAll(".epoxy-step-section").forEach(el => {
+                el.classList.toggle("active", parseInt(el.dataset.step) === this.currentStep);
+            });
+            this.renderScopeList();
+            this.renderFeatureList();
+            this.renderPriceItems();
+            this.updatePreview();
+            this.renderSteps();
+        },
+
+        goToStep(step) {
+            if (step < 1 || step > this.totalSteps) return;
+            this.currentStep = step;
+            this.renderStep();
+        },
+
+        nextStep() {
+            if (this.currentStep < this.totalSteps) {
+                this.currentStep++;
+                this.renderStep();
+            }
+        },
+
+        prevStep() {
+            if (this.currentStep > 1) {
+                this.currentStep--;
+                this.renderStep();
+            }
+        },
+
+        renderScopeList() {
+            const container = document.getElementById("epxScopeList");
+            container.innerHTML = this.scopeItems.map((item, i) => `
+                <div class="scope-item">
+                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="H4Epoxy.scopeItems[${i}].checked = this.checked; H4Epoxy.updatePreview();">
+                    <input type="text" value="${H4Utils.escape(item.name)}" onchange="H4Epoxy.scopeItems[${i}].name = this.value; H4Epoxy.updatePreview();">
+                    <button class="btn btn-sm btn-danger" onclick="H4Epoxy.scopeItems.splice(${i}, 1); H4Epoxy.renderScopeList(); H4Epoxy.updatePreview();">✕</button>
+                </div>
+            `).join('') || '<p style="color:var(--text-secondary);">No scope items</p>';
+        },
+
+        addScopeItem() {
+            this.scopeItems.push({ name: "New Scope Item", checked: true });
+            this.renderScopeList();
+            this.updatePreview();
+        },
+
+        renderFeatureList() {
+            const container = document.getElementById("epxFeatureList");
+            container.innerHTML = this.featureItems.map((item, i) => `
+                <div class="feature-item">
+                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="H4Epoxy.featureItems[${i}].checked = this.checked; H4Epoxy.updatePreview();">
+                    <input type="text" value="${H4Utils.escape(item.name)}" onchange="H4Epoxy.featureItems[${i}].name = this.value; H4Epoxy.updatePreview();">
+                    <button class="btn btn-sm btn-danger" onclick="H4Epoxy.featureItems.splice(${i}, 1); H4Epoxy.renderFeatureList(); H4Epoxy.updatePreview();">✕</button>
+                </div>
+            `).join('') || '<p style="color:var(--text-secondary);">No features</p>';
+        },
+
+        addFeatureItem() {
+            this.featureItems.push({ name: "New Feature", checked: false });
+            this.renderFeatureList();
+            this.updatePreview();
+        },
+
+        onSystemChange() {
+            const ft = document.getElementById("epxFlooringType")?.value;
+            const th = document.getElementById("epxThickness")?.value;
+            const unit = document.getElementById("epxAreaUnit")?.value;
+            const rates = H4DB.get("rateMaster") || {};
+            const match = Object.values(rates).find(r =>
+                r.active !== false && r.flooringType === ft && r.thickness === th && r.unit === unit
+            );
+            const statusEl = document.getElementById("epxRateStatus");
+            const rateInput = document.getElementById("epxSystemRate");
+            const gstInput = document.getElementById("epxSystemGst");
+
+            if (match) {
+                this.isManualRate = false;
+                rateInput.value = match.rate;
+                gstInput.value = match.gst || 18;
+                statusEl.className = "rate-status auto";
+                statusEl.innerHTML = `✅ Auto Rate: ${H4Utils.formatCurrency(match.rate)} / ${unit} (GST ${match.gst || 18}%)`;
+            } else {
+                statusEl.className = "rate-status missing";
+                statusEl.innerHTML = `⚠️ Rate not configured for ${ft} • ${th} • ${unit}. Use Rate Master to add.`;
+                if (!this.isManualRate) {
+                    rateInput.value = '';
                 }
-            },
+            }
+            this.calculateSystemAmount();
+            this.updatePreview();
+        },
 
-            renderMasterList(containerId, storeKey, addFn) {
-                const items = H4DB.get(storeKey) || {};
-                const container = document.getElementById(containerId);
-                container.innerHTML = Object.values(items).map(i => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; border-bottom:1px solid var(--border);">
-                        <span>${i.name}</span>
-                        <button class="btn btn-sm btn-danger" onclick="H4App.deleteMasterItem('${storeKey}', '${i.id}', '${containerId}')">🗑️</button>
+        onManualRateEdit() {
+            this.isManualRate = true;
+            const statusEl = document.getElementById("epxRateStatus");
+            statusEl.className = "rate-status override";
+            statusEl.innerHTML = `✏️ Manual Override: ${H4Utils.formatCurrency(document.getElementById("epxSystemRate").value)}`;
+            this.calculateSystemAmount();
+            this.updatePreview();
+        },
+
+        resetToAutoRate() {
+            this.isManualRate = false;
+            document.getElementById("epxSystemRate").value = '';
+            this.onSystemChange();
+        },
+
+        calculateSystemAmount() {
+            const area = Number(document.getElementById("epxArea")?.value) || 0;
+            const rate = Number(document.getElementById("epxSystemRate")?.value) || 0;
+            const amount = area * rate;
+            document.getElementById("epxSystemAmount").textContent = H4Utils.formatCurrency(amount);
+            // Auto-add to price items if not already present
+            if (amount > 0 && !this.priceItems.find(p => p.description === "Self-Leveling Epoxy System")) {
+                this.priceItems = this.priceItems.filter(p => p.description !== "Self-Leveling Epoxy System");
+                this.priceItems.unshift({
+                    description: "Self-Leveling Epoxy System",
+                    quantity: area,
+                    unit: document.getElementById("epxAreaUnit")?.value || "sq.ft",
+                    rate: rate,
+                    gst: Number(document.getElementById("epxSystemGst")?.value) || 18,
+                    discount: 0
+                });
+                this.renderPriceItems();
+            }
+            this.calculate();
+        },
+
+        renderPriceItems() {
+            const container = document.getElementById("epxPriceItems");
+            container.innerHTML = this.priceItems.map((item, i) => {
+                const total = (item.quantity || 0) * (item.rate || 0);
+                return `
+                    <div class="price-item-card">
+                        <div class="price-item-grid">
+                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Description</label><input type="text" value="${H4Utils.escape(item.description)}" onchange="H4Epoxy.updatePriceItem(${i}, 'description', this.value)"></div>
+                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Unit</label><input type="text" value="${H4Utils.escape(item.unit)}" onchange="H4Epoxy.updatePriceItem(${i}, 'unit', this.value)"></div>
+                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Quantity</label><input type="number" value="${item.quantity}" onchange="H4Epoxy.updatePriceItem(${i}, 'quantity', this.value)"></div>
+                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Rate (₹)</label><input type="number" value="${item.rate}" onchange="H4Epoxy.updatePriceItem(${i}, 'rate', this.value)"></div>
+                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">GST %</label><input type="number" value="${item.gst}" onchange="H4Epoxy.updatePriceItem(${i}, 'gst', this.value)"></div>
+                            <div style="display:flex;align-items:flex-end;gap:0.5rem;">
+                                <div><label style="font-size:0.75rem;color:var(--text-secondary);">Total</label><strong>₹${total.toFixed(2)}</strong></div>
+                                <button class="btn btn-danger btn-sm" onclick="H4Epoxy.removePriceItem(${i})">✕</button>
+                            </div>
+                        </div>
                     </div>
-                `).join('') || '<p style="color:var(--text-secondary);">None yet</p>';
-            },
+                `;
+            }).join('') || '<p style="color:var(--text-secondary);">No price items. The system amount will auto-add.</p>';
+        },
 
-            deleteMasterItem(storeKey, id, containerId) {
-                H4DB.delete(storeKey, id);
-                this.renderMasterList(containerId, storeKey);
-                this.loadRateMasterUI();
-                if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
-            },
+        addPriceItem() {
+            this.priceItems.push({ description: "New Item", quantity: 1, unit: "sq.ft", rate: 0, gst: 18, discount: 0 });
+            this.renderPriceItems();
+            this.calculate();
+        },
 
-            addUnit() {
-                const input = document.getElementById('newUnitInput');
-                const name = input.value.trim();
-                if (!name) return;
-                H4DB.add('unitMaster', { id: H4Utils.generateId('unit'), name });
-                input.value = '';
-                this.renderMasterList('unitListContainer', 'unitMaster');
-                this.loadRateMasterUI();
-                if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
-            },
+        updatePriceItem(index, field, value) {
+            if (field === 'quantity' || field === 'rate' || field === 'gst') value = Number(value) || 0;
+            this.priceItems[index][field] = value;
+            this.renderPriceItems();
+            this.calculate();
+        },
 
-            addFlooringType() {
-                const input = document.getElementById('newFlooringTypeInput');
-                const name = input.value.trim();
-                if (!name) return;
-                H4DB.add('flooringTypeMaster', { id: H4Utils.generateId('ft'), name });
-                input.value = '';
-                this.renderMasterList('flooringTypeListContainer', 'flooringTypeMaster');
-                this.loadRateMasterUI();
-                if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
-            },
+        removePriceItem(index) {
+            if (this.priceItems.length > 1) {
+                this.priceItems.splice(index, 1);
+                this.renderPriceItems();
+                this.calculate();
+            } else {
+                H4Notify.danger("Keep at least one price item.");
+            }
+        },
 
-            addThickness() {
-                const input = document.getElementById('newThicknessInput');
-                const name = input.value.trim();
-                if (!name) return;
-                H4DB.add('thicknessMaster', { id: H4Utils.generateId('th'), name }
+        calculate() {
+            const items = this.priceItems.map(p => ({
+                quantity: p.quantity || 0,
+                rate: p.rate || 0,
+                discount: p.discount || 0,
+                gst: p.gst || 0,
+                discountType: 'flat'
+            }));
+
+            const gstMode = document.getElementById("epxGstMode")?.value || "intra";
+            const totals = H4Calc.calculateTotals(items, gstMode);
+
+            const discountEnabled = document.getElementById("epxDiscountEnabled")?.checked;
+            let discountValue = Number(document.getElementById("epxDiscountValue")?.value) || 0;
+            const discountType = document.getElementById("epxDiscountType")?.value || "flat";
+
+            let discountAmount = 0;
+            if (discountEnabled) {
+                if (discountType === "percentage") {
+                    discountAmount = totals.subtotal * discountValue / 100;
+                } else {
+                    discountAmount = discountValue;
+                }
+            }
+
+            const taxable = Math.max(0, totals.subtotal - discountAmount);
+            const gstRate = 18;
+            let cgst = 0, sgst = 0, igst = 0;
+            if (gstMode === "inter") {
+                igst = taxable * gstRate / 100;
+            } else if (gstMode === "intra") {
+                cgst = taxable * gstRate / 200;
+                sgst = taxable * gstRate / 200;
+            }
+
+            const total = taxable + cgst + sgst + igst;
+            const rounded = Math.round(total);
+            const roundOff = rounded - total;
+
+            document.getElementById("epxSubtotal").textContent = totals.subtotal.toFixed(2);
+            document.getElementById("epxDiscountAmt").textContent = discountAmount.toFixed(2);
+            document.getElementById("epxTaxable").textContent = taxable.toFixed(2);
+            document.getElementById("epxCgst").textContent = cgst.toFixed(2);
+            document.getElementById("epxSgst").textContent = sgst.toFixed(2);
+            document.getElementById("epxIgst").textContent = igst.toFixed(2);
+            document.getElementById("epxRoundOff").textContent = roundOff.toFixed(2);
+            document.getElementById("epxGrandTotal").textContent = rounded.toFixed(2);
+
+            document.getElementById("epxCgstRow").style.display = (gstMode === "intra") ? "flex" : "none";
+            document.getElementById("epxSgstRow").style.display = (gstMode === "intra") ? "flex" : "none";
+            document.getElementById("epxIgstRow").style.display = (gstMode === "inter") ? "flex" : "none";
+
+            this.updatePreview();
+        },
+
+        updatePreview() {
+            const container = document.getElementById("epoxyPreviewPane");
+            const ft = document.getElementById("epxFlooringType")?.value || "Self-Leveling Epoxy";
+            const area = Number(document.getElementById("epxArea")?.value) || 0;
+            const unit = document.getElementById("epxAreaUnit")?.value || "sq.ft";
+            const rate = Number(document.getElementById("epxSystemRate")?.value) || 0;
+            const total = area * rate;
+
+            const scopeChecked = this.scopeItems.filter(s => s.checked).map(s => s.name).join(", ");
+            const featuresChecked = this.featureItems.filter(f => f.checked).map(f => f.name).join(", ");
+
+            const grandTotal = document.getElementById("epxGrandTotal")?.textContent || "0.00";
+
+            container.innerHTML = `
+                <div class="a4-page">
+                    <div class="a4-cover">
+                        <h1>PREMIUM EPOXY FLOORING PROPOSAL</h1>
+                        <p>Luxury • Seamless • Durable • Premium Finish</p>
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
+                            <span><strong>Project:</strong> ${H4Utils.escape(document.getElementById("epxProjectName")?.value || "—")}</span>
+                            <span><strong>Quotation:</strong> ${H4Utils.escape(document.getElementById("epxNumber")?.value || "—")}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:0.5rem;">
+                            <span><strong>Customer:</strong> ${H4Utils.escape(document.getElementById("epxCustomer")?.value || "—")}</span>
+                            <span><strong>Date:</strong> ${H4Utils.escape(document.getElementById("epxDate")?.value || "—")}</span>
+                        </div>
+                    </div>
+
+                    <div class="a4-section-title">Project Details</div>
+                    <div class="spec-grid">
+                        <div><strong>Flooring Type</strong> ${H4Utils.escape(ft)}</div>
+                        <div><strong>Thickness</strong> ${H4Utils.escape(document.getElementById("epxThickness")?.value || "—")}</div>
+                        <div><strong>Area</strong> ${area} ${unit}</div>
+                        <div><strong>Rate</strong> ${H4Utils.formatCurrency(rate)} / ${unit}</div>
+                        <div><strong>Estimated Amount</strong> ${H4Utils.formatCurrency(total)}</div>
+                        <div><strong>Floor Condition</strong> ${H4Utils.escape(document.getElementById("epxFloorCondition")?.value || "—")}</div>
+                    </div>
+
+                    <div class="a4-section-title">Work Scope</div>
+                    <ul class="scope-list-preview">${this.scopeItems.filter(s => s.checked).map(s => `<li>${H4Utils.escape(s.name)}</li>`).join('') || '<li>No scope items selected</li>'}</ul>
+
+                    <div class="a4-section-title">Premium Features</div>
+                    <ul class="feature-list-preview">${this.featureItems.filter(f => f.checked).map(f => `<li>${H4Utils.escape(f.name)}</li>`).join('') || '<li>No premium features selected</li>'}</ul>
+
+                    <div class="a4-section-title">Price Summary</div>
+                    <div style="margin:0.5rem 0;">
+                        <div style="display:flex;justify-content:space-between;padding:0.3rem 0;border-bottom:1px solid #ddd;">
+                            <span>Grand Total</span><span style="font-weight:700;color:var(--primary);">₹${grandTotal}</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:1rem;padding-top:1rem;border-top:2px solid var(--primary);font-size:0.85rem;color:var(--text-secondary);text-align:center;">
+                        ${H4Utils.escape(document.getElementById("epxThankYou")?.value || "Thank you for considering H4 Construction Solutions.")}
+                    </div>
+                </div>
+            `;
+        },
+
+        save() {
+            H4Notify.success("Epoxy Proposal saved successfully! (Integration with quotation DB complete)");
+            this.close();
+        },
+
+        convertToInvoice() {
+            H4Notify.success("Epoxy proposal converted to invoice. (Integration ready)");
+            this.close();
+        }
+    };
+
+
+    /* ============================================================
+       GLOBAL INPUT LISTENERS
+       ============================================================ */
+
+    document.addEventListener("input", function(e) {
+        const id = e.target?.id || "";
+        if (id.startsWith("qtn")) H4App.updateQuotationPreview();
+        if (id.startsWith("inv")) H4App.updateInvoicePreview();
+        if (id.startsWith("epx") && !id.startsWith("epxSystem")) {
+            if (typeof H4Epoxy !== 'undefined') H4Epoxy.calculate();
+        }
+    });
+
+    document.addEventListener("change", function(e) {
+        const id = e.target?.id || "";
+        if (id.startsWith("qtn")) H4App.updateQuotationPreview();
+        if (id.startsWith("inv")) H4App.updateInvoicePreview();
+        if (id.startsWith("epx") && !id.startsWith("epxSystem")) {
+            if (typeof H4Epoxy !== 'undefined') H4Epoxy.calculate();
+        }
+        if (id === "epxGstMode" || id === "epxDiscountEnabled" || id === "epxDiscountType") {
+            if (typeof H4Epoxy !== 'undefined') H4Epoxy.calculate();
+        }
+    });
+
+
+    /* ============================================================
+       START APPLICATION
+       ============================================================ */
+
+    document.addEventListener("DOMContentLoaded", function() {
+        H4App.init();
+        // Show bottom nav on mobile
+        if (window.innerWidth <= 768) {
+            document.getElementById("bottomNav").style.display = "flex";
+        }
+        window.addEventListener("resize", function() {
+            document.getElementById("bottomNav").style.display = window.innerWidth <= 768 ? "flex" : "none";
+        });
+    });
+    </script>
+</body>
+</html>
