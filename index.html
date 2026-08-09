@@ -129,7 +129,7 @@
         /* ==================== MAIN CONTENT ==================== */
         .main-content {
             padding: 1.5rem;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -302,7 +302,97 @@
         .table-actions {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
+
+        /* ==================== ITEMS TABLE ==================== */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .items-table th {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .items-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .items-table input,
+        .items-table select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .items-table input:focus,
+        .items-table select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* ==================== CALCULATION BOX ==================== */
+        .calc-box {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .calc-row.total {
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--primary);
+            padding: 1rem 0;
+            color: var(--primary);
+        }
+
+        .calc-label {
+            color: var(--text-secondary);
+        }
+
+        .calc-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* ==================== STATUS BADGE ==================== */
+        .status-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-draft { background: #E3F2FD; color: #1976D2; }
+        .status-sent { background: #FFF3E0; color: #F57C00; }
+        .status-accepted { background: #E8F5E9; color: #388E3C; }
+        .status-rejected { background: #FFEBEE; color: #D32F2F; }
+        .status-expired { background: #F3E5F5; color: #7B1FA2; }
+        .status-converted { background: #E0F2F1; color: #00897B; }
+        .status-unpaid { background: #FFEBEE; color: #D32F2F; }
+        .status-partially-paid { background: #FFF3E0; color: #F57C00; }
+        .status-paid { background: #E8F5E9; color: #388E3C; }
 
         /* ==================== MODALS ==================== */
         .modal-overlay {
@@ -408,6 +498,76 @@
             display: block;
         }
 
+        /* ==================== PREVIEW ==================== */
+        .preview-section {
+            background: white;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .document-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .document-number {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .preview-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-items {
+            margin-bottom: 2rem;
+        }
+
+        .preview-items table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .preview-items th {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .preview-items td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-totals {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .preview-totals-box {
+            min-width: 300px;
+        }
+
         /* ==================== DASHBOARD STATS ==================== */
         .stats-grid {
             display: grid;
@@ -496,6 +656,15 @@
 
             .main-content {
                 padding: 1rem;
+            }
+
+            .items-table {
+                font-size: 0.8rem;
+            }
+
+            .items-table th,
+            .items-table td {
+                padding: 0.5rem;
             }
         }
 
@@ -911,8 +1080,171 @@
                 <h1>📄 Quotations</h1>
                 <p>Create and manage quotations</p>
             </div>
-            <div class="card">
-                <p style="text-align: center; color: var(--text-secondary);">Quotation builder coming in Phase 2</p>
+
+            <!-- LIST VIEW -->
+            <div id="quotationsList">
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" onclick="H4App.openModal('qtnTypeModal')">➕ New Quotation</button>
+                </div>
+
+                <div class="card">
+                    <table class="table" id="quotationsTable">
+                        <thead>
+                            <tr>
+                                <th>Quotation #</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quotationsBody">
+                            <tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No quotations yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BUILDER VIEW -->
+            <div id="quotationBuilder" style="display:none;">
+                <button class="btn btn-outline" onclick="H4App.backToList('quotations')" style="margin-bottom: 1rem;">← Back to List</button>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quotation Details</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quotation Number *</label>
+                            <input type="text" id="qtnNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="qtnDate">Quotation Date *</label>
+                            <input type="date" id="qtnDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qtnCustomer">Customer *</label>
+                            <select id="qtnCustomer" required onchange="H4App.onCustomerChange()">
+                                <option value="">-- Select Customer --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="qtnValidUntil">Valid Until</label>
+                            <input type="date" id="qtnValidUntil">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qtnProject">Project Name</label>
+                            <input type="text" id="qtnProject">
+                        </div>
+                        <div class="form-group">
+                            <label for="qtnReference">Reference</label>
+                            <input type="text" id="qtnReference">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qtnAddress">Site Address</label>
+                        <textarea id="qtnAddress" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <!-- ITEMS -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Line Items</h2>
+                        <button class="btn btn-success btn-sm" onclick="H4App.addQtnItem()">➕ Add Item</button>
+                    </div>
+
+                    <table class="items-table" id="qtnItemsTable">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Rate (₹)</th>
+                                <th>Discount</th>
+                                <th>GST %</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="qtnItemsBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TOTALS -->
+                <div class="card">
+                    <div class="calc-box">
+                        <div class="calc-row">
+                            <span class="calc-label">Subtotal:</span>
+                            <span class="calc-value">₹ <span id="qtnSubtotal">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Total Discount:</span>
+                            <span class="calc-value">₹ <span id="qtnTotalDiscount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Taxable Amount:</span>
+                            <span class="calc-value">₹ <span id="qtnTaxableAmount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">CGST (9%):</span>
+                            <span class="calc-value">₹ <span id="qtnCGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">SGST (9%):</span>
+                            <span class="calc-value">₹ <span id="qtnSGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Round Off:</span>
+                            <span class="calc-value">₹ <span id="qtnRoundOff">0.00</span></span>
+                        </div>
+                        <div class="calc-row total">
+                            <span>GRAND TOTAL:</span>
+                            <span>₹ <span id="qtnGrandTotal">0.00</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="card">
+                    <div class="form-group">
+                        <label for="qtnNotes">Notes / Terms</label>
+                        <textarea id="qtnNotes" rows="3" placeholder="Special terms, payment conditions, etc."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qtnStatus">Status</label>
+                        <select id="qtnStatus">
+                            <option value="draft">Draft</option>
+                            <option value="sent">Sent</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="expired">Expired</option>
+                            <option value="converted">Converted</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap;">
+                        <button class="btn btn-outline" onclick="H4App.backToList('quotations')">Cancel</button>
+                        <button class="btn btn-danger" id="deleteQtnBtn" style="display:none;" onclick="H4App.deleteQuotation()">🗑️ Delete</button>
+                        <button class="btn btn-success" id="convertQtnBtn" style="display:none;" onclick="H4App.convertToInvoice()">✅ Convert to Invoice</button>
+                        <button class="btn btn-primary" onclick="H4App.saveQuotation()">💾 Save Quotation</button>
+                    </div>
+                </div>
+
+                <!-- LIVE PREVIEW -->
+                <div class="preview-section" id="qtnPreview"></div>
             </div>
         </div>
 
@@ -922,8 +1254,161 @@
                 <h1>🧾 Invoices</h1>
                 <p>Create and manage invoices</p>
             </div>
-            <div class="card">
-                <p style="text-align: center; color: var(--text-secondary);">Invoice builder coming in Phase 2</p>
+
+            <!-- LIST VIEW -->
+            <div id="invoicesList">
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" onclick="H4App.newInvoice()">➕ New Invoice</button>
+                </div>
+
+                <div class="card">
+                    <table class="table" id="invoicesTable">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Paid</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoicesBody">
+                            <tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No invoices yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BUILDER VIEW (simple) -->
+            <div id="invoiceBuilder" style="display:none;">
+                <button class="btn btn-outline" onclick="H4App.backToList('invoices')" style="margin-bottom: 1rem;">← Back to List</button>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Invoice Details</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Invoice Number *</label>
+                            <input type="text" id="invNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="invDate">Invoice Date *</label>
+                            <input type="date" id="invDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invCustomer">Customer *</label>
+                            <select id="invCustomer" required>
+                                <option value="">-- Select Customer --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="invDueDate">Due Date</label>
+                            <input type="date" id="invDueDate">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invProject">Project Name</label>
+                            <input type="text" id="invProject">
+                        </div>
+                        <div class="form-group">
+                            <label for="invReference">Reference</label>
+                            <input type="text" id="invReference">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="invQuotation">Linked Quotation (Optional)</label>
+                        <select id="invQuotation">
+                            <option value="">-- None --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ITEMS -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Line Items</h2>
+                        <button class="btn btn-success btn-sm" onclick="H4App.addInvItem()">➕ Add Item</button>
+                    </div>
+
+                    <table class="items-table" id="invItemsTable">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Rate (₹)</th>
+                                <th>Discount</th>
+                                <th>GST %</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invItemsBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TOTALS -->
+                <div class="card">
+                    <div class="calc-box">
+                        <div class="calc-row">
+                            <span class="calc-label">Subtotal:</span>
+                            <span class="calc-value">₹ <span id="invSubtotal">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Total Discount:</span>
+                            <span class="calc-value">₹ <span id="invTotalDiscount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Taxable Amount:</span>
+                            <span class="calc-value">₹ <span id="invTaxableAmount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">CGST (9%):</span>
+                            <span class="calc-value">₹ <span id="invCGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">SGST (9%):</span>
+                            <span class="calc-value">₹ <span id="invSGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Round Off:</span>
+                            <span class="calc-value">₹ <span id="invRoundOff">0.00</span></span>
+                        </div>
+                        <div class="calc-row total">
+                            <span>GRAND TOTAL:</span>
+                            <span>₹ <span id="invGrandTotal">0.00</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="card">
+                    <div class="form-group">
+                        <label for="invNotes">Notes / Terms</label>
+                        <textarea id="invNotes" rows="3" placeholder="Payment terms, special conditions, etc."></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap;">
+                        <button class="btn btn-outline" onclick="H4App.backToList('invoices')">Cancel</button>
+                        <button class="btn btn-danger" id="deleteInvBtn" style="display:none;" onclick="H4App.deleteInvoice()">🗑️ Delete</button>
+                        <button class="btn btn-primary" onclick="H4App.saveInvoice()">💾 Save Invoice</button>
+                    </div>
+                </div>
+
+                <!-- LIVE PREVIEW -->
+                <div class="preview-section" id="invPreview"></div>
             </div>
         </div>
 
@@ -1133,6 +1618,28 @@
     <div class="notifications" id="notifications"></div>
 
     <!-- MODALS -->
+
+    <!-- Quotation Type Modal -->
+    <div class="modal-overlay" id="qtnTypeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>New Quotation</h3>
+                <button class="modal-close" onclick="H4App.closeModal('qtnTypeModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:1rem; color:var(--text-secondary);">Choose quotation type</p>
+                <div style="display:grid; gap:0.85rem;">
+                    <button class="btn btn-outline btn-block" style="justify-content:flex-start; padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.newQuotation();">
+                        📄 <strong>General Quotation</strong> — standard items & pricing
+                    </button>
+                    <button class="btn btn-primary btn-block" style="justify-content:flex-start; padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Notify.success('Epoxy builder coming soon');">
+                        ✨ <strong>Premium Epoxy Flooring Proposal</strong>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Customer Modal -->
     <div class="modal-overlay" id="customerModal">
         <div class="modal-content">
@@ -1527,11 +2034,302 @@
             danger(msg) { this.show(msg, 'danger'); }
         };
 
+        // ==================== CALCULATION ENGINE ====================
+        const H4Calc = {
+            calculateLine(quantity, rate, discount, discountType) {
+                const qty = Number(quantity) || 0;
+                const rt = Number(rate) || 0;
+                const sub = qty * rt;
+                let discAmt = 0;
+                if (discountType === 'percentage') {
+                    discAmt = sub * (Number(discount) || 0) / 100;
+                } else {
+                    discAmt = Number(discount) || 0;
+                }
+                const taxable = Math.max(0, sub - discAmt);
+                return { subtotal: sub, discountAmount: discAmt, taxable: taxable };
+            },
+
+            calculateTotals(items) {
+                let subtotal = 0;
+                let totalDiscount = 0;
+                let taxableAmount = 0;
+                items.forEach(item => {
+                    const line = this.calculateLine(item.quantity, item.rate, item.discount, item.discountType || 'flat');
+                    subtotal += line.subtotal;
+                    totalDiscount += line.discountAmount;
+                    taxableAmount += line.taxable;
+                });
+                // CGST and SGST: 9% each on taxable
+                const cgst = taxableAmount * 0.09;
+                const sgst = taxableAmount * 0.09;
+                const grandTotalBeforeRound = taxableAmount + cgst + sgst;
+                const roundOff = Math.round(grandTotalBeforeRound) - grandTotalBeforeRound;
+                const grandTotal = Math.round(grandTotalBeforeRound);
+                return {
+                    subtotal,
+                    totalDiscount,
+                    taxableAmount,
+                    cgst,
+                    sgst,
+                    roundOff,
+                    grandTotal
+                };
+            }
+        };
+
+        // ==================== NUMBERING ENGINE ====================
+        const H4Numbering = {
+            getNextQuotationNumber() {
+                const settings = H4DB.get('settings');
+                const counter = settings.quotationCounter || 1;
+                const prefix = settings.quotationPrefix || 'H4-QTN';
+                const year = settings.quotationYear || new Date().getFullYear();
+                const number = String(counter).padStart(5, '0');
+                settings.quotationCounter = counter + 1;
+                H4DB.save('settings', settings);
+                return prefix + '-' + year + '-' + number;
+            },
+
+            getNextInvoiceNumber() {
+                const settings = H4DB.get('settings');
+                const counter = settings.invoiceCounter || 1;
+                const prefix = settings.invoicePrefix || 'H4-INV';
+                const year = settings.invoiceYear || new Date().getFullYear();
+                const number = String(counter).padStart(5, '0');
+                settings.invoiceCounter = counter + 1;
+                H4DB.save('settings', settings);
+                return prefix + '-' + year + '-' + number;
+            }
+        };
+
+        // ==================== DOCUMENT PREVIEW ====================
+        const H4Documents = {
+            quotation(data) {
+                const company = H4DB.get('company');
+                const customer = H4DB.get('customers')[data.customerId] || {};
+                const totals = H4Calc.calculateTotals(data.items || []);
+
+                let itemsHtml = '';
+                (data.items || []).forEach(item => {
+                    const line = H4Calc.calculateLine(item.quantity, item.rate, item.discount, item.discountType || 'flat');
+                    itemsHtml += `
+                        <tr>
+                            <td>${item.description}</td>
+                            <td style="text-align: right;">${item.quantity}</td>
+                            <td>${item.unit}</td>
+                            <td style="text-align: right;">₹${Number(item.rate).toFixed(2)}</td>
+                            <td style="text-align: right;">₹${line.discountAmount.toFixed(2)}</td>
+                            <td style="text-align: right;">${Number(item.gst || 0)}%</td>
+                            <td style="text-align: right;">₹${line.taxable.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                return `
+                    <div class="preview-header">
+                        <div class="document-title">QUOTATION</div>
+                        <div class="document-number">${data.number}</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Date: ${new Date(data.date).toLocaleDateString('en-IN')}
+                            ${data.validUntil ? ` | Valid Until: ${new Date(data.validUntil).toLocaleDateString('en-IN')}` : ''}
+                        </div>
+                    </div>
+
+                    <div class="preview-info">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">From:</h4>
+                            <strong>${company.legalName}</strong><br>
+                            ${company.address}<br>
+                            ${company.phone}
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">To:</h4>
+                            <strong>${customer.name}</strong><br>
+                            ${customer.address || ''}<br>
+                            ${customer.phone}
+                        </div>
+                    </div>
+
+                    ${data.project ? `<p><strong>Project:</strong> ${data.project}</p>` : ''}
+
+                    <div class="preview-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th style="text-align: right;">Qty</th>
+                                    <th>Unit</th>
+                                    <th style="text-align: right;">Rate</th>
+                                    <th style="text-align: right;">Discount</th>
+                                    <th style="text-align: right;">GST</th>
+                                    <th style="text-align: right;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="preview-totals">
+                        <div class="preview-totals-box">
+                            <div class="calc-row">
+                                <span>Subtotal:</span>
+                                <span>₹${totals.subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Total Discount:</span>
+                                <span>₹${totals.totalDiscount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Taxable:</span>
+                                <span>₹${totals.taxableAmount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>CGST (9%):</span>
+                                <span>₹${totals.cgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>SGST (9%):</span>
+                                <span>₹${totals.sgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Round Off:</span>
+                                <span>₹${totals.roundOff.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row total">
+                                <span>GRAND TOTAL:</span>
+                                <span>₹${totals.grandTotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${data.notes ? `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);"><strong>Terms:</strong><br>${data.notes}</div>` : ''}
+                `;
+            },
+
+            invoice(data) {
+                // Similar to quotation but with invoice-specific header
+                const company = H4DB.get('company');
+                const customer = H4DB.get('customers')[data.customerId] || {};
+                const totals = H4Calc.calculateTotals(data.items || []);
+
+                let itemsHtml = '';
+                (data.items || []).forEach(item => {
+                    const line = H4Calc.calculateLine(item.quantity, item.rate, item.discount, item.discountType || 'flat');
+                    itemsHtml += `
+                        <tr>
+                            <td>${item.description}</td>
+                            <td style="text-align: right;">${item.quantity}</td>
+                            <td>${item.unit}</td>
+                            <td style="text-align: right;">₹${Number(item.rate).toFixed(2)}</td>
+                            <td style="text-align: right;">₹${line.discountAmount.toFixed(2)}</td>
+                            <td style="text-align: right;">${Number(item.gst || 0)}%</td>
+                            <td style="text-align: right;">₹${line.taxable.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                return `
+                    <div class="preview-header">
+                        <div class="document-title">TAX INVOICE</div>
+                        <div class="document-number">${data.number}</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Date: ${new Date(data.date).toLocaleDateString('en-IN')}
+                            ${data.dueDate ? ` | Due Date: ${new Date(data.dueDate).toLocaleDateString('en-IN')}` : ''}
+                        </div>
+                    </div>
+
+                    <div class="preview-info">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">From:</h4>
+                            <strong>${company.legalName}</strong><br>
+                            ${company.address}<br>
+                            ${company.phone}
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">To:</h4>
+                            <strong>${customer.name}</strong><br>
+                            ${customer.address || ''}<br>
+                            ${customer.phone}
+                        </div>
+                    </div>
+
+                    ${data.project ? `<p><strong>Project:</strong> ${data.project}</p>` : ''}
+
+                    <div class="preview-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th style="text-align: right;">Qty</th>
+                                    <th>Unit</th>
+                                    <th style="text-align: right;">Rate</th>
+                                    <th style="text-align: right;">Discount</th>
+                                    <th style="text-align: right;">GST</th>
+                                    <th style="text-align: right;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="preview-totals">
+                        <div class="preview-totals-box">
+                            <div class="calc-row">
+                                <span>Subtotal:</span>
+                                <span>₹${totals.subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Total Discount:</span>
+                                <span>₹${totals.totalDiscount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Taxable:</span>
+                                <span>₹${totals.taxableAmount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>CGST (9%):</span>
+                                <span>₹${totals.cgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>SGST (9%):</span>
+                                <span>₹${totals.sgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Round Off:</span>
+                                <span>₹${totals.roundOff.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row total">
+                                <span>GRAND TOTAL:</span>
+                                <span>₹${totals.grandTotal.toFixed(2)}</span>
+                            </div>
+                            ${data.paidAmount ? `<div class="calc-row" style="color: var(--success);"><span>Amount Paid:</span><span>₹${Number(data.paidAmount).toFixed(2)}</span></div>` : ''}
+                            ${data.paidAmount ? `<div class="calc-row" style="color: var(--danger);"><span>Balance:</span><span>₹${(totals.grandTotal - Number(data.paidAmount)).toFixed(2)}</span></div>` : ''}
+                        </div>
+                    </div>
+
+                    ${data.notes ? `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);"><strong>Terms:</strong><br>${data.notes}</div>` : ''}
+                `;
+            }
+        };
+
         // ==================== MAIN APP ====================
         const H4App = {
             // Store editing IDs
             editingCustomerId: null,
             editingProductId: null,
+
+            // Quotation
+            currentQtnId: null,
+            qtnItems: [],
+
+            // Invoice
+            currentInvId: null,
+            invItems: [],
 
             init() {
                 H4DB.init();
@@ -1634,7 +2432,7 @@
                 });
             },
 
-            // ==================== NAVIGATION (FIXED) ====================
+            // ==================== NAVIGATION ====================
             navigate(moduleName) {
                 // Hide all modules
                 document.querySelectorAll('.module').forEach(m => {
@@ -1656,6 +2454,13 @@
                 document.querySelectorAll('.nav-item').forEach(item => {
                     item.classList.toggle('active', item.dataset.module === moduleName);
                 });
+
+                // Refresh data
+                if (moduleName === 'quotations') this.loadQuotations();
+                if (moduleName === 'invoices') this.loadInvoices();
+                if (moduleName === 'customers') this.loadCustomers();
+                if (moduleName === 'products') this.loadProducts();
+                if (moduleName === 'settings') this.loadSettings();
             },
 
             // ==================== LOAD DATA ====================
@@ -1666,6 +2471,8 @@
                 this.loadProducts();
                 this.loadThemes();
                 this.updateDashboard();
+                this.loadQuotations();
+                this.loadInvoices();
             },
 
             // ==================== COMPANY ====================
@@ -1870,6 +2677,8 @@
                 form.reset();
                 this.loadCustomers();
                 this.updateDashboard();
+                // Update dropdowns
+                this.populateCustomerSelects();
             },
 
             editCustomer(id) {
@@ -1902,7 +2711,23 @@
                     H4Notify.success('Customer deleted!');
                     this.loadCustomers();
                     this.updateDashboard();
+                    this.populateCustomerSelects();
                 }
+            },
+
+            populateCustomerSelects() {
+                const customers = H4DB.get('customers') || {};
+                const options = Object.values(customers).map(c =>
+                    `<option value="${c.id}">${c.name}</option>`
+                ).join('');
+                ['qtnCustomer', 'invCustomer'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        const currentVal = el.value;
+                        el.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
+                        el.value = currentVal;
+                    }
+                });
             },
 
             // ==================== PRODUCTS ====================
@@ -1976,6 +2801,8 @@
                 document.getElementById('productForm').reset();
                 this.loadProducts();
                 this.updateDashboard();
+                // Also update product dropdowns in quotation/invoice
+                this.populateProductSelects();
             },
 
             editProduct(id) {
@@ -2007,7 +2834,17 @@
                     H4Notify.success('Product deleted!');
                     this.loadProducts();
                     this.updateDashboard();
+                    this.populateProductSelects();
                 }
+            },
+
+            populateProductSelects() {
+                const products = H4DB.get('products') || {};
+                const options = Object.values(products).map(p =>
+                    `<option value="${p.id}">${p.name}</option>`
+                ).join('');
+                // We'll use dynamic dropdown in items, so we'll update when adding items
+                // No need to pre-populate all product selects.
             },
 
             // ==================== THEMES ====================
@@ -2141,6 +2978,661 @@
                     document.querySelector('#productModal .modal-header h3').textContent = 'Add / Edit Product';
                     this.editingProductId = null;
                 }
+            },
+
+            // ==================== QUOTATIONS ====================
+
+            newQuotation() {
+                this.currentQtnId = null;
+                this.qtnItems = [];
+
+                document.getElementById('quotationsList').style.display = 'none';
+                document.getElementById('quotationBuilder').style.display = 'block';
+
+                document.getElementById('qtnNumber').value = H4Numbering.getNextQuotationNumber();
+                document.getElementById('qtnDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('qtnValidUntil').value = '';
+                document.getElementById('qtnProject').value = '';
+                document.getElementById('qtnReference').value = '';
+                document.getElementById('qtnAddress').value = '';
+                document.getElementById('qtnNotes').value = '';
+                document.getElementById('qtnStatus').value = 'draft';
+                document.getElementById('deleteQtnBtn').style.display = 'none';
+                document.getElementById('convertQtnBtn').style.display = 'none';
+
+                this.populateCustomerSelects();
+                this.renderQtnItems();
+                this.updateQtnTotals();
+                this.updateQtnPreview();
+            },
+
+            addQtnItem() {
+                this.qtnItems.push({
+                    id: H4Utils.generateId('qitem'),
+                    productId: '',
+                    productName: '',
+                    description: '',
+                    quantity: 1,
+                    unit: 'Nos',
+                    rate: 0,
+                    discount: 0,
+                    discountType: 'flat',
+                    gst: 18
+                });
+                this.renderQtnItems();
+                this.updateQtnTotals();
+                this.updateQtnPreview();
+            },
+
+            renderQtnItems() {
+                const tbody = document.getElementById('qtnItemsBody');
+                if (!tbody) return;
+
+                const products = H4DB.get('products') || {};
+                const productOptions = Object.values(products).map(p =>
+                    `<option value="${p.id}">${p.name}</option>`
+                ).join('');
+
+                if (this.qtnItems.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added. Click "Add Item".</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = this.qtnItems.map((item, idx) => {
+                    const line = H4Calc.calculateLine(item.quantity, item.rate, item.discount, item.discountType || 'flat');
+                    return `
+                        <tr>
+                            <td>
+                                <select onchange="H4App.qtnProductChange(${idx}, this.value)">
+                                    <option value="">-- Product --</option>
+                                    ${productOptions}
+                                </select>
+                            </td>
+                            <td><input type="text" value="${item.description}" onchange="H4App.qtnUpdateItem(${idx}, 'description', this.value)"></td>
+                            <td><input type="number" min="0" step="0.01" value="${item.quantity}" onchange="H4App.qtnUpdateItem(${idx}, 'quantity', this.value)"></td>
+                            <td><input type="text" value="${item.unit}" onchange="H4App.qtnUpdateItem(${idx}, 'unit', this.value)"></td>
+                            <td><input type="number" min="0" step="0.01" value="${item.rate}" onchange="H4App.qtnUpdateItem(${idx}, 'rate', this.value)"></td>
+                            <td><input type="number" min="0" step="0.01" value="${item.discount}" onchange="H4App.qtnUpdateItem(${idx}, 'discount', this.value)"></td>
+                            <td>
+                                <select onchange="H4App.qtnUpdateItem(${idx}, 'gst', this.value)">
+                                    ${[0,5,12,18,28].map(g => `<option value="${g}" ${Number(item.gst)===g?'selected':''}>${g}%</option>`).join('')}
+                                </select>
+                            </td>
+                            <td style="text-align:right;font-weight:600;">₹${line.taxable.toFixed(2)}</td>
+                            <td><button class="btn btn-danger btn-sm" onclick="H4App.qtnRemoveItem(${idx})">🗑️</button></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Set selected products
+                this.qtnItems.forEach((item, idx) => {
+                    const row = tbody.querySelectorAll('tr')[idx];
+                    const select = row?.querySelector('select');
+                    if (select && item.productId) {
+                        select.value = item.productId;
+                    }
+                });
+            },
+
+            qtnProductChange(index, productId) {
+                const products = H4DB.get('products') || {};
+                const product = products[productId];
+                if (!product) return;
+                const item = this.qtnItems[index];
+                item.productId = productId;
+                item.productName = product.name || '';
+                item.description = product.description || product.name || '';
+                item.unit = product.unit || 'Nos';
+                item.rate = Number(product.sellingRate) || 0;
+                item.gst = Number(product.gst) || 0;
+                this.renderQtnItems();
+                this.updateQtnTotals();
+                this.updateQtnPreview();
+            },
+
+            qtnUpdateItem(index, field, value) {
+                if (!this.qtnItems[index]) return;
+                if (['quantity', 'rate', 'discount', 'gst'].includes(field)) value = Number(value) || 0;
+                this.qtnItems[index][field] = value;
+                this.renderQtnItems();
+                this.updateQtnTotals();
+                this.updateQtnPreview();
+            },
+
+            qtnRemoveItem(index) {
+                this.qtnItems.splice(index, 1);
+                this.renderQtnItems();
+                this.updateQtnTotals();
+                this.updateQtnPreview();
+            },
+
+            updateQtnTotals() {
+                const totals = H4Calc.calculateTotals(this.qtnItems);
+                document.getElementById('qtnSubtotal').textContent = totals.subtotal.toFixed(2);
+                document.getElementById('qtnTotalDiscount').textContent = totals.totalDiscount.toFixed(2);
+                document.getElementById('qtnTaxableAmount').textContent = totals.taxableAmount.toFixed(2);
+                document.getElementById('qtnCGST').textContent = totals.cgst.toFixed(2);
+                document.getElementById('qtnSGST').textContent = totals.sgst.toFixed(2);
+                document.getElementById('qtnRoundOff').textContent = totals.roundOff.toFixed(2);
+                document.getElementById('qtnGrandTotal').textContent = totals.grandTotal.toFixed(2);
+            },
+
+            updateQtnPreview() {
+                const preview = document.getElementById('qtnPreview');
+                if (!preview) return;
+
+                const data = {
+                    number: document.getElementById('qtnNumber').value,
+                    date: document.getElementById('qtnDate').value,
+                    customerId: document.getElementById('qtnCustomer').value,
+                    validUntil: document.getElementById('qtnValidUntil').value,
+                    project: document.getElementById('qtnProject').value,
+                    notes: document.getElementById('qtnNotes').value,
+                    items: this.qtnItems
+                };
+
+                if (!data.number) {
+                    preview.innerHTML = '<p style="color:var(--text-secondary);text-align:center;">Quotation preview will appear here.</p>';
+                    return;
+                }
+
+                preview.innerHTML = H4Documents.quotation(data);
+            },
+
+            getQtnData() {
+                return {
+                    id: this.currentQtnId || H4Utils.generateId('qtn'),
+                    number: document.getElementById('qtnNumber').value,
+                    date: document.getElementById('qtnDate').value,
+                    customerId: document.getElementById('qtnCustomer').value,
+                    validUntil: document.getElementById('qtnValidUntil').value,
+                    project: document.getElementById('qtnProject').value,
+                    reference: document.getElementById('qtnReference').value,
+                    address: document.getElementById('qtnAddress').value,
+                    notes: document.getElementById('qtnNotes').value,
+                    status: document.getElementById('qtnStatus').value,
+                    items: JSON.parse(JSON.stringify(this.qtnItems)),
+                    updatedAt: new Date().toISOString()
+                };
+            },
+
+            saveQuotation() {
+                const customer = document.getElementById('qtnCustomer').value;
+                if (!customer) { H4Notify.danger('Please select a customer.'); return; }
+                if (this.qtnItems.length === 0) { H4Notify.danger('Please add at least one item.'); return; }
+
+                const data = this.getQtnData();
+                if (this.currentQtnId) {
+                    H4DB.update('quotations', this.currentQtnId, data);
+                    H4Notify.success('Quotation updated!');
+                } else {
+                    H4DB.add('quotations', data);
+                    this.currentQtnId = data.id;
+                    H4Notify.success('Quotation saved!');
+                }
+                this.loadQuotations();
+                this.editQuotation(this.currentQtnId);
+            },
+
+            deleteQuotation() {
+                if (!this.currentQtnId) return;
+                if (!confirm('Delete this quotation?')) return;
+                H4DB.delete('quotations', this.currentQtnId);
+                this.loadQuotations();
+                this.backToList('quotations');
+                H4Notify.success('Quotation deleted.');
+            },
+
+            loadQuotations() {
+                const quotations = H4DB.get('quotations') || {};
+                const tbody = document.getElementById('quotationsBody');
+                if (!tbody) return;
+
+                const list = Object.values(quotations).sort((a, b) => new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date));
+                if (list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">No quotations yet</td></tr>';
+                    return;
+                }
+
+                const customers = H4DB.get('customers') || {};
+                tbody.innerHTML = list.map(q => {
+                    const customer = customers[q.customerId] || {};
+                    const totals = H4Calc.calculateTotals(q.items || []);
+                    return `
+                        <tr>
+                            <td><strong>${q.number}</strong></td>
+                            <td>${customer.name || 'Unknown'}</td>
+                            <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
+                            <td>${q.date ? new Date(q.date).toLocaleDateString('en-IN') : '-'}</td>
+                            <td><span class="status-badge status-${q.status || 'draft'}">${q.status || 'draft'}</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-outline" onclick="H4App.editQuotation('${q.id}')">✏️</button>
+                                    <button class="btn btn-sm btn-success" onclick="H4App.printQuotation('${q.id}')">🖨️</button>
+                                    <button class="btn btn-sm btn-danger" onclick="H4App.deleteQuotationById('${q.id}')">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            },
+
+            editQuotation(id) {
+                const q = H4DB.get('quotations')[id];
+                if (!q) return;
+
+                this.currentQtnId = id;
+                this.qtnItems = JSON.parse(JSON.stringify(q.items || []));
+
+                document.getElementById('quotationsList').style.display = 'none';
+                document.getElementById('quotationBuilder').style.display = 'block';
+
+                document.getElementById('qtnNumber').value = q.number || '';
+                document.getElementById('qtnDate').value = q.date || '';
+                document.getElementById('qtnCustomer').value = q.customerId || '';
+                document.getElementById('qtnValidUntil').value = q.validUntil || '';
+                document.getElementById('qtnProject').value = q.project || '';
+                document.getElementById('qtnReference').value = q.reference || '';
+                document.getElementById('qtnAddress').value = q.address || '';
+                document.getElementById('qtnNotes').value = q.notes || '';
+                document.getElementById('qtnStatus').value = q.status || 'draft';
+                document.getElementById('deleteQtnBtn').style.display = 'inline-flex';
+                document.getElementById('convertQtnBtn').style.display = 'inline-flex';
+
+                this.populateCustomerSelects();
+                this.renderQtnItems();
+                this.updateQtnTotals();
+                this.updateQtnPreview();
+            },
+
+            deleteQuotationById(id) {
+                if (!confirm('Delete this quotation?')) return;
+                H4DB.delete('quotations', id);
+                this.loadQuotations();
+                H4Notify.success('Quotation deleted.');
+            },
+
+            backToList(module) {
+                if (module === 'quotations') {
+                    document.getElementById('quotationBuilder').style.display = 'none';
+                    document.getElementById('quotationsList').style.display = 'block';
+                    this.currentQtnId = null;
+                    this.qtnItems = [];
+                    this.loadQuotations();
+                } else if (module === 'invoices') {
+                    document.getElementById('invoiceBuilder').style.display = 'none';
+                    document.getElementById('invoicesList').style.display = 'block';
+                    this.currentInvId = null;
+                    this.invItems = [];
+                    this.loadInvoices();
+                }
+            },
+
+            // ==================== PRINT QUOTATION ====================
+            printQuotation(id) {
+                const q = H4DB.get('quotations')[id];
+                if (!q) return;
+                const html = H4Documents.quotation(q);
+                const win = window.open('', '_blank');
+                if (!win) { H4Notify.danger('Please allow popups.'); return; }
+                win.document.write(`
+                    <html><head><title>${q.number}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .preview-header { text-align: center; margin-bottom: 20px; }
+                        .document-title { font-size: 24px; font-weight: bold; color: #6A3FA0; }
+                        .preview-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th { background: #6A3FA0; color: white; padding: 8px; text-align: left; }
+                        td { padding: 8px; border-bottom: 1px solid #ddd; }
+                        .preview-totals { display: flex; justify-content: flex-end; margin-top: 20px; }
+                        .preview-totals-box { width: 300px; }
+                        .calc-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #ddd; }
+                        .calc-row.total { font-weight: bold; border-bottom: 2px solid #6A3FA0; }
+                        @media print { body { margin: 0; } }
+                    </style>
+                    </head><body>${html}<script>window.onload=function(){window.print();};<\/script></body></html>
+                `);
+                win.document.close();
+            },
+
+            // ==================== CONVERT TO INVOICE ====================
+            convertToInvoice() {
+                if (!this.currentQtnId) return;
+                const q = H4DB.get('quotations')[this.currentQtnId];
+                if (!q) return;
+                if (q.status === 'converted') {
+                    H4Notify.danger('Quotation already converted.');
+                    return;
+                }
+
+                const inv = {
+                    id: H4Utils.generateId('inv'),
+                    number: H4Numbering.getNextInvoiceNumber(),
+                    date: new Date().toISOString().split('T')[0],
+                    dueDate: '',
+                    customerId: q.customerId,
+                    project: q.project || '',
+                    reference: q.number,
+                    quotationId: q.id,
+                    items: JSON.parse(JSON.stringify(q.items || [])),
+                    paidAmount: 0,
+                    paymentStatus: 'unpaid',
+                    notes: q.notes || '',
+                    updatedAt: new Date().toISOString()
+                };
+                H4DB.add('invoices', inv);
+                H4DB.update('quotations', q.id, { status: 'converted' });
+                this.loadQuotations();
+                this.loadInvoices();
+                H4Notify.success('Quotation converted to invoice: ' + inv.number);
+                this.backToList('quotations');
+            },
+
+            // ==================== INVOICES ====================
+            newInvoice() {
+                this.currentInvId = null;
+                this.invItems = [];
+                document.getElementById('invoicesList').style.display = 'none';
+                document.getElementById('invoiceBuilder').style.display = 'block';
+
+                document.getElementById('invNumber').value = H4Numbering.getNextInvoiceNumber();
+                document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('invDueDate').value = '';
+                document.getElementById('invProject').value = '';
+                document.getElementById('invReference').value = '';
+                document.getElementById('invNotes').value = '';
+                document.getElementById('deleteInvBtn').style.display = 'none';
+
+                // Load quotations for linking
+                const quotes = H4DB.get('quotations') || {};
+                const qtnSelect = document.getElementById('invQuotation');
+                if (qtnSelect) {
+                    let qOptions = '<option value="">-- None --</option>';
+                    Object.values(quotes).forEach(q => {
+                        if (q.status !== 'converted') {
+                            qOptions += `<option value="${q.id}">${q.number} - ${q.customerId ? (H4DB.get('customers')[q.customerId]?.name || 'Unknown') : 'Unknown'}</option>`;
+                        }
+                    });
+                    qtnSelect.innerHTML = qOptions;
+                }
+
+                this.populateCustomerSelects();
+                this.renderInvItems();
+                this.updateInvTotals();
+                this.updateInvPreview();
+            },
+
+            addInvItem() {
+                this.invItems.push({
+                    id: H4Utils.generateId('iitem'),
+                    productId: '',
+                    productName: '',
+                    description: '',
+                    quantity: 1,
+                    unit: 'Nos',
+                    rate: 0,
+                    discount: 0,
+                    discountType: 'flat',
+                    gst: 18
+                });
+                this.renderInvItems();
+                this.updateInvTotals();
+                this.updateInvPreview();
+            },
+
+            renderInvItems() {
+                const tbody = document.getElementById('invItemsBody');
+                if (!tbody) return;
+
+                const products = H4DB.get('products') || {};
+                const productOptions = Object.values(products).map(p =>
+                    `<option value="${p.id}">${p.name}</option>`
+                ).join('');
+
+                if (this.invItems.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added. Click "Add Item".</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = this.invItems.map((item, idx) => {
+                    const line = H4Calc.calculateLine(item.quantity, item.rate, item.discount, item.discountType || 'flat');
+                    return `
+                        <tr>
+                            <td>
+                                <select onchange="H4App.invProductChange(${idx}, this.value)">
+                                    <option value="">-- Product --</option>
+                                    ${productOptions}
+                                </select>
+                            </td>
+                            <td><input type="text" value="${item.description}" onchange="H4App.invUpdateItem(${idx}, 'description', this.value)"></td>
+                            <td><input type="number" min="0" step="0.01" value="${item.quantity}" onchange="H4App.invUpdateItem(${idx}, 'quantity', this.value)"></td>
+                            <td><input type="text" value="${item.unit}" onchange="H4App.invUpdateItem(${idx}, 'unit', this.value)"></td>
+                            <td><input type="number" min="0" step="0.01" value="${item.rate}" onchange="H4App.invUpdateItem(${idx}, 'rate', this.value)"></td>
+                            <td><input type="number" min="0" step="0.01" value="${item.discount}" onchange="H4App.invUpdateItem(${idx}, 'discount', this.value)"></td>
+                            <td>
+                                <select onchange="H4App.invUpdateItem(${idx}, 'gst', this.value)">
+                                    ${[0,5,12,18,28].map(g => `<option value="${g}" ${Number(item.gst)===g?'selected':''}>${g}%</option>`).join('')}
+                                </select>
+                            </td>
+                            <td style="text-align:right;font-weight:600;">₹${line.taxable.toFixed(2)}</td>
+                            <td><button class="btn btn-danger btn-sm" onclick="H4App.invRemoveItem(${idx})">🗑️</button></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Set selected products
+                this.invItems.forEach((item, idx) => {
+                    const row = tbody.querySelectorAll('tr')[idx];
+                    const select = row?.querySelector('select');
+                    if (select && item.productId) {
+                        select.value = item.productId;
+                    }
+                });
+            },
+
+            invProductChange(index, productId) {
+                const products = H4DB.get('products') || {};
+                const product = products[productId];
+                if (!product) return;
+                const item = this.invItems[index];
+                item.productId = productId;
+                item.productName = product.name || '';
+                item.description = product.description || product.name || '';
+                item.unit = product.unit || 'Nos';
+                item.rate = Number(product.sellingRate) || 0;
+                item.gst = Number(product.gst) || 0;
+                this.renderInvItems();
+                this.updateInvTotals();
+                this.updateInvPreview();
+            },
+
+            invUpdateItem(index, field, value) {
+                if (!this.invItems[index]) return;
+                if (['quantity', 'rate', 'discount', 'gst'].includes(field)) value = Number(value) || 0;
+                this.invItems[index][field] = value;
+                this.renderInvItems();
+                this.updateInvTotals();
+                this.updateInvPreview();
+            },
+
+            invRemoveItem(index) {
+                this.invItems.splice(index, 1);
+                this.renderInvItems();
+                this.updateInvTotals();
+                this.updateInvPreview();
+            },
+
+            updateInvTotals() {
+                const totals = H4Calc.calculateTotals(this.invItems);
+                document.getElementById('invSubtotal').textContent = totals.subtotal.toFixed(2);
+                document.getElementById('invTotalDiscount').textContent = totals.totalDiscount.toFixed(2);
+                document.getElementById('invTaxableAmount').textContent = totals.taxableAmount.toFixed(2);
+                document.getElementById('invCGST').textContent = totals.cgst.toFixed(2);
+                document.getElementById('invSGST').textContent = totals.sgst.toFixed(2);
+                document.getElementById('invRoundOff').textContent = totals.roundOff.toFixed(2);
+                document.getElementById('invGrandTotal').textContent = totals.grandTotal.toFixed(2);
+            },
+
+            updateInvPreview() {
+                const preview = document.getElementById('invPreview');
+                if (!preview) return;
+
+                const data = {
+                    number: document.getElementById('invNumber').value,
+                    date: document.getElementById('invDate').value,
+                    customerId: document.getElementById('invCustomer').value,
+                    dueDate: document.getElementById('invDueDate').value,
+                    notes: document.getElementById('invNotes').value,
+                    items: this.invItems
+                };
+
+                if (!data.number) {
+                    preview.innerHTML = '<p style="color:var(--text-secondary);text-align:center;">Invoice preview will appear here.</p>';
+                    return;
+                }
+
+                preview.innerHTML = H4Documents.invoice(data);
+            },
+
+            getInvData() {
+                return {
+                    id: this.currentInvId || H4Utils.generateId('inv'),
+                    number: document.getElementById('invNumber').value,
+                    date: document.getElementById('invDate').value,
+                    customerId: document.getElementById('invCustomer').value,
+                    dueDate: document.getElementById('invDueDate').value,
+                    project: document.getElementById('invProject').value,
+                    reference: document.getElementById('invReference').value,
+                    quotationId: document.getElementById('invQuotation').value,
+                    items: JSON.parse(JSON.stringify(this.invItems)),
+                    paidAmount: 0,
+                    paymentStatus: 'unpaid',
+                    notes: document.getElementById('invNotes').value,
+                    updatedAt: new Date().toISOString()
+                };
+            },
+
+            saveInvoice() {
+                const customer = document.getElementById('invCustomer').value;
+                if (!customer) { H4Notify.danger('Please select a customer.'); return; }
+                if (this.invItems.length === 0) { H4Notify.danger('Please add at least one item.'); return; }
+
+                const data = this.getInvData();
+                if (this.currentInvId) {
+                    H4DB.update('invoices', this.currentInvId, data);
+                    H4Notify.success('Invoice updated!');
+                } else {
+                    H4DB.add('invoices', data);
+                    this.currentInvId = data.id;
+                    H4Notify.success('Invoice saved!');
+                }
+                this.loadInvoices();
+                this.editInvoice(this.currentInvId);
+            },
+
+            deleteInvoice() {
+                if (!this.currentInvId) return;
+                if (!confirm('Delete this invoice?')) return;
+                H4DB.delete('invoices', this.currentInvId);
+                this.loadInvoices();
+                this.backToList('invoices');
+                H4Notify.success('Invoice deleted.');
+            },
+
+            loadInvoices() {
+                const invoices = H4DB.get('invoices') || {};
+                const tbody = document.getElementById('invoicesBody');
+                if (!tbody) return;
+
+                const list = Object.values(invoices).sort((a, b) => new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date));
+                if (list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No invoices yet</td></tr>';
+                    return;
+                }
+
+                const customers = H4DB.get('customers') || {};
+                tbody.innerHTML = list.map(inv => {
+                    const customer = customers[inv.customerId] || {};
+                    const totals = H4Calc.calculateTotals(inv.items || []);
+                    const paid = Number(inv.paidAmount) || 0;
+                    const balance = Math.max(0, totals.grandTotal - paid);
+                    return `
+                        <tr>
+                            <td><strong>${inv.number}</strong></td>
+                            <td>${customer.name || 'Unknown'}</td>
+                            <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
+                            <td>${H4Utils.formatCurrency(paid)}</td>
+                            <td>${H4Utils.formatCurrency(balance)}</td>
+                            <td><span class="status-badge status-${inv.paymentStatus || 'unpaid'}">${inv.paymentStatus || 'unpaid'}</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-outline" onclick="H4App.editInvoice('${inv.id}')">✏️</button>
+                                    <button class="btn btn-sm btn-danger" onclick="H4App.deleteInvoiceById('${inv.id}')">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            },
+
+            editInvoice(id) {
+                const inv = H4DB.get('invoices')[id];
+                if (!inv) return;
+
+                this.currentInvId = id;
+                this.invItems = JSON.parse(JSON.stringify(inv.items || []));
+
+                document.getElementById('invoicesList').style.display = 'none';
+                document.getElementById('invoiceBuilder').style.display = 'block';
+
+                document.getElementById('invNumber').value = inv.number || '';
+                document.getElementById('invDate').value = inv.date || '';
+                document.getElementById('invCustomer').value = inv.customerId || '';
+                document.getElementById('invDueDate').value = inv.dueDate || '';
+                document.getElementById('invProject').value = inv.project || '';
+                document.getElementById('invReference').value = inv.reference || '';
+                document.getElementById('invQuotation').value = inv.quotationId || '';
+                document.getElementById('invNotes').value = inv.notes || '';
+                document.getElementById('deleteInvBtn').style.display = 'inline-flex';
+
+                // Load quotations for linking
+                const quotes = H4DB.get('quotations') || {};
+                const qtnSelect = document.getElementById('invQuotation');
+                if (qtnSelect) {
+                    let qOptions = '<option value="">-- None --</option>';
+                    Object.values(quotes).forEach(q => {
+                        if (q.status !== 'converted' || q.id === inv.quotationId) {
+                            qOptions += `<option value="${q.id}" ${q.id === inv.quotationId ? 'selected' : ''}>${q.number} - ${q.customerId ? (H4DB.get('customers')[q.customerId]?.name || 'Unknown') : 'Unknown'}</option>`;
+                        }
+                    });
+                    qtnSelect.innerHTML = qOptions;
+                }
+
+                this.populateCustomerSelects();
+                this.renderInvItems();
+                this.updateInvTotals();
+                this.updateInvPreview();
+            },
+
+            deleteInvoiceById(id) {
+                if (!confirm('Delete this invoice?')) return;
+                H4DB.delete('invoices', id);
+                this.loadInvoices();
+                H4Notify.success('Invoice deleted.');
+            },
+
+            // ==================== CUSTOMER DROPDOWN CHANGE ====================
+            onCustomerChange() {
+                // Update address field
+                const customerId = document.getElementById('qtnCustomer').value;
+                if (customerId) {
+                    const customer = H4DB.get('customers')[customerId];
+                    if (customer) {
+                        document.getElementById('qtnAddress').value = customer.address || '';
+                    }
+                }
+                this.updateQtnPreview();
             }
         };
 
@@ -2158,6 +3650,17 @@
                     }
                 }
             });
+
+            // Auto-close modals on outside click
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+
+            console.log('H4 Billing ERP Phase 2 loaded successfully!');
         });
     </script>
 </body>
