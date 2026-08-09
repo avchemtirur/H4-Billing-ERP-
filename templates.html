@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>H4 Document Template Manager</title>
+
+    <!-- Google Fonts for preview -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ─── RESET & BASE ─── */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6fa;
+            color: #1e293b;
+            padding: 20px;
+        }
+
+        /* ─── MAIN LAYOUT ─── */
+        .tm-wrapper {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        .tm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 28px;
+            background: #fff;
+            padding: 20px 28px;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .tm-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tm-header h1 small {
+            font-weight: 400;
+            font-size: 14px;
+            color: #64748b;
+        }
+        .tm-header-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .tm-header-actions button {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            background: #eef2f6;
+            color: #1e293b;
+            transition: 0.2s;
+        }
+        .tm-header-actions button:hover {
+            background: #dce1e8;
+        }
+        .tm-header-actions .btn-primary {
+            background: #1e293b;
+            color: #fff;
+        }
+        .tm-header-actions .btn-primary:hover {
+            background: #0f172a;
+        }
+        .tm-header-actions .btn-success {
+            background: #0b9e6a;
+            color: #fff;
+        }
+        .tm-header-actions .btn-success:hover {
+            background: #087a53;
+        }
+
+        /* ─── TEMPLATE GRID ─── */
+        .tm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 900px) {
+            .tm-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tm-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .tm-card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .tm-card-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tm-card-header .badge {
+            font-size: 11px;
+            font-weight: 600;
+            background: #dbeafe;
+            color: #1e4f8a;
+            padding: 2px 12px;
+            border-radius: 30px;
+        }
+        .tm-card-header .badge.quotation {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+        .tm-thumb-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 18px 24px 24px;
+        }
+        @media (max-width: 600px) {
+            .tm-thumb-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .tm-thumb {
+            background: #f8fafc;
+            border: 2px solid #eef2f6;
+            border-radius: 12px;
+            padding: 14px 10px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+        }
+        .tm-thumb:hover {
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        }
+        .tm-thumb.active {
+            border-color: #1e293b;
+            background: #f1f5f9;
+        }
+        .tm-thumb .thumb-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 4px;
+        }
+        .tm-thumb .thumb-preview {
+            width: 100%;
+            aspect-ratio: 1 / 1.4;
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #94a3b8;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        .tm-thumb .thumb-preview .mini-logo {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .tm-thumb .thumb-check {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #1e293b;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .tm-thumb.active .thumb-check {
+            opacity: 1;
+        }
+        .tm-thumb .thumb-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .tm-thumb .thumb-actions button {
+            padding: 3px 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #eef2f6;
+            color: #1e293b;
+            transition: 0.15s;
+        }
+        .tm-thumb .thumb-actions button:hover {
+            background: #dce1e8;
+        }
+        .tm-thumb .thumb-actions .btn-select {
+            background: #1e293b;
+            color: #fff;
+        }
+        .tm-thumb .thumb-actions .btn-select:hover {
+            background: #0f172a;
+        }
+
+        /* ─── EDITOR PANEL ─── */
+        .tm-editor {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            padding: 24px 28px;
+            margin-top: 12px;
+            display: none;
+        }
+        .tm-editor.open {
+            display: block;
+        }
+
+        .tm-editor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eef2f6;
+        }
+        .tm-editor-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .tm-editor-header .tm-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #94a3b8;
+            padding: 0 6px;
+        }
+        .tm-editor-header .tm-close:hover {
+            color: #1e293b;
+        }
+
+        .tm-editor-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+        @media (max-width: 1100px) {
+            .tm-editor-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ─── CONTROLS ─── */
+        .tm-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .tm-controls .ctrl-group {
+            border: 1px solid #eef2f6;
+            border-radius: 12px;
+            padding: 12px 16px;
+            background: #fafcff;
+        }
+        .tm-controls .ctrl-group summary {
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            padding: 4px 0;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+        .tm-controls .ctrl-group summary::-webkit-details-marker {
+            color: #94a3b8;
+        }
+        .tm-controls .ctrl-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 16px;
+            padding-top: 12px;
+        }
+        @media (max-width: 500px) {
+            .tm-controls .ctrl-body {
+                grid-template-columns: 1fr;
+            }
+        }
+        .tm-controls .ctrl-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .tm-controls .ctrl-item label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .tm-controls .ctrl-item input,
+        .tm-controls .ctrl-item select,
+        .tm-controls .ctrl-item textarea {
+            padding: 6px 10px;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fff;
+            width: 100%;
+            transition: 0.15s;
+        }
+        .tm-controls .ctrl-item input:focus,
+        .tm-controls .ctrl-item select:focus,
+        .tm-controls .ctrl-item textarea:focus {
+            outline: none;
+            border-color: #1e293b;
+            box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.08);
+        }
+        .tm-controls .ctrl-item input[type="color"] {
+            padding: 2px;
+            height: 40px;
+            cursor: pointer;
+        }
+        .tm-controls .ctrl-item input[type="file"] {
+            padding: 4px 0;
+            border: none;
+            background: none;
+        }
+        .tm-controls .ctrl-item .file-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .tm-controls .ctrl-item .file-actions button {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #eef2f6;
+            color: #1e293b;
+        }
+        .tm-controls .ctrl-item .file-actions button:hover {
+            background: #dce1e8;
+        }
+        .tm-controls .ctrl-item .file-actions .btn-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .tm-controls .ctrl-item .file-actions .btn-danger:hover {
+            background: #fecaca;
+        }
+        .tm-controls .ctrl-full {
+            grid-column: 1 / -1;
+        }
+
+        .tm-controls .range-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tm-controls .range-wrap input[type="range"] {
+            flex: 1;
+        }
+        .tm-controls .range-wrap .range-val {
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 36px;
+            text-align: center;
+        }
+
+        /* ─── LIVE PREVIEW ─── */
+        .tm-preview {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 600px;
+            position: sticky;
+            top: 20px;
+        }
+        .tm-preview .a4-page {
+            width: 100%;
+            max-width: 700px;
+            background: #fff;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            padding: 40px 36px;
+            min-height: 700px;
+            font-size: 13px;
+            line-height: 1.6;
+            transition: all 0.15s;
+            position: relative;
+            overflow: hidden;
+            color: #1e293b;
+        }
+        .tm-preview .a4-page .bg-image-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.08;
+            z-index: 0;
+        }
+        .tm-preview .a4-page .watermark-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.06;
+            z-index: 1;
+        }
+        .tm-preview .a4-page>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ─── INVOICE / QUOTATION TEMPLATE STYLES ─── */
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .doc-header .doc-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .doc-header .doc-brand .logo-img {
+            max-height: 52px;
+            max-width: 52px;
+            object-fit: contain;
+        }
+        .doc-header .doc-brand .brand-logo-img {
+            max-height: 40px;
+            max-width: 40px;
+            object-fit: contain;
+        }
+        .doc-header .doc-brand .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .doc-header .doc-brand .brand-text .company-name {
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 1.2;
+        }
+        .doc-header .doc-brand .brand-text .brand-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #475569;
+        }
+        .doc-header .doc-title-area {
+            text-align: right;
+        }
+        .doc-header .doc-title-area .doc-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .doc-header .doc-title-area .doc-meta {
+            font-size: 12px;
+            color: #475569;
+            margin-top: 2px;
+        }
+
+        .doc-address {
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .doc-address .company-detail {
+            display: inline-block;
+            margin-right: 12px;
+        }
+
+        .doc-row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .doc-row .doc-col {
+            flex: 1;
+            min-width: 140px;
+        }
+        .doc-row .doc-col .label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+        .doc-row .doc-col .value {
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        .doc-table-wrap {
+            overflow-x: auto;
+            margin: 16px 0 12px;
+        }
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .doc-table th {
+            background: #f1f5f9;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        .doc-table td {
+            padding: 7px 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .doc-table .text-right {
+            text-align: right;
+        }
+        .doc-table .text-center {
+            text-align: center;
+        }
+
+        .doc-totals {
+            display: flex;
+            justify-content: flex-end;
+            gap: 32px;
+            margin: 12px 0 16px;
+            flex-wrap: wrap;
+        }
+        .doc-totals .totals-box {
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 8px;
+            min-width: 180px;
+            border: 1px solid #eef2f6;
+        }
+        .doc-totals .totals-box .total-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            font-size: 13px;
+            padding: 2px 0;
+        }
+        .doc-totals .totals-box .total-line.grand {
+            font-weight: 800;
+            font-size: 16px;
+            border-top: 2px solid #1e293b;
+            padding-top: 6px;
+            margin-top: 4px;
+        }
+        .doc-totals .totals-box .total-line .label {
+            font-weight: 500;
+        }
+
+        .doc-footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #eef2f6;
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .doc-footer .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .doc-footer .footer-right {
+            text-align: right;
+        }
+        .doc-footer .signature-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+        .doc-footer .signature-area .sig-img {
+            max-height: 44px;
+            max-width: 120px;
+            object-fit: contain;
+        }
+        .doc-footer .signature-area .sig-label {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* ─── QUOTATION specific ─── */
+        .doc-quote .valid-until {
+            font-weight: 500;
+        }
+
+        /* ─── PRINT HIDE ─── */
+        @media print {
+            .tm-wrapper .tm-header,
+            .tm-wrapper .tm-grid,
+            .tm-wrapper .tm-editor,
+            .tm-wrapper .tm-preview .a4-page {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            .tm-wrapper .tm-preview {
+                background: none !important;
+                padding: 0 !important;
+            }
+            .tm-wrapper .tm-preview .a4-page {
+                max-width: 100% !important;
+                padding: 30px !important;
+                min-height: auto !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: #fff !important;
+                padding: 0 !important;
+            }
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 700px) {
+            .tm-header {
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tm-header h1 {
+                font-size: 20px;
+            }
+            .tm-editor {
+                padding: 16px;
+            }
+            .tm-editor-layout {
+                grid-template-columns: 1fr;
+            }
+            .tm-preview {
+                min-height: 400px;
+                padding: 12px;
+            }
+            .tm-preview .a4-page {
+                padding: 20px 16px;
+                min-height: 500px;
+            }
+            .doc-header .doc-title-area .doc-title {
+                font-size: 22px;
+            }
+            .doc-totals {
+                justify-content: flex-start;
+            }
+            .tm-thumb-grid {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 12px 16px 16px;
+            }
+            .tm-card-header {
+                padding: 14px 16px;
+            }
+        }
+        @media (max-width: 400px) {
+            .tm-thumb-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .doc-row {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .doc-header {
+                flex-direction: column;
+            }
+            .doc-header .doc-title-area {
+                text-align: left;
+                width: 100%;
+            }
+        }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tm-wrapper" id="tmApp">
+
+        <!-- ─── HEADER ─── -->
+        <header class="tm-header no-print">
+            <h1>
+                📄 Document Template Manager
+                <small>Invoice &amp; Quotation</small>
+            </h1>
+            <div class="tm-header-actions">
+                <button class="btn-success" onclick="saveAllSettings()">💾 Save All</button>
+                <button onclick="resetAllTemplates()">↺ Reset All</button>
+                <button onclick="applyThemeToAll()">🎨 Apply Theme to All</button>
+            </div>
+        </header>
+
+        <!-- ─── TEMPLATE GRID ─── -->
+        <div class="tm-grid no-print" id="tmGrid">
+            <!-- INVOICE SECTION -->
+            <div class="tm-card">
+                <div class="tm-card-header">
+                    <h2>🧾 Invoice Templates</h2>
+                    <span class="badge">6 designs</span>
+                </div>
+                <div class="tm-thumb-grid" id="invoiceThumbs">
+                    <!-- injected by JS -->
+                </div>
+            </div>
+
+            <!-- QUOTATION SECTION -->
+            <div class="tm-card">
+                <div class="tm-card-header">
+                    <h2>📋 Quotation Templates</h2>
+                    <span class="badge quotation">6 designs</span>
+                </div>
+                <div class="tm-thumb-grid" id="quotationThumbs">
+                    <!-- injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── EDITOR ─── -->
+        <div class="tm-editor no-print" id="tmEditor">
+            <div class="tm-editor-header">
+                <h3 id="editorTitle">✏️ Customize Template</h3>
+                <button class="tm-close" onclick="closeEditor()">✕</button>
+            </div>
+
+            <div class="tm-editor-layout">
+                <!-- CONTROLS -->
+                <div class="tm-controls" id="tmControls">
+                    <!-- injected by JS -->
+                </div>
+
+                <!-- PREVIEW -->
+                <div class="tm-preview" id="tmPreviewWrap">
+                    <div class="a4-page" id="a4Page">
+                        <!-- live preview rendered by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── STATUS / FOOTER ─── -->
+        <div style="margin-top:24px;text-align:center;font-size:13px;color:#94a3b8;border-top:1px solid #eef2f6;padding-top:16px;" class="no-print">
+            H4 Billing ERP — Document Template System &bull; All settings auto-save to browser storage
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        //  H4 DOCUMENT TEMPLATE MANAGER — FULL IMPLEMENTATION
+        //  All 6 Invoice + 6 Quotation templates with full customization.
+        //  Data stored in localStorage under 'h4_template_settings'.
+        // ═══════════════════════════════════════════════════════════════
+
+        // ─── TEMPLATE DEFINITIONS ────────────────────────────────────
+
+        const TEMPLATE_NAMES = {
+            invoice: ['Classic Corporate', 'Modern Header', 'Curved Premium', 'Clean Professional', 'Premium Brand',
+                'Minimal Luxury'
+            ],
+            quotation: ['Classic Corporate', 'Modern Header', 'Curved Premium', 'Clean Professional', 'Premium Brand',
+                'Minimal Luxury'
+            ]
+        };
+
+        // Default settings for each template (independent)
+        function getDefaultSettings(type, idx) {
+            const base = {
+                // Colors
+                primaryColor: '#1e293b',
+                secondaryColor: '#475569',
+                accentColor: '#0b9e6a',
+                textColor: '#1e293b',
+                headingColor: '#0f172a',
+                fontColor: '#1e293b',
+                tableHeaderColor: '#f1f5f9',
+                tableTextColor: '#1e293b',
+                borderColor: '#e2e8f0',
+                backgroundColor: '#ffffff',
+                headerBackground: '#f8fafc',
+                footerBackground: '#f8fafc',
+                totalBoxColor: '#f8fafc',
+                totalTextColor: '#1e293b',
+                customerSectionColor: '#fafcff',
+                notesSectionColor: '#fafcff',
+
+                // Font
+                fontFamily: 'Inter',
+                companyFontSize: 20,
+                brandFontSize: 14,
+                docTitleFontSize: 28,
+                invoiceNumberFontSize: 14,
+                dateFontSize: 13,
+                customerNameFontSize: 14,
+                customerDetailsFontSize: 12,
+                sectionHeadingFontSize: 13,
+                projectFontSize: 13,
+                referenceFontSize: 13,
+                tableHeaderFontSize: 12,
+                tableBodyFontSize: 13,
+                subtotalFontSize: 14,
+                gstFontSize: 13,
+                discountFontSize: 13,
+                grandTotalFontSize: 18,
+                paymentDetailsFontSize: 12,
+                termsFontSize: 12,
+                footerFontSize: 12,
+
+                // Font weights
+                companyWeight: '700',
+                brandWeight: '500',
+                docTitleWeight: '800',
+                headingWeight: '700',
+                tableHeaderWeight: '700',
+                grandTotalWeight: '800',
+
+                // Italic / Underline flags
+                docTitleItalic: false,
+                docTitleUnderline: false,
+
+                // Positions
+                companyAlign: 'left',
+                brandAlign: 'left',
+                docTitleAlign: 'right',
+                customerAlign: 'left',
+                tableAlign: 'left',
+                totalsAlign: 'right',
+                signatureAlign: 'left',
+                termsAlign: 'left',
+                footerAlign: 'center',
+
+                // Logo
+                logoData: null,
+                logoWidth: 52,
+                logoHeight: 52,
+                logoAlign: 'left',
+                logoOpacity: 100,
+                brandLogoData: null,
+                brandLogoWidth: 40,
+                brandLogoHeight: 40,
+                brandLogoAlign: 'left',
+                brandLogoOpacity: 100,
+
+                // Background / Watermark
+                bgImageData: null,
+                bgPosition: 'center',
+                bgWidth: 100,
+                bgHeight: 100,
+                bgOpacity: 8,
+                watermarkData: null,
+                watermarkOpacity: 6,
+                watermarkPosition: 'center',
+
+                // Company
+                companyName: 'Your Company Name',
+                brandName: 'Brand Name',
+                address: '123 Business Street',
+                city: 'City',
+                district: 'District',
+                state: 'State',
+                pin: '123456',
+                country: 'Country',
+                phone: '+1 234 567 8900',
+                mobile: '+1 234 567 8901',
+                whatsapp: '+1 234 567 8902',
+                email: 'info@company.com',
+                website: 'www.company.com',
+                gstin: '22AAAAA0000A1Z5',
+                pan: 'AAAAA0000A',
+                udyam: 'UDYAM-XX-00-0000000',
+                license: 'LIC-000000',
+
+                // Bank
+                bankName: 'State Bank',
+                accountName: 'Your Company Name',
+                accountNumber: '1234567890',
+                ifsc: 'SBIN0001234',
+                branch: 'Main Branch',
+                upiId: 'company@upi',
+                qrData: null,
+                showPayment: true,
+
+                // Signature
+                signatureData: null,
+                signatureWidth: 120,
+                signatureHeight: 44,
+                signatureAlign: 'left',
+                signatureOpacity: 100,
+                showSignature: true,
+
+                // Document title
+                docTitle: 'INVOICE',
+                customTitle: '',
+
+                // Show/hide flags
+                showProject: true,
+                showReference: true,
+                showGst: true,
+                showDiscount: true,
+                showShipping: true,
+                showPaymentDetails: true,
+                showTerms: true,
+                showFooter: true,
+                showSignature: true,
+
+                // Terms
+                termsText: 'Payment terms: 15 days from invoice date. Late payment subject to 2% monthly interest.',
+                paymentTerms: 'Bank transfer / UPI / Cheque',
+                warrantyTerms: 'Standard warranty as per company policy.',
+                deliveryTerms: 'Delivery within 7 working days.',
+                notesText: 'Thank you for your business.',
+
+                // Footer
+                footerText: 'Thank you for your business.',
+                footerPhone: true,
+                footerEmail: true,
+                footerWebsite: true,
+                footerSocial: false,
+
+                // Table columns visibility
+                showItemNo: true,
+                showSku: true,
+                showHsn: true,
+                showUnit: true,
+                showDiscountCol: true,
+                showTaxCol: true,
+
+                // Alternating rows
+                altRowBg: true,
+                altRowColor: '#f8fafc',
+
+                // Spacing
+                marginTop: 20,
+                marginBottom: 20,
+                marginLeft: 20,
+                marginRight: 20,
+                padding: 16,
+            };
+
+            // Slight variations per template for visual diversity
+            const variations = {
+                'invoice-0': { primaryColor: '#1a3a5c', accentColor: '#c9a84c', docTitle: 'TAX INVOICE' },
+                'invoice-1': { primaryColor: '#0b4a6f', secondaryColor: '#e67e22', accentColor: '#e67e22',
+                    headerBackground: '#0b4a6f', textColor: '#ffffff', headingColor: '#ffffff', fontColor: '#ffffff',
+                    docTitle: 'INVOICE' },
+                'invoice-2': { primaryColor: '#1a1a2e', accentColor: '#e94560', secondaryColor: '#16213e',
+                    docTitle: 'SALES INVOICE' },
+                'invoice-3': { primaryColor: '#2c3e50', accentColor: '#3498db', docTitle: 'INVOICE' },
+                'invoice-4': { primaryColor: '#0d1b2a', accentColor: '#f4a261', secondaryColor: '#1b3a4b',
+                    docTitle: 'TAX INVOICE' },
+                'invoice-5': { primaryColor: '#2d2d2d', accentColor: '#b8860b', docTitle: 'INVOICE' },
+                'quotation-0': { primaryColor: '#1a3a5c', accentColor: '#c9a84c', docTitle: 'QUOTATION' },
+                'quotation-1': { primaryColor: '#0b4a6f', secondaryColor: '#e67e22', accentColor: '#e67e22',
+                    headerBackground: '#0b4a6f', textColor: '#ffffff', headingColor: '#ffffff', fontColor: '#ffffff',
+                    docTitle: 'QUOTATION' },
+                'quotation-2': { primaryColor: '#1a1a2e', accentColor: '#e94560', secondaryColor: '#16213e',
+                    docTitle: 'PRICE QUOTATION' },
+                'quotation-3': { primaryColor: '#2c3e50', accentColor: '#3498db', docTitle: 'QUOTATION' },
+                'quotation-4': { primaryColor: '#0d1b2a', accentColor: '#f4a261', secondaryColor: '#1b3a4b',
+                    docTitle: 'ESTIMATE' },
+                'quotation-5': { primaryColor: '#2d2d2d', accentColor: '#b8860b', docTitle: 'PROFORMA QUOTATION' },
+            };
+
+            const key = `${type}-${idx}`;
+            const v = variations[key] || {};
+            return { ...base, ...v };
+        }
+
+        // ─── STORAGE ──────────────────────────────────────────────────
+
+        function getStorage() {
+            try {
+                const raw = localStorage.getItem('h4_template_settings');
+                if (raw) return JSON.parse(raw);
+            } catch (e) { /* ignore */ }
+            return {};
+        }
+
+        function saveStorage(data) {
+            localStorage.setItem('h4_template_settings', JSON.stringify(data));
+        }
+
+        function getTemplateSettings(type, idx) {
+            const store = getStorage();
+            const key = `${type}-${idx}`;
+            if (store[key]) return store[key];
+            const def = getDefaultSettings(type, idx);
+            store[key] = def;
+            saveStorage(store);
+            return def;
+        }
+
+        function setTemplateSettings(type, idx, settings) {
+            const store = getStorage();
+            const key = `${type}-${idx}`;
+            store[key] = settings;
+            saveStorage(store);
+        }
+
+        function resetTemplate(type, idx) {
+            const def = getDefaultSettings(type, idx);
+            setTemplateSettings(type, idx, def);
+            return def;
+        }
+
+        function resetAllTemplates() {
+            if (!confirm('Reset ALL templates to default settings?')) return;
+            for (let t of ['invoice', 'quotation']) {
+                for (let i = 0; i < 6; i++) {
+                    resetTemplate(t, i);
+                }
+            }
+            renderAll();
+            closeEditor();
+            alert('All templates reset to defaults.');
+        }
+
+        // ─── APPLY THEME TO ALL ─────────────────────────────────────
+
+        function applyThemeToAll() {
+            const cur = getCurrentEditor();
+            if (!cur) return alert('Please open a template first.');
+            const { type, idx } = cur;
+            const src = getTemplateSettings(type, idx);
+            if (!confirm(`Apply theme from "${TEMPLATE_NAMES[type][idx]}" to ALL templates? (Colors + Fonts only)`))
+            return;
+
+            const theme = {
+                primaryColor: src.primaryColor,
+                secondaryColor: src.secondaryColor,
+                accentColor: src.accentColor,
+                textColor: src.textColor,
+                headingColor: src.headingColor,
+                fontColor: src.fontColor,
+                tableHeaderColor: src.tableHeaderColor,
+                tableTextColor: src.tableTextColor,
+                borderColor: src.borderColor,
+                backgroundColor: src.backgroundColor,
+                headerBackground: src.headerBackground,
+                footerBackground: src.footerBackground,
+                totalBoxColor: src.totalBoxColor,
+                totalTextColor: src.totalTextColor,
+                customerSectionColor: src.customerSectionColor,
+                notesSectionColor: src.notesSectionColor,
+                fontFamily: src.fontFamily,
+                companyFontSize: src.companyFontSize,
+                brandFontSize: src.brandFontSize,
+                docTitleFontSize: src.docTitleFontSize,
+                invoiceNumberFontSize: src.invoiceNumberFontSize,
+                dateFontSize: src.dateFontSize,
+                customerNameFontSize: src.customerNameFontSize,
+                customerDetailsFontSize: src.customerDetailsFontSize,
+                sectionHeadingFontSize: src.sectionHeadingFontSize,
+                projectFontSize: src.projectFontSize,
+                referenceFontSize: src.referenceFontSize,
+                tableHeaderFontSize: src.tableHeaderFontSize,
+                tableBodyFontSize: src.tableBodyFontSize,
+                subtotalFontSize: src.subtotalFontSize,
+                gstFontSize: src.gstFontSize,
+                discountFontSize: src.discountFontSize,
+                grandTotalFontSize: src.grandTotalFontSize,
+                paymentDetailsFontSize: src.paymentDetailsFontSize,
+                termsFontSize: src.termsFontSize,
+                footerFontSize: src.footerFontSize,
+                companyWeight: src.companyWeight,
+                brandWeight: src.brandWeight,
+                docTitleWeight: src.docTitleWeight,
+                headingWeight: src.headingWeight,
+                tableHeaderWeight: src.tableHeaderWeight,
+                grandTotalWeight: src.grandTotalWeight,
+                docTitleItalic: src.docTitleItalic,
+                docTitleUnderline: src.docTitleUnderline,
+            };
+
+            for (let t of ['invoice', 'quotation']) {
+                for (let i = 0; i < 6; i++) {
+                    const s = getTemplateSettings(t, i);
+                    Object.assign(s, theme);
+                    setTemplateSettings(t, i, s);
+                }
+            }
+            renderAll();
+            closeEditor();
+            alert('Theme applied to all templates.');
+        }
+
+        // ─── CURRENT EDITOR STATE ──────────────────────────────────
+
+        let currentEditor = null; // { type, idx }
+
+        function getCurrentEditor() { return currentEditor; }
+
+        function setCurrentEditor(type, idx) {
+            currentEditor = { type, idx };
+        }
+
+        function closeEditor() {
+            document.getElementById('tmEditor').classList.remove('open');
+            currentEditor = null;
+        }
+
+        function openEditor(type, idx) {
+            setCurrentEditor(type, idx);
+            document.getElementById('tmEditor').classList.add('open');
+            renderEditor();
+            renderPreview();
+        }
+
+        // ─── RENDER THUMBNAILS ──────────────────────────────────────
+
+        function renderThumbs() {
+            const invContainer = document.getElementById('invoiceThumbs');
+            const quoContainer = document.getElementById('quotationThumbs');
+
+            invContainer.innerHTML = renderThumbSet('invoice');
+            quoContainer.innerHTML = renderThumbSet('quotation');
+        }
+
+        function renderThumbSet(type) {
+            const names = TEMPLATE_NAMES[type];
+            let html = '';
+            for (let i = 0; i < 6; i++) {
+                const s = getTemplateSettings(type, i);
+                const label = names[i];
+                const color = s.primaryColor || '#1e293b';
+                const docTitle = s.docTitle || (type === 'invoice' ? 'INVOICE' : 'QUOTATION');
+                html += `
+                    <div class="tm-thumb" data-type="${type}" data-idx="${i}">
+                        <div class="thumb-preview" style="background:${s.backgroundColor || '#fff'};border-color:${s.borderColor || '#e2e8f0'};">
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;width:100%;">
+                                <div style="font-size:10px;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:0.5px;">${docTitle}</div>
+                                <div style="font-size:8px;color:${s.textColor || '#1e293b'};font-weight:600;background:${s.tableHeaderColor || '#f1f5f9'};padding:1px 6px;border-radius:4px;width:80%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.companyName || 'Company'}</div>
+                                <div style="font-size:7px;color:#94a3b8;margin-top:2px;">${label}</div>
+                                ${s.logoData ? `<div style="font-size:18px;margin-top:2px;">🖼</div>` : ''}
+                            </div>
+                            <div class="thumb-check">✓</div>
+                        </div>
+                        <div class="thumb-label">${label}</div>
+                        <div class="thumb-actions">
+                            <button class="btn-select" onclick="selectTemplate('${type}',${i})">Select</button>
+                            <button onclick="openEditor('${type}',${i})">Customize</button>
+                            <button onclick="resetTemplate('${type}',${i});renderAll();">↺</button>
+                        </div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function selectTemplate(type, idx) {
+            // Set as default for this type
+            const store = getStorage();
+            store[`default_${type}`] = idx;
+            saveStorage(store);
+            renderThumbs();
+            // Highlight
+            document.querySelectorAll('.tm-thumb').forEach(el => {
+                el.classList.toggle('active', el.dataset.type === type && parseInt(el.dataset.idx) === idx);
+            });
+            // Show preview in editor if open
+            if (currentEditor) {
+                renderPreview();
+            }
+        }
+
+        function getDefaultTemplate(type) {
+            const store = getStorage();
+            const def = store[`default_${type}`];
+            if (def !== undefined && def >= 0 && def < 6) return def;
+            return 0;
+        }
+
+        // ─── RENDER EDITOR CONTROLS ─────────────────────────────────
+
+        function renderEditor() {
+            if (!currentEditor) return;
+            const { type, idx } = currentEditor;
+            const s = getTemplateSettings(type, idx);
+            const label = TEMPLATE_NAMES[type][idx];
+            document.getElementById('editorTitle').textContent =
+                `✏️ ${type === 'invoice' ? '🧾' : '📋'} ${label} — ${type.toUpperCase()}`;
+
+            const container = document.getElementById('tmControls');
+            container.innerHTML = buildControlsHTML(type, idx, s);
+            attachControlEvents(type, idx);
+        }
+
+        function buildControlsHTML(type, idx, s) {
+            const fontOptions = ['Inter', 'Roboto', 'Poppins', 'Montserrat', 'Open Sans', 'Lato', 'Arial', 'Georgia',
+                'Times New Roman'
+            ];
+            const weightOptions = ['300', '400', '500', '600', '700', '800'];
+            const alignOptions = ['left', 'center', 'right'];
+            const posOptions = ['top-left', 'top-center', 'top-right', 'center-left', 'center', 'center-right',
+                'bottom-left', 'bottom-center', 'bottom-right'
+            ];
+
+            const fontOpts = fontOptions.map(f =>
+                `<option value="${f}" ${s.fontFamily===f?'selected':''}>${f}</option>`).join('');
+            const weightOpts = weightOptions.map(w =>
+                `<option value="${w}" ${s.companyWeight===w?'selected':''}>${w}</option>`).join('');
+
+            // Build sections
+            return `
+                <details class="ctrl-group" open>
+                    <summary>🎨 Colors</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item"><label>Primary</label><input type="color" data-key="primaryColor" value="${s.primaryColor}" /></div>
+                        <div class="ctrl-item"><label>Secondary</label><input type="color" data-key="secondaryColor" value="${s.secondaryColor}" /></div>
+                        <div class="ctrl-item"><label>Accent</label><input type="color" data-key="accentColor" value="${s.accentColor}" /></div>
+                        <div class="ctrl-item"><label>Text</label><input type="color" data-key="textColor" value="${s.textColor}" /></div>
+                        <div class="ctrl-item"><label>Heading</label><input type="color" data-key="headingColor" value="${s.headingColor}" /></div>
+                        <div class="ctrl-item"><label>Font</label><input type="color" data-key="fontColor" value="${s.fontColor}" /></div>
+                        <div class="ctrl-item"><label>Table Header</label><input type="color" data-key="tableHeaderColor" value="${s.tableHeaderColor}" /></div>
+                        <div class="ctrl-item"><label>Table Text</label><input type="color" data-key="tableTextColor" value="${s.tableTextColor}" /></div>
+                        <div class="ctrl-item"><label>Border</label><input type="color" data-key="borderColor" value="${s.borderColor}" /></div>
+                        <div class="ctrl-item"><label>Background</label><input type="color" data-key="backgroundColor" value="${s.backgroundColor}" /></div>
+                        <div class="ctrl-item"><label>Header BG</label><input type="color" data-key="headerBackground" value="${s.headerBackground}" /></div>
+                        <div class="ctrl-item"><label>Footer BG</label><input type="color" data-key="footerBackground" value="${s.footerBackground}" /></div>
+                        <div class="ctrl-item"><label>Total Box</label><input type="color" data-key="totalBoxColor" value="${s.totalBoxColor}" /></div>
+                        <div class="ctrl-item"><label>Total Text</label><input type="color" data-key="totalTextColor" value="${s.totalTextColor}" /></div>
+                        <div class="ctrl-item"><label>Customer Section</label><input type="color" data-key="customerSectionColor" value="${s.customerSectionColor}" /></div>
+                        <div class="ctrl-item"><label>Notes Section</label><input type="color" data-key="notesSectionColor" value="${s.notesSectionColor}" /></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group" open>
+                    <summary>🔤 Typography</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Font Family</label>
+                            <select data-key="fontFamily">${fontOpts}</select>
+                            <div style="display:flex;gap:6px;margin-top:4px;">
+                                <input type="text" placeholder="+ Add custom font (Google Font name)" id="customFontInput" style="flex:1;" />
+                                <button onclick="addCustomFont()" style="padding:4px 12px;border:none;border-radius:6px;background:#1e293b;color:#fff;font-weight:600;cursor:pointer;">Add</button>
+                            </div>
+                        </div>
+                        <div class="ctrl-item"><label>Company Size</label><input type="number" data-key="companyFontSize" value="${s.companyFontSize}" min="8" max="40" /></div>
+                        <div class="ctrl-item"><label>Brand Size</label><input type="number" data-key="brandFontSize" value="${s.brandFontSize}" min="8" max="30" /></div>
+                        <div class="ctrl-item"><label>Doc Title Size</label><input type="number" data-key="docTitleFontSize" value="${s.docTitleFontSize}" min="14" max="48" /></div>
+                        <div class="ctrl-item"><label>Invoice # Size</label><input type="number" data-key="invoiceNumberFontSize" value="${s.invoiceNumberFontSize}" min="10" max="24" /></div>
+                        <div class="ctrl-item"><label>Date Size</label><input type="number" data-key="dateFontSize" value="${s.dateFontSize}" min="10" max="20" /></div>
+                        <div class="ctrl-item"><label>Customer Name</label><input type="number" data-key="customerNameFontSize" value="${s.customerNameFontSize}" min="10" max="24" /></div>
+                        <div class="ctrl-item"><label>Customer Details</label><input type="number" data-key="customerDetailsFontSize" value="${s.customerDetailsFontSize}" min="9" max="18" /></div>
+                        <div class="ctrl-item"><label>Section Heading</label><input type="number" data-key="sectionHeadingFontSize" value="${s.sectionHeadingFontSize}" min="10" max="20" /></div>
+                        <div class="ctrl-item"><label>Project</label><input type="number" data-key="projectFontSize" value="${s.projectFontSize}" min="10" max="20" /></div>
+                        <div class="ctrl-item"><label>Reference</label><input type="number" data-key="referenceFontSize" value="${s.referenceFontSize}" min="10" max="20" /></div>
+                        <div class="ctrl-item"><label>Table Header</label><input type="number" data-key="tableHeaderFontSize" value="${s.tableHeaderFontSize}" min="9" max="18" /></div>
+                        <div class="ctrl-item"><label>Table Body</label><input type="number" data-key="tableBodyFontSize" value="${s.tableBodyFontSize}" min="10" max="20" /></div>
+                        <div class="ctrl-item"><label>Subtotal</label><input type="number" data-key="subtotalFontSize" value="${s.subtotalFontSize}" min="10" max="24" /></div>
+                        <div class="ctrl-item"><label>GST</label><input type="number" data-key="gstFontSize" value="${s.gstFontSize}" min="10" max="20" /></div>
+                        <div class="ctrl-item"><label>Discount</label><input type="number" data-key="discountFontSize" value="${s.discountFontSize}" min="10" max="20" /></div>
+                        <div class="ctrl-item"><label>Grand Total</label><input type="number" data-key="grandTotalFontSize" value="${s.grandTotalFontSize}" min="14" max="40" /></div>
+                        <div class="ctrl-item"><label>Payment Details</label><input type="number" data-key="paymentDetailsFontSize" value="${s.paymentDetailsFontSize}" min="10" max="18" /></div>
+                        <div class="ctrl-item"><label>Terms</label><input type="number" data-key="termsFontSize" value="${s.termsFontSize}" min="10" max="18" /></div>
+                        <div class="ctrl-item"><label>Footer</label><input type="number" data-key="footerFontSize" value="${s.footerFontSize}" min="9" max="16" /></div>
+                        <div class="ctrl-item"><label>Company Weight</label>
+                            <select data-key="companyWeight">${weightOpts}</select>
+                        </div>
+                        <div class="ctrl-item"><label>Doc Title Weight</label>
+                            <select data-key="docTitleWeight">${weightOpts}</select>
+                        </div>
+                        <div class="ctrl-item"><label>Grand Total Weight</label>
+                            <select data-key="grandTotalWeight">${weightOpts}</select>
+                        </div>
+                        <div class="ctrl-item" style="flex-direction:row;gap:12px;align-items:center;">
+                            <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox" data-key="docTitleItalic" ${s.docTitleItalic?'checked':''} /> Italic</label>
+                            <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox" data-key="docTitleUnderline" ${s.docTitleUnderline?'checked':''} /> Underline</label>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>📐 Positions &amp; Alignment</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item"><label>Company Align</label><select data-key="companyAlign">${alignOptions.map(a=>`<option value="${a}" ${s.companyAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Brand Align</label><select data-key="brandAlign">${alignOptions.map(a=>`<option value="${a}" ${s.brandAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Doc Title Align</label><select data-key="docTitleAlign">${alignOptions.map(a=>`<option value="${a}" ${s.docTitleAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Customer Align</label><select data-key="customerAlign">${alignOptions.map(a=>`<option value="${a}" ${s.customerAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Table Align</label><select data-key="tableAlign">${alignOptions.map(a=>`<option value="${a}" ${s.tableAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Totals Align</label><select data-key="totalsAlign">${alignOptions.map(a=>`<option value="${a}" ${s.totalsAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Signature Align</label><select data-key="signatureAlign">${alignOptions.map(a=>`<option value="${a}" ${s.signatureAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Terms Align</label><select data-key="termsAlign">${alignOptions.map(a=>`<option value="${a}" ${s.termsAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Footer Align</label><select data-key="footerAlign">${alignOptions.map(a=>`<option value="${a}" ${s.footerAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Logo Align</label><select data-key="logoAlign">${alignOptions.map(a=>`<option value="${a}" ${s.logoAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                        <div class="ctrl-item"><label>Brand Logo Align</label><select data-key="brandLogoAlign">${alignOptions.map(a=>`<option value="${a}" ${s.brandLogoAlign===a?'selected':''}>${a}</option>`).join('')}</select></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>🖼️ Logos &amp; Branding</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Company Logo</label>
+                            <input type="file" accept="image/*" data-key="logoData" />
+                            <div class="file-actions">
+                                <button onclick="clearLogo('logoData')">Remove</button>
+                            </div>
+                            ${s.logoData ? `<div style="margin-top:4px;"><img src="${s.logoData}" style="max-height:40px;max-width:80px;object-fit:contain;border:1px solid #e2e8f0;border-radius:4px;padding:2px;" /></div>` : ''}
+                        </div>
+                        <div class="ctrl-item"><label>Logo Width</label><input type="number" data-key="logoWidth" value="${s.logoWidth}" min="20" max="120" /></div>
+                        <div class="ctrl-item"><label>Logo Height</label><input type="number" data-key="logoHeight" value="${s.logoHeight}" min="20" max="120" /></div>
+                        <div class="ctrl-item"><label>Logo Opacity</label><input type="range" data-key="logoOpacity" min="10" max="100" value="${s.logoOpacity}" /> <span class="range-val">${s.logoOpacity}%</span></div>
+
+                        <div class="ctrl-item ctrl-full" style="margin-top:8px;"><label>Brand Logo</label>
+                            <input type="file" accept="image/*" data-key="brandLogoData" />
+                            <div class="file-actions">
+                                <button onclick="clearLogo('brandLogoData')">Remove</button>
+                            </div>
+                            ${s.brandLogoData ? `<div style="margin-top:4px;"><img src="${s.brandLogoData}" style="max-height:40px;max-width:80px;object-fit:contain;border:1px solid #e2e8f0;border-radius:4px;padding:2px;" /></div>` : ''}
+                        </div>
+                        <div class="ctrl-item"><label>Brand Logo Width</label><input type="number" data-key="brandLogoWidth" value="${s.brandLogoWidth}" min="20" max="80" /></div>
+                        <div class="ctrl-item"><label>Brand Logo Height</label><input type="number" data-key="brandLogoHeight" value="${s.brandLogoHeight}" min="20" max="80" /></div>
+                        <div class="ctrl-item"><label>Brand Logo Opacity</label><input type="range" data-key="brandLogoOpacity" min="10" max="100" value="${s.brandLogoOpacity}" /> <span class="range-val">${s.brandLogoOpacity}%</span></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>🏢 Company Details</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Company Name</label><input type="text" data-key="companyName" value="${s.companyName}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Brand Name</label><input type="text" data-key="brandName" value="${s.brandName}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Address</label><input type="text" data-key="address" value="${s.address}" /></div>
+                        <div class="ctrl-item"><label>City</label><input type="text" data-key="city" value="${s.city}" /></div>
+                        <div class="ctrl-item"><label>District</label><input type="text" data-key="district" value="${s.district}" /></div>
+                        <div class="ctrl-item"><label>State</label><input type="text" data-key="state" value="${s.state}" /></div>
+                        <div class="ctrl-item"><label>PIN</label><input type="text" data-key="pin" value="${s.pin}" /></div>
+                        <div class="ctrl-item"><label>Country</label><input type="text" data-key="country" value="${s.country}" /></div>
+                        <div class="ctrl-item"><label>Phone</label><input type="text" data-key="phone" value="${s.phone}" /></div>
+                        <div class="ctrl-item"><label>Mobile</label><input type="text" data-key="mobile" value="${s.mobile}" /></div>
+                        <div class="ctrl-item"><label>WhatsApp</label><input type="text" data-key="whatsapp" value="${s.whatsapp}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Email</label><input type="text" data-key="email" value="${s.email}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Website</label><input type="text" data-key="website" value="${s.website}" /></div>
+                        <div class="ctrl-item"><label>GSTIN</label><input type="text" data-key="gstin" value="${s.gstin}" /></div>
+                        <div class="ctrl-item"><label>PAN</label><input type="text" data-key="pan" value="${s.pan}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Udyam</label><input type="text" data-key="udyam" value="${s.udyam}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>License</label><input type="text" data-key="license" value="${s.license}" /></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>💳 Payment Details</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item"><label>Bank Name</label><input type="text" data-key="bankName" value="${s.bankName}" /></div>
+                        <div class="ctrl-item"><label>Account Name</label><input type="text" data-key="accountName" value="${s.accountName}" /></div>
+                        <div class="ctrl-item"><label>Account Number</label><input type="text" data-key="accountNumber" value="${s.accountNumber}" /></div>
+                        <div class="ctrl-item"><label>IFSC</label><input type="text" data-key="ifsc" value="${s.ifsc}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Branch</label><input type="text" data-key="branch" value="${s.branch}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>UPI ID</label><input type="text" data-key="upiId" value="${s.upiId}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Payment QR</label><input type="file" accept="image/*" data-key="qrData" />
+                            <div class="file-actions"><button onclick="clearLogo('qrData')">Remove</button></div>
+                            ${s.qrData ? `<div style="margin-top:4px;"><img src="${s.qrData}" style="max-height:60px;max-width:60px;object-fit:contain;border:1px solid #e2e8f0;border-radius:4px;padding:2px;" /></div>` : ''}
+                        </div>
+                        <div class="ctrl-item" style="flex-direction:row;gap:12px;align-items:center;">
+                            <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox" data-key="showPayment" ${s.showPayment?'checked':''} /> Show Payment Details</label>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>✍️ Signature</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Signature Image</label><input type="file" accept="image/*" data-key="signatureData" />
+                            <div class="file-actions"><button onclick="clearLogo('signatureData')">Remove</button></div>
+                            ${s.signatureData ? `<div style="margin-top:4px;"><img src="${s.signatureData}" style="max-height:50px;max-width:120px;object-fit:contain;border:1px solid #e2e8f0;border-radius:4px;padding:2px;" /></div>` : ''}
+                        </div>
+                        <div class="ctrl-item"><label>Width</label><input type="number" data-key="signatureWidth" value="${s.signatureWidth}" min="40" max="200" /></div>
+                        <div class="ctrl-item"><label>Height</label><input type="number" data-key="signatureHeight" value="${s.signatureHeight}" min="20" max="80" /></div>
+                        <div class="ctrl-item"><label>Opacity</label><input type="range" data-key="signatureOpacity" min="20" max="100" value="${s.signatureOpacity}" /> <span class="range-val">${s.signatureOpacity}%</span></div>
+                        <div class="ctrl-item" style="flex-direction:row;gap:12px;align-items:center;">
+                            <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox" data-key="showSignature" ${s.showSignature?'checked':''} /> Show Signature</label>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>📄 Document</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Document Title</label>
+                            <select data-key="docTitle">
+                                ${type === 'invoice' ?
+                                    `<option value="INVOICE" ${s.docTitle==='INVOICE'?'selected':''}>INVOICE</option>
+                                     <option value="TAX INVOICE" ${s.docTitle==='TAX INVOICE'?'selected':''}>TAX INVOICE</option>
+                                     <option value="SALES INVOICE" ${s.docTitle==='SALES INVOICE'?'selected':''}>SALES INVOICE</option>`
+                                    :
+                                    `<option value="QUOTATION" ${s.docTitle==='QUOTATION'?'selected':''}>QUOTATION</option>
+                                     <option value="PRICE QUOTATION" ${s.docTitle==='PRICE QUOTATION'?'selected':''}>PRICE QUOTATION</option>
+                                     <option value="ESTIMATE" ${s.docTitle==='ESTIMATE'?'selected':''}>ESTIMATE</option>
+                                     <option value="PROFORMA QUOTATION" ${s.docTitle==='PROFORMA QUOTATION'?'selected':''}>PROFORMA QUOTATION</option>`
+                                }
+                            </select>
+                        </div>
+                        <div class="ctrl-item ctrl-full"><label>Custom Title (overrides)</label><input type="text" data-key="customTitle" value="${s.customTitle}" placeholder="Leave blank to use default" /></div>
+                        <div class="ctrl-item"><label>Show Project</label><input type="checkbox" data-key="showProject" ${s.showProject?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Reference</label><input type="checkbox" data-key="showReference" ${s.showReference?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show GST</label><input type="checkbox" data-key="showGst" ${s.showGst?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Discount</label><input type="checkbox" data-key="showDiscount" ${s.showDiscount?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Shipping</label><input type="checkbox" data-key="showShipping" ${s.showShipping?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Terms</label><input type="checkbox" data-key="showTerms" ${s.showTerms?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Footer</label><input type="checkbox" data-key="showFooter" ${s.showFooter?'checked':''} /></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>📋 Table</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item"><label>Show Item No.</label><input type="checkbox" data-key="showItemNo" ${s.showItemNo?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show SKU</label><input type="checkbox" data-key="showSku" ${s.showSku?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show HSN/SAC</label><input type="checkbox" data-key="showHsn" ${s.showHsn?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Unit</label><input type="checkbox" data-key="showUnit" ${s.showUnit?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Discount Col</label><input type="checkbox" data-key="showDiscountCol" ${s.showDiscountCol?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Tax Col</label><input type="checkbox" data-key="showTaxCol" ${s.showTaxCol?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Alternating Row BG</label><input type="checkbox" data-key="altRowBg" ${s.altRowBg?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Alt Row Color</label><input type="color" data-key="altRowColor" value="${s.altRowColor}" /></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>📝 Terms &amp; Notes</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Terms Text</label><textarea data-key="termsText" rows="2">${s.termsText}</textarea></div>
+                        <div class="ctrl-item ctrl-full"><label>Payment Terms</label><input type="text" data-key="paymentTerms" value="${s.paymentTerms}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Warranty Terms</label><input type="text" data-key="warrantyTerms" value="${s.warrantyTerms}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Delivery Terms</label><input type="text" data-key="deliveryTerms" value="${s.deliveryTerms}" /></div>
+                        <div class="ctrl-item ctrl-full"><label>Notes</label><textarea data-key="notesText" rows="2">${s.notesText}</textarea></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>🖨️ Background &amp; Watermark</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Background Image</label><input type="file" accept="image/*" data-key="bgImageData" />
+                            <div class="file-actions"><button onclick="clearLogo('bgImageData')">Remove</button></div>
+                            ${s.bgImageData ? `<div style="margin-top:4px;"><img src="${s.bgImageData}" style="max-height:60px;max-width:100px;object-fit:contain;border:1px solid #e2e8f0;border-radius:4px;padding:2px;" /></div>` : ''}
+                        </div>
+                        <div class="ctrl-item"><label>BG Position</label><select data-key="bgPosition">
+                                ${posOptions.map(p=>`<option value="${p}" ${s.bgPosition===p?'selected':''}>${p}</option>`).join('')}
+                            </select></div>
+                        <div class="ctrl-item"><label>BG Opacity</label><input type="range" data-key="bgOpacity" min="2" max="30" value="${s.bgOpacity}" /> <span class="range-val">${s.bgOpacity}%</span></div>
+                        <div class="ctrl-item ctrl-full"><label>Watermark Logo</label><input type="file" accept="image/*" data-key="watermarkData" />
+                            <div class="file-actions"><button onclick="clearLogo('watermarkData')">Remove</button></div>
+                            ${s.watermarkData ? `<div style="margin-top:4px;"><img src="${s.watermarkData}" style="max-height:50px;max-width:80px;object-fit:contain;border:1px solid #e2e8f0;border-radius:4px;padding:2px;" /></div>` : ''}
+                        </div>
+                        <div class="ctrl-item"><label>Watermark Opacity</label><input type="range" data-key="watermarkOpacity" min="2" max="25" value="${s.watermarkOpacity}" /> <span class="range-val">${s.watermarkOpacity}%</span></div>
+                        <div class="ctrl-item"><label>Watermark Position</label><select data-key="watermarkPosition">
+                                ${posOptions.map(p=>`<option value="${p}" ${s.watermarkPosition===p?'selected':''}>${p}</option>`).join('')}
+                            </select></div>
+                    </div>
+                </details>
+
+                <details class="ctrl-group">
+                    <summary>📱 Footer</summary>
+                    <div class="ctrl-body">
+                        <div class="ctrl-item ctrl-full"><label>Footer Text</label><input type="text" data-key="footerText" value="${s.footerText}" /></div>
+                        <div class="ctrl-item"><label>Show Phone</label><input type="checkbox" data-key="footerPhone" ${s.footerPhone?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Email</label><input type="checkbox" data-key="footerEmail" ${s.footerEmail?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Website</label><input type="checkbox" data-key="footerWebsite" ${s.footerWebsite?'checked':''} /></div>
+                        <div class="ctrl-item"><label>Show Social</label><input type="checkbox" data-key="footerSocial" ${s.footerSocial?'checked':''} /></div>
+                    </div>
+                </details>
+
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #eef2f6;">
+                    <button onclick="saveCurrentSettings()" style="padding:10px 28px;border:none;border-radius:10px;background:#1e293b;color:#fff;font-weight:700;cursor:pointer;">💾 Save Template</button>
+                    <button onclick="resetTemplate('${type}',${idx});renderAll();openEditor('${type}',${idx});" style="padding:10px 28px;border:none;border-radius:10px;background:#eef2f6;color:#1e293b;font-weight:600;cursor:pointer;">↺ Reset This Template</button>
+                    <button onclick="printPreview()" style="padding:10px 28px;border:none;border-radius:10px;background:#0b9e6a;color:#fff;font-weight:600;cursor:pointer;">🖨️ Print / PDF</button>
+                </div>
+            `;
+        }
+
+        // ─── ATTACH CONTROL EVENTS ──────────────────────────────────
+
+        function attachControlEvents(type, idx) {
+            const container = document.getElementById('tmControls');
+
+            // All inputs with data-key
+            container.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                const event = el.type === 'checkbox' ? 'change' : 'input';
+                el.addEventListener(event, function() {
+                    const s = getTemplateSettings(type, idx);
+                    if (this.type === 'checkbox') {
+                        s[key] = this.checked;
+                    } else if (this.type === 'file') {
+                        handleFileUpload(this, key, type, idx);
+                        return;
+                    } else if (this.type === 'range') {
+                        s[key] = parseInt(this.value);
+                        const valSpan = this.parentElement.querySelector('.range-val');
+                        if (valSpan) valSpan.textContent = this.value + (key.includes('Opacity') ? '%' : '');
+                    } else if (this.type === 'number') {
+                        s[key] = parseFloat(this.value) || 0;
+                    } else {
+                        s[key] = this.value;
+                    }
+                    setTemplateSettings(type, idx, s);
+                    renderPreview();
+                });
+            });
+
+            // Special: range value display
+            container.querySelectorAll('input[type="range"]').forEach(el => {
+                const valSpan = el.parentElement.querySelector('.range-val');
+                if (valSpan) {
+                    valSpan.textContent = el.value + (el.dataset.key.includes('Opacity') ? '%' : '');
+                }
+            });
+        }
+
+        function handleFileUpload(input, key, type, idx) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const s = getTemplateSettings(type, idx);
+                s[key] = e.target.result;
+                setTemplateSettings(type, idx, s);
+                renderEditor();
+                renderPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearLogo(key) {
+            if (!currentEditor) return;
+            const { type, idx } = currentEditor;
+            const s = getTemplateSettings(type, idx);
+            s[key] = null;
+            setTemplateSettings(type, idx, s);
+            renderEditor();
+            renderPreview();
+        }
+
+        function addCustomFont() {
+            const input = document.getElementById('customFontInput');
+            const font = input.value.trim();
+            if (!font) return;
+            // Add to font dropdown
+            const select = document.querySelector('[data-key="fontFamily"]');
+            if (select) {
+                const opt = document.createElement('option');
+                opt.value = font;
+                opt.textContent = font;
+                select.appendChild(opt);
+                select.value = font;
+                // Trigger change
+                const evt = new Event('change');
+                select.dispatchEvent(evt);
+                input.value = '';
+            }
+        }
+
+        function saveCurrentSettings() {
+            if (!currentEditor) return;
+            const { type, idx } = currentEditor;
+            // Already saved on each change, but we force a re-save
+            const s = getTemplateSettings(type, idx);
+            setTemplateSettings(type, idx, s);
+            renderAll();
+            alert(`✅ Template "${TEMPLATE_NAMES[type][idx]}" saved.`);
+        }
+
+        function saveAllSettings() {
+            // Just re-save everything
+            const store = getStorage();
+            saveStorage(store);
+            alert('✅ All settings saved.');
+        }
+
+        // ─── RENDER PREVIEW ──────────────────────────────────────────
+
+        function renderPreview() {
+            if (!currentEditor) return;
+            const { type, idx } = currentEditor;
+            const s = getTemplateSettings(type, idx);
+            const page = document.getElementById('a4Page');
+
+            // Build sample data
+            const sampleItems = [
+                { no: 1, product: 'Product A', description: 'High-quality product with premium features', sku: 'SKU-001',
+                    hsn: '1234', qty: 2, unit: 'Pcs', rate: 150, discount: 5, tax: 12, amount: 300 },
+                { no: 2, product: 'Product B', description: 'Durable and reliable solution', sku: 'SKU-002',
+                    hsn: '5678', qty: 1, unit: 'Box', rate: 250, discount: 0, tax: 12, amount: 250 },
+                { no: 3, product: 'Service C', description: 'Professional consulting service', sku: 'SRV-003',
+                    hsn: '9012', qty: 3, unit: 'Hrs', rate: 80, discount: 10, tax: 18, amount: 240 },
+            ];
+
+            const subtotal = sampleItems.reduce((sum, it) => sum + it.amount, 0);
+            const discount = sampleItems.reduce((sum, it) => sum + (it.amount * it.discount / 100), 0);
+            const taxable = subtotal - discount;
+            const tax = sampleItems.reduce((sum, it) => sum + (it.amount * it.tax / 100), 0);
+            const shipping = 25;
+            const grandTotal = taxable + tax + shipping;
+            const balanceDue = grandTotal;
+
+            const docTitle = s.customTitle || s.docTitle || (type === 'invoice' ? 'INVOICE' : 'QUOTATION');
+            const isQuotation = type === 'quotation';
+
+            // Build HTML
+            let html = `
+                <style>
+                    .a4-preview * { box-sizing: border-box; }
+                    .a4-preview { font-family: '${s.fontFamily}', sans-serif; color: ${s.textColor}; background: ${s.backgroundColor}; padding: ${s.padding}px; margin:0; }
+                    .a4-preview .doc-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+                    .a4-preview .doc-header .doc-brand { display: flex; align-items: center; gap: 14px; }
+                    .a4-preview .doc-header .doc-brand .logo-img { max-height: ${s.logoHeight}px; max-width: ${s.logoWidth}px; object-fit: contain; opacity: ${s.logoOpacity/100}; }
+                    .a4-preview .doc-header .doc-brand .brand-logo-img { max-height: ${s.brandLogoHeight}px; max-width: ${s.brandLogoWidth}px; object-fit: contain; opacity: ${s.brandLogoOpacity/100}; }
+                    .a4-preview .doc-header .doc-brand .brand-text .company-name { font-weight: ${s.companyWeight}; font-size: ${s.companyFontSize}px; color: ${s.primaryColor}; }
+                    .a4-preview .doc-header .doc-brand .brand-text .brand-name { font-weight: ${s.brandWeight}; font-size: ${s.brandFontSize}px; color: ${s.secondaryColor}; }
+                    .a4-preview .doc-header .doc-title-area .doc-title { font-size: ${s.docTitleFontSize}px; font-weight: ${s.docTitleWeight}; color: ${s.headingColor}; ${s.docTitleItalic ? 'font-style:italic;' : ''} ${s.docTitleUnderline ? 'text-decoration:underline;' : ''} text-transform: uppercase; letter-spacing: 1px; }
+                    .a4-preview .doc-address { font-size: 12px; color: ${s.secondaryColor}; margin-bottom: 10px; line-height: 1.5; }
+                    .a4-preview .doc-row { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 12px; }
+                    .a4-preview .doc-row .doc-col { flex: 1; min-width: 120px; }
+                    .a4-preview .doc-row .doc-col .label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: ${s.secondaryColor}; }
+                    .a4-preview .doc-row .doc-col .value { font-weight: 500; font-size: ${s.customerDetailsFontSize}px; color: ${s.textColor}; }
+                    .a4-preview .doc-table-wrap { overflow-x: auto; margin: 12px 0; }
+                    .a4-preview .doc-table { width: 100%; border-collapse: collapse; font-size: ${s.tableBodyFontSize}px; }
+                    .a4-preview .doc-table th { background: ${s.tableHeaderColor}; font-weight: ${s.tableHeaderWeight}; font-size: ${s.tableHeaderFontSize}px; text-transform: uppercase; letter-spacing: 0.3px; padding: 6px 10px; border: 1px solid ${s.borderColor}; text-align: left; color: ${s.headingColor}; }
+                    .a4-preview .doc-table td { padding: 5px 10px; border: 1px solid ${s.borderColor}; color: ${s.tableTextColor}; }
+                    .a4-preview .doc-table .text-right { text-align: right; }
+                    .a4-preview .doc-table .text-center { text-align: center; }
+                    .a4-preview .doc-table tbody tr:nth-child(even) { background: ${s.altRowBg ? s.altRowColor : 'transparent'}; }
+                    .a4-preview .doc-totals { display: flex; justify-content: ${s.totalsAlign}; gap: 24px; flex-wrap: wrap; margin: 10px 0 14px; }
+                    .a4-preview .doc-totals .totals-box { background: ${s.totalBoxColor}; padding: 10px 18px; border-radius: 6px; min-width: 160px; border: 1px solid ${s.borderColor}; }
+                    .a4-preview .doc-totals .totals-box .total-line { display: flex; justify-content: space-between; gap: 20px; font-size: ${s.subtotalFontSize}px; padding: 2px 0; color: ${s.totalTextColor}; }
+                    .a4-preview .doc-totals .totals-box .total-line.grand { font-weight: ${s.grandTotalWeight}; font-size: ${s.grandTotalFontSize}px; border-top: 2px solid ${s.primaryColor}; padding-top: 6px; margin-top: 4px; color: ${s.primaryColor}; }
+                    .a4-preview .doc-footer { margin-top: 20px; padding-top: 14px; border-top: 1px solid ${s.borderColor}; font-size: ${s.footerFontSize}px; color: ${s.secondaryColor}; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+                    .a4-preview .doc-footer .signature-area { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 4px; }
+                    .a4-preview .doc-footer .signature-area .sig-img { max-height: ${s.signatureHeight}px; max-width: ${s.signatureWidth}px; object-fit: contain; opacity: ${s.signatureOpacity/100}; }
+                    .a4-preview .doc-footer .signature-area .sig-label { font-size: 11px; color: ${s.secondaryColor}; }
+                    .a4-preview .doc-terms { margin-top: 12px; padding: 10px 14px; background: ${s.notesSectionColor}; border-radius: 6px; border: 1px solid ${s.borderColor}; font-size: ${s.termsFontSize}px; color: ${s.textColor}; }
+                    .a4-preview .doc-terms p { margin: 3px 0; }
+                    .a4-preview .bg-image-layer { position: absolute; inset: 0; pointer-events: none; background-size: cover; background-position: ${s.bgPosition.replace('-',' ')}; opacity: ${s.bgOpacity/100}; z-index: 0; }
+                    .a4-preview .watermark-layer { position: absolute; inset: 0; pointer-events: none; background-size: contain; background-repeat: no-repeat; background-position: ${s.watermarkPosition.replace('-',' ')}; opacity: ${s.watermarkOpacity/100}; z-index: 1; }
+                    .a4-preview .doc-content { position: relative; z-index: 2; }
+                    .a4-preview .doc-payment { font-size: ${s.paymentDetailsFontSize}px; color: ${s.textColor}; margin: 6px 0; }
+                    .a4-preview .text-${s.companyAlign} { text-align: ${s.companyAlign}; }
+                    .a4-preview .text-${s.brandAlign} { text-align: ${s.brandAlign}; }
+                    .a4-preview .text-${s.docTitleAlign} { text-align: ${s.docTitleAlign}; }
+                    .a4-preview .text-${s.customerAlign} { text-align: ${s.customerAlign}; }
+                    .a4-preview .text-${s.tableAlign} { text-align: ${s.tableAlign}; }
+                    .a4-preview .text-${s.signatureAlign} { text-align: ${s.signatureAlign}; }
+                    .a4-preview .text-${s.termsAlign} { text-align: ${s.termsAlign}; }
+                    .a4-preview .text-${s.footerAlign} { text-align: ${s.footerAlign}; }
+                    .a4-preview .justify-end { justify-content: flex-end; }
+                    @media print { .a4-preview { padding: 0; } }
+                </style>
+                <div class="a4-preview" style="position:relative;overflow:hidden;padding:${s.padding}px;background:${s.backgroundColor};">
+            `;
+
+            // Background image
+            if (s.bgImageData) {
+                html += `<div class="bg-image-layer" style="background-image:url('${s.bgImageData}');"></div>`;
+            }
+            // Watermark
+            if (s.watermarkData) {
+                html += `<div class="watermark-layer" style="background-image:url('${s.watermarkData}');"></div>`;
+            }
+
+            html += `<div class="doc-content">`;
+
+            // ─── HEADER ──────────────────────────────────────────────
+            html += `<div class="doc-header">`;
+            html += `<div class="doc-brand">`;
+            if (s.logoData) {
+                html += `<img class="logo-img" src="${s.logoData}" alt="Logo" />`;
+            }
+            html += `<div class="brand-text">`;
+            html += `<div class="company-name">${s.companyName}</div>`;
+            if (s.brandLogoData) {
+                html += `<img class="brand-logo-img" src="${s.brandLogoData}" alt="Brand" style="margin-top:2px;" />`;
+            }
+            html += `<div class="brand-name">${s.brandName}</div>`;
+            html += `</div></div>`;
+
+            html += `<div class="doc-title-area">`;
+            html += `<div class="doc-title">${docTitle}</div>`;
+            html +=
+            `<div class="doc-meta"># ${isQuotation ? 'QTN' : 'INV'}-${String(1001 + idx).padStart(4,'0')} &bull; ${new Date().toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'})}</div>`;
+            if (isQuotation) {
+                html +=
+                    `<div class="doc-meta">Valid until: ${new Date(Date.now()+30*86400000).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'})}</div>`;
+            } else {
+                html +=
+                    `<div class="doc-meta">Due: ${new Date(Date.now()+15*86400000).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'})}</div>`;
+            }
+            html += `</div></div>`;
+
+            // ─── ADDRESS ─────────────────────────────────────────────
+            html +=
+            `<div class="doc-address">${s.address}, ${s.city}, ${s.district}, ${s.state} ${s.pin}, ${s.country} &bull; ${s.phone} &bull; ${s.email}</div>`;
+
+            // ─── CUSTOMER ────────────────────────────────────────────
+            html += `<div class="doc-row" style="background:${s.customerSectionColor};padding:8px 12px;border-radius:6px;border:1px solid ${s.borderColor};">`;
+            html += `<div class="doc-col"><div class="label">Bill To</div><div class="value" style="font-size:${s.customerNameFontSize}px;font-weight:600;">Acme Corporation</div>`;
+            html +=
+                `<div style="font-size:${s.customerDetailsFontSize}px;color:${s.secondaryColor};">123 Business Park<br/>Mumbai, Maharashtra 400001<br/>GST: 22ABCDE1234F1Z5</div></div>`;
+            if (!isQuotation) {
+                html +=
+                    `<div class="doc-col"><div class="label">Ship To</div><div class="value" style="font-size:${s.customerNameFontSize}px;font-weight:600;">Acme Corp - Warehouse</div>`;
+                html +=
+                    `<div style="font-size:${s.customerDetailsFontSize}px;color:${s.secondaryColor};">456 Logistics Hub,<br/>Navi Mumbai 400706</div></div>`;
+            }
+            if (s.showProject) {
+                html +=
+                `<div class="doc-col"><div class="label">Project</div><div class="value" style="font-size:${s.projectFontSize}px;">H4 Tower Construction</div></div>`;
+            }
+            if (s.showReference) {
+                html +=
+                    `<div class="doc-col"><div class="label">Reference</div><div class="value" style="font-size:${s.referenceFontSize}px;">PO-2026-0042</div></div>`;
+            }
+            html += `</div>`;
+
+            // ─── TABLE ───────────────────────────────────────────────
+            html += `<div class="doc-table-wrap">`;
+            html += `<table class="doc-table">`;
+            html += `<thead><tr>`;
+            if (s.showItemNo) html += `<th style="width:40px;">#</th>`;
+            html += `<th>Product</th>`;
+            html += `<th>Description</th>`;
+            if (s.showSku) html += `<th>SKU</th>`;
+            if (s.showHsn) html += `<th>HSN/SAC</th>`;
+            html += `<th style="text-align:center;">Qty</th>`;
+            if (s.showUnit) html += `<th style="text-align:center;">Unit</th>`;
+            html += `<th style="text-align:right;">Rate</th>`;
+            if (s.showDiscountCol) html += `<th style="text-align:right;">Disc %</th>`;
+            if (s.showTaxCol) html += `<th style="text-align:right;">Tax %</th>`;
+            html += `<th style="text-align:right;">Amount</th>`;
+            html += `</tr></thead><tbody>`;
+
+            sampleItems.forEach((item, i) => {
+                html += `<tr>`;
+                if (s.showItemNo) html += `<td>${item.no}</td>`;
+                html += `<td>${item.product}</td>`;
+                html += `<td>${item.description}</td>`;
+                if (s.showSku) html += `<td>${item.sku}</td>`;
+                if (s.showHsn) html += `<td>${item.hsn}</td>`;
+                html += `<td class="text-center">${item.qty}</td>`;
+                if (s.showUnit) html += `<td class="text-center">${item.unit}</td>`;
+                html += `<td class="text-right">₹${item.rate.toFixed(2)}</td>`;
+                if (s.showDiscountCol) html += `<td class="text-right">${item.discount}%</td>`;
+                if (s.showTaxCol) html += `<td class="text-right">${item.tax}%</td>`;
+                html += `<td class="text-right">₹${item.amount.toFixed(2)}</td>`;
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+
+            // ─── TOTALS ──────────────────────────────────────────────
+            html += `<div class="doc-totals">`;
+            html += `<div class="totals-box">`;
+            html += `<div class="total-line"><span class="label">Subtotal</span><span>₹${subtotal.toFixed(2)}</span></div>`;
+            if (s.showDiscount && discount > 0) {
+                html +=
+                    `<div class="total-line"><span class="label">Discount</span><span>-₹${discount.toFixed(2)}</span></div>`;
+            }
+            if (s.showGst) {
+                html +=
+                `<div class="total-line"><span class="label">Taxable</span><span>₹${taxable.toFixed(2)}</span></div>`;
+                html +=
+                    `<div class="total-line"><span class="label">CGST (6%)</span><span>₹${(tax/2).toFixed(2)}</span></div>`;
+                html +=
+                    `<div class="total-line"><span class="label">SGST (6%)</span><span>₹${(tax/2).toFixed(2)}</span></div>`;
+            }
+            if (s.showShipping) {
+                html +=
+                    `<div class="total-line"><span class="label">Shipping</span><span>₹${shipping.toFixed(2)}</span></div>`;
+            }
+            html +=
+                `<div class="total-line grand"><span class="label">Grand Total</span><span>₹${grandTotal.toFixed(2)}</span></div>`;
+            html +=
+                `<div class="total-line" style="font-size:${s.paymentDetailsFontSize}px;color:${s.secondaryColor};border-top:1px solid ${s.borderColor};padding-top:4px;margin-top:2px;"><span class="label">Balance Due</span><span>₹${balanceDue.toFixed(2)}</span></div>`;
+            html += `</div></div>`;
+
+            // ─── PAYMENT ─────────────────────────────────────────────
+            if (s.showPayment && s.showPaymentDetails) {
+                html += `<div class="doc-payment" style="background:${s.notesSectionColor};padding:8px 14px;border-radius:6px;border:1px solid ${s.borderColor};margin:6px 0;">`;
+                html += `<strong>Payment Details:</strong> ${s.bankName} • ${s.accountName} • A/C: ${s.accountNumber} • IFSC: ${s.ifsc} • UPI: ${s.upiId}`;
+                if (s.qrData) {
+                    html += `<img src="${s.qrData}" style="max-height:50px;max-width:50px;object-fit:contain;vertical-align:middle;margin-left:10px;border:1px solid ${s.borderColor};border-radius:4px;padding:2px;" />`;
+                }
+                html += `</div>`;
+            }
+
+            // ─── TERMS ───────────────────────────────────────────────
+            if (s.showTerms) {
+                html += `<div class="doc-terms">`;
+                html += `<p><strong>Terms:</strong> ${s.termsText}</p>`;
+                html += `<p><strong>Payment:</strong> ${s.paymentTerms}</p>`;
+                html += `<p><strong>Warranty:</strong> ${s.warrantyTerms}</p>`;
+                html += `<p><strong>Delivery:</strong> ${s.deliveryTerms}</p>`;
+                html += `<p style="margin-top:4px;font-style:italic;color:${s.secondaryColor};">${s.notesText}</p>`;
+                html += `</div>`;
+            }
+
+            // ─── FOOTER ──────────────────────────────────────────────
+            if (s.showFooter) {
+                html += `<div class="doc-footer">`;
+                html += `<div class="footer-left">`;
+                html += `<div>${s.footerText}</div>`;
+                let contacts = [];
+                if (s.footerPhone) contacts.push(`📞 ${s.phone}`);
+                if (s.footerEmail) contacts.push(`✉️ ${s.email}`);
+                if (s.footerWebsite) contacts.push(`🌐 ${s.website}`);
+                if (s.footerSocial) contacts.push(`📱 Social: @company`);
+                if (contacts.length) html += `<div style="font-size:${s.footerFontSize-1}px;">${contacts.join(' • ')}</div>`;
+                html += `</div>`;
+                html += `<div class="footer-right">`;
+                if (s.showSignature && s.signatureData) {
+                    html += `<div class="signature-area" style="justify-content:${s.signatureAlign};">`;
+                    html += `<img class="sig-img" src="${s.signatureData}" alt="Signature" />`;
+                    html += `<span class="sig-label">Authorized Signatory</span>`;
+                    html += `</div>`;
+                }
+                html += `<div style="font-size:${s.footerFontSize-1}px;color:${s.secondaryColor};">${s.companyName} • ${s.gstin} • PAN: ${s.pan}</div>`;
+                html += `</div></div>`;
+            }
+
+            html += `</div></div>`; // .doc-content, .a4-preview
+
+            page.innerHTML = html;
+        }
+
+        // ─── PRINT / PDF ─────────────────────────────────────────────
+
+        function printPreview() {
+            const page = document.getElementById('a4Page');
+            const content = page.innerHTML;
+            const win = window.open('', '_blank', 'width=900,height=800');
+            if (!win) return alert('Please allow popups for this site.');
+            win.document.write(`
+                <!DOCTYPE html><html><head><title>Document</title>
+                <style>body { margin:0; padding:20px; background:#f0f2f5; } .print-wrap { max-width:800px; margin:0 auto; background:#fff; padding:30px; box-shadow:0 4px 20px rgba(0,0,0,0.05); }</style>
+                </head><body><div class="print-wrap">${content}</div>
+                <script>window.onload=function(){ window.print(); }<\/script>
+                </body></html>
+            `);
+            win.document.close();
+        }
+
+        // ─── RENDER ALL ──────────────────────────────────────────────
+
+        function renderAll() {
+            renderThumbs();
+            // Highlight defaults
+            document.querySelectorAll('.tm-thumb').forEach(el => {
+                const type = el.dataset.type;
+                const idx = parseInt(el.dataset.idx);
+                const def = getDefaultTemplate(type);
+                el.classList.toggle('active', idx === def);
+            });
+            if (currentEditor) {
+                renderEditor();
+                renderPreview();
+            }
+        }
+
+        // ─── INIT ────────────────────────────────────────────────────
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAll();
+            // If no default set, set first as default
+            for (let t of ['invoice', 'quotation']) {
+                const store = getStorage();
+                if (store[`default_${t}`] === undefined) {
+                    store[`default_${t}`] = 0;
+                    saveStorage(store);
+                }
+            }
+            renderThumbs();
+        });
+
+        // Expose to global
+        window.selectTemplate = selectTemplate;
+        window.openEditor = openEditor;
+        window.closeEditor = closeEditor;
+        window.renderPreview = renderPreview;
+        window.renderEditor = renderEditor;
+        window.renderAll = renderAll;
+        window.saveCurrentSettings = saveCurrentSettings;
+        window.saveAllSettings = saveAllSettings;
+        window.resetTemplate = resetTemplate;
+        window.resetAllTemplates = resetAllTemplates;
+        window.applyThemeToAll = applyThemeToAll;
+        window.printPreview = printPreview;
+        window.clearLogo = clearLogo;
+        window.addCustomFont = addCustomFont;
+        window.getTemplateSettings = getTemplateSettings;
+        window.setTemplateSettings = setTemplateSettings;
+        window.getDefaultTemplate = getDefaultTemplate;
+
+        console.log('🏗️ H4 Document Template Manager loaded.');
+        console.log('📦 6 Invoice + 6 Quotation templates with full customization.');
+        console.log('💾 Settings saved to localStorage under "h4_template_settings".');
+    </script>
+
+</body>
+</html>
