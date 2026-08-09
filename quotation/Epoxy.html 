@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>H4 Billing ERP - Quotation & Invoice Manager</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#6A3FA0;--secondary:#8A6510;--accent:#00BCD4;--success:#2e7d32;--danger:#d32f2f;--warning:#ef6c00;--bg:#f4f5f7;--surface:#fff;--text:#202124;--muted:#6b7280;--border:#e5e7eb;--shadow:0 2px 10px rgba(0,0,0,.08);--shadow-lg:0 12px 35px rgba(0,0,0,.16)}
+html,body{min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+body{padding-bottom:72px}.app-header{height:64px;background:linear-gradient(135deg,var(--accent),var(--primary));color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:1000;box-shadow:var(--shadow)}
+.header-left,.header-actions{display:flex;align-items:center;gap:12px}.app-title{font-weight:700}.menu-toggle{border:0;background:#ffffff24;color:#fff;border-radius:9px;font-size:22px;padding:8px;cursor:pointer}
+.sidebar{position:fixed;z-index:1200;top:0;left:0;width:270px;height:100vh;background:#fff;box-shadow:var(--shadow-lg);transform:translateX(-105%);transition:.25s;overflow:auto}.sidebar.active{transform:translateX(0)}
+.sidebar-header{padding:20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:800;font-size:18px}.sidebar-title{padding:16px 16px 7px;color:var(--muted);font-size:11px;text-transform:uppercase;font-weight:800}.sidebar-item{padding:12px 16px;border-left:4px solid transparent;cursor:pointer}.sidebar-item:hover,.sidebar-item.active{background:#f6f2fb;border-left-color:var(--primary);color:var(--primary);font-weight:700}
+.main-content{max-width:1280px;margin:auto;padding:22px}.module{display:none}.module.active{display:block}.page-header{background:linear-gradient(135deg,var(--accent),var(--primary));color:#fff;padding:25px;border-radius:16px;margin-bottom:20px}.page-header h1{font-size:28px}.page-header p{opacity:.9;margin-top:5px}.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-header{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:16px}.card-header h2{font-size:18px;color:var(--primary)}
+.form-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.form-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.form-group{margin-bottom:14px}.form-group label{display:block;font-weight:650;margin-bottom:6px}.form-group input,.form-group select,.form-group textarea{width:100%;border:1px solid var(--border);border-radius:9px;padding:10px 11px;font:inherit;background:#fff}.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px #6a3fa01a}.hint{font-size:12px;color:var(--muted)}.check{display:flex;align-items:center;gap:8px}.check input{width:auto}
+.btn{border:0;border-radius:9px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn-primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--secondary))}.btn-secondary{color:#fff;background:var(--accent)}.btn-success{color:#fff;background:var(--success)}.btn-danger{color:#fff;background:var(--danger)}.btn-outline{background:#fff;color:var(--primary);border:1px solid var(--primary)}.btn-sm{padding:6px 9px;font-size:12px}.btn-block{width:100%}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;box-shadow:var(--shadow)}.stat-value{font-size:30px;font-weight:800;color:var(--primary)}.stat-label{color:var(--muted);font-size:13px}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th{background:var(--primary);color:#fff;text-align:left;padding:10px}.table td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}.table-actions{display:flex;gap:5px;flex-wrap:wrap}
+.modal-overlay{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:3000}.modal-overlay.active{display:flex}.modal-content{width:min(760px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:15px;box-shadow:var(--shadow-lg)}.modal-header{padding:15px 18px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center}.modal-close{border:0;background:none;color:#fff;font-size:22px;cursor:pointer}.modal-body{padding:18px}.modal-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}.notifications{position:fixed;right:15px;top:78px;z-index:5000;width:min(380px,calc(100% - 30px))}.notification{background:#fff;border-left:4px solid var(--primary);padding:12px 14px;border-radius:8px;margin-bottom:8px;box-shadow:var(--shadow-lg)}.notification.success{border-color:var(--success)}.notification.danger{border-color:var(--danger)}
+.bottom-nav{position:fixed;z-index:1100;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:none;box-shadow:0 -4px 12px #00000012}.nav-item{flex:1;text-align:center;padding:8px 3px;font-size:11px;color:var(--muted);cursor:pointer}.nav-item.active{color:var(--primary);font-weight:800}.nav-icon{display:block;font-size:20px}
+.rate-status{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800}.pill-auto{background:#e8f5e9;color:#1b5e20}.pill-override{background:#fff3e0;color:#e65100}.pill-none{background:#ffebee;color:#b71c1c}
+.epoxy-overlay{position:fixed;inset:0;background:#edf0f5;z-index:2500;display:none;flex-direction:column}.epoxy-overlay.active{display:flex}.epoxy-top{height:64px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:8px 14px;flex:none}.epoxy-top h2{font-size:17px;color:var(--primary)}.epoxy-body{min-height:0;flex:1;display:grid;grid-template-columns:minmax(360px,520px) 1fr;gap:12px;padding:12px}.builder-panel,.preview-panel{min-height:0;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:14px}.builder-panel{padding:14px}.preview-panel{background:#8b9099;padding:22px}.steps{display:flex;gap:5px;overflow:auto;padding-bottom:12px;position:sticky;top:0;background:#fff;z-index:2}.step{min-width:75px;border:1px solid var(--border);border-radius:8px;padding:6px;text-align:center;font-size:10px;cursor:pointer;background:#fff}.step.active{background:#f2ebfa;border-color:var(--primary);color:var(--primary);font-weight:800}.step.done{border-color:#a5d6a7}.epoxy-step{display:none}.epoxy-step.active{display:block}.step-title{font-size:20px;color:var(--primary);margin:8px 0 14px}.epoxy-footer{height:64px;background:#fff;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:10px 14px;flex:none}.step-counter{font-size:12px;color:var(--muted)}.preview-a4{width:210mm;min-height:297mm;background:#fff;margin:0 auto;box-shadow:0 2px 18px #0005;color:#222;overflow:hidden}.proposal-page{min-height:297mm;padding:14mm;page-break-after:always;position:relative}.proposal-cover{background:linear-gradient(135deg,#fff 0,#faf7ff 60%,#f4ecff 100%)}.proposal-brand{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.proposal-logo{width:90px;height:70px;object-fit:contain}.proposal-kicker{font-size:10px;letter-spacing:2px;color:#7b61a5;font-weight:800}.proposal-title{font-size:28px;line-height:1.1;color:#4e267a;margin-top:8px}.proposal-subtitle{font-size:12px;color:#777;margin-top:8px}.proposal-rule{height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));margin:18px 0}.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.p-box{border:1px solid #ddd;border-radius:7px;padding:10px}.p-box h4{font-size:10px;text-transform:uppercase;color:#76539b;margin-bottom:6px;letter-spacing:.8px}.p-label{font-size:9px;color:#777}.p-value{font-size:11px;font-weight:650}.p-section-title{font-size:15px;color:#4e267a;border-bottom:2px solid #eee;padding-bottom:5px;margin:0 0 10px}.p-list{margin:0;padding-left:16px;font-size:10px}.p-list li{margin:4px 0}.p-table{width:100%;border-collapse:collapse;font-size:9px}.p-table th{background:#4e267a;color:#fff;padding:6px;text-align:left}.p-table td{padding:6px;border-bottom:1px solid #ddd}.p-total{margin-left:auto;width:55%;font-size:10px}.p-total div{display:flex;justify-content:space-between;padding:3px 0}.p-grand{font-size:14px!important;font-weight:800;border-top:2px solid #4e267a;margin-top:4px;padding-top:6px!important}.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px}.feature{padding:6px;border:1px solid #ddd;border-radius:6px}.signature-box{height:80px;border-bottom:1px solid #777;margin-top:12px}.qr{width:110px;height:110px;object-fit:contain;border:1px solid #ddd}.preview-empty{padding:60px 20px;color:#fff;text-align:center}
+.price-item{border:1px solid var(--border);border-radius:11px;padding:12px;margin-bottom:10px;background:#fafafa}.price-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px}.rate-lock{display:flex;align-items:center;gap:6px}.scope-row,.feature-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-bottom:8px}.mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.mini-grid .form-group{margin-bottom:8px}.danger-text{color:var(--danger);font-size:12px}.success-text{color:var(--success);font-size:12px}.empty{padding:25px;text-align:center;color:var(--muted)}.inline-add{display:flex;gap:6px;margin-top:6px}.inline-add input{flex:1}.summary-box{background:#f7f3fb;border:1px solid #dfd1ef;border-radius:10px;padding:12px}.summary-line{display:flex;justify-content:space-between;padding:3px 0}.summary-grand{font-size:17px;font-weight:800;color:var(--primary);border-top:1px solid #cbb8df;margin-top:5px;padding-top:7px}
+.modifier-row{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:center;padding:6px 8px;background:#f8f6fb;border-radius:6px;margin-bottom:4px}.modifier-row .mod-name{font-weight:600;font-size:12px}.modifier-row .mod-value{font-size:12px;color:var(--primary)}.modifier-row .mod-remove{color:var(--danger);cursor:pointer;padding:0 4px}
+@media(max-width:900px){.epoxy-body{grid-template-columns:1fr}.preview-panel{display:none}.epoxy-overlay.mobile-preview .builder-panel{display:none}.epoxy-overlay.mobile-preview .preview-panel{display:block}.preview-a4{transform-origin:top center;transform:scale(.72);margin-bottom:-80mm}.stats-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.main-content{padding:12px}.form-row,.form-row-3{grid-template-columns:1fr}.sidebar{width:100%;height:auto;max-height:70vh;top:auto;bottom:0;transform:translateY(105%)}.sidebar.active{transform:translateY(0)}.bottom-nav{display:flex}.app-header{position:sticky}.stats-grid{grid-template-columns:repeat(2,1fr)}.epoxy-body{padding:7px}.builder-panel{border-radius:10px;padding:11px}.epoxy-top{height:58px}.epoxy-footer{height:58px}.mini-grid{grid-template-columns:1fr 1fr}.p-grid{grid-template-columns:1fr}.p-total{width:100%}}
+@media print{body>*:not(#printArea){display:none!important}#printArea{display:block!important}.preview-a4{box-shadow:none;margin:0;width:210mm}.proposal-page{page-break-after:always}}
+#printArea{display:none}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="header-left"><button class="menu-toggle" id="menuToggle">☰</button><div class="app-title">H4 Billing ERP</div></div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">🏢 H4 Billing ERP</div>
+  <div class="sidebar-title">Dashboard</div><div class="sidebar-item active" data-module="dashboard">📊 Dashboard</div>
+  <div class="sidebar-title">Setup</div><div class="sidebar-item" data-module="company">🏭 Company Profile</div><div class="sidebar-item" data-module="themes">🎨 Themes</div>
+  <div class="sidebar-title">Master Data</div><div class="sidebar-item" data-module="customers">👥 Customers</div><div class="sidebar-item" data-module="products">📦 Products</div>
+  <div class="sidebar-title">Documents</div><div class="sidebar-item" data-module="quotations">📄 Quotations</div><div class="sidebar-item" data-module="invoices">🧾 Invoices</div><div class="sidebar-item" data-module="payments">💰 Payments</div>
+  <div class="sidebar-title">Tools</div><div class="sidebar-item" data-module="templates">📋 Templates</div><div class="sidebar-item" data-module="backup">💾 Backup</div><div class="sidebar-item" data-module="settings">⚙️ Settings</div>
+</aside>
+
+<main class="main-content">
+<section class="module active" data-module="dashboard">
+  <div class="page-header"><h1>📊 Dashboard</h1><p>H4 quotation, invoice and project billing workspace</p></div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" id="todayQuotations">0</div><div class="stat-label">Quotations</div></div>
+    <div class="stat-card"><div class="stat-value" id="todayInvoices">0</div><div class="stat-label">Invoices</div></div>
+    <div class="stat-card"><div class="stat-value" id="totalCustomers">0</div><div class="stat-label">Customers</div></div>
+    <div class="stat-card"><div class="stat-value" id="totalProducts">0</div><div class="stat-label">Products</div></div>
+  </div>
+  <div class="card"><div class="card-header"><h2>Quick Actions</h2></div><div class="toolbar">
+    <button class="btn btn-primary" onclick="H4App.newQuotation()">➕ New Quotation</button>
+    <button class="btn btn-secondary" onclick="H4App.newInvoice()">➕ New Invoice</button>
+    <button class="btn btn-outline" onclick="H4App.navigate('customers');H4App.openModal('customerModal')">👥 Add Customer</button>
+    <button class="btn btn-outline" onclick="H4App.navigate('products');H4App.openModal('productModal')">📦 Add Product</button>
+  </div></div>
+</section>
+
+<section class="module" data-module="company">
+<div class="page-header"><h1>🏭 Company Profile</h1><p>Company information used automatically in proposals and invoices</p></div>
+<div class="card"><div class="card-header"><h2>Business Information</h2></div>
+<form id="companyForm">
+<div class="form-row"><div class="form-group"><label>Legal Company Name *</label><input id="legalName" required></div><div class="form-group"><label>Brand Name</label><input id="brandName"></div></div>
+<div class="form-group"><label>Business Type</label><select id="businessType"><option>Manufacturing</option><option>Trading</option><option>Service</option><option>Distributor</option></select></div>
+<div class="form-group"><label>Address *</label><textarea id="address" rows="2" required></textarea></div>
+<div class="form-row-3"><div class="form-group"><label>City</label><input id="city"></div><div class="form-group"><label>District</label><input id="district"></div><div class="form-group"><label>State</label><input id="state"></div></div>
+<div class="form-row"><div class="form-group"><label>PIN</label><input id="pin"></div><div class="form-group"><label>Website</label><input id="website" type="url"></div></div>
+<div class="form-row"><div class="form-group"><label>Phone *</label><input id="phone" required></div><div class="form-group"><label>WhatsApp</label><input id="whatsapp"></div></div>
+<div class="form-group"><label>Email</label><input id="email" type="email"></div>
+<div class="check form-group"><input type="checkbox" id="gstEnabled"><label for="gstEnabled">GST Enabled</label></div>
+<div id="gstFields"><div class="form-row"><div class="form-group"><label>GSTIN</label><input id="gstin" maxlength="15"></div><div class="form-group"><label>GST State Code</label><input id="gstStateCode" maxlength="2"></div></div></div>
+<div class="check form-group"><input type="checkbox" id="panEnabled"><label for="panEnabled">PAN Enabled</label></div>
+<div id="panFields"><div class="form-group"><label>PAN</label><input id="pan" maxlength="10"></div></div>
+<div class="check form-group"><input type="checkbox" id="bankEnabled"><label for="bankEnabled">Bank Details</label></div>
+<div id="bankFields"><div class="form-row"><div class="form-group"><label>Bank Name</label><input id="bankName"></div><div class="form-group"><label>Account Name</label><input id="accountName"></div></div><div class="form-row"><div class="form-group"><label>Account Number</label><input id="accountNumber"></div><div class="form-group"><label>IFSC</label><input id="ifsc"></div></div><div class="form-row"><div class="form-group"><label>Branch</label><input id="branch"></div><div class="form-group"><label>UPI ID</label><input id="upiId"></div></div></div>
+<div class="form-group"><label>Default Terms</label><textarea id="terms" rows="3"></textarea></div><div class="form-group"><label>Footer Text</label><input id="footerText"></div>
+<div class="toolbar" style="justify-content:flex-end"><button class="btn btn-primary">💾 Save Company Profile</button></div>
+</form></div>
+<div class="card"><div class="card-header"><h2>Logo & Signature</h2></div>
+<div class="form-row"><div class="form-group"><label>Upload Logo</label><input type="file" id="logoUpload" accept="image/*"><div id="logoPreview" class="image-preview" style="margin-top:8px;display:none"><img id="logoImage"></div></div><div class="form-group"><label>Upload Signature</label><input type="file" id="signatureUpload" accept="image/*"><div id="signaturePreview" class="image-preview" style="margin-top:8px;display:none"><img id="signatureImage"></div></div></div>
+<div class="form-group"><label>Authorized Signatory Name</label><input id="signatoryName"></div>
+</div>
+</section>
+
+<section class="module" data-module="customers"><div class="page-header"><h1>👥 Customers</h1><p>Customer master</p></div><div class="card"><div class="toolbar" style="margin-bottom:12px"><button class="btn btn-primary" onclick="H4App.openModal('customerModal')">➕ Add Customer</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Name</th><th>Company</th><th>Phone</th><th>WhatsApp</th><th>Address</th><th>Actions</th></tr></thead><tbody id="customersBody"></tbody></table></div></div></section>
+
+<section class="module" data-module="products"><div class="page-header"><h1>📦 Products / Materials</h1><p>Product master</p></div><div class="card"><div class="toolbar" style="margin-bottom:12px"><button class="btn btn-primary" onclick="H4App.openModal('productModal')">➕ Add Product</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Name</th><th>Category</th><th>Unit</th><th>Rate</th><th>GST</th><th>Actions</th></tr></thead><tbody id="productsBody"></tbody></table></div></div></section>
+
+<section class="module" data-module="quotations"><div class="page-header"><h1>📄 Quotations</h1><p>General quotations and Premium Epoxy Flooring Proposals</p></div>
+<div class="card"><div class="toolbar" style="margin-bottom:14px"><button class="btn btn-primary" onclick="H4App.newQuotation()">➕ New Quotation</button></div><div class="table-wrap"><table class="table"><thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Customer</th><th>Project</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody id="quotationsBody"></tbody></table></div></div></section>
+
+<section class="module" data-module="invoices"><div class="page-header"><h1>🧾 Invoices</h1><p>Invoice records and quotation conversion</p></div><div class="card"><div class="toolbar" style="margin-bottom:14px"><button class="btn btn-secondary" onclick="H4App.newInvoice()">➕ New Invoice</button></div><div class="table-wrap"><table class="table"><thead><tr><th>No.</th><th>Date</th><th>Customer</th><th>Reference</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody id="invoicesBody"></tbody></table></div></div></section>
+
+<section class="module" data-module="payments"><div class="page-header"><h1>💰 Payments</h1><p>Payment tracking</p></div><div class="card"><p class="empty">Payment tracking can be extended without changing quotation history.</p></div></section>
+<section class="module" data-module="templates"><div class="page-header"><h1>📋 Templates</h1><p>Template-aware quotation architecture</p></div><div class="card"><h3>Available quotation templates</h3><ul style="padding:15px 25px"><li>General Quotation</li><li><strong>Premium Epoxy Flooring Proposal</strong></li><li>3D Epoxy Proposal (ready for future template)</li><li>Waterproofing Proposal (ready for future template)</li><li>Tile Adhesive Quotation (ready for future template)</li><li>Custom Proposal (ready for future template)</li></ul></div></section>
+<section class="module" data-module="themes"><div class="page-header"><h1>🎨 Themes</h1><p>Document appearance</p></div><div class="card"><button class="btn btn-primary" onclick="H4App.openModal('themeModal')">➕ Create Theme</button><div id="themesContainer" style="margin-top:15px"></div></div></section>
+
+<section class="module" data-module="backup"><div class="page-header"><h1>💾 Backup & Restore</h1><p>All data including Rate Master and Unit Master is included</p></div>
+<div class="card"><button class="btn btn-primary btn-block" onclick="H4App.downloadBackup()">📥 Download Complete Backup</button></div>
+<div class="card"><div class="form-group"><label>Backup File</label><input type="file" id="backupFile" accept=".json"></div><button class="btn btn-danger btn-block" onclick="H4App.restoreBackup()">⚠️ Restore Backup</button></div></section>
+
+<section class="module" data-module="settings"><div class="page-header"><h1>⚙️ Settings</h1><p>GST, numbering, validity, Rate Master and Unit Master</p></div>
+<div class="card"><div class="card-header"><h2>General Settings</h2></div><form id="settingsForm">
+<div class="form-row"><div class="form-group"><label>Currency</label><select id="currency"><option value="INR">₹ INR</option><option value="USD">$ USD</option><option value="EUR">€ EUR</option></select></div><div class="form-group"><label>Date Format</label><select id="dateFormat"><option>DD/MM/YYYY</option><option>MM/DD/YYYY</option><option>YYYY-MM-DD</option></select></div></div>
+<div class="form-row"><div class="form-group"><label>Default GST %</label><input type="number" id="defaultGst" step=".01"></div><div class="form-group"><label>Inter-state by default</label><div class="check"><input type="checkbox" id="defaultInterState"><label for="defaultInterState">Use IGST</label></div></div></div>
+<h3 style="margin:14px 0 10px;color:var(--primary)">Quotation Numbering</h3><div class="form-row"><div class="form-group"><label>Prefix</label><input id="quotationPrefix"></div><div class="form-group"><label>Financial Year</label><input type="number" id="quotationYear"></div></div><div class="form-row"><div class="form-group"><label>Starting Number</label><input type="number" id="quotationStart"></div><div class="form-group"><label>Default Validity (days)</label><input type="number" id="quotationValidity" min="1"></div></div>
+<h3 style="margin:14px 0 10px;color:var(--primary)">Invoice Numbering</h3><div class="form-row"><div class="form-group"><label>Prefix</label><input id="invoicePrefix"></div><div class="form-group"><label>Financial Year</label><input type="number" id="invoiceYear"></div></div><div class="form-row"><div class="form-group"><label>Starting Number</label><input type="number" id="invoiceStart"></div><div class="form-group"><label>Default Due Days</label><input type="number" id="invoiceDueDays"></div></div>
+<div class="toolbar" style="justify-content:flex-end"><button class="btn btn-primary">💾 Save Settings</button></div></form></div>
+
+<div class="card"><div class="card-header"><h2>💰 Rate Master</h2><button class="btn btn-primary btn-sm" onclick="H4App.openRateModal()">➕ Add New Rate</button></div><p class="hint" style="margin-bottom:10px">Auto lookup key = Flooring Type + Thickness + Unit. Rates are historical snapshots when used in quotations.</p><div class="table-wrap"><table class="table"><thead><tr><th>Flooring Type</th><th>Thickness</th><th>Unit</th><th>Rate</th><th>GST</th><th>Status</th><th>Actions</th></tr></thead><tbody id="rateMasterBody"></tbody></table></div></div>
+
+<div class="card"><div class="card-header"><h2>📏 Unit Master</h2><button class="btn btn-primary btn-sm" onclick="H4App.openUnitModal()">➕ Add New Unit</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Unit</th><th>Label</th><th>Active</th><th>Actions</th></tr></thead><tbody id="unitMasterBody"></tbody></table></div></div>
+
+<div class="card"><div class="card-header"><h2>Danger Zone</h2></div><button class="btn btn-danger btn-block" onclick="H4App.resetAllData()">🗑️ Delete All Data</button></div>
+</section>
+</main>
+
+<nav class="bottom-nav"><div class="nav-item active" data-module="dashboard"><span class="nav-icon">📊</span>Dashboard</div><div class="nav-item" data-module="quotations"><span class="nav-icon">📄</span>Quotes</div><div class="nav-item" data-module="invoices"><span class="nav-icon">🧾</span>Invoices</div><div class="nav-item" data-module="customers"><span class="nav-icon">👥</span>Customers</div><div class="nav-item" data-module="settings"><span class="nav-icon">⚙️</span>Settings</div></nav>
+<div class="notifications" id="notifications"></div>
+
+<!-- Customer -->
+<div class="modal-overlay" id="customerModal"><div class="modal-content"><div class="modal-header"><h3>Customer</h3><button class="modal-close" onclick="H4App.closeModal('customerModal')">✕</button></div><div class="modal-body"><form id="customerForm">
+<div class="form-row"><div class="form-group"><label>Name *</label><input id="custName" required></div><div class="form-group"><label>Company</label><input id="custCompany"></div></div>
+<div class="form-row"><div class="form-group"><label>Phone *</label><input id="custPhone" required></div><div class="form-group"><label>WhatsApp</label><input id="custWhatsapp"></div></div>
+<div class="form-group"><label>Email</label><input id="custEmail" type="email"></div><div class="form-group"><label>Address</label><textarea id="custAddress" rows="2"></textarea></div>
+<div class="form-row-3"><div class="form-group"><label>City</label><input id="custCity"></div><div class="form-group"><label>District</label><input id="custDistrict"></div><div class="form-group"><label>State</label><input id="custState"></div></div>
+<div class="form-row"><div class="form-group"><label>PIN</label><input id="custPin"></div><div class="form-group"><label>GSTIN</label><input id="custGstin"></div></div></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="H4App.closeModal('customerModal')">Cancel</button><button class="btn btn-primary" onclick="H4App.saveCustomer()">💾 Save</button></div></div></div>
+
+<!-- Product -->
+<div class="modal-overlay" id="productModal"><div class="modal-content"><div class="modal-header"><h3>Product / Material</h3><button class="modal-close" onclick="H4App.closeModal('productModal')">✕</button></div><div class="modal-body"><form id="productForm">
+<div class="form-row"><div class="form-group"><label>Name *</label><input id="prodName" required></div><div class="form-group"><label>SKU</label><input id="prodSku"></div></div>
+<div class="form-row"><div class="form-group"><label>Category</label><select id="prodCategory"><option value="tile-adhesive">Tile Adhesive</option><option value="waterproofing">Waterproofing</option><option value="epoxy">Epoxy Flooring</option></select></div><div class="form-group"><label>Brand</label><input id="prodBrand"></div></div>
+<div class="form-group"><label>Description</label><textarea id="prodDescription"></textarea></div><div class="form-row"><div class="form-group"><label>Unit *</label><input id="prodUnit" required></div><div class="form-group"><label>Selling Rate *</label><input type="number" id="prodRate" step=".01" required></div></div>
+<div class="form-row"><div class="form-group"><label>Purchase Rate</label><input type="number" id="prodPurchaseRate"></div><div class="form-group"><label>MRP</label><input type="number" id="prodMrp"></div></div>
+<div class="form-row"><div class="form-group"><label>GST %</label><input type="number" id="prodGst" value="18"></div><div class="form-group"><label>HSN</label><input id="prodHsn"></div></div></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="H4App.closeModal('productModal')">Cancel</button><button class="btn btn-primary" onclick="H4App.saveProduct()">💾 Save</button></div></div></div>
+
+<!-- Theme -->
+<div class="modal-overlay" id="themeModal"><div class="modal-content"><div class="modal-header"><h3>Create Theme</h3><button class="modal-close" onclick="H4App.closeModal('themeModal')">✕</button></div><div class="modal-body"><form id="themeForm"><div class="form-group"><label>Name</label><input id="themeName" required></div><div class="form-row"><div class="form-group"><label>Primary</label><input type="color" id="themePrimary" value="#6A3FA0"></div><div class="form-group"><label>Secondary</label><input type="color" id="themeSecondary" value="#8A6510"></div></div><div class="form-row"><div class="form-group"><label>Accent</label><input type="color" id="themeAccent" value="#00BCD4"></div><div class="form-group"><label>Text</label><input type="color" id="themeText" value="#212121"></div></div></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="H4App.closeModal('themeModal')">Cancel</button><button class="btn btn-primary" onclick="H4App.saveTheme()">💾 Save</button></div></div></div>
+
+<!-- Rate -->
+<div class="modal-overlay" id="rateModal"><div class="modal-content"><div class="modal-header"><h3 id="rateModalTitle">Add Rate</h3><button class="modal-close" onclick="H4App.closeModal('rateModal')">✕</button></div><div class="modal-body"><form id="rateForm">
+<div class="form-group"><label>Category *</label><select id="rateCategory" onchange="H4App.populateRateCategoryFields()"><option value="epoxy">Epoxy Flooring</option><option value="waterproofing">Waterproofing</option><option value="general">General</option></select></div>
+<div id="rateEpoxyFields"><div class="form-group"><label>Epoxy Type *</label><select id="rateEpoxyType"><option value="Standard Epoxy Flooring">Standard Epoxy Flooring</option><option value="Premium Self-Leveling Epoxy">Premium Self-Leveling Epoxy</option><option value="Metallic Epoxy Flooring">Metallic Epoxy Flooring</option><option value="3D Epoxy Flooring">3D Epoxy Flooring</option><option value="Decorative Flake Epoxy">Decorative Flake Epoxy</option><option value="Industrial Epoxy Flooring">Industrial Epoxy Flooring</option><option value="Epoxy Cove Flooring">Epoxy Cove Flooring</option></select></div>
+<div class="form-group"><label>System</label><select id="rateEpoxySystem"><option value="H4 Premium Epoxy">H4 Premium Epoxy</option><option value="H4 Metallic Epoxy">H4 Metallic Epoxy</option><option value="H4 3D Epoxy">H4 3D Epoxy</option><option value="H4 Standard Epoxy">H4 Standard Epoxy</option></select></div>
+<div class="form-group"><label>Design Type</label><select id="rateDesignType"><option value="None">None</option><option value="Solid">Solid</option><option value="Metallic">Metallic</option><option value="3D">3D</option><option value="Flake">Flake</option><option value="Quartz">Quartz</option></select></div>
+<div class="form-group"><label>Colour Type</label><select id="rateColourType"><option value="Standard">Standard</option><option value="Premium">Premium</option><option value="Custom">Custom</option></select></div>
+<div class="form-group"><label>Finish</label><select id="rateFinish"><option value="High Gloss">High Gloss</option><option value="Gloss">Gloss</option><option value="Matte">Matte</option><option value="Satin">Satin</option></select></div>
+<div class="form-group"><label>Floor Condition</label><select id="rateFloorCondition"><option value="New Concrete">New Concrete</option><option value="Existing Concrete">Existing Concrete</option><option value="Existing Tile">Existing Tile</option><option value="Existing Epoxy">Existing Epoxy</option><option value="Other">Other</option></select></div>
+<div class="form-group"><label>Anti-Slip</label><select id="rateAntiSlip"><option value="Not Required">Not Required</option><option value="Standard">Standard</option><option value="Medium">Medium</option><option value="Heavy Duty">Heavy Duty</option></select></div>
+<div class="form-group"><label>Top Coat</label><select id="rateTopCoat"><option value="None">None</option><option value="Standard PU">Standard PU</option><option value="Premium PU">Premium PU</option><option value="Anti-Slip PU">Anti-Slip PU</option></select></div></div>
+<div id="rateWaterproofingFields" style="display:none;"><div class="form-group"><label>Waterproofing Type</label><select id="rateWaterproofingType"><option value="Terrace Waterproofing">Terrace Waterproofing</option><option value="Bathroom Waterproofing">Bathroom Waterproofing</option><option value="Roof Waterproofing">Roof Waterproofing</option><option value="Basement Waterproofing">Basement Waterproofing</option></select></div></div>
+<div class="form-group"><label>Thickness *</label><select id="rateThickness"><option value="1 mm">1 mm</option><option value="2 mm">2 mm</option><option value="3 mm">3 mm</option><option value="4 mm">4 mm</option><option value="5 mm">5 mm</option><option value="6 mm">6 mm</option></select></div>
+<div class="form-group"><label>Unit *</label><select id="rateUnit"><option value="sq.ft">sq.ft</option><option value="sq.m">sq.m</option><option value="running ft">running ft</option><option value="litre">litre</option><option value="kg">kg</option></select></div>
+<div class="form-row"><div class="form-group"><label>Base Rate *</label><input type="number" id="rateValue" step=".01" min="0"></div><div class="form-group"><label>GST %</label><input type="number" id="rateGst" step=".01"></div></div>
+<div class="check"><input type="checkbox" id="rateActive" checked><label for="rateActive">Active</label></div>
+<div id="rateModifiersSection" style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;"><h4 style="font-size:13px;color:var(--primary);margin-bottom:8px;">Modifiers</h4><p class="hint">Modifiers are added to the base rate. For example, Metallic design adds ₹50/sq.ft.</p>
+<div id="rateModifierList"></div><div class="inline-add"><select id="modifierTypeSelect"><option value="design">Design</option><option value="finish">Finish</option><option value="floorCondition">Floor Condition</option><option value="antiSlip">Anti-Slip</option><option value="topCoat">Top Coat</option><option value="colourType">Colour Type</option><option value="other">Other</option></select><input id="modifierName" placeholder="Modifier name"><input id="modifierValue" type="number" step=".01" placeholder="Value"><select id="modifierValueType"><option value="fixed">Fixed (₹)</option><option value="percentage">Percentage (%)</option></select><button type="button" class="btn btn-sm btn-primary" onclick="H4App.addRateModifier()">+</button></div></div>
+</form></div><div class="modal-footer"><button class="btn btn-outline" onclick="H4App.closeModal('rateModal')">Cancel</button><button class="btn btn-primary" onclick="H4App.saveRate()">💾 Save Rate</button></div></div></div>
+
+<!-- Unit -->
+<div class="modal-overlay" id="unitModal"><div class="modal-content"><div class="modal-header"><h3>Add Unit</h3><button class="modal-close" onclick="H4App.closeModal('unitModal')">✕</button></div><div class="modal-body"><form id="unitForm"><div class="form-row"><div class="form-group"><label>Unit Key *</label><input id="unitKey" placeholder="sq.ft"></div><div class="form-group"><label>Display Label</label><input id="unitLabel" placeholder="sq.ft"></div></div><div class="check"><input type="checkbox" id="unitActive" checked><label for="unitActive">Active</label></div></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="H4App.closeModal('unitModal')">Cancel</button><button class="btn btn-primary" onclick="H4App.saveUnit()">💾 Save Unit</button></div></div></div>
+
+<!-- Full screen Epoxy Builder -->
+<div class="epoxy-overlay" id="epoxyBuilder">
+  <div class="epoxy-top"><div class="header-left"><button class="btn btn-outline btn-sm" onclick="H4App.closeEpoxyBuilder()">← Close</button><div><h2>H4 Premium Epoxy Quotation Builder</h2><div class="hint">Luxury • Seamless • Durable • Premium Finish</div></div></div><div class="toolbar"><button class="btn btn-success btn-sm" onclick="H4App.saveEpoxy(false)">💾 Save</button><button class="btn btn-outline btn-sm" onclick="H4App.togglePreview()">👁 Preview</button></div></div>
+  <div class="epoxy-body">
+    <div class="builder-panel">
+      <div class="steps" id="epoxySteps"></div>
+      <div id="epoxyStepContainer"></div>
+    </div>
+    <div class="preview-panel"><div id="epoxyPreview" class="preview-empty">Preview loading…</div></div>
+  </div>
+  <div class="epoxy-footer"><div class="step-counter" id="stepCounter"></div><div class="toolbar"><button class="btn btn-outline" id="prevStepBtn" onclick="H4App.prevStep()">← Previous</button><button class="btn btn-primary" id="nextStepBtn" onclick="H4App.nextStep()">Next →</button></div></div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+'use strict';
+
+const H4DB={
+  STORAGE_KEY:'h4_billing_erp_v3',
+  defaultData(){
+    const now=new Date().toISOString();
+    return {
+      version:6,
+      company:{id:'default',legalName:'AV CHEM',brandName:'H4 Construction Solutions',businessType:'Manufacturing',address:'Tirur',city:'Malappuram',district:'Malappuram',state:'Kerala',pin:'676101',phone:'+91-XXXXXXXXXX',whatsapp:'+91-XXXXXXXXXX',email:'info@h4chem.com',website:'https://avchemtirur.github.io/',gstEnabled:true,gstin:'',gstStateCode:'32',panEnabled:false,pan:'',logo:'',signature:'',signatoryName:'Authorized Signatory',bankEnabled:false,bank:{name:'',accountName:'',accountNumber:'',ifsc:'',branch:'',upiId:''},terms:'Payment terms as mutually agreed.',footerText:'Thank you for your business!',createdAt:now,updatedAt:now},
+      customers:{},products:{},
+      quotations:{},invoices:{},payments:{},
+      templates:{tpl_001:{id:'tpl_001',name:'H4 Standard Quotation',type:'quotation',preset:'standard'},tpl_epoxy:{id:'tpl_epoxy',name:'Premium Epoxy Flooring Proposal',type:'quotation',preset:'premium-epoxy'},tpl_002:{id:'tpl_002',name:'H4 Standard Invoice',type:'invoice',preset:'standard'}},
+      themes:{theme_001:{id:'theme_001',name:'H4 Purple & Gold',primary:'#6A3FA0',secondary:'#8A6510',accent:'#00BCD4',background:'#fff',text:'#212121'}},
+      settings:{currency:'INR',dateFormat:'DD/MM/YYYY',defaultGst:18,defaultInterState:false,quotationPrefix:'H4-QTN',quotationStart:1,quotationYear:new Date().getFullYear(),quotationValidity:30,quotationCounter:1,invoicePrefix:'H4-INV',invoiceYear:new Date().getFullYear(),invoiceStart:1,invoiceDueDays:30,invoiceCounter:1},
+      masterLists:{
+        epoxyTypes:['Standard Epoxy Flooring','Premium Self-Leveling Epoxy','Metallic Epoxy Flooring','3D Epoxy Flooring','Decorative Flake Epoxy','Industrial Epoxy Flooring','Epoxy Cove Flooring'],
+        epoxySystems:['H4 Premium Epoxy','H4 Metallic Epoxy','H4 3D Epoxy','H4 Standard Epoxy','H4 Decorative Epoxy'],
+        thicknesses:['1 mm','2 mm','3 mm','4 mm','5 mm','6 mm'],
+        floorConditions:['New Concrete','Existing Concrete','Existing Tile','Existing Epoxy','Other'],
+        finishes:['High Gloss','Gloss','Matte','Satin'],
+        antiSlip:['Not Required','Standard','Medium','Heavy Duty'],
+        areaUnits:['sq.ft','sq.m','running ft','meter'],
+        designTypes:['None','Solid','Metallic','3D','Flake','Quartz'],
+        colourTypes:['Standard','Premium','Custom'],
+        topCoats:['None','Standard PU','Premium PU','Anti-Slip PU'],
+        workScopes:['Surface Grinding','Crack Repair','Primer Coat','Epoxy Screed / Putty','Self-Leveling Epoxy','Decorative Flakes / Metallic Effect','UV Resistant PU Top Coat','Final Inspection & Cleaning'],
+        features:['Seamless Finish','High Gloss Luxury Look','Chemical Resistant','Scratch Resistant','Dust Free Surface','Easy to Clean','Long Life Performance','Premium Imported Pigments','UV Protected Top Coat'],
+        waterproofingTypes:['Terrace Waterproofing','Bathroom Waterproofing','Roof Waterproofing','Basement Waterproofing','Balcony Waterproofing','Water Tank Waterproofing']
+      },
+      rateMaster:{
+        rate_001:{id:'rate_001',category:'epoxy',epoxyType:'Premium Self-Leveling Epoxy',system:'H4 Premium Epoxy',designType:'None',colourType:'Standard',finish:'High Gloss',floorCondition:'New Concrete',antiSlip:'Not Required',topCoat:'Standard PU',thickness:'2 mm',unit:'sq.ft',baseRate:250,gst:18,active:true,modifiers:[]},
+        rate_002:{id:'rate_002',category:'epoxy',epoxyType:'Metallic Epoxy Flooring',system:'H4 Metallic Epoxy',designType:'Metallic',colourType:'Premium',finish:'High Gloss',floorCondition:'New Concrete',antiSlip:'Not Required',topCoat:'Premium PU',thickness:'3 mm',unit:'sq.ft',baseRate:450,gst:18,active:true,modifiers:[]}
+      },
+      unitMaster:{
+        sqft:{id:'sqft',unit:'sq.ft',label:'sq.ft',active:true},
+        sqm:{id:'sqm',unit:'sq.m',label:'sq.m',active:true},
+        kg:{id:'kg',unit:'kg',label:'kg',active:true},
+        litre:{id:'litre',unit:'litre',label:'litre',active:true},
+        set:{id:'set',unit:'set',label:'set',active:true},
+        piece:{id:'piece',unit:'piece',label:'piece',active:true},
+        meter:{id:'meter',unit:'meter',label:'meter',active:true},
+        day:{id:'day',unit:'day',label:'day',active:true},
+        job:{id:'job',unit:'job',label:'job',active:true}
+      },
+      activityLog:[],backupHistory:[]
+    };
+  },
+  init(){
+    let raw=localStorage.getItem(this.STORAGE_KEY);
+    if(!raw){this.import(this.defaultData());return}
+    try{const d=JSON.parse(raw);this.migrate(d)}catch(e){console.error(e);this.import(this.defaultData())}
+  },
+  migrate(d){
+    const base=this.defaultData();
+    d.version=d.version||1;
+    d.company=Object.assign({},base.company,d.company);
+    d.customers=d.customers||{};d.products=d.products||{};d.quotations=d.quotations||{};d.invoices=d.invoices||{};d.payments=d.payments||{};
+    d.templates=Object.assign({},base.templates,d.templates);d.themes=Object.assign({},base.themes,d.themes);
+    d.settings=Object.assign({},base.settings,d.settings);
+    d.masterLists=Object.assign({},base.masterLists,d.masterLists);
+    d.rateMaster=Object.assign({},base.rateMaster,d.rateMaster);d.unitMaster=Object.assign({},base.unitMaster,d.unitMaster);
+    d.activityLog=d.activityLog||[];d.backupHistory=d.backupHistory||[];
+    Object.values(d.quotations||{}).forEach(q=>{q.quotationType=q.quotationType||'general';q.templateId=q.templateId||'tpl_001';q.items=q.items||[];q.pricingSnapshot=q.pricingSnapshot||null});
+    localStorage.setItem(this.STORAGE_KEY,JSON.stringify(d));
+  },
+  get(key){const d=JSON.parse(localStorage.getItem(this.STORAGE_KEY)||'{}');return key?d[key]:d},
+  save(key,value){const d=this.get();d[key]=value;localStorage.setItem(this.STORAGE_KEY,JSON.stringify(d))},
+  add(category,item){const d=this.get(category)||{};d[item.id]=item;this.save(category,d);return item},
+  update(category,id,updates){const d=this.get(category)||{};if(!d[id])return null;d[id]={...d[id],...updates};this.save(category,d);return d[id]},
+  delete(category,id){const d=this.get(category)||{};delete d[id];this.save(category,d)},
+  export(){return JSON.stringify(this.get(),null,2)},
+  import(data){localStorage.setItem(this.STORAGE_KEY,JSON.stringify(data))}
+};
+
+const H4Utils={
+  id(p){return p+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)},
+  money(v){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(v)||0)},
+  num(v){return Number.isFinite(Number(v))?Number(v):0},
+  esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))},
+  date(v){if(!v)return'';return new Date(v).toLocaleDateString('en-IN')},
+  addDays(date,days){const d=new Date(date);d.setDate(d.getDate()+Number(days||0));return d.toISOString()},
+  base64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})},
+  wa(phone,text){const p=String(phone||'').replace(/\D/g,'');return 'https://wa.me/'+p+'?text='+encodeURIComponent(text)},
+  qr(value){return 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(value||'H4 Construction Solutions')}
+};
+
+const H4Notify={show(msg,type='success'){const c=document.getElementById('notifications');const n=document.createElement('div');n.className='notification '+type;n.textContent=msg;c.appendChild(n);setTimeout(()=>n.remove(),3500)},success(m){this.show(m,'success')},danger(m){this.show(m,'danger')}};
+
+const H4App={
+  currentModule:'dashboard',
+  epoxy:null,
+  step:0,
+  steps:['Customer','Project','System','Scope','Materials','Pricing','GST','Timeline','Warranty','Features','Terms','Preview'],
+  rateModifiers:[],
+  init(){
+    H4DB.init();this.bind();this.loadAll();this.renderEpoxySteps();this.renderRateMaster();this.renderUnitMaster();
+  },
+  bind(){
+    document.getElementById('menuToggle').onclick=()=>document.getElementById('sidebar').classList.toggle('active');
+    document.querySelectorAll('.sidebar-item,.nav-item').forEach(el=>el.onclick=()=>{this.navigate(el.dataset.module);document.getElementById('sidebar').classList.remove('active')});
+    document.getElementById('companyForm').onsubmit=e=>{e.preventDefault();this.saveCompany()};
+    document.getElementById('settingsForm').onsubmit=e=>{e.preventDefault();this.saveSettings()};
+    document.getElementById('customerForm').onsubmit=e=>{e.preventDefault();this.saveCustomer()};
+    document.getElementById('productForm').onsubmit=e=>{e.preventDefault();this.saveProduct()};
+    document.getElementById('themeForm').onsubmit=e=>{e.preventDefault();this.saveTheme()};
+    ['gstEnabled','panEnabled','bankEnabled'].forEach(id=>document.getElementById(id).onchange=e=>document.getElementById(id.replace('Enabled','Fields')).style.display=e.target.checked?'block':'none');
+    document.getElementById('logoUpload').onchange=async e=>{if(e.target.files[0]){const b=await H4Utils.base64(e.target.files[0]);document.getElementById('logoImage').src=b;document.getElementById('logoPreview').style.display='flex';}};
+    document.getElementById('signatureUpload').onchange=async e=>{if(e.target.files[0]){const b=await H4Utils.base64(e.target.files[0]);document.getElementById('signatureImage').src=b;document.getElementById('signaturePreview').style.display='flex';}};
+    document.addEventListener('keydown',e=>this.globalKey(e));
+  },
+  globalKey(e){
+    if(!this.epoxy||!document.getElementById('epoxyBuilder').classList.contains('active'))return;
+    if(e.key==='Escape'){e.preventDefault();this.closeEpoxyBuilder();return}
+    if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();this.saveEpoxy(false);return}
+    if(e.key==='Enter'&&!e.ctrlKey&&!e.shiftKey){
+      const t=e.target;
+      if(t&&t.tagName==='TEXTAREA')return;
+      if(t&&['INPUT','SELECT','BUTTON'].includes(t.tagName)){e.preventDefault();this.focusNext(t)}
+    }
+  },
+  focusNext(el){
+    const step=document.querySelector('.epoxy-step.active');if(!step)return;
+    const fields=[...step.querySelectorAll('input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),button[data-enter="next"]')].filter(x=>x.offsetParent!==null);
+    const i=fields.indexOf(el);if(i>=0&&i<fields.length-1){fields[i+1].focus();fields[i+1].scrollIntoView({block:'center'})}else this.nextStep();
+  },
+  navigate(name){this.currentModule=name;document.querySelectorAll('.module').forEach(m=>m.classList.toggle('active',m.dataset.module===name));document.querySelectorAll('.sidebar-item,.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.module===name));if(name==='quotations')this.renderQuotations();if(name==='invoices')this.renderInvoices();if(name==='settings'){this.renderRateMaster();this.renderUnitMaster()}},
+  loadAll(){this.loadCompany();this.loadSettings();this.renderCustomers();this.renderProducts();this.renderThemes();this.updateDashboard();this.renderQuotations();this.renderInvoices()},
+  loadCompany(){const c=H4DB.get('company');const ids=['legalName','brandName','businessType','address','city','district','state','pin','website','phone','whatsapp','email','gstin','gstStateCode','pan','terms','footerText','signatoryName'];ids.forEach(id=>{const e=document.getElementById(id);if(e)e.value=c[id]||''});document.getElementById('gstEnabled').checked=!!c.gstEnabled;document.getElementById('panEnabled').checked=!!c.panEnabled;document.getElementById('bankEnabled').checked=!!c.bankEnabled;document.getElementById('gstFields').style.display=c.gstEnabled?'block':'none';document.getElementById('panFields').style.display=c.panEnabled?'block':'none';document.getElementById('bankFields').style.display=c.bankEnabled?'block':'none';const b=c.bank||{};['bankName','accountName','accountNumber','ifsc','branch','upiId'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=b[id.replace('bankName','name')]||b[id]||''});if(c.logo){document.getElementById('logoImage').src=c.logo;document.getElementById('logoPreview').style.display='flex'}if(c.signature){document.getElementById('signatureImage').src=c.signature;document.getElementById('signaturePreview').style.display='flex'}},
+  saveCompany(){const old=H4DB.get('company')||{};const c={...old,id:'default',legalName:v('legalName'),brandName:v('brandName'),businessType:v('businessType'),address:v('address'),city:v('city'),district:v('district'),state:v('state'),pin:v('pin'),website:v('website'),phone:v('phone'),whatsapp:v('whatsapp'),email:v('email'),gstEnabled:checked('gstEnabled'),gstin:v('gstin'),gstStateCode:v('gstStateCode'),panEnabled:checked('panEnabled'),pan:v('pan'),bankEnabled:checked('bankEnabled'),bank:{name:v('bankName'),accountName:v('accountName'),accountNumber:v('accountNumber'),ifsc:v('ifsc'),branch:v('branch'),upiId:v('upiId')},terms:v('terms'),footerText:v('footerText'),logo:document.getElementById('logoImage').src||old.logo||'',signature:document.getElementById('signatureImage').src||old.signature||'',signatoryName:v('signatoryName'),updatedAt:new Date().toISOString()};H4DB.save('company',c);H4Notify.success('Company profile saved')},
+  loadSettings(){const s=H4DB.get('settings');['currency','dateFormat','defaultGst','quotationPrefix','quotationYear','quotationStart','quotationValidity','invoicePrefix','invoiceYear','invoiceStart','invoiceDueDays'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=s[id]??''});document.getElementById('defaultInterState').checked=!!s.defaultInterState},
+  saveSettings(){const old=H4DB.get('settings');const s={...old,currency:v('currency'),dateFormat:v('dateFormat'),defaultGst:H4Utils.num(v('defaultGst')),defaultInterState:checked('defaultInterState'),quotationPrefix:v('quotationPrefix'),quotationYear:parseInt(v('quotationYear'))||new Date().getFullYear(),quotationStart:parseInt(v('quotationStart'))||1,quotationValidity:parseInt(v('quotationValidity'))||30,invoicePrefix:v('invoicePrefix'),invoiceYear:parseInt(v('invoiceYear'))||new Date().getFullYear(),invoiceStart:parseInt(v('invoiceStart'))||1,invoiceDueDays:parseInt(v('invoiceDueDays'))||30};H4DB.save('settings',s);H4Notify.success('Settings saved')},
+  renderCustomers(){const d=H4DB.get('customers')||{};const b=document.getElementById('customersBody');const a=Object.values(d);b.innerHTML=a.length?a.map(c=>`<tr><td><strong>${H4Utils.esc(c.name)}</strong></td><td>${H4Utils.esc(c.company||'-')}</td><td>${H4Utils.esc(c.phone||'-')}</td><td>${H4Utils.esc(c.whatsapp||'-')}</td><td>${H4Utils.esc([c.address,c.city].filter(Boolean).join(', ')||'-')}</td><td><div class="table-actions"><button class="btn btn-sm btn-outline" onclick="H4App.editCustomer('${c.id}')">✏️</button><button class="btn btn-sm btn-danger" onclick="H4App.deleteCustomer('${c.id}')">🗑️</button></div></td></tr>`).join(''):'<tr><td colspan="6" class="empty">No customers</td></tr>'},
+  saveCustomer(){const form=document.getElementById('customerForm');const id=form.dataset.id||H4Utils.id('cust');const old=(H4DB.get('customers')||{})[id]||{};const c={...old,id,name:v('custName'),company:v('custCompany'),phone:v('custPhone'),whatsapp:v('custWhatsapp'),email:v('custEmail'),address:v('custAddress'),city:v('custCity'),district:v('custDistrict'),state:v('custState'),pin:v('custPin'),gstin:v('custGstin'),createdAt:old.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};H4DB.add('customers',c);this.closeModal('customerModal');form.reset();delete form.dataset.id;this.renderCustomers();this.updateDashboard();H4Notify.success('Customer saved')},
+  editCustomer(id){const c=(H4DB.get('customers')||{})[id];if(!c)return;setv('custName',c.name);setv('custCompany',c.company);setv('custPhone',c.phone);setv('custWhatsapp',c.whatsapp);setv('custEmail',c.email);setv('custAddress',c.address);setv('custCity',c.city);setv('custDistrict',c.district);setv('custState',c.state);setv('custPin',c.pin);setv('custGstin',c.gstin);document.getElementById('customerForm').dataset.id=id;this.openModal('customerModal')},
+  deleteCustomer(id){if(confirm('Delete this customer?')){H4DB.delete('customers',id);this.renderCustomers();this.updateDashboard();H4Notify.success('Customer deleted')}},
+  renderProducts(){const d=H4DB.get('products')||{};const b=document.getElementById('productsBody');const a=Object.values(d);b.innerHTML=a.length?a.map(p=>`<tr><td><strong>${H4Utils.esc(p.name)}</strong><br><small>${H4Utils.esc(p.sku||'')}</small></td><td>${H4Utils.esc(p.category)}</td><td>${H4Utils.esc(p.unit)}</td><td>${H4Utils.money(p.sellingRate)}</td><td>${p.gst||0}%</td><td><div class="table-actions"><button class="btn btn-sm btn-outline" onclick="H4App.editProduct('${p.id}')">✏️</button><button class="btn btn-sm btn-danger" onclick="H4App.deleteProduct('${p.id}')">🗑️</button></div></td></tr>`).join(''):'<tr><td colspan="6" class="empty">No products</td></tr>'},
+  saveProduct(){const f=document.getElementById('productForm'),id=f.dataset.id||H4Utils.id('prod'),old=(H4DB.get('products')||{})[id]||{};const p={...old,id,name:v('prodName'),sku:v('prodSku'),category:v('prodCategory'),brand:v('prodBrand'),description:v('prodDescription'),unit:v('prodUnit'),purchaseRate:H4Utils.num(v('prodPurchaseRate')),sellingRate:H4Utils.num(v('prodRate')),mrp:H4Utils.num(v('prodMrp')),gst:H4Utils.num(v('prodGst')),hsnCode:v('prodHsn'),active:true,createdAt:old.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};H4DB.add('products',p);this.closeModal('productModal');f.reset();delete f.dataset.id;this.renderProducts();this.updateDashboard();H4Notify.success('Product saved')},
+  editProduct(id){const p=(H4DB.get('products')||{})[id];if(!p)return;[['prodName','name'],['prodSku','sku'],['prodCategory','category'],['prodBrand','brand'],['prodDescription','description'],['prodUnit','unit'],['prodPurchaseRate','purchaseRate'],['prodRate','sellingRate'],['prodMrp','mrp'],['prodGst','gst'],['prodHsn','hsnCode']].forEach(([a,b])=>setv(a,p[b]));document.getElementById('productForm').dataset.id=id;this.openModal('productModal')},
+  deleteProduct(id){if(confirm('Delete this product?')){H4DB.delete('products',id);this.renderProducts();this.updateDashboard();H4Notify.success('Product deleted')}},
+  renderThemes(){const d=H4DB.get('themes')||{};document.getElementById('themesContainer').innerHTML=Object.values(d).map(t=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><strong>${H4Utils.esc(t.name)}</strong><div style="display:flex;gap:5px;margin-top:5px"><i style="width:25px;height:25px;background:${t.primary};display:block;border-radius:4px"></i><i style="width:25px;height:25px;background:${t.secondary};display:block;border-radius:4px"></i><i style="width:25px;height:25px;background:${t.accent};display:block;border-radius:4px"></i></div></div><button class="btn btn-sm btn-danger" onclick="H4App.deleteTheme('${t.id}')">🗑️</button></div>`).join('')},
+  saveTheme(){const f=document.getElementById('themeForm'),t={id:H4Utils.id('theme'),name:v('themeName'),primary:v('themePrimary'),secondary:v('themeSecondary'),accent:v('themeAccent'),text:v('themeText'),background:'#fff'};H4DB.add('themes',t);this.closeModal('themeModal');f.reset();this.renderThemes();H4Notify.success('Theme created')},
+  deleteTheme(id){if(confirm('Delete theme?')){H4DB.delete('themes',id);this.renderThemes()}},
+  updateDashboard(){document.getElementById('totalCustomers').textContent=Object.keys(H4DB.get('customers')||{}).length;document.getElementById('totalProducts').textContent=Object.keys(H4DB.get('products')||{}).length;document.getElementById('todayQuotations').textContent=Object.keys(H4DB.get('quotations')||{}).length;document.getElementById('todayInvoices').textContent=Object.keys(H4DB.get('invoices')||{}).length},
+  generateNumber(type){const s=H4DB.get('settings');if(type==='qtn'){const n=Math.max(s.quotationCounter||1,s.quotationStart||1);const all=H4DB.get('settings');all.quotationCounter=n+1;H4DB.save('settings',all);return `${s.quotationPrefix}-${s.quotationYear}-${String(n).padStart(5,'0')}`}else{const n=Math.max(s.invoiceCounter||1,s.invoiceStart||1);const all=H4DB.get('settings');all.invoiceCounter=n+1;H4DB.save('settings',all);return `${s.invoicePrefix}-${s.invoiceYear}-${String(n).padStart(5,'0')}`}},
+  newQuotation(){this.openQuotationTypePicker()},
+  openQuotationTypePicker(){const html=`<div class="modal-overlay active" id="quotationTypeModal"><div class="modal-content"><div class="modal-header"><h3>New Quotation</h3><button class="modal-close" onclick="H4App.closeModal('quotationTypeModal')">✕</button></div><div class="modal-body"><p style="margin-bottom:15px">Choose the quotation template.</p><div class="toolbar" style="flex-direction:column;gap:10px;"><button class="btn btn-outline btn-block" onclick="H4App.closeModal('quotationTypeModal');H4App.openGeneralQuotation()">📄 General Quotation</button><button class="btn btn-primary btn-block" onclick="H4App.closeModal('quotationTypeModal');H4App.openEpoxyBuilder()">✨ Premium Epoxy Flooring Proposal</button><button class="btn btn-secondary btn-block" onclick="H4App.closeModal('quotationTypeModal');H4App.openWaterproofingBuilder()">💧 Premium Waterproofing Proposal</button></div></div></div></div>`;document.body.insertAdjacentHTML('beforeend',html)},
+  openGeneralQuotation(){const q={id:H4Utils.id('qtn'),number:this.generateNumber('qtn'),quotationType:'general',templateId:'tpl_001',date:new Date().toISOString(),validUntil:H4Utils.addDays(new Date(),H4DB.get('settings').quotationValidity),customerId:'',projectName:'',siteAddress:'',reference:'',items:[],subtotal:0,totalDiscount:0,taxableAmount:0,cgst:0,sgst:0,igst:0,roundOff:0,grandTotal:0,status:'draft',convertedToInvoice:null,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),companySnapshot:this.snapshotCompany(),customerSnapshot:{}};H4DB.add('quotations',q);H4Notify.success('General quotation created. Edit it in the quotations list.');this.renderQuotations()},
+  openWaterproofingBuilder(){H4Notify.success('Waterproofing builder coming soon. Use Epoxy builder for now.')},
+  newInvoice(){const n=this.generateNumber('inv');const inv={id:H4Utils.id('inv'),number:n,date:new Date().toISOString(),dueDate:H4Utils.addDays(new Date(),H4DB.get('settings').invoiceDueDays),customerId:'',quotationId:null,items:[],subtotal:0,totalDiscount:0,taxableAmount:0,cgst:0,sgst:0,igst:0,roundOff:0,grandTotal:0,status:'unpaid',totalAmount:0,paidAmount:0,balanceAmount:0,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};H4DB.add('invoices',inv);this.renderInvoices();H4Notify.success('Blank invoice created')},
+  renderQuotations(){const qs=Object.values(H4DB.get('quotations')||{}),cs=H4DB.get('customers')||{};document.getElementById('quotationsBody').innerHTML=qs.length?qs.map(q=>`<tr><td>${H4Utils.esc(q.number)}</td><td>${H4Utils.date(q.date)}</td><td>${q.quotationType==='premium-epoxy'?'✨ Epoxy':q.quotationType==='waterproofing'?'💧 Waterproofing':'General'}</td><td>${H4Utils.esc((cs[q.customerId]||{}).name||q.customerSnapshot?.name||'-')}</td><td>${H4Utils.esc(q.projectDetails?.projectName||q.projectName||'-')}</td><td>${H4Utils.money(q.pricing?.grandTotal??q.grandTotal)}</td><td>${H4Utils.esc(q.status||'draft')}</td><td><div class="table-actions">${q.quotationType==='premium-epoxy'?`<button class="btn btn-sm btn-outline" onclick="H4App.editEpoxy('${q.id}')">✏️</button><button class="btn btn-sm btn-secondary" onclick="H4App.printQuotation('${q.id}')">🖨️</button><button class="btn btn-sm btn-success" onclick="H4App.convertQuotationToInvoice('${q.id}')">🧾</button>`:`<span class="hint">${q.quotationType==='waterproofing'?'💧 Waterproofing':''}</span>`}</div></td></tr>`).join(''):'<tr><td colspan="8" class="empty">No quotations yet</td></tr>'},
+  renderInvoices(){const ins=Object.values(H4DB.get('invoices')||{}),cs=H4DB.get('customers')||{};document.getElementById('invoicesBody').innerHTML=ins.length?ins.map(i=>`<tr><td>${H4Utils.esc(i.number)}</td><td>${H4Utils.date(i.date)}</td><td>${H4Utils.esc((cs[i.customerId]||{}).name||i.customerSnapshot?.name||'-')}</td><td>${H4Utils.esc(i.quotationNumber||'-')}</td><td>${H4Utils.money(i.grandTotal)}</td><td>${H4Utils.esc(i.status)}</td><td><button class="btn btn-sm btn-outline" onclick="H4App.printInvoice('${i.id}')">🖨️</button></td></tr>`).join(''):'<tr><td colspan="7" class="empty">No invoices</td></tr>'},
+  snapshotCompany(){const c=H4DB.get('company');return JSON.parse(JSON.stringify(c))},
+  snapshotCustomer(id){const c=(H4DB.get('customers')||{})[id];return c?JSON.parse(JSON.stringify(c)):{}},
+
+  // ===== RATE ENGINE WITH MODIFIERS =====
+  getModifiersForRate(rateId){
+    const rate=(H4DB.get('rateMaster')||{})[rateId];
+    return rate?.modifiers||[];
+  },
+
+  calculateEpoxyRate(epoxyType,system,thickness,designType,colourType,finish,floorCondition,antiSlip,topCoat,unit){
+    const rates=Object.values(H4DB.get('rateMaster')||{});
+    // Priority 1: Exact match
+    let match=rates.find(r=>
+      r.category==='epoxy'&&r.active!==false&&
+      r.epoxyType===epoxyType&&r.system===system&&r.thickness===thickness&&
+      r.designType===designType&&r.colourType===colourType&&
+      r.finish===finish&&r.floorCondition===floorCondition&&
+      r.antiSlip===antiSlip&&r.topCoat===topCoat&&r.unit===unit
+    );
+    if(match){
+      const mods=this.getModifiersForRate(match.id);
+      const modTotal=mods.reduce((sum,m)=>sum+(m.valueType==='fixed'?m.value:match.baseRate*m.value/100),0);
+      return {baseRate:match.baseRate,modifiers:mods,modifierTotal:modTotal,finalRate:match.baseRate+modTotal,rateStatus:'auto',rateSource:'exact',rateId:match.id};
+    }
+    // Priority 2: Without designType, colourType, antiSlip, topCoat, floorCondition
+    match=rates.find(r=>
+      r.category==='epoxy'&&r.active!==false&&
+      r.epoxyType===epoxyType&&r.system===system&&r.thickness===thickness&&
+      r.finish===finish&&r.unit===unit
+    );
+    if(match){
+      const mods=this.getModifiersForRate(match.id);
+      const modTotal=mods.reduce((sum,m)=>sum+(m.valueType==='fixed'?m.value:match.baseRate*m.value/100),0);
+      return {baseRate:match.baseRate,modifiers:mods,modifierTotal:modTotal,finalRate:match.baseRate+modTotal,rateStatus:'auto',rateSource:'system-thickness-finish',rateId:match.id};
+    }
+    // Priority 3: Without finish, designType, colourType, antiSlip, topCoat, floorCondition
+    match=rates.find(r=>
+      r.category==='epoxy'&&r.active!==false&&
+      r.epoxyType===epoxyType&&r.system===system&&r.thickness===thickness&&r.unit===unit
+    );
+    if(match){
+      const mods=this.getModifiersForRate(match.id);
+      const modTotal=mods.reduce((sum,m)=>sum+(m.valueType==='fixed'?m.value:match.baseRate*m.value/100),0);
+      return {baseRate:match.baseRate,modifiers:mods,modifierTotal:modTotal,finalRate:match.baseRate+modTotal,rateStatus:'auto',rateSource:'system-thickness',rateId:match.id};
+    }
+    // Priority 4: Only epoxyType + system + unit
+    match=rates.find(r=>
+      r.category==='epoxy'&&r.active!==false&&
+      r.epoxyType===epoxyType&&r.system===system&&r.unit===unit
+    );
+    if(match){
+      const mods=this.getModifiersForRate(match.id);
+      const modTotal=mods.reduce((sum,m)=>sum+(m.valueType==='fixed'?m.value:match.baseRate*m.value/100),0);
+      return {baseRate:match.baseRate,modifiers:mods,modifierTotal:modTotal,finalRate:match.baseRate+modTotal,rateStatus:'auto',rateSource:'system',rateId:match.id};
+    }
+    // No match
+    return {baseRate:0,modifiers:[],modifierTotal:0,finalRate:0,rateStatus:'none',rateSource:'none',rateId:null};
+  },
+
+  // ===== RATE MODAL =====
+  openRateModal(id=null){
+    this.rateModifiers=[];
+    const r=id?(H4DB.get('rateMaster')||{})[id]:null;
+    this.populateRateModal(r);
+    this.openModal('rateModal');
+  },
+
+  populateRateModal(edit){
+    const l=H4DB.get('masterLists');
+    const units=Object.values(H4DB.get('unitMaster')).filter(x=>x.active).map(x=>x.unit);
+    setOptions('rateCategory',['epoxy','waterproofing','general'],edit?.category||'epoxy');
+    this.populateRateCategoryFields();
+    if(edit){
+      document.getElementById('rateEpoxyType').value=edit.epoxyType||'';
+      document.getElementById('rateEpoxySystem').value=edit.system||'';
+      document.getElementById('rateDesignType').value=edit.designType||'None';
+      document.getElementById('rateColourType').value=edit.colourType||'Standard';
+      document.getElementById('rateFinish').value=edit.finish||'High Gloss';
+      document.getElementById('rateFloorCondition').value=edit.floorCondition||'New Concrete';
+      document.getElementById('rateAntiSlip').value=edit.antiSlip||'Not Required';
+      document.getElementById('rateTopCoat').value=edit.topCoat||'None';
+      document.getElementById('rateWaterproofingType').value=edit.waterproofingType||'Terrace Waterproofing';
+    }
+    setOptions('rateThickness',l.thicknesses,edit?.thickness);
+    setOptions('rateUnit',units,edit?.unit);
+    setv('rateValue',edit?.baseRate||'');
+    setv('rateGst',edit?.gst??H4DB.get('settings').defaultGst);
+    document.getElementById('rateActive').checked=edit?.active!==false;
+    document.getElementById('rateForm').dataset.id=edit?.id||'';
+    document.getElementById('rateModalTitle').textContent=edit?'Edit Rate':'Add Rate';
+    this.rateModifiers=edit?.modifiers||[];
+    this.renderRateModifiers();
+  },
+
+  populateRateCategoryFields(){
+    const cat=document.getElementById('rateCategory').value;
+    document.getElementById('rateEpoxyFields').style.display=cat==='epoxy'?'block':'none';
+    document.getElementById('rateWaterproofingFields').style.display=cat==='waterproofing'?'block':'none';
+  },
+
+  addRateModifier(){
+    const type=document.getElementById('modifierTypeSelect').value;
+    const name=document.getElementById('modifierName').value.trim();
+    const value=parseFloat(document.getElementById('modifierValue').value);
+    const valueType=document.getElementById('modifierValueType').value;
+    if(!name||isNaN(value)||value<=0){H4Notify.danger('Please enter modifier name and value');return}
+    this.rateModifiers.push({id:H4Utils.id('mod'),category:type,name,valueType,value:valueType==='percentage'?value/100:value,unit:'fixed'});
+    document.getElementById('modifierName').value='';
+    document.getElementById('modifierValue').value='';
+    this.renderRateModifiers();
+  },
+
+  removeRateModifier(idx){this.rateModifiers.splice(idx,1);this.renderRateModifiers()},
+
+  renderRateModifiers(){
+    const container=document.getElementById('rateModifierList');
+    container.innerHTML=this.rateModifiers.map((m,i)=>`<div class="modifier-row"><span class="mod-name">${H4Utils.esc(m.name)}</span><span class="mod-value">${m.valueType==='fixed'?'₹':''}${m.valueType==='percentage'?m.value*100+'%':m.value}</span><span class="mod-remove" onclick="H4App.removeRateModifier(${i})">✕</span></div>`).join('');
+  },
+
+  saveRate(){
+    const f=document.getElementById('rateForm'),id=f.dataset.id||H4Utils.id('rate');
+    const cat=document.getElementById('rateCategory').value;
+    const r={id,category:cat,
+      epoxyType:document.getElementById('rateEpoxyType').value,
+      system:document.getElementById('rateEpoxySystem').value,
+      designType:document.getElementById('rateDesignType').value,
+      colourType:document.getElementById('rateColourType').value,
+      finish:document.getElementById('rateFinish').value,
+      floorCondition:document.getElementById('rateFloorCondition').value,
+      antiSlip:document.getElementById('rateAntiSlip').value,
+      topCoat:document.getElementById('rateTopCoat').value,
+      waterproofingType:document.getElementById('rateWaterproofingType').value,
+      thickness:v('rateThickness'),unit:v('rateUnit'),baseRate:H4Utils.num(v('rateValue')),gst:H4Utils.num(v('rateGst')),active:checked('rateActive'),modifiers:this.rateModifiers,updatedAt:new Date().toISOString()};
+    if(!r.baseRate||r.baseRate<=0){H4Notify.danger('Base Rate is required');return}
+    H4DB.add('rateMaster',r);
+    this.closeModal('rateModal');
+    this.renderRateMaster();
+    H4Notify.success('Rate saved with '+r.modifiers.length+' modifiers');
+  },
+
+  renderRateMaster(){
+    const d=H4DB.get('rateMaster')||{},b=document.getElementById('rateMasterBody');if(!b)return;
+    b.innerHTML=Object.values(d).map(r=>`<tr><td>${H4Utils.esc(r.epoxyType||r.waterproofingType||r.category)}</td><td>${H4Utils.esc(r.thickness)}</td><td>${H4Utils.esc(r.unit)}</td><td>${H4Utils.money(r.baseRate)}${r.modifiers?.length?' + '+r.modifiers.length+' mods':''}</td><td>${r.gst}%</td><td>${r.active?'✅':'❌'}</td><td><div class="table-actions"><button class="btn btn-sm btn-outline" onclick="H4App.openRateModal('${r.id}')">✏️</button><button class="btn btn-sm btn-outline" onclick="H4App.toggleRate('${r.id}')">${r.active?'Deactivate':'Activate'}</button><button class="btn btn-sm btn-danger" onclick="H4App.deleteRate('${r.id}')">🗑️</button></div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">No rates</td></tr>'},
+  toggleRate(id){const r=(H4DB.get('rateMaster')||{})[id];if(r){r.active=!r.active;H4DB.add('rateMaster',r);this.renderRateMaster()}},
+  deleteRate(id){if(confirm('Delete this rate?')){H4DB.delete('rateMaster',id);this.renderRateMaster()}},
+
+  // ===== UNIT MASTER =====
+  openUnitModal(edit=null){const f=document.getElementById('unitForm');f.dataset.id=edit?.id||'';setv('unitKey',edit?.unit||'');setv('unitLabel',edit?.label||'');document.getElementById('unitActive').checked=edit?.active!==false;this.openModal('unitModal')},
+  saveUnit(){const f=document.getElementById('unitForm'),id=f.dataset.id||H4Utils.id('unit'),u={id,unit:v('unitKey').trim(),label:v('unitLabel').trim()||v('unitKey').trim(),active:checked('unitActive')};if(!u.unit){H4Notify.danger('Unit is required');return}H4DB.add('unitMaster',u);this.closeModal('unitModal');this.renderUnitMaster();H4Notify.success('Unit saved')},
+  renderUnitMaster(){const d=H4DB.get('unitMaster')||{},b=document.getElementById('unitMasterBody');if(!b)return;b.innerHTML=Object.values(d).map(u=>`<tr><td>${H4Utils.esc(u.unit)}</td><td>${H4Utils.esc(u.label)}</td><td>${u.active?'Yes':'No'}</td><td><button class="btn btn-sm btn-outline" onclick='H4App.openUnitModal(${JSON.stringify(u)})'>✏️</button> <button class="btn btn-sm btn-danger" onclick="H4App.deleteUnit('${u.id}')">🗑️</button></td></tr>`).join('')},
+  deleteUnit(id){if(confirm('Delete this unit?')){H4DB.delete('unitMaster',id);this.renderUnitMaster()}},
+
+  // ===== EPOXY BUILDER =====
+  renderEpoxySteps(){const s=document.getElementById('epoxySteps');s.innerHTML=this.steps.map((x,i)=>`<div class="step" id="epoxyStepNav${i}" onclick="H4App.goStep(${i})"><strong>${i+1}</strong><br>${x}</div>`).join('');this.renderEpoxyStepContent()},
+  createEpoxyDraft(){
+    const s=H4DB.get('settings'),now=new Date().toISOString();
+    const scopes=H4DB.get('masterLists').workScopes.map((n,i)=>({id:'scope_'+i,name:n,selected:true,description:n,quantity:'',unit:''}));
+    const features=H4DB.get('masterLists').features.map((n,i)=>({id:'feature_'+i,name:n,selected:i<4}));
+    return {id:H4Utils.id('qtn'),quotationType:'premium-epoxy',templateId:'tpl_epoxy',themeId:'theme_001',number:this.generateNumber('qtn'),date:now,validUntil:H4Utils.addDays(now,s.quotationValidity),validityDays:s.quotationValidity,customerId:'',customerSnapshot:{},projectDetails:{projectName:'',area:500,areaUnit:'sq.ft',epoxyType:'Premium Self-Leveling Epoxy',system:'H4 Premium Epoxy',thickness:'2 mm',floorCondition:'New Concrete',designType:'None',colourType:'Standard',finish:'High Gloss',antiSlip:'Not Required',topCoat:'Standard PU',reference:''},workScope:scopes,materialSpecification:{brand:'H4 ShieldX',productSystem:'Premium Self-Leveling Epoxy',mixingRatio:'',thickness:'2 mm',colourCode:'',colourName:'',finish:'High Gloss',antiSlip:'Not Required'},pricing:{items:[],subtotal:0,discountEnabled:false,discount:0,discountType:'percentage',taxableAmount:0,cgst:0,sgst:0,igst:0,roundOff:0,grandTotal:0,interState:s.defaultInterState},pricingSnapshot:null,timeline:{workDuration:'3–5 Days',curingTime:'24–72 Hours'},warranty:{enabled:true,period:'5 Years',terms:'Subject to H4 Construction Solutions Warranty Terms & Conditions.',conditions:''},premiumFeatures:features,termsAndConditions:{advancePayment:'50%',balancePayment:'50% upon completion',workSchedule:'As mutually agreed',waterElectricityByClient:'To be provided by client',warrantyConditions:'As stated above',surfaceConditionResponsibility:'Client to disclose existing substrate defects and moisture issues.',accessToWorkArea:'Safe access to be provided by client.',curingRestrictions:'Restrict traffic during curing.',maintenanceRequirements:'Follow recommended cleaning and maintenance.',otherTerms:''},footer:{thankYou:'Thank you for choosing H4 Construction Solutions.',authorizedSignatoryName:H4DB.get('company').signatoryName||'Authorized Signatory',companySeal:'',qrEnabled:true,qrType:'website',qrValue:H4DB.get('company').website||''},reference:'',status:'draft',createdAt:now,updatedAt:now,companySnapshot:this.snapshotCompany(),customerSnapshot:{}};
+  },
+  openEpoxyBuilder(q=null){
+    this.epoxy=q?JSON.parse(JSON.stringify(q)):this.createEpoxyDraft();
+    this.step=0;
+    if(this.epoxy.projectDetails&&!this.epoxy.projectDetails.epoxyType){
+      this.epoxy.projectDetails.epoxyType=this.epoxy.projectDetails.flooringType||'Premium Self-Leveling Epoxy';
+      this.epoxy.projectDetails.system=this.epoxy.materialSpecification?.productSystem||'H4 Premium Epoxy';
+      this.epoxy.projectDetails.designType='None';
+      this.epoxy.projectDetails.colourType='Standard';
+      this.epoxy.projectDetails.finish=this.epoxy.materialSpecification?.finish||'High Gloss';
+      this.epoxy.projectDetails.antiSlip=this.epoxy.materialSpecification?.antiSlip||'Not Required';
+      this.epoxy.projectDetails.topCoat='Standard PU';
+    }
+    this.renderEpoxyStepContent();
+    document.getElementById('epoxyBuilder').classList.add('active');
+    this.updateEpoxyPreview();
+    this.restoreDraftBanner();
+  },
+  editEpoxy(id){const q=(H4DB.get('quotations')||{})[id];if(q)this.openEpoxyBuilder(q)},
+  closeEpoxyBuilder(){
+    if(this.epoxy&&this.hasUnsavedChanges()){if(confirm('Save draft before closing?')){this.saveEpoxy(true);return}}
+    document.getElementById('epoxyBuilder').classList.remove('active');this.epoxy=null;this.clearDraft();this.navigate('quotations')
+  },
+  hasUnsavedChanges(){return !!this.epoxy},
+  saveDraft(){if(!this.epoxy)return;localStorage.setItem('h4_epoxy_draft',JSON.stringify(this.epoxy))},
+  clearDraft(){localStorage.removeItem('h4_epoxy_draft')},
+  restoreDraftBanner(){const raw=localStorage.getItem('h4_epoxy_draft');if(raw&&this.epoxy?.id!==JSON.parse(raw).id&&confirm('Unsaved quotation found. Continue editing it?')){this.epoxy=JSON.parse(raw);this.renderEpoxyStepContent();this.updateEpoxyPreview()}},
+  goStep(i){if(!this.epoxy)return;this.step=Math.max(0,Math.min(this.steps.length-1,i));this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+  prevStep(){if(this.step>0)this.goStep(this.step-1)},
+  nextStep(){if(this.step<this.steps.length-1)this.goStep(this.step+1);else this.saveEpoxy(false)},
+  saveEpoxy(draftOnly=false){
+    if(!this.epoxy)return;
+    this.syncCurrentStep();
+    this.calculateEpoxyPricing();
+    const q=this.epoxy;
+    // Store pricing snapshot for historical accuracy
+    q.pricingSnapshot={
+      baseRate:q._calculatedRate?.baseRate||0,
+      modifiers:q._calculatedRate?.modifiers||[],
+      modifierTotal:q._calculatedRate?.modifierTotal||0,
+      finalRate:q._calculatedRate?.finalRate||0,
+      rateSource:q._calculatedRate?.rateSource||'none',
+      rateStatus:q._calculatedRate?.rateStatus||'none',
+      rateId:q._calculatedRate?.rateId||null,
+      calculatedAt:new Date().toISOString()
+    };
+    q.updatedAt=new Date().toISOString();
+    q.companySnapshot=this.snapshotCompany();
+    q.customerSnapshot=this.snapshotCustomer(q.customerId);
+    H4DB.add('quotations',q);
+    this.clearDraft();
+    this.renderQuotations();
+    this.updateDashboard();
+    this.updateEpoxyPreview();
+    if(!draftOnly)H4Notify.success('Premium Epoxy Proposal saved: '+q.number);
+  },
+  syncCurrentStep(){
+    if(!this.epoxy)return;
+    const q=this.epoxy;
+    const fields=document.querySelectorAll('.epoxy-step.active [data-bind]');
+    fields.forEach(el=>{
+      const path=el.dataset.bind;
+      const val=el.type==='checkbox'?el.checked:el.value;
+      this.setByPath(q,path,val);
+    });
+    this.calculateEpoxyPricing();
+  },
+  setByPath(obj,path,val){const p=path.split('.');let o=obj;for(let i=0;i<p.length-1;i++){if(!o[p[i]])o[p[i]]={};o=o[p[i]]}o[p[p.length-1]]=val},
+  getByPath(obj,path){return path.split('.').reduce((o,k)=>o?.[k],obj)},
+
+  calculateEpoxyPricing(){
+    const q=this.epoxy;if(!q)return;
+    const pd=q.projectDetails||{};
+    const p=q.pricing||{};
+    const area=H4Utils.num(pd.area);
+    // Calculate rate using engine
+    const rateResult=this.calculateEpoxyRate(
+      pd.epoxyType||'Premium Self-Leveling Epoxy',
+      pd.system||'H4 Premium Epoxy',
+      pd.thickness||'2 mm',
+      pd.designType||'None',
+      pd.colourType||'Standard',
+      pd.finish||'High Gloss',
+      pd.floorCondition||'New Concrete',
+      pd.antiSlip||'Not Required',
+      pd.topCoat||'Standard PU',
+      pd.areaUnit||'sq.ft'
+    );
+    q._calculatedRate=rateResult;
+    const rate=rateResult.finalRate||0;
+    // Update pricing items
+    if(!p.items||p.items.length===0){
+      p.items=[{itemId:H4Utils.id('item'),description:`${pd.epoxyType||'Epoxy'} — ${pd.system||'System'}`,category:'Material Cost',quantity:area,unit:pd.areaUnit||'sq.ft',rate:rate,gst:H4DB.get('settings').defaultGst||18,amount:area*rate,discount:0}];
+    }else{
+      // Update first item rate if it's the main epoxy item
+      const mainItem=p.items[0];
+      if(mainItem&&mainItem.category==='Material Cost'){
+        mainItem.rate=rate;
+        mainItem.quantity=area;
+        mainItem.unit=pd.areaUnit||'sq.ft';
+        mainItem.amount=area*rate;
+      }
+    }
+    // Recalculate totals
+    let subtotal=0;
+    p.items.forEach(item=>{
+      const qty=H4Utils.num(item.quantity);
+      const rt=H4Utils.num(item.rate);
+      const disc=H4Utils.num(item.discount||0);
+      const amt=qty*rt;
+      item.amount=amt;
+      subtotal+=amt-disc;
+    });
+    p.subtotal=subtotal;
+    let discountAmount=0;
+    if(p.discountEnabled){
+      discountAmount=p.discountType==='percentage'?subtotal*H4Utils.num(p.discount)/100:H4Utils.num(p.discount);
+    }
+    p.discountAmount=discountAmount;
+    p.taxableAmount=Math.max(0,subtotal-discountAmount);
+    const gstEnabled=!!H4DB.get('company').gstEnabled;
+    p.cgst=p.sgst=p.igst=0;
+    if(gstEnabled){
+      const gstTotal=p.taxableAmount*(H4DB.get('settings').defaultGst||18)/100;
+      if(p.interState)p.igst=gstTotal;
+      else{p.cgst=gstTotal/2;p.sgst=gstTotal/2}
+    }
+    const before=p.taxableAmount+p.cgst+p.sgst+p.igst;
+    p.roundOff=Math.round(before)-before;
+    p.grandTotal=Math.round(before);
+    this._dirty=true;
+  },
+
+  renderEpoxyStepContent(){
+    if(!this.epoxy)return;this.syncCurrentStep();
+    const q=this.epoxy, s=H4DB.get('masterLists'), c=H4DB.get('customers')||{};
+    document.querySelectorAll('.step').forEach((e,i)=>e.classList.toggle('active',i===this.step));
+    document.getElementById('stepCounter').textContent=`Step ${this.step+1} of ${this.steps.length} • ${this.steps[this.step]}`;
+    document.getElementById('prevStepBtn').disabled=this.step===0;
+    document.getElementById('nextStepBtn').textContent=this.step===this.steps.length-1?'💾 Save Quotation':'Next →';
+    const cont=document.getElementById('epoxyStepContainer');
+    const inp=(label,id,val,type='text',extra='')=>`<div class="form-group"><label>${label}</label><input ${extra} type="${type}" id="${id}" data-bind="${id}" value="${H4Utils.esc(val)}"></div>`;
+    const sel=(label,id,val,opts,extra='')=>`<div class="form-group"><label>${label}</label><select ${extra} id="${id}" data-bind="${id}" onchange="H4App.epoxyFieldChange('${id}')">${opts.map(x=>`<option value="${H4Utils.esc(x)}" ${String(x)===String(val)?'selected':''}>${H4Utils.esc(x)}</option>`).join('')}</select></div>`;
+    let h='';
+    if(this.step===0){
+      const custOpts=[''].concat(Object.values(c).map(x=>x.id));
+      h=`<div class="epoxy-step active"><h3 class="step-title">1. Quotation & Customer</h3>${sel('Quotation Type','quotationType',q.quotationType,['premium-epoxy'])}<div class="form-row">${inp('Quotation Number','number',q.number)}${inp('Date','date',q.date.slice(0,10),'date')}</div><div class="form-row">${inp('Validity (days)','validityDays',q.validityDays,'number')}<div class="form-group"><label>Valid Until</label><input value="${H4Utils.date(q.validUntil)}" disabled></div></div>${sel('Customer','customerId',q.customerId,custOpts)}<div class="form-row">${inp('Customer Phone','customerPhone',q.customerSnapshot?.phone||'')} ${inp('Customer WhatsApp','customerWhatsapp',q.customerSnapshot?.whatsapp||'')}</div>${inp('Customer Email','customerEmail',q.customerSnapshot?.email||'')} ${inp('Site Address','siteAddress',q.customerSnapshot?.address||'')} ${inp('Project Name','projectDetails.projectName',q.projectDetails.projectName)} ${inp('Reference Number','reference',q.reference||'')}</div>`;
+    }else if(this.step===1){
+      const types=s.epoxyTypes||['Premium Self-Leveling Epoxy','Metallic Epoxy Flooring','3D Epoxy Flooring'];
+      const systems=s.epoxySystems||['H4 Premium Epoxy','H4 Metallic Epoxy','H4 3D Epoxy'];
+      h=`<div class="epoxy-step active"><h3 class="step-title">2. Project Details</h3>${inp('Project Name','projectDetails.projectName',q.projectDetails.projectName)}<div class="form-row">${inp('Area','projectDetails.area',q.projectDetails.area,'number')}${sel('Area Unit','projectDetails.areaUnit',q.projectDetails.areaUnit,s.areaUnits)}</div>${sel('Epoxy Type','projectDetails.epoxyType',q.projectDetails.epoxyType,types)}${sel('System','projectDetails.system',q.projectDetails.system,systems)}${sel('Thickness','projectDetails.thickness',q.projectDetails.thickness,s.thicknesses)}${sel('Floor Condition','projectDetails.floorCondition',q.projectDetails.floorCondition,s.floorConditions)}${sel('Design Type','projectDetails.designType',q.projectDetails.designType,s.designTypes||['None','Solid','Metallic','3D','Flake'])}${sel('Colour Type','projectDetails.colourType',q.projectDetails.colourType,s.colourTypes||['Standard','Premium','Custom'])}${sel('Finish','projectDetails.finish',q.projectDetails.finish,s.finishes)}${sel('Anti-Slip','projectDetails.antiSlip',q.projectDetails.antiSlip,s.antiSlip)}${sel('Top Coat','projectDetails.topCoat',q.projectDetails.topCoat,s.topCoats||['None','Standard PU','Premium PU','Anti-Slip PU'])}</div>`;
+    }else if(this.step===2){
+      const rate=q._calculatedRate||{baseRate:0,modifiers:[],modifierTotal:0,finalRate:0,rateStatus:'none',rateSource:'none'};
+      const statusLabels={auto:'pill-auto',override:'pill-override',none:'pill-none'};
+      const statusTexts={auto:'🔒 AUTO RATE',override:'✏️ RATE OVERRIDE',none:'⚠️ NO RATE'};
+      h=`<div class="epoxy-step active"><h3 class="step-title">3. Smart Rate Engine</h3><div class="summary-box"><div><strong>${H4Utils.esc(q.projectDetails.epoxyType||'')}</strong> • ${H4Utils.esc(q.projectDetails.system||'')} • ${H4Utils.esc(q.projectDetails.thickness||'')}</div><div class="rate-status"><span class="pill ${statusLabels[rate.rateStatus]||'pill-none'}">${statusTexts[rate.rateStatus]||'⚠️ UNKNOWN'}</span> ${rate.finalRate?H4Utils.money(rate.finalRate)+' / '+H4Utils.esc(q.projectDetails.areaUnit||'sq.ft'):'Rate not configured'}</div>${rate.rateStatus!=='none'?`<div class="text-sm text-muted">Base: ${H4Utils.money(rate.baseRate)} ${rate.modifiers.length?'+ '+rate.modifiers.length+' modifiers':''} ${rate.modifierTotal?'→ '+H4Utils.money(rate.modifierTotal):''}</div>`:''}</div><div class="form-row" style="margin-top:14px">${inp('Quantity','systemQuantity',q.projectDetails.area)}${inp('Rate','systemRate',rate.finalRate||'','number','step="0.01"')}</div><div class="toolbar">${rate.rateStatus==='none'?`<button class="btn btn-outline btn-sm" onclick="H4App.openRateModal()">+ Add Rate</button><button class="btn btn-outline btn-sm" onclick="H4App.enableManualRate()">✏️ Enter Rate Manually</button>`:`<button class="btn btn-outline btn-sm" onclick="H4App.enableManualRate()">✏️ Override Rate</button>`}</div><div class="summary-box" style="margin-top:12px"><div class="summary-line"><span>Quantity</span><strong>${q.projectDetails.area} ${q.projectDetails.areaUnit}</strong></div><div class="summary-line"><span>Rate</span><strong>${H4Utils.money(rate.finalRate||0)}</strong></div><div class="summary-line summary-grand"><span>Amount</span><strong>${H4Utils.money(H4Utils.num(q.projectDetails.area)*(rate.finalRate||0))}</strong></div></div></div>`;
+    }else if(this.step===3){
+      h=`<div class="epoxy-step active"><h3 class="step-title">4. Work Scope</h3>${q.workScope.map((x,i)=>`<div class="scope-row"><input type="checkbox" ${x.selected?'checked':''} onchange="H4App.updateScope(${i},this.checked)"><input value="${H4Utils.esc(x.description)}" onchange="H4App.updateScopeDesc(${i},this.value)"><button class="btn btn-sm btn-danger" onclick="H4App.removeScope(${i})">✕</button></div>`).join('')}<div class="inline-add"><input id="newScopeName" placeholder="New work scope"><button type="button" class="btn btn-outline btn-sm" onclick="H4App.addScope()">+ Add</button></div></div>`;
+    }else if(this.step===4){
+      h=`<div class="epoxy-step active"><h3 class="step-title">5. Material Specification</h3><div class="form-row">${inp('Brand','materialSpecification.brand',q.materialSpecification.brand)}${inp('Product / System','materialSpecification.productSystem',q.materialSpecification.productSystem)}</div><div class="form-row">${inp('Mixing Ratio','materialSpecification.mixingRatio',q.materialSpecification.mixingRatio)}${inp('Thickness','materialSpecification.thickness',q.materialSpecification.thickness)}</div><div class="form-row">${inp('Colour Code','materialSpecification.colourCode',q.materialSpecification.colourCode)}${inp('Colour Name','materialSpecification.colourName',q.materialSpecification.colourName)}</div><div class="form-row">${sel('Finish','materialSpecification.finish',q.materialSpecification.finish,s.finishes)}${sel('Anti-slip','materialSpecification.antiSlip',q.materialSpecification.antiSlip,s.antiSlip)}</div></div>`;
+    }else if(this.step===5){
+      h=`<div class="epoxy-step active"><h3 class="step-title">6. Price Items</h3><div id="priceItems">${q.pricing.items.map((it,i)=>this.priceItemHtml(it,i)).join('')}</div><button class="btn btn-outline btn-block" type="button" onclick="H4App.addPriceItem()">➕ Add Item</button><div class="summary-box" style="margin-top:14px"><div class="summary-line"><span>Subtotal</span><strong>${H4Utils.money(q.pricing.subtotal)}</strong></div><div class="summary-line"><span>Discount</span><strong>- ${H4Utils.money(q.pricing.discountAmount||0)}</strong></div><div class="summary-line"><span>Taxable</span><strong>${H4Utils.money(q.pricing.taxableAmount)}</strong></div><div class="summary-line"><span>GST</span><strong>${H4Utils.money((q.pricing.cgst||0)+(q.pricing.sgst||0)+(q.pricing.igst||0))}</strong></div><div class="summary-line summary-grand"><span>Grand Total</span><strong>${H4Utils.money(q.pricing.grandTotal)}</strong></div></div></div>`;
+    }else if(this.step===6){
+      h=`<div class="epoxy-step active"><h3 class="step-title">7. Discount & GST</h3><div class="check form-group"><input type="checkbox" ${q.pricing.discountEnabled?'checked':''} onchange="H4App.setPricing('discountEnabled',this.checked)"><label>Discount ON</label></div><div class="form-row">${sel('Discount Type','pricing.discountType',q.pricing.discountType,['percentage','flat'])}${inp('Discount','pricing.discount',q.pricing.discount,'number')}</div><div class="check form-group"><input type="checkbox" ${q.pricing.interState?'checked':''} onchange="H4App.setPricing('interState',this.checked)"><label>Inter-state supply (IGST)</label></div><div class="summary-box" style="margin-top:12px"><div class="summary-line"><span>Taxable Amount</span><strong>${H4Utils.money(q.pricing.taxableAmount)}</strong></div>${H4DB.get('company').gstEnabled?`<div class="summary-line"><span>${q.pricing.interState?'IGST':'CGST + SGST'}</span><strong>${H4Utils.money(q.pricing.interState?q.pricing.igst:q.pricing.cgst+q.pricing.sgst)}</strong></div>`:''}<div class="summary-line"><span>Round Off</span><strong>${H4Utils.money(q.pricing.roundOff)}</strong></div><div class="summary-line summary-grand"><span>Grand Total</span><strong>${H4Utils.money(q.pricing.grandTotal)}</strong></div></div></div>`;
+    }else if(this.step===7){
+      h=`<div class="epoxy-step active"><h3 class="step-title">8. Timeline</h3>${inp('Work Duration','timeline.workDuration',q.timeline.workDuration)}${inp('Curing Time','timeline.curingTime',q.timeline.curingTime)}</div>`;
+    }else if(this.step===8){
+      h=`<div class="epoxy-step active"><h3 class="step-title">9. Warranty</h3><div class="check form-group"><input type="checkbox" ${q.warranty.enabled?'checked':''} onchange="H4App.setPricing('warrantyEnabled',this.checked)"><label>Warranty ON</label></div>${sel('Warranty Period','warranty.period',q.warranty.period,['3 Years','5 Years','10 Years','Custom'])}${inp('Warranty Terms','warranty.terms',q.warranty.terms)}${inp('Conditions','warranty.conditions',q.warranty.conditions)}</div>`;
+    }else if(this.step===9){
+      h=`<div class="epoxy-step active"><h3 class="step-title">10. Premium Features</h3>${q.premiumFeatures.map((x,i)=>`<div class="feature-row"><input type="checkbox" ${x.selected?'checked':''} onchange="H4App.updateFeature(${i},this.checked)"><input value="${H4Utils.esc(x.name)}" onchange="H4App.updateFeatureName(${i},this.value)"><button class="btn btn-sm btn-danger" onclick="H4App.removeFeature(${i})">✕</button></div>`).join('')}<div class="inline-add"><input id="newFeatureName" placeholder="New feature"><button class="btn btn-outline btn-sm" onclick="H4App.addFeature()">+ Add</button></div></div>`;
+    }else if(this.step===10){
+      const t=q.termsAndConditions;h=`<div class="epoxy-step active"><h3 class="step-title">11. Terms & Conditions</h3>${inp('Advance Payment (%)','termsAndConditions.advancePayment',t.advancePayment)}${inp('Balance Payment','termsAndConditions.balancePayment',t.balancePayment)}${inp('Work Schedule','termsAndConditions.workSchedule',t.workSchedule)}${inp('Water & Electricity by Client','termsAndConditions.waterElectricityByClient',t.waterElectricityByClient)}${inp('Warranty Conditions','termsAndConditions.warrantyConditions',t.warrantyConditions)}${inp('Surface Condition Responsibility','termsAndConditions.surfaceConditionResponsibility',t.surfaceConditionResponsibility)}${inp('Access to Work Area','termsAndConditions.accessToWorkArea',t.accessToWorkArea)}${inp('Curing Restrictions','termsAndConditions.curingRestrictions',t.curingRestrictions)}${inp('Maintenance Requirements','termsAndConditions.maintenanceRequirements',t.maintenanceRequirements)}<div class="form-group"><label>Other Terms</label><textarea data-bind="termsAndConditions.otherTerms" rows="4">${H4Utils.esc(t.otherTerms)}</textarea></div></div>`;
+    }else{
+      h=`<div class="epoxy-step active"><h3 class="step-title">12. Final Review / Footer / QR</h3>${inp('Thank You Message','footer.thankYou',q.footer.thankYou)}${inp('Authorized Signatory Name','footer.authorizedSignatoryName',q.footer.authorizedSignatoryName)}${sel('QR Destination','footer.qrType',q.footer.qrType,['website','whatsapp','portfolio','custom'])}${inp('QR Value','footer.qrValue',q.footer.qrValue)}<div class="toolbar"><button class="btn btn-primary" type="button" onclick="H4App.saveEpoxy(false)">💾 Save Quotation</button><button class="btn btn-secondary" type="button" onclick="H4App.printCurrentEpoxy()">🖨️ Print / PDF</button><button class="btn btn-success" type="button" onclick="H4App.convertCurrentEpoxy()">🧾 Convert to Invoice</button></div></div>`;
+    }
+    cont.innerHTML=h;
+    this.attachEpoxyEvents();
+    this.applyCustomerSnapshot();
+    this.calculateEpoxyPricing();
+  },
+
+  epoxyFieldChange(id){
+    this.syncCurrentStep();
+    this.calculateEpoxyPricing();
+    this.updateEpoxyPreview();
+    this.saveDraft();
+  },
+
+  attachEpoxyEvents(){
+    document.querySelectorAll('.epoxy-step.active [data-bind]').forEach(el=>{
+      el.addEventListener('input',()=>{
+        this.syncCurrentStep();
+        this.calculateEpoxyPricing();
+        this.updateEpoxyPreview();
+        this.saveDraft();
+      });
+      el.addEventListener('change',()=>{
+        this.syncCurrentStep();
+        if(el.dataset.bind==='customerId')this.applyCustomerSnapshot();
+        this.calculateEpoxyPricing();
+        this.updateEpoxyPreview();
+        this.saveDraft();
+      });
+    });
+  },
+
+  enableManualRate(){
+    const val=prompt('Enter manual rate per '+this.epoxy.projectDetails.areaUnit);
+    if(val!==null){
+      const rate=H4Utils.num(val);
+      this.epoxy._calculatedRate={baseRate:rate,modifiers:[],modifierTotal:0,finalRate:rate,rateStatus:'override',rateSource:'manual',rateId:null};
+      this.renderEpoxyStepContent();
+      this.calculateEpoxyPricing();
+      this.updateEpoxyPreview();
+    }
+  },
+
+  applyCustomerSnapshot(){
+    if(!this.epoxy)return;const id=this.epoxy.customerId,c=(H4DB.get('customers')||{})[id];if(!c)return;
+    this.epoxy.customerSnapshot=JSON.parse(JSON.stringify(c));
+  },
+
+  setPricing(key,val){if(key==='warrantyEnabled')this.epoxy.warranty.enabled=val;else this.epoxy.pricing[key]=val;this.calculateEpoxyPricing();this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+
+  priceItemHtml(it,i){
+    const units=Object.values(H4DB.get('unitMaster')).filter(x=>x.active).map(x=>x.unit);
+    return `<div class="price-item"><div class="price-head"><strong>Item ${i+1}</strong><div class="toolbar"><button class="btn btn-sm btn-outline" onclick="H4App.duplicateItem(${i})">Duplicate</button><button class="btn btn-sm btn-danger" onclick="H4App.removeItem(${i})">Delete</button></div></div>
+    <div class="form-group"><label>Description</label><input value="${H4Utils.esc(it.description)}" onchange="H4App.updateItem(${i},'description',this.value)"></div>
+    <div class="mini-grid"><div class="form-group"><label>Category</label><select onchange="H4App.updateItem(${i},'category',this.value)">${['Material Cost','Labour Cost','Surface Preparation','Crack Repair','Primer Coat','Epoxy Screed / Putty','Self-Leveling Epoxy','Decorative Finish','PU Top Coat','Transportation','Other Charges'].map(x=>`<option ${x===it.category?'selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Qty</label><input type="number" step=".01" value="${it.quantity}" onchange="H4App.updateItem(${i},'quantity',this.value)"></div>
+    <div class="form-group"><label>Unit</label><select onchange="H4App.updateItem(${i},'unit',this.value)">${units.map(x=>`<option ${x===it.unit?'selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Rate</label><input type="number" step=".01" value="${it.rate}" onchange="H4App.updateItem(${i},'rate',this.value)"></div></div>
+    <div class="mini-grid"><div class="form-group"><label>Discount</label><input type="number" step=".01" value="${it.discount}" onchange="H4App.updateItem(${i},'discount',this.value)"></div><div class="form-group"><label>GST %</label><input type="number" step=".01" value="${it.gst}" onchange="H4App.updateItem(${i},'gst',this.value)"></div></div>
+    <div class="summary-line"><span>Amount</span><strong>${H4Utils.money(it.amount)}</strong></div></div>`;
+  },
+
+  addPriceItem(){
+    const q=this.epoxy,pd=q.projectDetails;
+    const rate=q._calculatedRate?.finalRate||0;
+    q.pricing.items.push({itemId:H4Utils.id('item'),description:`${pd.epoxyType||'Epoxy'} — ${pd.system||'System'}`,category:'Material Cost',quantity:pd.area||0,unit:pd.areaUnit||'sq.ft',rate:rate,gst:H4DB.get('settings').defaultGst||18,amount:H4Utils.num(pd.area)*rate,discount:0});
+    this.calculateEpoxyPricing();
+    this.renderEpoxyStepContent();
+    this.updateEpoxyPreview();
+  },
+
+  updateItem(i,key,val){const it=this.epoxy.pricing.items[i];if(!it)return;it[key]=['quantity','rate','discount','gst'].includes(key)?H4Utils.num(val):val;this.calculateEpoxyPricing();this.renderEpoxyStepContent();this.updateEpoxyPreview();this.saveDraft()},
+  duplicateItem(i){const x=JSON.parse(JSON.stringify(this.epoxy.pricing.items[i]));x.itemId=H4Utils.id('item');this.epoxy.pricing.items.splice(i+1,0,x);this.calculateEpoxyPricing();this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+  removeItem(i){this.epoxy.pricing.items.splice(i,1);this.calculateEpoxyPricing();this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+  updateScope(i,v){this.epoxy.workScope[i].selected=v;this.updateEpoxyPreview();this.saveDraft()},
+  updateScopeDesc(i,v){this.epoxy.workScope[i].description=v;this.updateEpoxyPreview();this.saveDraft()},
+  removeScope(i){this.epoxy.workScope.splice(i,1);this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+  addScope(){const e=document.getElementById('newScopeName'),n=e.value.trim();if(!n)return;this.epoxy.workScope.push({id:H4Utils.id('scope'),name:n,selected:true,description:n,quantity:'',unit:''});e.value='';this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+  updateFeature(i,v){this.epoxy.premiumFeatures[i].selected=v;this.updateEpoxyPreview();this.saveDraft()},
+  updateFeatureName(i,v){this.epoxy.premiumFeatures[i].name=v;this.updateEpoxyPreview();this.saveDraft()},
+  removeFeature(i){this.epoxy.premiumFeatures.splice(i,1);this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+  addFeature(){const e=document.getElementById('newFeatureName'),n=e.value.trim();if(!n)return;this.epoxy.premiumFeatures.push({id:H4Utils.id('feature'),name:n,selected:true});e.value='';this.renderEpoxyStepContent();this.updateEpoxyPreview()},
+
+  togglePreview(){document.getElementById('epoxyBuilder').classList.toggle('mobile-preview')},
+
+  updateEpoxyPreview(){if(!this.epoxy)return;this.calculateEpoxyPricing();document.getElementById('epoxyPreview').innerHTML=this.buildProposalHtml(this.epoxy)},
+
+  buildProposalHtml(q){
+    const c=q.companySnapshot||H4DB.get('company'),cu=q.customerSnapshot||this.snapshotCustomer(q.customerId),p=q.projectDetails,pr=q.pricing,t=q.termsAndConditions;
+    const logo=c.logo?`<img class="proposal-logo" src="${c.logo}" alt="Logo">`:'<div class="proposal-logo"></div>';
+    const scope=q.workScope.filter(x=>x.selected),features=q.premiumFeatures.filter(x=>x.selected);
+    const qrVal=q.footer?.qrValue||c.website||'';const qr=q.footer?.qrEnabled!==false?`<img class="qr" src="${H4Utils.qr(qrVal)}" alt="QR Code">`:'';
+    const rate=q._calculatedRate||{baseRate:0,modifiers:[],modifierTotal:0,finalRate:0,rateStatus:'none'};
+    const itemRows=pr.items.map((x,i)=>`<tr><td>${i+1}</td><td>${H4Utils.esc(x.description)}</td><td>${H4Utils.esc(x.unit)}</td><td>${H4Utils.num(x.quantity)}</td><td>${H4Utils.money(x.rate)}</td><td>${H4Utils.money(x.amount)}</td></tr>`).join('')||`<tr><td colspan="6" style="text-align:center">No price items yet</td></tr>`;
+    const page=(title,body,cls='')=>`<section class="proposal-page ${cls}"><h2 class="p-section-title">${title}</h2>${body}</section>`;
+    return `<div class="preview-a4">
+      <section class="proposal-page proposal-cover">
+        <div class="proposal-brand"><div>${logo}<div class="proposal-kicker">H4 CONSTRUCTION SOLUTIONS</div><div class="proposal-title">PREMIUM EPOXY<br>FLOORING PROPOSAL</div><div class="proposal-subtitle">Luxury • Seamless • Durable • Premium Finish</div></div><div class="p-box" style="min-width:150px"><h4>Quotation</h4><div class="p-label">Quotation No.</div><div class="p-value">${H4Utils.esc(q.number)}</div><div class="p-label">Date</div><div class="p-value">${H4Utils.date(q.date)}</div><div class="p-label">Validity</div><div class="p-value">${q.validityDays} Days</div></div></div>
+        <div class="proposal-rule"></div><div class="p-grid"><div class="p-box"><h4>Company Details</h4><div class="p-value">${H4Utils.esc(c.legalName||c.brandName)}</div><div class="p-label">${H4Utils.esc(c.address||'')}</div><div class="p-label">${H4Utils.esc([c.city,c.district,c.state,c.pin].filter(Boolean).join(', '))}</div><div class="p-label">Phone: ${H4Utils.esc(c.phone||'-')}</div><div class="p-label">WhatsApp: ${H4Utils.esc(c.whatsapp||'-')}</div><div class="p-label">${H4Utils.esc(c.email||'')}</div><div class="p-label">${H4Utils.esc(c.website||'')}</div>${c.gstEnabled&&c.gstin?`<div class="p-label">GSTIN: ${H4Utils.esc(c.gstin)}</div>`:''}</div>
+        <div class="p-box"><h4>Customer Details</h4><div class="p-value">${H4Utils.esc(cu.name||'-')}</div><div class="p-label">${H4Utils.esc(cu.address||'-')}</div><div class="p-label">Phone: ${H4Utils.esc(cu.phone||'-')}</div><div class="p-label">WhatsApp: ${H4Utils.esc(cu.whatsapp||'-')}</div><div class="p-label">${H4Utils.esc(cu.email||'')}</div>${cu.gstin?`<div class="p-label">GSTIN: ${H4Utils.esc(cu.gstin)}</div>`:''}</div></div>
+        <div class="p-box" style="margin-top:10px"><h4>Project Details</h4><div class="p-grid"><div><div class="p-label">Project</div><div class="p-value">${H4Utils.esc(p.projectName||'-')}</div></div><div><div class="p-label">Area</div><div class="p-value">${H4Utils.esc(p.area)} ${H4Utils.esc(p.areaUnit)}</div></div><div><div class="p-label">Epoxy Type</div><div class="p-value">${H4Utils.esc(p.epoxyType)}</div></div><div><div class="p-label">System</div><div class="p-value">${H4Utils.esc(p.system)}</div></div><div><div class="p-label">Thickness</div><div class="p-value">${H4Utils.esc(p.thickness)}</div></div><div><div class="p-label">Design</div><div class="p-value">${H4Utils.esc(p.designType||'None')}</div></div><div><div class="p-label">Finish</div><div class="p-value">${H4Utils.esc(p.finish)}</div></div><div><div class="p-label">Reference</div><div class="p-value">${H4Utils.esc(q.reference||'-')}</div></div></div></div>
+        <div style="margin-top:30px;text-align:center;font-size:11px;color:#777">Professional epoxy flooring proposal prepared by H4 Construction Solutions.</div>
+      </section>
+      ${page('PROJECT SPECIFICATION',`<div class="p-grid"><div class="p-box"><h4>Area</h4><div class="p-value">${H4Utils.esc(p.area)} ${H4Utils.esc(p.areaUnit)}</div></div><div class="p-box"><h4>Floor Condition</h4><div class="p-value">${H4Utils.esc(p.floorCondition)}</div></div></div><h2 class="p-section-title" style="margin-top:20px">WORK SCOPE</h2><ul class="p-list">${scope.map(x=>`<li>${H4Utils.esc(x.description)}</li>`).join('')||'<li>No scope selected</li>'}</ul><h2 class="p-section-title" style="margin-top:20px">RATE CALCULATION</h2><div class="p-box"><div class="p-label">Base Rate</div><div class="p-value">${H4Utils.money(rate.baseRate)} / ${p.areaUnit}</div>${rate.modifiers?.length?`<div class="p-label">Modifiers</div>${rate.modifiers.map(m=>`<div class="p-value" style="font-size:10px">+ ${H4Utils.esc(m.name)}: ${m.valueType==='fixed'?H4Utils.money(m.value):(m.value*100)+'%'}</div>`).join('')}`:''}${rate.modifierTotal?`<div class="p-label">Modifier Total</div><div class="p-value">${H4Utils.money(rate.modifierTotal)}</div>`:''}<div class="p-label">Final Rate</div><div class="p-value" style="font-size:16px;font-weight:800;color:var(--primary)">${H4Utils.money(rate.finalRate)} / ${p.areaUnit}</div></div>`)}
+      ${page('PRICE TABLE',`<table class="p-table"><thead><tr><th>#</th><th>Description</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>${itemRows}</tbody></table><div class="p-total" style="margin-top:15px"><div><span>Subtotal</span><strong>${H4Utils.money(pr.subtotal)}</strong></div><div><span>Discount</span><strong>- ${H4Utils.money(pr.discountAmount||0)}</strong></div><div><span>Taxable Amount</span><strong>${H4Utils.money(pr.taxableAmount)}</strong></div>${c.gstEnabled?(pr.interState?`<div><span>IGST</span><strong>${H4Utils.money(pr.igst)}</strong></div>`:`<div><span>CGST</span><strong>${H4Utils.money(pr.cgst)}</strong></div><div><span>SGST</span><strong>${H4Utils.money(pr.sgst)}</strong></div>`):''}<div><span>Round Off</span><strong>${H4Utils.money(pr.roundOff)}</strong></div><div class="p-grand"><span>GRAND TOTAL</span><strong>${H4Utils.money(pr.grandTotal)}</strong></div></div>`)}
+      ${page('TIMELINE & WARRANTY',`<div class="p-grid"><div class="p-box"><h4>Work Duration</h4><div class="p-value">${H4Utils.esc(q.timeline.workDuration)}</div></div><div class="p-box"><h4>Curing Time</h4><div class="p-value">${H4Utils.esc(q.timeline.curingTime)}</div></div></div>${q.warranty.enabled?`<div class="p-box"><div style="font-size:18px;color:#4e267a;font-weight:800">${H4Utils.esc(q.warranty.period)} Warranty</div><div style="font-size:10px;margin-top:5px">${H4Utils.esc(q.warranty.terms)}</div>${q.warranty.conditions?`<div style="font-size:10px;margin-top:5px">${H4Utils.esc(q.warranty.conditions)}</div>`:''}</div>`:'<div class="p-box">Warranty not enabled.</div>'}<h2 class="p-section-title" style="margin-top:20px">PREMIUM FEATURES</h2><div class="feature-grid">${features.map(x=>`<div class="feature">✓ ${H4Utils.esc(x.name)}</div>`).join('')||'<div>No features selected.</div>'}</div><h2 class="p-section-title" style="margin-top:20px">TERMS & CONDITIONS</h2><div style="font-size:10px"><div><strong>Advance:</strong> ${H4Utils.esc(t.advancePayment)}</div><div><strong>Balance:</strong> ${H4Utils.esc(t.balancePayment)}</div><div><strong>Work Schedule:</strong> ${H4Utils.esc(t.workSchedule)}</div><div><strong>Water & Electricity:</strong> ${H4Utils.esc(t.waterElectricityByClient)}</div><div><strong>Warranty:</strong> ${H4Utils.esc(t.warrantyConditions)}</div><div><strong>Surface:</strong> ${H4Utils.esc(t.surfaceConditionResponsibility)}</div><div><strong>Access:</strong> ${H4Utils.esc(t.accessToWorkArea)}</div><div><strong>Curing:</strong> ${H4Utils.esc(t.curingRestrictions)}</div><div><strong>Maintenance:</strong> ${H4Utils.esc(t.maintenanceRequirements)}</div><div><strong>Other:</strong> ${H4Utils.esc(t.otherTerms)}</div></div><div class="proposal-rule"></div><div style="display:flex;justify-content:space-between;gap:20px"><div style="flex:1"><div style="font-size:13px;font-weight:800">${H4Utils.esc(q.footer.thankYou)}</div><div class="signature-box">${c.signature?`<img src="${c.signature}" style="height:65px;max-width:160px;object-fit:contain">`:''}</div><div style="font-size:10px;margin-top:4px">${H4Utils.esc(q.footer.authorizedSignatoryName)}</div><div style="font-size:9px;color:#777">Authorized Signatory</div></div><div style="text-align:center">${qr}<div style="font-size:8px;margin-top:4px">Scan to connect</div></div></div><div style="text-align:center;margin-top:20px;font-size:9px;color:#777">${H4Utils.esc(c.brandName||'H4 Construction Solutions')} • ${H4Utils.esc(c.footerText||'Thank you for your business!')}</div>`)}
+    </div>`;
+  },
+
+  printCurrentEpoxy(){if(!this.epoxy)return;this.calculateEpoxyPricing();document.getElementById('printArea').innerHTML=this.buildProposalHtml(this.epoxy);window.print()},
+  printQuotation(id){const q=(H4DB.get('quotations')||{})[id];if(!q)return;if(q.quotationType==='premium-epoxy'){this.printCurrentByObject(q)}},
+  printCurrentByObject(q){document.getElementById('printArea').innerHTML=this.buildProposalHtml(q);window.print()},
+  convertCurrentEpoxy(){if(this.epoxy){this.saveEpoxy(true);this.convertQuotationToInvoice(this.epoxy.id)}},
+
+  convertQuotationToInvoice(qid){
+    const q=(H4DB.get('quotations')||{})[qid];if(!q)return;
+    if(q.convertedToInvoice){H4Notify.success('Already converted to invoice');return}
+    const s=H4DB.get('settings'),n=this.generateNumber('inv'),p=q.pricing||{};
+    const inv={id:H4Utils.id('inv'),number:n,quotationId:q.id,quotationNumber:q.number,customerId:q.customerId,customerSnapshot:q.customerSnapshot,companySnapshot:q.companySnapshot,date:new Date().toISOString(),dueDate:H4Utils.addDays(new Date(),s.invoiceDueDays),projectName:q.projectDetails?.projectName||'',siteAddress:q.customerSnapshot?.address||'',reference:q.reference||'',projectDetails:JSON.parse(JSON.stringify(q.projectDetails||{})),workScope:JSON.parse(JSON.stringify(q.workScope||[])),materialSpecification:JSON.parse(JSON.stringify(q.materialSpecification||{})),items:(p.items||[]).map(x=>({...x,rate:Number(x.rate),amount:Number(x.amount),historicalRate:true})),subtotal:p.subtotal,totalDiscount:p.discountAmount||0,taxableAmount:p.taxableAmount,cgst:p.cgst,sgst:p.sgst,igst:p.igst,roundOff:p.roundOff,grandTotal:p.grandTotal,status:'unpaid',totalAmount:p.grandTotal,paidAmount:0,balanceAmount:p.grandTotal,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    H4DB.add('invoices',inv);H4DB.update('quotations',q.id,{convertedToInvoice:inv.id,status:'converted',updatedAt:new Date().toISOString()});
+    if(this.epoxy?.id===qid)this.closeEpoxyBuilder();
+    this.renderInvoices();this.renderQuotations();this.updateDashboard();
+    H4Notify.success('Invoice created with historical quotation rates: '+n)
+  },
+
+  printInvoice(id){const i=(H4DB.get('invoices')||{})[id];if(!i)return;const c=i.companySnapshot||H4DB.get('company'),cu=i.customerSnapshot||{};const rows=(i.items||[]).map((x,n)=>`<tr><td>${n+1}</td><td>${H4Utils.esc(x.description)}</td><td>${H4Utils.esc(x.unit)}</td><td>${x.quantity}</td><td>${H4Utils.money(x.rate)}</td><td>${H4Utils.money(x.amount)}</td></tr>`).join('');document.getElementById('printArea').innerHTML=`<div class="preview-a4"><section class="proposal-page"><div class="proposal-brand"><div><div class="proposal-kicker">${H4Utils.esc(c.brandName||c.legalName)}</div><div class="proposal-title" style="font-size:25px">TAX INVOICE</div></div>${c.logo?`<img class="proposal-logo" src="${c.logo}">`:''}</div><div class="proposal-rule"></div><div class="p-grid"><div class="p-box"><h4>Company</h4><div class="p-value">${H4Utils.esc(c.legalName)}</div><div class="p-label">${H4Utils.esc(c.address)}</div><div class="p-label">${H4Utils.esc(c.phone)} • ${H4Utils.esc(c.email)}</div>${c.gstin?`<div class="p-label">GSTIN: ${H4Utils.esc(c.gstin)}</div>`:''}</div><div class="p-box"><h4>Bill To</h4><div class="p-value">${H4Utils.esc(cu.name||'-')}</div><div class="p-label">${H4Utils.esc(cu.address||'-')}</div><div class="p-label">${H4Utils.esc(cu.phone||'-')}</div></div></div><div class="p-box" style="margin-top:10px"><div class="p-grid"><div><div class="p-label">Invoice No.</div><div class="p-value">${H4Utils.esc(i.number)}</div></div><div><div class="p-label">Date</div><div class="p-value">${H4Utils.date(i.date)}</div></div><div><div class="p-label">Quotation</div><div class="p-value">${H4Utils.esc(i.quotationNumber||'-')}</div></div><div><div class="p-label">Project</div><div class="p-value">${H4Utils.esc(i.projectName||'-')}</div></div></div></div><table class="p-table" style="margin-top:18px"><thead><tr><th>#</th><th>Description</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="p-total" style="margin-top:15px"><div><span>Subtotal</span><strong>${H4Utils.money(i.subtotal)}</strong></div><div><span>Discount</span><strong>- ${H4Utils.money(i.totalDiscount)}</strong></div><div><span>Taxable</span><strong>${H4Utils.money(i.taxableAmount)}</strong></div>${c.gstEnabled?(i.igst?`<div><span>IGST</span><strong>${H4Utils.money(i.igst)}</strong></div>`:`<div><span>CGST</span><strong>${H4Utils.money(i.cgst)}</strong></div><div><span>SGST</span><strong>${H4Utils.money(i.sgst)}</strong></div>`):''}<div><span>Round Off</span><strong>${H4Utils.money(i.roundOff)}</strong></div><div class="p-grand"><span>TOTAL</span><strong>${H4Utils.money(i.grandTotal)}</strong></div></div><div style="margin-top:60px;text-align:right"><div class="signature-box" style="display:inline-block;width:220px">${c.signature?`<img src="${c.signature}" style="height:65px;max-width:160px;object-fit:contain">`:''}</div><div>${H4Utils.esc(c.signatoryName||'Authorized Signatory')}</div></div></section></div>`;window.print()},
+
+  openModal(id){const e=document.getElementById(id);if(e)e.classList.add('active')},
+  closeModal(id){const e=document.getElementById(id);if(e)e.remove?((id==='quotationTypeModal')?e.remove():e.classList.remove('active')):null},
+  downloadBackup(){const blob=new Blob([H4DB.export()],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='H4-Billing-Backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);H4Notify.success('Backup downloaded')},
+  restoreBackup(){const f=document.getElementById('backupFile').files[0];if(!f){H4Notify.danger('Select a backup file');return}const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);H4DB.import(d);H4Notify.success('Backup restored. Reloading…');setTimeout(()=>location.reload(),700)}catch(x){H4Notify.danger('Invalid backup file')}};r.readAsText(f)},
+  resetAllData(){if(confirm('Delete ALL H4 Billing ERP data?')){localStorage.removeItem(H4DB.STORAGE_KEY);localStorage.removeItem('h4_epoxy_draft');location.reload()}}
+};
+
+function v(id){return document.getElementById(id)?.value??''}function setv(id,x){const e=document.getElementById(id);if(e)e.value=x??''}function checked(id){return !!document.getElementById(id)?.checked}
+function setOptions(id,arr,selected){const e=document.getElementById(id);if(!e)return;e.innerHTML=arr.map(x=>`<option value="${H4Utils.esc(x)}" ${String(x)===String(selected)?'selected':''}>${H4Utils.esc(x)}</option>`).join('')}
+window.H4App=H4App;
+document.addEventListener('DOMContentLoaded',()=>H4App.init());
+</script>
+</body>
+</html>
