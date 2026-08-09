@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>H4 Billing ERP - Quotation & Invoice Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6A3FA0;
+            --secondary: #8A6510;
+            --accent: #00BCD4;
+            --success: #4CAF50;
+            --danger: #F44336;
+            --warning: #FF9800;
+            --bg: #F5F5F5;
+            --surface: #FFFFFF;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border: #E0E0E0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding-bottom: 80px;
+        }
+
+        /* ==================== HEADER ==================== */
+        .app-header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .menu-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            background: var(--surface);
+            box-shadow: var(--shadow-lg);
+            overflow-y: auto;
+            z-index: 99;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0.5rem 0;
+        }
+
+        .sidebar-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            color: var(--text-primary);
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: var(--bg);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            padding: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ==================== CARDS & FORMS ==================== */
+        .card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 63, 160, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* ==================== TABLES ==================== */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table tbody tr:hover {
+            background: var(--bg);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* ==================== ITEMS TABLE ==================== */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .items-table th {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .items-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .items-table input,
+        .items-table select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .items-table input:focus,
+        .items-table select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* ==================== CALCULATION BOX ==================== */
+        .calc-box {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .calc-row.total {
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--primary);
+            padding: 1rem 0;
+            color: var(--primary);
+        }
+
+        .calc-label {
+            color: var(--text-secondary);
+        }
+
+        .calc-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* ==================== STATUS BADGE ==================== */
+        .status-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-draft { background: #E3F2FD; color: #1976D2; }
+        .status-sent { background: #FFF3E0; color: #F57C00; }
+        .status-accepted { background: #E8F5E9; color: #388E3C; }
+        .status-rejected { background: #FFEBEE; color: #D32F2F; }
+        .status-expired { background: #F3E5F5; color: #7B1FA2; }
+        .status-converted { background: #E0F2F1; color: #00897B; }
+        .status-unpaid { background: #FFEBEE; color: #D32F2F; }
+        .status-partially-paid { background: #FFF3E0; color: #F57C00; }
+        .status-paid { background: #E8F5E9; color: #388E3C; }
+
+        /* ==================== MODALS ==================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 12px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            margin: auto;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        /* ==================== NOTIFICATIONS ==================== */
+        .notifications {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2000;
+            max-width: 400px;
+        }
+
+        .notification {
+            background: white;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.danger {
+            border-left-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ==================== MODULES ==================== */
+        .module {
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        /* ==================== PREVIEW ==================== */
+        .preview-section {
+            background: white;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .document-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .document-number {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .preview-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-items {
+            margin-bottom: 2rem;
+        }
+
+        .preview-items table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .preview-items th {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .preview-items td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-totals {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .preview-totals-box {
+            min-width: 300px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .form-row,
+            .form-row-3,
+            .preview-info {
+                grid-template-columns: 1fr;
+            }
+
+            .items-table {
+                font-size: 0.8rem;
+            }
+
+            .items-table th,
+            .items-table td {
+                padding: 0.5rem;
+            }
+
+            .modal-content {
+                border-radius: 12px 12px 0 0;
+                max-height: 80vh;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+        }
+
+        /* ==================== EPOXY FULL-SCREEN BUILDER ==================== */
+        .epoxy-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .epoxy-overlay.active {
+            display: flex;
+        }
+
+        .epoxy-topbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.85rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .epoxy-topbar-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .epoxy-steps {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.25rem;
+            padding: 0.6rem 0.75rem;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .epoxy-step-chip {
+            flex: none;
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: var(--bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+        }
+
+        .epoxy-step-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .epoxy-step-chip.done {
+            background: #E8F5E9;
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .epoxy-body {
+            flex: 1;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .epoxy-form-pane {
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .epoxy-preview-pane {
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .epoxy-bottombar {
+            background: white;
+            border-top: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .epoxy-step-section {
+            display: none;
+        }
+
+        .epoxy-step-section.active {
+            display: block;
+        }
+
+        .scope-item, .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scope-item input[type="checkbox"],
+        .feature-item input[type="checkbox"] {
+            margin-top: 0.35rem;
+            width: 18px;
+            height: 18px;
+            flex: none;
+        }
+
+        .scope-item input[type="text"],
+        .feature-item input[type="text"] {
+            flex: 1;
+        }
+
+        .rate-status {
+            padding: 0.6rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 0.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .rate-status.auto {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .rate-status.override {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .rate-status.missing {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .price-item-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.85rem;
+            margin-bottom: 0.75rem;
+            background: white;
+        }
+
+        .price-item-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .a4-page {
+            padding: 1.25rem;
+            border-bottom: 2px dashed var(--border);
+        }
+
+        .a4-page:last-child {
+            border-bottom: none;
+        }
+
+        .a4-cover {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .a4-cover h1 {
+            font-size: 1.4rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .a4-cover p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .a4-section-title {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 1.25rem 0 0.6rem;
+            padding-bottom: 0.35rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .spec-grid div strong {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .scope-list-preview, .feature-list-preview {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .scope-list-preview li, .feature-list-preview li {
+            padding: 0.3rem 0;
+        }
+
+        .scope-list-preview li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .feature-list-preview li::before {
+            content: "★ ";
+            color: var(--secondary);
+        }
+
+        .warranty-badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .qr-box {
+            width: 100px;
+            height: 100px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .rate-master-table td, .rate-master-table th {
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 900px) {
+            .epoxy-body {
+                grid-template-columns: 1fr;
+            }
+            .epoxy-preview-pane {
+                display: none;
+            }
+            .epoxy-preview-pane.mobile-show {
+                display: block;
+            }
+        }
+
+        /* ==================== BOTTOM NAV ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            z-index: 999;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+            font-size: 0.75rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <div class="app-title">H4 Billing ERP - Phase 2</div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">H4 Billing ERP</div>
+        <nav class="sidebar-menu">
+            <div class="sidebar-item active" data-module="quotations">📄 Quotations</div>
+            <div class="sidebar-item" data-module="invoices">🧾 Invoices</div>
+            <div class="sidebar-item" data-module="payments">💰 Payments</div>
+            <div class="sidebar-item" data-module="rateMaster">🧮 Rate Master</div>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- ==================== QUOTATIONS ==================== -->
+        <div class="module active" data-module="quotations">
+            <div class="page-header">
+                <h1>📄 Quotations</h1>
+                <p>Create and manage quotations for your customers</p>
+            </div>
+
+            <!-- LIST VIEW -->
+            <div id="quotationsList">
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" onclick="H4App.openModal('qtnTypeModal')">➕ New Quotation</button>
+                </div>
+
+                <div class="card">
+                    <table class="table" id="quotationsTable">
+                        <thead>
+                            <tr>
+                                <th>Quotation #</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quotationsBody">
+                            <tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No quotations yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BUILDER VIEW -->
+            <div id="quotationBuilder" style="display:none;">
+                <button class="btn btn-outline" onclick="H4App.backToList('quotations')" style="margin-bottom: 1rem;">← Back to List</button>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quotation Details</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quotation Number *</label>
+                            <input type="text" id="qtnNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="qtnDate">Quotation Date *</label>
+                            <input type="date" id="qtnDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qtnCustomer">Customer *</label>
+                            <select id="qtnCustomer" required onchange="H4App.onCustomerChange()">
+                                <option value="">-- Select Customer --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="qtnValidUntil">Valid Until</label>
+                            <input type="date" id="qtnValidUntil">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qtnProject">Project Name</label>
+                            <input type="text" id="qtnProject">
+                        </div>
+                        <div class="form-group">
+                            <label for="qtnReference">Reference</label>
+                            <input type="text" id="qtnReference">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qtnAddress">Site Address</label>
+                        <textarea id="qtnAddress" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <!-- ITEMS -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Line Items</h2>
+                        <button class="btn btn-success btn-sm" onclick="H4App.addQtnItem()">➕ Add Item</button>
+                    </div>
+
+                    <table class="items-table" id="qtnItemsTable">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Rate (₹)</th>
+                                <th>Discount</th>
+                                <th>GST %</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="qtnItemsBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TOTALS -->
+                <div class="card">
+                    <div class="calc-box">
+                        <div class="calc-row">
+                            <span class="calc-label">Subtotal:</span>
+                            <span class="calc-value">₹ <span id="qtnSubtotal">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Total Discount:</span>
+                            <span class="calc-value">₹ <span id="qtnTotalDiscount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Taxable Amount:</span>
+                            <span class="calc-value">₹ <span id="qtnTaxableAmount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">CGST (9%):</span>
+                            <span class="calc-value">₹ <span id="qtnCGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">SGST (9%):</span>
+                            <span class="calc-value">₹ <span id="qtnSGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Round Off:</span>
+                            <span class="calc-value">₹ <span id="qtnRoundOff">0.00</span></span>
+                        </div>
+                        <div class="calc-row total">
+                            <span>GRAND TOTAL:</span>
+                            <span>₹ <span id="qtnGrandTotal">0.00</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="card">
+                    <div class="form-group">
+                        <label for="qtnNotes">Notes / Terms</label>
+                        <textarea id="qtnNotes" rows="3" placeholder="Special terms, payment conditions, etc."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qtnStatus">Status</label>
+                        <select id="qtnStatus">
+                            <option value="draft">Draft</option>
+                            <option value="sent">Sent</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="expired">Expired</option>
+                            <option value="converted">Converted</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                        <button class="btn btn-outline" onclick="H4App.backToList('quotations')">Cancel</button>
+                        <button class="btn btn-danger" id="deleteQtnBtn" style="display:none;" onclick="H4App.deleteQuotation()">🗑️ Delete</button>
+                        <button class="btn btn-success" id="convertQtnBtn" style="display:none;" onclick="H4App.convertToInvoice()">✅ Convert to Invoice</button>
+                        <button class="btn btn-primary" onclick="H4App.saveQuotation()">💾 Save Quotation</button>
+                    </div>
+                </div>
+
+                <!-- LIVE PREVIEW -->
+                <div class="preview-section" id="qtnPreview"></div>
+            </div>
+        </div>
+
+        <!-- ==================== INVOICES ==================== -->
+        <div class="module" data-module="invoices">
+            <div class="page-header">
+                <h1>🧾 Invoices</h1>
+                <p>Create and manage invoices for your customers</p>
+            </div>
+
+            <!-- LIST VIEW -->
+            <div id="invoicesList">
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" onclick="H4App.newInvoice()">➕ New Invoice</button>
+                </div>
+
+                <div class="card">
+                    <table class="table" id="invoicesTable">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Paid</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoicesBody">
+                            <tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No invoices yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BUILDER VIEW -->
+            <div id="invoiceBuilder" style="display:none;">
+                <button class="btn btn-outline" onclick="H4App.backToList('invoices')" style="margin-bottom: 1rem;">← Back to List</button>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Invoice Details</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Invoice Number *</label>
+                            <input type="text" id="invNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="invDate">Invoice Date *</label>
+                            <input type="date" id="invDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invCustomer">Customer *</label>
+                            <select id="invCustomer" required>
+                                <option value="">-- Select Customer --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="invDueDate">Due Date</label>
+                            <input type="date" id="invDueDate">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invProject">Project Name</label>
+                            <input type="text" id="invProject">
+                        </div>
+                        <div class="form-group">
+                            <label for="invReference">Reference</label>
+                            <input type="text" id="invReference">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="invQuotation">Linked Quotation (Optional)</label>
+                        <select id="invQuotation">
+                            <option value="">-- None --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ITEMS -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Line Items</h2>
+                        <button class="btn btn-success btn-sm" onclick="H4App.addInvItem()">➕ Add Item</button>
+                    </div>
+
+                    <table class="items-table" id="invItemsTable">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Rate (₹)</th>
+                                <th>Discount</th>
+                                <th>GST %</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invItemsBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TOTALS -->
+                <div class="card">
+                    <div class="calc-box">
+                        <div class="calc-row">
+                            <span class="calc-label">Subtotal:</span>
+                            <span class="calc-value">₹ <span id="invSubtotal">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Total Discount:</span>
+                            <span class="calc-value">₹ <span id="invTotalDiscount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Taxable Amount:</span>
+                            <span class="calc-value">₹ <span id="invTaxableAmount">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">CGST (9%):</span>
+                            <span class="calc-value">₹ <span id="invCGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">SGST (9%):</span>
+                            <span class="calc-value">₹ <span id="invSGST">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Round Off:</span>
+                            <span class="calc-value">₹ <span id="invRoundOff">0.00</span></span>
+                        </div>
+                        <div class="calc-row total">
+                            <span>GRAND TOTAL:</span>
+                            <span>₹ <span id="invGrandTotal">0.00</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAYMENT STATUS -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Payment Status</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invPaidAmount">Amount Paid (₹)</label>
+                            <input type="number" id="invPaidAmount" step="0.01" min="0" onchange="H4App.updatePaymentStatus()">
+                        </div>
+                        <div class="form-group">
+                            <label for="invPaymentStatus">Payment Status</label>
+                            <select id="invPaymentStatus">
+                                <option value="unpaid">Unpaid</option>
+                                <option value="partially-paid">Partially Paid</option>
+                                <option value="paid">Paid</option>
+                                <option value="overdue">Overdue</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Balance Amount (₹): <strong id="invBalance">0.00</strong></label>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="card">
+                    <div class="form-group">
+                        <label for="invNotes">Notes / Terms</label>
+                        <textarea id="invNotes" rows="3" placeholder="Payment terms, special conditions, etc."></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                        <button class="btn btn-outline" onclick="H4App.backToList('invoices')">Cancel</button>
+                        <button class="btn btn-danger" id="deleteInvBtn" style="display:none;" onclick="H4App.deleteInvoice()">🗑️ Delete</button>
+                        <button class="btn btn-primary" onclick="H4App.saveInvoice()">💾 Save Invoice</button>
+                    </div>
+                </div>
+
+                <!-- LIVE PREVIEW -->
+                <div class="preview-section" id="invPreview"></div>
+            </div>
+        </div>
+
+        <!-- ==================== PAYMENTS ==================== -->
+        <div class="module" data-module="payments">
+            <div class="page-header">
+                <h1>💰 Payments</h1>
+                <p>Track invoice payments</p>
+            </div>
+            <div class="card">
+                <p style="text-align: center; color: var(--text-secondary);">Coming next - Advanced Payment Tracking</p>
+            </div>
+        </div>
+
+        <!-- ==================== RATE MASTER ==================== -->
+        <div class="module" data-module="rateMaster">
+            <div class="page-header">
+                <h1>🧮 Rate Master</h1>
+                <p>Flooring Type + Thickness + Unit → Rate mapping (used for auto-fill in Epoxy quotations)</p>
+            </div>
+
+            <div style="margin-bottom: 1rem; display:flex; gap:0.75rem; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="H4App.populateMasterSelect('rmFlooringType','flooringTypeMaster'); H4App.populateMasterSelect('rmThickness','thicknessMaster'); H4App.populateMasterSelect('rmUnit','unitMaster'); document.getElementById('rateMasterForm').reset(); document.getElementById('rateMasterForm').removeAttribute('data-rate-id'); H4App.openModal('rateMasterModal')">➕ Add Rate</button>
+                <button class="btn btn-outline" onclick="H4App.renderMasterList('unitListContainer','unitMaster'); H4App.openModal('unitMasterModal')">📏 Manage Units</button>
+                <button class="btn btn-outline" onclick="H4App.renderMasterList('flooringTypeListContainer','flooringTypeMaster'); H4App.openModal('flooringTypeModal')">🧱 Manage Flooring Types</button>
+                <button class="btn btn-outline" onclick="H4App.renderMasterList('thicknessListContainer','thicknessMaster'); H4App.openModal('thicknessModal')">📐 Manage Thickness</button>
+            </div>
+
+            <div class="card">
+                <table class="table rate-master-table" id="rateMasterTable">
+                    <thead>
+                        <tr>
+                            <th>Flooring Type</th>
+                            <th>Thickness</th>
+                            <th>Unit</th>
+                            <th>Rate (₹)</th>
+                            <th>GST %</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rateMasterBody">
+                        <tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-secondary);">No rates configured yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==================== QUOTATION TYPE SELECTOR MODAL ==================== -->
+    <div class="modal-overlay" id="qtnTypeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>New Quotation</h3>
+                <button class="modal-close" onclick="H4App.closeModal('qtnTypeModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:1rem; color:var(--text-secondary);">Choose quotation type</p>
+                <div style="display:grid; gap:0.85rem;">
+                    <button class="btn btn-outline btn-block" style="justify-content:flex-start; padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.newQuotation();">
+                        📄 <strong>General Quotation</strong> — standard items & pricing
+                    </button>
+                    <button class="btn btn-primary btn-block" style="justify-content:flex-start; padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Epoxy.open();">
+                        ✨ <strong>Premium Epoxy Flooring Proposal</strong> — full proposal builder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== RATE MASTER MODAL ==================== -->
+    <div class="modal-overlay" id="rateMasterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add / Edit Rate</h3>
+                <button class="modal-close" onclick="H4App.closeModal('rateMasterModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="rateMasterForm">
+                    <div class="form-group">
+                        <label for="rmFlooringType">Flooring Type *</label>
+                        <select id="rmFlooringType" required></select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="rmThickness">Thickness *</label>
+                            <select id="rmThickness" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="rmUnit">Unit *</label>
+                            <select id="rmUnit" required></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="rmRate">Rate (₹) *</label>
+                            <input type="number" id="rmRate" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rmGst">GST %</label>
+                            <input type="number" id="rmGst" step="0.01" value="18">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="rmActive" checked> Active</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="H4App.closeModal('rateMasterModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="H4App.saveRateMaster()">💾 Save Rate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== UNIT MASTER MODAL ==================== -->
+    <div class="modal-overlay" id="unitMasterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Unit Master</h3>
+                <button class="modal-close" onclick="H4App.closeModal('unitMasterModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+                    <input type="text" id="newUnitInput" placeholder="e.g. sq.ft">
+                    <button class="btn btn-primary btn-sm" onclick="H4App.addUnit()">Add</button>
+                </div>
+                <div id="unitListContainer"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="H4App.closeModal('unitMasterModal')">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FLOORING TYPE MODAL ==================== -->
+    <div class="modal-overlay" id="flooringTypeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Flooring Types</h3>
+                <button class="modal-close" onclick="H4App.closeModal('flooringTypeModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+                    <input type="text" id="newFlooringTypeInput" placeholder="e.g. Metallic Epoxy Flooring">
+                    <button class="btn btn-primary btn-sm" onclick="H4App.addFlooringType()">Add</button>
+                </div>
+                <div id="flooringTypeListContainer"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="H4App.closeModal('flooringTypeModal')">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== THICKNESS MODAL ==================== -->
+    <div class="modal-overlay" id="thicknessModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thickness Options</h3>
+                <button class="modal-close" onclick="H4App.closeModal('thicknessModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+                    <input type="text" id="newThicknessInput" placeholder="e.g. 4 mm">
+                    <button class="btn btn-primary btn-sm" onclick="H4App.addThickness()">Add</button>
+                </div>
+                <div id="thicknessListContainer"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="H4App.closeModal('thicknessModal')">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PREMIUM EPOXY FULL-SCREEN BUILDER ==================== -->
+    <div class="epoxy-overlay" id="epoxyOverlay">
+        <div class="epoxy-topbar">
+            <div class="epoxy-topbar-title">✨ Premium Epoxy Flooring Proposal</div>
+            <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-sm btn-secondary" onclick="H4Epoxy.togglePreviewMobile()" id="epoxyPreviewToggleBtn" style="display:none;">👁️ Preview</button>
+                <button class="btn btn-sm btn-success" onclick="H4Epoxy.save()">💾 Save</button>
+                <button class="btn btn-sm btn-danger" onclick="H4Epoxy.close()">✕ Close</button>
+            </div>
+        </div>
+
+        <div class="epoxy-steps" id="epoxySteps"></div>
+
+        <div class="epoxy-body">
+            <div class="epoxy-form-pane" id="epoxyFormPane">
+
+                <!-- STEP 1: CUSTOMER -->
+                <div class="epoxy-step-section" data-step="1">
+                    <div class="card">
+                        <div class="card-header"><h2>Quotation & Customer</h2></div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Quotation Number</label>
+                                <input type="text" id="epxNumber" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="epxDate">Date</label>
+                                <input type="date" id="epxDate">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxValidity">Validity (days)</label>
+                                <input type="number" id="epxValidity" min="1" value="15">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxCustomer">Customer *</label>
+                                <select id="epxCustomer"></select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxProjectName">Project Name</label>
+                                <input type="text" id="epxProjectName">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxReference">Reference</label>
+                                <input type="text" id="epxReference">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="epxSiteAddress">Site Address</label>
+                            <textarea id="epxSiteAddress" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: PROJECT DETAILS -->
+                <div class="epoxy-step-section" data-step="2">
+                    <div class="card">
+                        <div class="card-header"><h2>Project Details</h2></div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxArea">Area *</label>
+                                <input type="number" id="epxArea" min="0" step="0.01" oninput="H4Epoxy.onSystemChange()">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxAreaUnit">Area Unit</label>
+                                <select id="epxAreaUnit" onchange="H4Epoxy.onSystemChange()"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="epxFlooringType">Flooring Type *</label>
+                            <select id="epxFlooringType" onchange="H4Epoxy.onSystemChange()"></select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxThickness">Thickness *</label>
+                                <select id="epxThickness" onchange="H4Epoxy.onSystemChange()"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="epxFloorCondition">Floor Condition</label>
+                                <select id="epxFloorCondition"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: SMART RATE -->
+                <div class="epoxy-step-section" data-step="3">
+                    <div class="card">
+                        <div class="card-header"><h2>Smart Rate / Flooring System</h2></div>
+                        <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:0.75rem;">Based on Flooring Type + Thickness + Unit selected in Step 2, the rate is auto-filled from the Rate Master.</p>
+
+                        <div id="epxRateStatus" class="rate-status auto">Select project details to check rate</div>
+
+                        <div class="form-row" style="margin-top:1rem;">
+                            <div class="form-group">
+                                <label for="epxSystemRate">Rate (₹ per unit)</label>
+                                <input type="number" id="epxSystemRate" step="0.01" min="0" oninput="H4Epoxy.onManualRateEdit()">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxSystemGst">GST %</label>
+                                <input type="number" id="epxSystemGst" step="0.01" min="0" value="18">
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <button class="btn btn-sm btn-outline" onclick="H4Epoxy.resetToAutoRate()">🔒 Use Auto Rate</button>
+                            <button class="btn btn-sm btn-outline" onclick="H4App.openModal('rateMasterModal')">➕ Add Rate</button>
+                        </div>
+
+                        <div class="card" style="margin-top:1rem; background:var(--bg);">
+                            <strong>Estimated Amount (Self-Leveling System):</strong>
+                            <div style="font-size:1.3rem; color:var(--primary); font-weight:700;" id="epxSystemAmount">₹0.00</div>
+                            <small style="color:var(--text-secondary);">Area × Rate — this line is auto-added to Price Items in Step 6.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: WORK SCOPE -->
+                <div class="epoxy-step-section" data-step="4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Work Scope</h2>
+                            <button class="btn btn-sm btn-success" onclick="H4Epoxy.addScopeItem()">➕ Add</button>
+                        </div>
+                        <div id="epxScopeList"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: MATERIAL SPECIFICATION -->
+                <div class="epoxy-step-section" data-step="5">
+                    <div class="card">
+                        <div class="card-header"><h2>Material Specification</h2></div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxBrand">Brand</label>
+                                <input type="text" id="epxBrand" value="H4">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxProductSystem">Product / System</label>
+                                <input type="text" id="epxProductSystem">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxMixingRatio">Mixing Ratio</label>
+                                <input type="text" id="epxMixingRatio" placeholder="e.g. 2:1">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxMatThickness">Thickness</label>
+                                <input type="text" id="epxMatThickness" placeholder="e.g. 2mm">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxColourCode">Colour Code</label>
+                                <input type="text" id="epxColourCode">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxColourName">Colour Name</label>
+                                <input type="text" id="epxColourName">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxFinish">Finish</label>
+                                <select id="epxFinish">
+                                    <option>High Gloss</option>
+                                    <option>Gloss</option>
+                                    <option>Matte</option>
+                                    <option>Satin</option>
+                                    <option>Custom</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="epxAntiSlip">Anti-slip</label>
+                                <select id="epxAntiSlip">
+                                    <option>Not Required</option>
+                                    <option>Standard</option>
+                                    <option>Medium</option>
+                                    <option>Heavy Duty</option>
+                                    <option>Custom</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 6: PRICE ITEMS -->
+                <div class="epoxy-step-section" data-step="6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Price Items</h2>
+                            <button class="btn btn-sm btn-success" onclick="H4Epoxy.addPriceItem()">➕ Add Item</button>
+                        </div>
+                        <div id="epxPriceItems"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 7: DISCOUNT & GST -->
+                <div class="epoxy-step-section" data-step="7">
+                    <div class="card">
+                        <div class="card-header"><h2>Discount & GST</h2></div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="epxDiscountEnabled" onchange="H4Epoxy.calculate()"> Enable Discount</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxDiscountValue">Discount</label>
+                                <input type="number" id="epxDiscountValue" step="0.01" min="0" value="0" oninput="H4Epoxy.calculate()">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxDiscountType">Discount Type</label>
+                                <select id="epxDiscountType" onchange="H4Epoxy.calculate()">
+                                    <option value="flat">Flat</option>
+                                    <option value="percentage">Percentage</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="epxGstMode">GST Mode</label>
+                            <select id="epxGstMode" onchange="H4Epoxy.calculate()">
+                                <option value="intra">Intra-state (CGST + SGST)</option>
+                                <option value="inter">Inter-state (IGST)</option>
+                                <option value="off">GST Disabled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 8: CALCULATION -->
+                <div class="epoxy-step-section" data-step="8">
+                    <div class="card">
+                        <div class="card-header"><h2>Calculation</h2></div>
+                        <div class="calc-box">
+                            <div class="calc-row"><span class="calc-label">Subtotal:</span><span class="calc-value">₹ <span id="epxSubtotal">0.00</span></span></div>
+                            <div class="calc-row"><span class="calc-label">Discount:</span><span class="calc-value">₹ <span id="epxDiscountAmt">0.00</span></span></div>
+                            <div class="calc-row"><span class="calc-label">Taxable Amount:</span><span class="calc-value">₹ <span id="epxTaxable">0.00</span></span></div>
+                            <div class="calc-row" id="epxCgstRow"><span class="calc-label">CGST:</span><span class="calc-value">₹ <span id="epxCgst">0.00</span></span></div>
+                            <div class="calc-row" id="epxSgstRow"><span class="calc-label">SGST:</span><span class="calc-value">₹ <span id="epxSgst">0.00</span></span></div>
+                            <div class="calc-row" id="epxIgstRow" style="display:none;"><span class="calc-label">IGST:</span><span class="calc-value">₹ <span id="epxIgst">0.00</span></span></div>
+                            <div class="calc-row"><span class="calc-label">Round Off:</span><span class="calc-value">₹ <span id="epxRoundOff">0.00</span></span></div>
+                            <div class="calc-row total"><span>GRAND TOTAL:</span><span>₹ <span id="epxGrandTotal">0.00</span></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 9: TIMELINE / WARRANTY / FEATURES -->
+                <div class="epoxy-step-section" data-step="9">
+                    <div class="card">
+                        <div class="card-header"><h2>Timeline</h2></div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxWorkDuration">Work Duration</label>
+                                <input type="text" id="epxWorkDuration" placeholder="e.g. 3-5 Days">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxCuringTime">Curing Time</label>
+                                <input type="text" id="epxCuringTime" placeholder="e.g. 24-72 Hours">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><h2>Warranty</h2></div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="epxWarrantyEnabled" checked> Enable Warranty</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxWarrantyPeriod">Warranty Period</label>
+                                <select id="epxWarrantyPeriod">
+                                    <option>3 Years</option>
+                                    <option selected>5 Years</option>
+                                    <option>10 Years</option>
+                                    <option>Custom</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="epxWarrantyTerms">Warranty Terms</label>
+                            <textarea id="epxWarrantyTerms" rows="2">Subject to H4 Construction Solutions Warranty Terms & Conditions.</textarea>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Premium Features</h2>
+                            <button class="btn btn-sm btn-success" onclick="H4Epoxy.addFeatureItem()">➕ Add</button>
+                        </div>
+                        <div id="epxFeatureList"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 10: TERMS / FOOTER / PREVIEW -->
+                <div class="epoxy-step-section" data-step="10">
+                    <div class="card">
+                        <div class="card-header"><h2>Terms & Conditions</h2></div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxAdvancePayment">Advance Payment (%)</label>
+                                <input type="number" id="epxAdvancePayment" value="50" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxBalancePayment">Balance Payment</label>
+                                <input type="text" id="epxBalancePayment" value="50% upon completion">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="epxWorkSchedule">Work Schedule</label>
+                                <input type="text" id="epxWorkSchedule" value="As mutually agreed">
+                            </div>
+                            <div class="form-group">
+                                <label for="epxWaterElectricity">Water & Electricity</label>
+                                <input type="text" id="epxWaterElectricity" value="To be provided by client">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="epxOtherTerms">Other Terms</label>
+                            <textarea id="epxOtherTerms" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><h2>Footer & QR</h2></div>
+                        <div class="form-group">
+                            <label for="epxThankYou">Thank You Message</label>
+                            <input type="text" id="epxThankYou" value="Thank you for considering H4 Construction Solutions.">
+                        </div>
+                        <div class="form-group">
+                            <label for="epxQrType">QR Destination</label>
+                            <select id="epxQrType">
+                                <option value="website">Website</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="portfolio">Portfolio</option>
+                                <option value="custom">Custom URL</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="epxQrValue">QR Value / URL</label>
+                            <input type="text" id="epxQrValue" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
+                        <button class="btn btn-success" id="epxConvertBtn" style="display:none;" onclick="H4Epoxy.convertToInvoice()">✅ Convert to Invoice</button>
+                        <button class="btn btn-primary" onclick="H4Epoxy.save()">💾 Save Quotation</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="epoxy-preview-pane" id="epoxyPreviewPane"></div>
+        </div>
+
+        <div class="epoxy-bottombar">
+            <button class="btn btn-outline" id="epxPrevBtn" onclick="H4Epoxy.prevStep()">← Previous</button>
+            <button class="btn btn-primary" id="epxNextBtn" onclick="H4Epoxy.nextStep()">Next →</button>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="notifications" id="notifications"></div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav" id="bottomNav" style="display: none;">
+        <div class="nav-item active" data-module="quotations">
+            <span class="nav-icon">📄</span>
+            <span>Quotations</span>
+        </div>
+        <div class="nav-item" data-module="invoices">
+            <span class="nav-icon">🧾</span>
+            <span>Invoices</span>
+        </div>
+        <div class="nav-item" data-module="payments">
+            <span class="nav-icon">💰</span>
+            <span>Payments</span>
+        </div>
+    </nav>
+
+    <!-- CORE JAVASCRIPT -->
+    <script>
+        // ==================== CALCULATION ENGINE ====================
+        const H4Calc = {
+            calculateLineTotal(quantity, rate, discount, discountType) {
+                const subtotal = quantity * rate;
+                const discountAmount = discountType === 'percentage' ? (subtotal * discount / 100) : discount;
+                return Math.max(0, subtotal - discountAmount);
+            },
+
+            calculateTotals(items) {
+                let subtotal = 0;
+                let totalDiscount = 0;
+
+                items.forEach(item => {
+                    const qty = parseFloat(item.quantity) || 0;
+                    const rate = parseFloat(item.rate) || 0;
+                    const discount = parseFloat(item.discount) || 0;
+                    const discountType = item.discountType || 'flat';
+
+                    const itemSubtotal = qty * rate;
+                    const discountAmount = discountType === 'percentage' ? (itemSubtotal * discount / 100) : discount;
+
+                    subtotal += itemSubtotal;
+                    totalDiscount += discountAmount;
+                });
+
+                const taxableAmount = subtotal - totalDiscount;
+                
+                // CGST + SGST (splitting 18% GST equally)
+                const cgst = taxableAmount * 0.09;
+                const sgst = taxableAmount * 0.09;
+                const total = taxableAmount + cgst + sgst;
+
+                return {
+                    subtotal,
+                    totalDiscount,
+                    taxableAmount,
+                    cgst,
+                    sgst,
+                    igst: 0,
+                    roundOff: 0,
+                    grandTotal: total
+                };
+            }
+        };
+
+        // ==================== NUMBERING ENGINE ====================
+        const H4Numbering = {
+            getNextQuotationNumber() {
+                const settings = H4DB.get('settings');
+                const counter = settings.quotationCounter || 1;
+                const prefix = settings.quotationPrefix || 'H4-QTN';
+                const year = settings.quotationYear || 2026;
+                const number = String(counter).padStart(5, '0');
+                
+                // Increment for next time
+                settings.quotationCounter = counter + 1;
+                H4DB.save('settings', settings);
+
+                return `${prefix}-${year}-${number}`;
+            },
+
+            getNextInvoiceNumber() {
+                const settings = H4DB.get('settings');
+                const counter = settings.invoiceCounter || 1;
+                const prefix = settings.invoicePrefix || 'H4-INV';
+                const year = settings.invoiceYear || 2026;
+                const number = String(counter).padStart(5, '0');
+
+                // Increment for next time
+                settings.invoiceCounter = counter + 1;
+                H4DB.save('settings', settings);
+
+                return `${prefix}-${year}-${number}`;
+            }
+        };
+
+        // ==================== DOCUMENT GENERATOR ====================
+        const H4Documents = {
+            generateQuotationPreview(data) {
+                const company = H4DB.get('company');
+                const customer = H4DB.get('customers')[data.customerId] || {};
+                
+                const totals = H4Calc.calculateTotals(data.items);
+                
+                let itemsHtml = '';
+                data.items.forEach(item => {
+                    const lineTotal = H4Calc.calculateLineTotal(item.quantity, item.rate, item.discount, item.discountType);
+                    itemsHtml += `
+                        <tr>
+                            <td>${item.description}</td>
+                            <td style="text-align: right;">${item.quantity}</td>
+                            <td>${item.unit}</td>
+                            <td style="text-align: right;">₹${parseFloat(item.rate || 0).toFixed(2)}</td>
+                            <td style="text-align: right;">₹${parseFloat(item.discount || 0).toFixed(2)}</td>
+                            <td style="text-align: right;">${item.gst}%</td>
+                            <td style="text-align: right;">₹${lineTotal.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                return `
+                    <div class="preview-header">
+                        <div class="document-title">QUOTATION</div>
+                        <div class="document-number">${data.number || 'H4-QTN-2026-00001'}</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Date: ${new Date(data.date).toLocaleDateString('en-IN')}
+                            ${data.validUntil ? ` | Valid Until: ${new Date(data.validUntil).toLocaleDateString('en-IN')}` : ''}
+                        </div>
+                    </div>
+
+                    <div class="preview-info">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">From:</h4>
+                            <strong>${company.legalName}</strong><br>
+                            ${company.address}<br>
+                            ${company.phone}
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">To:</h4>
+                            <strong>${customer.name}</strong><br>
+                            ${customer.address || ''}<br>
+                            ${customer.phone}
+                        </div>
+                    </div>
+
+                    <div class="preview-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th style="text-align: right;">Qty</th>
+                                    <th>Unit</th>
+                                    <th style="text-align: right;">Rate</th>
+                                    <th style="text-align: right;">Discount</th>
+                                    <th style="text-align: right;">GST</th>
+                                    <th style="text-align: right;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="preview-totals">
+                        <div class="preview-totals-box">
+                            <div class="calc-row">
+                                <span>Subtotal:</span>
+                                <span>₹${totals.subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Total Discount:</span>
+                                <span>₹${totals.totalDiscount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Taxable:</span>
+                                <span>₹${totals.taxableAmount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>CGST (9%):</span>
+                                <span>₹${totals.cgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>SGST (9%):</span>
+                                <span>₹${totals.sgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row total">
+                                <span>GRAND TOTAL:</span>
+                                <span>₹${totals.grandTotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${data.notes ? `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);"><strong>Terms:</strong><br>${data.notes}</div>` : ''}
+                `;
+            },
+
+            generateInvoicePreview(data) {
+                const company = H4DB.get('company');
+                const customer = H4DB.get('customers')[data.customerId] || {};
+                
+                const totals = H4Calc.calculateTotals(data.items);
+                
+                let itemsHtml = '';
+                data.items.forEach(item => {
+                    const lineTotal = H4Calc.calculateLineTotal(item.quantity, item.rate, item.discount, item.discountType);
+                    itemsHtml += `
+                        <tr>
+                            <td>${item.description}</td>
+                            <td style="text-align: right;">${item.quantity}</td>
+                            <td>${item.unit}</td>
+                            <td style="text-align: right;">₹${parseFloat(item.rate || 0).toFixed(2)}</td>
+                            <td style="text-align: right;">₹${parseFloat(item.discount || 0).toFixed(2)}</td>
+                            <td style="text-align: right;">${item.gst}%</td>
+                            <td style="text-align: right;">₹${lineTotal.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                return `
+                    <div class="preview-header">
+                        <div class="document-title">INVOICE</div>
+                        <div class="document-number">${data.number || 'H4-INV-2026-00001'}</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Date: ${new Date(data.date).toLocaleDateString('en-IN')}
+                            ${data.dueDate ? ` | Due Date: ${new Date(data.dueDate).toLocaleDateString('en-IN')}` : ''}
+                        </div>
+                    </div>
+
+                    <div class="preview-info">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">From:</h4>
+                            <strong>${company.legalName}</strong><br>
+                            ${company.address}<br>
+                            ${company.phone}
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">To:</h4>
+                            <strong>${customer.name}</strong><br>
+                            ${customer.address || ''}<br>
+                            ${customer.phone}
+                        </div>
+                    </div>
+
+                    <div class="preview-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th style="text-align: right;">Qty</th>
+                                    <th>Unit</th>
+                                    <th style="text-align: right;">Rate</th>
+                                    <th style="text-align: right;">Discount</th>
+                                    <th style="text-align: right;">GST</th>
+                                    <th style="text-align: right;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="preview-totals">
+                        <div class="preview-totals-box">
+                            <div class="calc-row">
+                                <span>Subtotal:</span>
+                                <span>₹${totals.subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Total Discount:</span>
+                                <span>₹${totals.totalDiscount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>Taxable:</span>
+                                <span>₹${totals.taxableAmount.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>CGST (9%):</span>
+                                <span>₹${totals.cgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row">
+                                <span>SGST (9%):</span>
+                                <span>₹${totals.sgst.toFixed(2)}</span>
+                            </div>
+                            <div class="calc-row total">
+                                <span>GRAND TOTAL:</span>
+                                <span>₹${totals.grandTotal.toFixed(2)}</span>
+                            </div>
+                            ${data.paidAmount ? `<div class="calc-row" style="color: var(--success);"><span>Amount Paid:</span><span>₹${parseFloat(data.paidAmount).toFixed(2)}</span></div>` : ''}
+                            ${data.paidAmount ? `<div class="calc-row" style="color: var(--danger);"><span>Balance:</span><span>₹${(totals.grandTotal - parseFloat(data.paidAmount)).toFixed(2)}</span></div>` : ''}
+                        </div>
+                    </div>
+
+                    ${data.notes ? `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);"><strong>Terms:</strong><br>${data.notes}</div>` : ''}
+                `;
+            }
+        };
+
+        // ==================== DATABASE ====================
+        const H4DB = {
+            STORAGE_KEY: 'h4_billing_erp_v3',
+
+            init() {
+                if (!localStorage.getItem(this.STORAGE_KEY)) {
+                    // Assume Phase 1 data exists
+                }
+            },
+
+            get(key) {
+                const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+                return key ? data[key] : data;
+            },
+
+            save(key, value) {
+                const data = this.get();
+                data[key] = value;
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+            },
+
+            add(category, item) {
+                const data = this.get(category) || {};
+                data[item.id] = item;
+                this.save(category, data);
+                return item;
+            },
+
+            update(category, id, updates) {
+                const data = this.get(category) || {};
+                if (data[id]) {
+                    data[id] = { ...data[id], ...updates };
+                    this.save(category, data);
+                    return data[id];
+                }
+                return null;
+            },
+
+            delete(category, id) {
+                const data = this.get(category) || {};
+                delete data[id];
+                this.save(category, data);
+            }
+        };
+
+        // ==================== MASTER DATA (Rate/Unit/Flooring/Thickness) ====================
+        const H4Masters = {
+            ensureSeed() {
+                if (!H4DB.get('unitMaster')) {
+                    H4DB.save('unitMaster', {
+                        'unit_001': { id: 'unit_001', name: 'sq.ft' },
+                        'unit_002': { id: 'unit_002', name: 'sq.m' },
+                        'unit_003': { id: 'unit_003', name: 'running ft' },
+                        'unit_004': { id: 'unit_004', name: 'meter' },
+                        'unit_005': { id: 'unit_005', name: 'kg' },
+                        'unit_006': { id: 'unit_006', name: 'litre' },
+                        'unit_007': { id: 'unit_007', name: 'set' },
+                        'unit_008': { id: 'unit_008', name: 'piece' },
+                        'unit_009': { id: 'unit_009', name: 'day' },
+                        'unit_010': { id: 'unit_010', name: 'job' }
+                    });
+                }
+                if (!H4DB.get('flooringTypeMaster')) {
+                    H4DB.save('flooringTypeMaster', {
+                        'ft_001': { id: 'ft_001', name: 'Standard Epoxy Flooring' },
+                        'ft_002': { id: 'ft_002', name: 'Premium Self-Leveling Epoxy' },
+                        'ft_003': { id: 'ft_003', name: 'Metallic Epoxy Flooring' },
+                        'ft_004': { id: 'ft_004', name: '3D Epoxy Flooring' },
+                        'ft_005': { id: 'ft_005', name: 'Decorative Flake Epoxy' },
+                        'ft_006': { id: 'ft_006', name: 'Industrial Epoxy Flooring' },
+                        'ft_007': { id: 'ft_007', name: 'Epoxy Cove Flooring' }
+                    });
+                }
+                if (!H4DB.get('thicknessMaster')) {
+                    H4DB.save('thicknessMaster', {
+                        'th_001': { id: 'th_001', name: '1 mm' },
+                        'th_002': { id: 'th_002', name: '2 mm' },
+                        'th_003': { id: 'th_003', name: '3 mm' }
+                    });
+                }
+                if (!H4DB.get('floorConditionMaster')) {
+                    H4DB.save('floorConditionMaster', {
+                        'fc_001': { id: 'fc_001', name: 'New Concrete' },
+                        'fc_002': { id: 'fc_002', name: 'Existing Concrete' },
+                        'fc_003': { id: 'fc_003', name: 'Existing Tile' },
+                        'fc_004': { id: 'fc_004', name: 'Existing Epoxy' },
+                        'fc_005': { id: 'fc_005', name: 'Other' }
+                    });
+                }
+                if (!H4DB.get('rateMaster')) {
+                    H4DB.save('rateMaster', {
+                        'rate_001': { id: 'rate_001', flooringType: 'Premium Self-Leveling Epoxy', thickness: '1 mm', unit: 'sq.ft', rate: 250, gst: 18, active: true },
+                        'rate_002': { id: 'rate_002', flooringType: 'Premium Self-Leveling Epoxy', thickness: '2 mm', unit: 'sq.ft', rate: 350, gst: 18, active: true },
+                        'rate_003': { id: 'rate_003', flooringType: 'Premium Self-Leveling Epoxy', thickness: '3 mm', unit: 'sq.ft', rate: 450, gst: 18, active: true }
+                    });
+                }
+                if (!H4DB.get('workScopeDefaults')) {
+                    H4DB.save('workScopeDefaults', [
+                        'Surface Grinding', 'Crack Repair', 'Primer Coat', 'Epoxy Screed / Putty',
+                        'Self-Leveling Epoxy', 'Decorative Flakes / Metallic Effect',
+                        'UV Resistant PU Top Coat', 'Final Inspection & Cleaning'
+                    ]);
+                }
+                if (!H4DB.get('premiumFeatureDefaults')) {
+                    H4DB.save('premiumFeatureDefaults', [
+                        'Seamless Finish', 'High Gloss Luxury Look', 'Chemical Resistant',
+                        'Scratch Resistant', 'Dust Free Surface', 'Easy to Clean',
+                        'Long Life Performance', 'Premium Imported Pigments', 'UV Protected Top Coat'
+                    ]);
+                }
+            },
+
+            findRate(flooringType, thickness, unit) {
+                const rates = H4DB.get('rateMaster') || {};
+                return Object.values(rates).find(r =>
+                    r.active !== false &&
+                    r.flooringType === flooringType &&
+                    r.thickness === thickness &&
+                    r.unit === unit
+                ) || null;
+            }
+        };
+
+        // ==================== UTILITIES ====================
+        const H4Utils = {
+            generateId(prefix) {
+                return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            },
+
+            formatCurrency(value) {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(value);
+            }
+        };
+
+        // ==================== NOTIFICATIONS ====================
+        const H4Notify = {
+            show(message, type = 'success') {
+                const container = document.getElementById('notifications');
+                const div = document.createElement('div');
+                div.className = `notification ${type}`;
+                div.textContent = message;
+                container.appendChild(div);
+                setTimeout(() => div.remove(), 3000);
+            },
+
+            success(msg) { this.show(msg, 'success'); },
+            danger(msg) { this.show(msg, 'danger'); }
+        };
+
+        // ==================== MAIN APP ====================
+        const H4App = {
+            currentQtnId: null,
+            currentInvId: null,
+            qtnItems: [],
+            invItems: [],
+
+            init() {
+                H4DB.init();
+                H4Masters.ensureSeed();
+                this.setupNavigation();
+                this.loadCustomerSelects();
+                this.loadQuotations();
+                this.loadInvoices();
+                this.setDefaultDates();
+                this.loadRateMasterUI();
+            },
+
+            // ==================== RATE / UNIT / FLOORING / THICKNESS MASTER UI ====================
+            loadRateMasterUI() {
+                const rates = H4DB.get('rateMaster') || {};
+                const tbody = document.getElementById('rateMasterBody');
+                const entries = Object.values(rates);
+
+                if (entries.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-secondary);">No rates configured yet</td></tr>';
+                } else {
+                    tbody.innerHTML = entries.map(r => `
+                        <tr>
+                            <td>${r.flooringType}</td>
+                            <td>${r.thickness}</td>
+                            <td>${r.unit}</td>
+                            <td>${H4Utils.formatCurrency(r.rate)}</td>
+                            <td>${r.gst}%</td>
+                            <td>${r.active !== false ? '✅ Active' : '⛔ Inactive'}</td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-outline" onclick="H4App.editRateMaster('${r.id}')">✏️</button>
+                                    <button class="btn btn-sm btn-danger" onclick="H4App.deleteRateMaster('${r.id}')">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                this.populateMasterSelect('rmFlooringType', 'flooringTypeMaster');
+                this.populateMasterSelect('rmThickness', 'thicknessMaster');
+                this.populateMasterSelect('rmUnit', 'unitMaster');
+            },
+
+            populateMasterSelect(selectId, storeKey) {
+                const el = document.getElementById(selectId);
+                if (!el) return;
+                const items = H4DB.get(storeKey) || {};
+                el.innerHTML = Object.values(items).map(i => `<option value="${i.name}">${i.name}</option>`).join('');
+            },
+
+            saveRateMaster() {
+                const id = document.getElementById('rateMasterForm').dataset.rateId || H4Utils.generateId('rate');
+                const rate = {
+                    id,
+                    flooringType: document.getElementById('rmFlooringType').value,
+                    thickness: document.getElementById('rmThickness').value,
+                    unit: document.getElementById('rmUnit').value,
+                    rate: parseFloat(document.getElementById('rmRate').value),
+                    gst: parseFloat(document.getElementById('rmGst').value) || 0,
+                    active: document.getElementById('rmActive').checked
+                };
+                H4DB.add('rateMaster', rate);
+                H4Notify.success('Rate saved!');
+                this.closeModal('rateMasterModal');
+                document.getElementById('rateMasterForm').removeAttribute('data-rate-id');
+                document.getElementById('rateMasterForm').reset();
+                this.loadRateMasterUI();
+            },
+
+            editRateMaster(id) {
+                const r = (H4DB.get('rateMaster') || {})[id];
+                if (!r) return;
+                this.populateMasterSelect('rmFlooringType', 'flooringTypeMaster');
+                this.populateMasterSelect('rmThickness', 'thicknessMaster');
+                this.populateMasterSelect('rmUnit', 'unitMaster');
+                document.getElementById('rmFlooringType').value = r.flooringType;
+                document.getElementById('rmThickness').value = r.thickness;
+                document.getElementById('rmUnit').value = r.unit;
+                document.getElementById('rmRate').value = r.rate;
+                document.getElementById('rmGst').value = r.gst;
+                document.getElementById('rmActive').checked = r.active !== false;
+                document.getElementById('rateMasterForm').dataset.rateId = id;
+                this.openModal('rateMasterModal');
+            },
+
+            deleteRateMaster(id) {
+                if (confirm('Delete this rate?')) {
+                    H4DB.delete('rateMaster', id);
+                    H4Notify.success('Rate deleted!');
+                    this.loadRateMasterUI();
+                }
+            },
+
+            renderMasterList(containerId, storeKey, addFn) {
+                const items = H4DB.get(storeKey) || {};
+                const container = document.getElementById(containerId);
+                container.innerHTML = Object.values(items).map(i => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; border-bottom:1px solid var(--border);">
+                        <span>${i.name}</span>
+                        <button class="btn btn-sm btn-danger" onclick="H4App.deleteMasterItem('${storeKey}', '${i.id}', '${containerId}')">🗑️</button>
+                    </div>
+                `).join('') || '<p style="color:var(--text-secondary);">None yet</p>';
+            },
+
+            deleteMasterItem(storeKey, id, containerId) {
+                H4DB.delete(storeKey, id);
+                this.renderMasterList(containerId, storeKey);
+                this.loadRateMasterUI();
+                if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
+            },
+
+            addUnit() {
+                const input = document.getElementById('newUnitInput');
+                const name = input.value.trim();
+                if (!name) return;
+                H4DB.add('unitMaster', { id: H4Utils.generateId('unit'), name });
+                input.value = '';
+                this.renderMasterList('unitListContainer', 'unitMaster');
+                this.loadRateMasterUI();
+                if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
+            },
+
+            addFlooringType() {
+                const input = document.getElementById('newFlooringTypeInput');
+                const name = input.value.trim();
+                if (!name) return;
+                H4DB.add('flooringTypeMaster', { id: H4Utils.generateId('ft'), name });
+                input.value = '';
+                this.renderMasterList('flooringTypeListContainer', 'flooringTypeMaster');
+                this.loadRateMasterUI();
+                if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
+            },
+
+            addThickness() {
+                const input = document.getElementById('newThicknessInput');
+                const name = input.value.trim();
+                if (!name) return;
+                H4DB.add('thicknessMaster', { id: H4Utils.generateId('th'), name }
