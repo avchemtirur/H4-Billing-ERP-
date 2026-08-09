@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>H4 Billing ERP - Quotation & Invoice Builder</title>
     <style>
+        /* ==================== RESET & ROOT ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         :root {
             --primary: #6A3FA0;
             --secondary: #8A6510;
@@ -26,7 +26,6 @@
             --shadow: 0 2px 8px rgba(0,0,0,0.1);
             --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
@@ -48,14 +47,12 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .app-title {
             font-size: 1rem;
             font-weight: 600;
         }
-
         .menu-toggle {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
             font-size: 1.5rem;
@@ -78,23 +75,17 @@
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
+        .sidebar.active { transform: translateX(0); }
         .sidebar-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 1.5rem;
             font-weight: 600;
         }
-
         .sidebar-menu {
             list-style: none;
             padding: 0.5rem 0;
         }
-
         .sidebar-item {
             padding: 0.75rem 1rem;
             cursor: pointer;
@@ -102,7 +93,6 @@
             border-left: 4px solid transparent;
             color: var(--text-primary);
         }
-
         .sidebar-item:hover,
         .sidebar-item.active {
             background: var(--bg);
@@ -117,7 +107,6 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-
         .page-header {
             background: linear-gradient(135deg, var(--accent), var(--primary));
             color: white;
@@ -125,7 +114,6 @@
             border-radius: 12px;
             margin-bottom: 2rem;
         }
-
         .page-header h1 {
             font-size: 2rem;
             margin-bottom: 0.5rem;
@@ -139,7 +127,6 @@
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
         }
-
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -148,22 +135,18 @@
             padding-bottom: 1rem;
             border-bottom: 2px solid var(--border);
         }
-
         .card-header h2 {
             font-size: 1.25rem;
             color: var(--primary);
         }
-
         .form-group {
             margin-bottom: 1.5rem;
         }
-
         .form-group label {
             display: block;
             font-weight: 500;
             margin-bottom: 0.5rem;
         }
-
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -173,22 +156,20 @@
             border-radius: 8px;
             font-size: 0.95rem;
             font-family: inherit;
+            background: white;
         }
-
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(106, 63, 160, 0.1);
+            box-shadow: 0 0 0 3px rgba(106,63,160,0.1);
         }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
-
         .form-row-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -208,46 +189,21 @@
             align-items: center;
             gap: 0.5rem;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .btn-secondary { background: var(--accent); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary);
             color: var(--primary);
         }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-        }
-
-        .btn-block {
-            width: 100%;
-        }
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+        .btn-block { width: 100%; }
 
         /* ==================== TABLES ==================== */
         .table {
@@ -255,30 +211,26 @@
             border-collapse: collapse;
             font-size: 0.95rem;
         }
-
         .table thead {
             background: var(--primary);
             color: white;
         }
-
         .table th {
             padding: 1rem;
             text-align: left;
             font-weight: 600;
         }
-
         .table td {
             padding: 1rem;
             border-bottom: 1px solid var(--border);
         }
-
         .table tbody tr:hover {
             background: var(--bg);
         }
-
         .table-actions {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         /* ==================== ITEMS TABLE ==================== */
@@ -288,7 +240,6 @@
             margin-bottom: 1rem;
             font-size: 0.9rem;
         }
-
         .items-table th {
             background: var(--primary);
             color: white;
@@ -296,12 +247,10 @@
             text-align: left;
             font-weight: 600;
         }
-
         .items-table td {
             padding: 0.75rem;
             border-bottom: 1px solid var(--border);
         }
-
         .items-table input,
         .items-table select {
             width: 100%;
@@ -309,8 +258,8 @@
             border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 0.9rem;
+            background: white;
         }
-
         .items-table input:focus,
         .items-table select:focus {
             outline: none;
@@ -324,14 +273,12 @@
             border-radius: 8px;
             border-left: 4px solid var(--primary);
         }
-
         .calc-row {
             display: flex;
             justify-content: space-between;
             padding: 0.5rem 0;
             border-bottom: 1px solid var(--border);
         }
-
         .calc-row.total {
             font-weight: 600;
             font-size: 1.1rem;
@@ -339,15 +286,8 @@
             padding: 1rem 0;
             color: var(--primary);
         }
-
-        .calc-label {
-            color: var(--text-secondary);
-        }
-
-        .calc-value {
-            font-weight: 600;
-            text-align: right;
-        }
+        .calc-label { color: var(--text-secondary); }
+        .calc-value { font-weight: 600; text-align: right; }
 
         /* ==================== STATUS BADGE ==================== */
         .status-badge {
@@ -358,7 +298,6 @@
             font-weight: 600;
             text-transform: uppercase;
         }
-
         .status-draft { background: #E3F2FD; color: #1976D2; }
         .status-sent { background: #FFF3E0; color: #F57C00; }
         .status-accepted { background: #E8F5E9; color: #388E3C; }
@@ -376,7 +315,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             display: none;
             align-items: center;
             justify-content: center;
@@ -384,11 +323,7 @@
             padding: 1rem;
             overflow-y: auto;
         }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
+        .modal-overlay.active { display: flex; }
         .modal-content {
             background: var(--surface);
             border-radius: 12px;
@@ -399,7 +334,6 @@
             box-shadow: var(--shadow-lg);
             margin: auto;
         }
-
         .modal-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -409,11 +343,7 @@
             align-items: center;
             border-radius: 12px 12px 0 0;
         }
-
-        .modal-header h3 {
-            font-size: 1.25rem;
-        }
-
+        .modal-header h3 { font-size: 1.25rem; }
         .modal-close {
             background: none;
             border: none;
@@ -421,11 +351,7 @@
             font-size: 1.5rem;
             cursor: pointer;
         }
-
-        .modal-body {
-            padding: 2rem;
-        }
-
+        .modal-body { padding: 2rem; }
         .modal-footer {
             padding: 1rem 2rem;
             border-top: 1px solid var(--border);
@@ -442,7 +368,6 @@
             z-index: 2000;
             max-width: 400px;
         }
-
         .notification {
             background: white;
             border-left: 4px solid var(--primary);
@@ -452,28 +377,16 @@
             box-shadow: var(--shadow-lg);
             animation: slideIn 0.3s ease;
         }
-
-        .notification.success {
-            border-left-color: var(--success);
-        }
-
-        .notification.danger {
-            border-left-color: var(--danger);
-        }
-
+        .notification.success { border-left-color: var(--success); }
+        .notification.danger { border-left-color: var(--danger); }
         @keyframes slideIn {
             from { transform: translateX(400px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
         /* ==================== MODULES ==================== */
-        .module {
-            display: none;
-        }
-
-        .module.active {
-            display: block;
-        }
+        .module { display: none; }
+        .module.active { display: block; }
 
         /* ==================== PREVIEW ==================== */
         .preview-section {
@@ -483,27 +396,23 @@
             padding: 2rem;
             margin-top: 2rem;
         }
-
         .preview-header {
             text-align: center;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid var(--border);
         }
-
         .document-title {
             font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
-
         .document-number {
             font-size: 1.1rem;
             color: var(--text-secondary);
             margin-bottom: 1rem;
         }
-
         .preview-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -512,342 +421,28 @@
             padding-bottom: 2rem;
             border-bottom: 1px solid var(--border);
         }
-
-        .preview-items {
-            margin-bottom: 2rem;
-        }
-
+        .preview-items { margin-bottom: 2rem; }
         .preview-items table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
         }
-
         .preview-items th {
             background: var(--primary);
             color: white;
             padding: 0.75rem;
             text-align: left;
         }
-
         .preview-items td {
             padding: 0.75rem;
             border-bottom: 1px solid var(--border);
         }
-
         .preview-totals {
             display: flex;
             justify-content: flex-end;
             margin-top: 2rem;
         }
-
-        .preview-totals-box {
-            min-width: 300px;
-        }
-
-        /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 768px) {
-            .form-row,
-            .form-row-3,
-            .preview-info {
-                grid-template-columns: 1fr;
-            }
-
-            .items-table {
-                font-size: 0.8rem;
-            }
-
-            .items-table th,
-            .items-table td {
-                padding: 0.5rem;
-            }
-
-            .modal-content {
-                border-radius: 12px 12px 0 0;
-                max-height: 80vh;
-            }
-
-            .main-content {
-                padding: 1rem;
-            }
-        }
-
-        /* ==================== EPOXY FULL-SCREEN BUILDER ==================== */
-        .epoxy-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            z-index: 3000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .epoxy-overlay.active {
-            display: flex;
-        }
-
-        .epoxy-topbar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 0.85rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .epoxy-topbar-title {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .epoxy-steps {
-            display: flex;
-            overflow-x: auto;
-            gap: 0.25rem;
-            padding: 0.6rem 0.75rem;
-            background: white;
-            border-bottom: 1px solid var(--border);
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .epoxy-step-chip {
-            flex: none;
-            padding: 0.4rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            background: var(--bg);
-            color: var(--text-secondary);
-            cursor: pointer;
-            white-space: nowrap;
-            border: 1px solid var(--border);
-        }
-
-        .epoxy-step-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .epoxy-step-chip.done {
-            background: #E8F5E9;
-            color: var(--success);
-            border-color: var(--success);
-        }
-
-        .epoxy-body {
-            flex: 1;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            padding: 1rem;
-        }
-
-        .epoxy-form-pane {
-            overflow-y: auto;
-            padding-right: 0.25rem;
-        }
-
-        .epoxy-preview-pane {
-            overflow-y: auto;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            padding: 1.5rem;
-        }
-
-        .epoxy-bottombar {
-            background: white;
-            border-top: 1px solid var(--border);
-            padding: 0.75rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            gap: 0.75rem;
-        }
-
-        .epoxy-step-section {
-            display: none;
-        }
-
-        .epoxy-step-section.active {
-            display: block;
-        }
-
-        .scope-item, .feature-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.6rem;
-            padding: 0.6rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .scope-item input[type="checkbox"],
-        .feature-item input[type="checkbox"] {
-            margin-top: 0.35rem;
-            width: 18px;
-            height: 18px;
-            flex: none;
-        }
-
-        .scope-item input[type="text"],
-        .feature-item input[type="text"] {
-            flex: 1;
-        }
-
-        .rate-status {
-            padding: 0.6rem 0.85rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-top: 0.35rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.5rem;
-        }
-
-        .rate-status.auto {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .rate-status.override {
-            background: #FFF3E0;
-            color: #E65100;
-        }
-
-        .rate-status.missing {
-            background: #FFEBEE;
-            color: #C62828;
-        }
-
-        .price-item-card {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0.85rem;
-            margin-bottom: 0.75rem;
-            background: white;
-        }
-
-        .price-item-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.6rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .a4-page {
-            padding: 1.25rem;
-            border-bottom: 2px dashed var(--border);
-        }
-
-        .a4-page:last-child {
-            border-bottom: none;
-        }
-
-        .a4-cover {
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 2rem 1.25rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        .a4-cover h1 {
-            font-size: 1.4rem;
-            margin-bottom: 0.35rem;
-        }
-
-        .a4-cover p {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            letter-spacing: 1px;
-        }
-
-        .a4-section-title {
-            color: var(--primary);
-            font-size: 1rem;
-            font-weight: 700;
-            margin: 1.25rem 0 0.6rem;
-            padding-bottom: 0.35rem;
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .spec-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .spec-grid div strong {
-            display: block;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-        }
-
-        .scope-list-preview, .feature-list-preview {
-            list-style: none;
-            font-size: 0.9rem;
-        }
-
-        .scope-list-preview li, .feature-list-preview li {
-            padding: 0.3rem 0;
-        }
-
-        .scope-list-preview li::before {
-            content: "✓ ";
-            color: var(--success);
-            font-weight: 700;
-        }
-
-        .feature-list-preview li::before {
-            content: "★ ";
-            color: var(--secondary);
-        }
-
-        .warranty-badge {
-            display: inline-block;
-            background: var(--secondary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .qr-box {
-            width: 100px;
-            height: 100px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            text-align: center;
-        }
-
-        .rate-master-table td, .rate-master-table th {
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 900px) {
-            .epoxy-body {
-                grid-template-columns: 1fr;
-            }
-            .epoxy-preview-pane {
-                display: none;
-            }
-            .epoxy-preview-pane.mobile-show {
-                display: block;
-            }
-        }
+        .preview-totals-box { min-width: 300px; }
 
         /* ==================== BOTTOM NAV ==================== */
         .bottom-nav {
@@ -862,7 +457,6 @@
             z-index: 999;
             box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
         }
-
         .nav-item {
             flex: 1;
             padding: 0.75rem;
@@ -872,36 +466,58 @@
             transition: color 0.2s ease;
             font-size: 0.75rem;
         }
-
         .nav-item.active {
             color: var(--primary);
             font-weight: 600;
         }
-
         .nav-icon {
             font-size: 1.5rem;
             display: block;
             margin-bottom: 0.25rem;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .form-row, .form-row-3, .preview-info { grid-template-columns: 1fr; }
+            .items-table { font-size: 0.8rem; }
+            .items-table th, .items-table td { padding: 0.5rem; }
+            .modal-content { border-radius: 12px 12px 0 0; max-height: 80vh; }
+            .main-content { padding: 1rem; }
+            .sidebar { width: 100%; height: auto; max-height: 70vh; bottom: 0; left: 0; top: auto; transform: translateY(100%); }
+            .sidebar.active { transform: translateY(0); }
+        }
+
+        /* ==================== RATE MASTER TABLE ==================== */
+        .rate-master-table td, .rate-master-table th { font-size: 0.85rem; }
+        .rate-master-table input, .rate-master-table select {
+            width: 100%;
+            padding: 0.4rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
     <!-- HEADER -->
     <header class="app-header">
-        <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="display:flex;align-items:center;gap:1rem;">
             <button class="menu-toggle" id="menuToggle">☰</button>
-            <div class="app-title">H4 Billing ERP - Phase 2</div>
+            <div class="app-title">H4 Billing ERP</div>
         </div>
     </header>
 
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">H4 Billing ERP</div>
+        <div class="sidebar-header">🏢 H4 Billing ERP</div>
         <nav class="sidebar-menu">
             <div class="sidebar-item active" data-module="quotations">📄 Quotations</div>
             <div class="sidebar-item" data-module="invoices">🧾 Invoices</div>
             <div class="sidebar-item" data-module="payments">💰 Payments</div>
             <div class="sidebar-item" data-module="rateMaster">🧮 Rate Master</div>
+            <div class="sidebar-item" data-module="customers">👥 Customers</div>
+            <div class="sidebar-item" data-module="products">📦 Products</div>
+            <div class="sidebar-item" data-module="company">🏭 Company</div>
         </nav>
     </aside>
 
@@ -917,12 +533,11 @@
 
             <!-- LIST VIEW -->
             <div id="quotationsList">
-                <div style="margin-bottom: 1.5rem;">
+                <div style="margin-bottom:1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
                     <button class="btn btn-primary" onclick="H4App.openModal('qtnTypeModal')">➕ New Quotation</button>
                 </div>
-
                 <div class="card">
-                    <table class="table" id="quotationsTable">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Quotation #</th>
@@ -934,7 +549,7 @@
                             </tr>
                         </thead>
                         <tbody id="quotationsBody">
-                            <tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No quotations yet</td></tr>
+                            <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">No quotations yet</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -942,50 +557,44 @@
 
             <!-- BUILDER VIEW -->
             <div id="quotationBuilder" style="display:none;">
-                <button class="btn btn-outline" onclick="H4App.backToList('quotations')" style="margin-bottom: 1rem;">← Back to List</button>
+                <button class="btn btn-outline" onclick="H4App.backToList('quotations')" style="margin-bottom:1rem;">← Back to List</button>
 
                 <div class="card">
-                    <div class="card-header">
-                        <h2>Quotation Details</h2>
-                    </div>
-
+                    <div class="card-header"><h2>Quotation Details</h2></div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Quotation Number *</label>
                             <input type="text" id="qtnNumber" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="qtnDate">Quotation Date *</label>
+                            <label>Quotation Date *</label>
                             <input type="date" id="qtnDate" required>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="qtnCustomer">Customer *</label>
+                            <label>Customer *</label>
                             <select id="qtnCustomer" required onchange="H4App.onCustomerChange()">
                                 <option value="">-- Select Customer --</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="qtnValidUntil">Valid Until</label>
+                            <label>Valid Until</label>
                             <input type="date" id="qtnValidUntil">
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="qtnProject">Project Name</label>
+                            <label>Project Name</label>
                             <input type="text" id="qtnProject">
                         </div>
                         <div class="form-group">
-                            <label for="qtnReference">Reference</label>
+                            <label>Reference</label>
                             <input type="text" id="qtnReference">
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="qtnAddress">Site Address</label>
+                        <label>Site Address</label>
                         <textarea id="qtnAddress" rows="2"></textarea>
                     </div>
                 </div>
@@ -996,8 +605,7 @@
                         <h2>Line Items</h2>
                         <button class="btn btn-success btn-sm" onclick="H4App.addQtnItem()">➕ Add Item</button>
                     </div>
-
-                    <table class="items-table" id="qtnItemsTable">
+                    <table class="items-table">
                         <thead>
                             <tr>
                                 <th>Product</th>
@@ -1012,6 +620,7 @@
                             </tr>
                         </thead>
                         <tbody id="qtnItemsBody">
+                            <tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added. Click "Add Item".</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1019,46 +628,24 @@
                 <!-- TOTALS -->
                 <div class="card">
                     <div class="calc-box">
-                        <div class="calc-row">
-                            <span class="calc-label">Subtotal:</span>
-                            <span class="calc-value">₹ <span id="qtnSubtotal">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Total Discount:</span>
-                            <span class="calc-value">₹ <span id="qtnTotalDiscount">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Taxable Amount:</span>
-                            <span class="calc-value">₹ <span id="qtnTaxableAmount">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">CGST (9%):</span>
-                            <span class="calc-value">₹ <span id="qtnCGST">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">SGST (9%):</span>
-                            <span class="calc-value">₹ <span id="qtnSGST">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Round Off:</span>
-                            <span class="calc-value">₹ <span id="qtnRoundOff">0.00</span></span>
-                        </div>
-                        <div class="calc-row total">
-                            <span>GRAND TOTAL:</span>
-                            <span>₹ <span id="qtnGrandTotal">0.00</span></span>
-                        </div>
+                        <div class="calc-row"><span class="calc-label">Subtotal:</span><span class="calc-value">₹ <span id="qtnSubtotal">0.00</span></span></div>
+                        <div class="calc-row"><span class="calc-label">Total Discount:</span><span class="calc-value">₹ <span id="qtnTotalDiscount">0.00</span></span></div>
+                        <div class="calc-row"><span class="calc-label">Taxable Amount:</span><span class="calc-value">₹ <span id="qtnTaxableAmount">0.00</span></span></div>
+                        <div class="calc-row"><span class="calc-label">CGST (9%):</span><span class="calc-value">₹ <span id="qtnCGST">0.00</span></span></div>
+                        <div class="calc-row"><span class="calc-label">SGST (9%):</span><span class="calc-value">₹ <span id="qtnSGST">0.00</span></span></div>
+                        <div class="calc-row"><span class="calc-label">Round Off:</span><span class="calc-value">₹ <span id="qtnRoundOff">0.00</span></span></div>
+                        <div class="calc-row total"><span>GRAND TOTAL:</span><span>₹ <span id="qtnGrandTotal">0.00</span></span></div>
                     </div>
                 </div>
 
                 <!-- NOTES -->
                 <div class="card">
                     <div class="form-group">
-                        <label for="qtnNotes">Notes / Terms</label>
+                        <label>Notes / Terms</label>
                         <textarea id="qtnNotes" rows="3" placeholder="Special terms, payment conditions, etc."></textarea>
                     </div>
-
                     <div class="form-group">
-                        <label for="qtnStatus">Status</label>
+                        <label>Status</label>
                         <select id="qtnStatus">
                             <option value="draft">Draft</option>
                             <option value="sent">Sent</option>
@@ -1068,8 +655,7 @@
                             <option value="converted">Converted</option>
                         </select>
                     </div>
-
-                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                    <div style="display:flex;gap:0.75rem;justify-content:flex-end;flex-wrap:wrap;">
                         <button class="btn btn-outline" onclick="H4App.backToList('quotations')">Cancel</button>
                         <button class="btn btn-danger" id="deleteQtnBtn" style="display:none;" onclick="H4App.deleteQuotation()">🗑️ Delete</button>
                         <button class="btn btn-success" id="convertQtnBtn" style="display:none;" onclick="H4App.convertToInvoice()">✅ Convert to Invoice</button>
@@ -1078,7 +664,9 @@
                 </div>
 
                 <!-- LIVE PREVIEW -->
-                <div class="preview-section" id="qtnPreview"></div>
+                <div class="preview-section" id="qtnPreview">
+                    <p style="color:var(--text-secondary);text-align:center;">Quotation preview will appear here.</p>
+                </div>
             </div>
         </div>
 
@@ -1086,17 +674,14 @@
         <div class="module" data-module="invoices">
             <div class="page-header">
                 <h1>🧾 Invoices</h1>
-                <p>Create and manage invoices for your customers</p>
+                <p>Create and manage invoices</p>
             </div>
-
-            <!-- LIST VIEW -->
             <div id="invoicesList">
-                <div style="margin-bottom: 1.5rem;">
+                <div style="margin-bottom:1.5rem;">
                     <button class="btn btn-primary" onclick="H4App.newInvoice()">➕ New Invoice</button>
                 </div>
-
                 <div class="card">
-                    <table class="table" id="invoicesTable">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Invoice #</th>
@@ -1109,198 +694,31 @@
                             </tr>
                         </thead>
                         <tbody id="invoicesBody">
-                            <tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No invoices yet</td></tr>
+                            <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No invoices yet</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
-            <!-- BUILDER VIEW -->
             <div id="invoiceBuilder" style="display:none;">
-                <button class="btn btn-outline" onclick="H4App.backToList('invoices')" style="margin-bottom: 1rem;">← Back to List</button>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Invoice Details</h2>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Invoice Number *</label>
-                            <input type="text" id="invNumber" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="invDate">Invoice Date *</label>
-                            <input type="date" id="invDate" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="invCustomer">Customer *</label>
-                            <select id="invCustomer" required>
-                                <option value="">-- Select Customer --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="invDueDate">Due Date</label>
-                            <input type="date" id="invDueDate">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="invProject">Project Name</label>
-                            <input type="text" id="invProject">
-                        </div>
-                        <div class="form-group">
-                            <label for="invReference">Reference</label>
-                            <input type="text" id="invReference">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="invQuotation">Linked Quotation (Optional)</label>
-                        <select id="invQuotation">
-                            <option value="">-- None --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- ITEMS -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Line Items</h2>
-                        <button class="btn btn-success btn-sm" onclick="H4App.addInvItem()">➕ Add Item</button>
-                    </div>
-
-                    <table class="items-table" id="invItemsTable">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Description</th>
-                                <th>Qty</th>
-                                <th>Unit</th>
-                                <th>Rate (₹)</th>
-                                <th>Discount</th>
-                                <th>GST %</th>
-                                <th>Total</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="invItemsBody">
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- TOTALS -->
-                <div class="card">
-                    <div class="calc-box">
-                        <div class="calc-row">
-                            <span class="calc-label">Subtotal:</span>
-                            <span class="calc-value">₹ <span id="invSubtotal">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Total Discount:</span>
-                            <span class="calc-value">₹ <span id="invTotalDiscount">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Taxable Amount:</span>
-                            <span class="calc-value">₹ <span id="invTaxableAmount">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">CGST (9%):</span>
-                            <span class="calc-value">₹ <span id="invCGST">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">SGST (9%):</span>
-                            <span class="calc-value">₹ <span id="invSGST">0.00</span></span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Round Off:</span>
-                            <span class="calc-value">₹ <span id="invRoundOff">0.00</span></span>
-                        </div>
-                        <div class="calc-row total">
-                            <span>GRAND TOTAL:</span>
-                            <span>₹ <span id="invGrandTotal">0.00</span></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAYMENT STATUS -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Payment Status</h2>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="invPaidAmount">Amount Paid (₹)</label>
-                            <input type="number" id="invPaidAmount" step="0.01" min="0" onchange="H4App.updatePaymentStatus()">
-                        </div>
-                        <div class="form-group">
-                            <label for="invPaymentStatus">Payment Status</label>
-                            <select id="invPaymentStatus">
-                                <option value="unpaid">Unpaid</option>
-                                <option value="partially-paid">Partially Paid</option>
-                                <option value="paid">Paid</option>
-                                <option value="overdue">Overdue</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Balance Amount (₹): <strong id="invBalance">0.00</strong></label>
-                    </div>
-                </div>
-
-                <!-- NOTES -->
-                <div class="card">
-                    <div class="form-group">
-                        <label for="invNotes">Notes / Terms</label>
-                        <textarea id="invNotes" rows="3" placeholder="Payment terms, special conditions, etc."></textarea>
-                    </div>
-
-                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-                        <button class="btn btn-outline" onclick="H4App.backToList('invoices')">Cancel</button>
-                        <button class="btn btn-danger" id="deleteInvBtn" style="display:none;" onclick="H4App.deleteInvoice()">🗑️ Delete</button>
-                        <button class="btn btn-primary" onclick="H4App.saveInvoice()">💾 Save Invoice</button>
-                    </div>
-                </div>
-
-                <!-- LIVE PREVIEW -->
-                <div class="preview-section" id="invPreview"></div>
+                <button class="btn btn-outline" onclick="H4App.backToList('invoices')" style="margin-bottom:1rem;">← Back to List</button>
+                <div class="card"><p style="text-align:center;color:var(--text-secondary);">Invoice builder coming soon</p></div>
             </div>
         </div>
 
         <!-- ==================== PAYMENTS ==================== -->
         <div class="module" data-module="payments">
-            <div class="page-header">
-                <h1>💰 Payments</h1>
-                <p>Track invoice payments</p>
-            </div>
-            <div class="card">
-                <p style="text-align: center; color: var(--text-secondary);">Coming next - Advanced Payment Tracking</p>
-            </div>
+            <div class="page-header"><h1>💰 Payments</h1><p>Track invoice payments</p></div>
+            <div class="card"><p style="text-align:center;color:var(--text-secondary);">Payment tracking coming soon</p></div>
         </div>
 
         <!-- ==================== RATE MASTER ==================== -->
         <div class="module" data-module="rateMaster">
-            <div class="page-header">
-                <h1>🧮 Rate Master</h1>
-                <p>Flooring Type + Thickness + Unit → Rate mapping (used for auto-fill in Epoxy quotations)</p>
+            <div class="page-header"><h1>🧮 Rate Master</h1><p>Manage rates for epoxy flooring</p></div>
+            <div style="margin-bottom:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="H4App.openModal('rateMasterModal')">➕ Add Rate</button>
             </div>
-
-            <div style="margin-bottom: 1rem; display:flex; gap:0.75rem; flex-wrap: wrap;">
-                <button class="btn btn-primary" onclick="H4App.populateMasterSelect('rmFlooringType','flooringTypeMaster'); H4App.populateMasterSelect('rmThickness','thicknessMaster'); H4App.populateMasterSelect('rmUnit','unitMaster'); document.getElementById('rateMasterForm').reset(); document.getElementById('rateMasterForm').removeAttribute('data-rate-id'); H4App.openModal('rateMasterModal')">➕ Add Rate</button>
-                <button class="btn btn-outline" onclick="H4App.renderMasterList('unitListContainer','unitMaster'); H4App.openModal('unitMasterModal')">📏 Manage Units</button>
-                <button class="btn btn-outline" onclick="H4App.renderMasterList('flooringTypeListContainer','flooringTypeMaster'); H4App.openModal('flooringTypeModal')">🧱 Manage Flooring Types</button>
-                <button class="btn btn-outline" onclick="H4App.renderMasterList('thicknessListContainer','thicknessMaster'); H4App.openModal('thicknessModal')">📐 Manage Thickness</button>
-            </div>
-
             <div class="card">
-                <table class="table rate-master-table" id="rateMasterTable">
+                <table class="table rate-master-table">
                     <thead>
                         <tr>
                             <th>Flooring Type</th>
@@ -1313,14 +731,95 @@
                         </tr>
                     </thead>
                     <tbody id="rateMasterBody">
-                        <tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-secondary);">No rates configured yet</td></tr>
+                        <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No rates configured yet</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- ==================== CUSTOMERS ==================== -->
+        <div class="module" data-module="customers">
+            <div class="page-header"><h1>👥 Customers</h1><p>Manage your customers</p></div>
+            <div style="margin-bottom:1rem;">
+                <button class="btn btn-primary" onclick="H4App.openModal('customerModal')">➕ Add Customer</button>
+            </div>
+            <div class="card">
+                <table class="table">
+                    <thead><tr><th>Name</th><th>Company</th><th>Phone</th><th>Email</th><th>Actions</th></tr></thead>
+                    <tbody id="customersBody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary);">No customers yet</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== PRODUCTS ==================== -->
+        <div class="module" data-module="products">
+            <div class="page-header"><h1>📦 Products</h1><p>Manage your products</p></div>
+            <div style="margin-bottom:1rem;">
+                <button class="btn btn-primary" onclick="H4App.openModal('productModal')">➕ Add Product</button>
+            </div>
+            <div class="card">
+                <table class="table">
+                    <thead><tr><th>Name</th><th>Category</th><th>Unit</th><th>Rate</th><th>Actions</th></tr></thead>
+                    <tbody id="productsBody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary);">No products yet</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== COMPANY ==================== -->
+        <div class="module" data-module="company">
+            <div class="page-header"><h1>🏭 Company</h1><p>Manage company profile</p></div>
+            <div class="card">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" id="companyName" value="H4 Construction Solutions">
+                    </div>
+                    <div class="form-group">
+                        <label>GSTIN</label>
+                        <input type="text" id="companyGstin">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="companyAddress" rows="2" placeholder="Company address"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" id="companyPhone">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="companyEmail">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="H4App.saveCompany()">💾 Save Company</button>
+            </div>
+        </div>
     </main>
 
-    <!-- ==================== QUOTATION TYPE SELECTOR MODAL ==================== -->
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav" id="bottomNav" style="display:none;">
+        <div class="nav-item active" data-module="quotations">
+            <span class="nav-icon">📄</span><span>Quotations</span>
+        </div>
+        <div class="nav-item" data-module="invoices">
+            <span class="nav-icon">🧾</span><span>Invoices</span>
+        </div>
+        <div class="nav-item" data-module="customers">
+            <span class="nav-icon">👥</span><span>Customers</span>
+        </div>
+        <div class="nav-item" data-module="settings">
+            <span class="nav-icon">⚙️</span><span>Settings</span>
+        </div>
+    </nav>
+
+    <!-- NOTIFICATIONS -->
+    <div class="notifications" id="notifications"></div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Quotation Type Modal -->
     <div class="modal-overlay" id="qtnTypeModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1328,564 +827,193 @@
                 <button class="modal-close" onclick="H4App.closeModal('qtnTypeModal')">✕</button>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom:1rem; color:var(--text-secondary);">Choose quotation type</p>
-                <div style="display:grid; gap:0.85rem;">
-                    <button class="btn btn-outline btn-block" style="justify-content:flex-start; padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.newQuotation();">
+                <p style="margin-bottom:1rem;color:var(--text-secondary);">Choose quotation type</p>
+                <div style="display:grid;gap:0.85rem;">
+                    <button class="btn btn-outline btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.newQuotation();">
                         📄 <strong>General Quotation</strong> — standard items & pricing
                     </button>
-                    <button class="btn btn-primary btn-block" style="justify-content:flex-start; padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Epoxy.open();">
-                        ✨ <strong>Premium Epoxy Flooring Proposal</strong> — full proposal builder
+                    <button class="btn btn-primary btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Notify.success('Epoxy builder coming soon');">
+                        ✨ <strong>Premium Epoxy Flooring Proposal</strong>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== RATE MASTER MODAL ==================== -->
+    <!-- Rate Master Modal -->
     <div class="modal-overlay" id="rateMasterModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Add / Edit Rate</h3>
+                <h3>Add Rate</h3>
                 <button class="modal-close" onclick="H4App.closeModal('rateMasterModal')">✕</button>
             </div>
             <div class="modal-body">
-                <form id="rateMasterForm">
-                    <div class="form-group">
-                        <label for="rmFlooringType">Flooring Type *</label>
-                        <select id="rmFlooringType" required></select>
-                    </div>
+                <form id="rateMasterForm" onsubmit="H4App.saveRateMaster(); return false;">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="rmThickness">Thickness *</label>
-                            <select id="rmThickness" required></select>
+                            <label>Flooring Type *</label>
+                            <input type="text" id="rmFlooringType" required>
                         </div>
                         <div class="form-group">
-                            <label for="rmUnit">Unit *</label>
-                            <select id="rmUnit" required></select>
+                            <label>Thickness *</label>
+                            <input type="text" id="rmThickness" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="rmRate">Rate (₹) *</label>
+                            <label>Unit *</label>
+                            <input type="text" id="rmUnit" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Rate (₹) *</label>
                             <input type="number" id="rmRate" step="0.01" min="0" required>
                         </div>
-                        <div class="form-group">
-                            <label for="rmGst">GST %</label>
-                            <input type="number" id="rmGst" step="0.01" value="18">
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>GST %</label>
+                        <input type="number" id="rmGst" step="0.01" value="18">
                     </div>
                     <div class="form-group">
                         <label><input type="checkbox" id="rmActive" checked> Active</label>
                     </div>
+                    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;">
+                        <button type="button" class="btn btn-outline" onclick="H4App.closeModal('rateMasterModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">💾 Save</button>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="H4App.closeModal('rateMasterModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="H4App.saveRateMaster()">💾 Save Rate</button>
-            </div>
         </div>
     </div>
 
-    <!-- ==================== UNIT MASTER MODAL ==================== -->
-    <div class="modal-overlay" id="unitMasterModal">
+    <!-- Customer Modal -->
+    <div class="modal-overlay" id="customerModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Unit Master</h3>
-                <button class="modal-close" onclick="H4App.closeModal('unitMasterModal')">✕</button>
+                <h3>Add Customer</h3>
+                <button class="modal-close" onclick="H4App.closeModal('customerModal')">✕</button>
             </div>
             <div class="modal-body">
-                <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-                    <input type="text" id="newUnitInput" placeholder="e.g. sq.ft">
-                    <button class="btn btn-primary btn-sm" onclick="H4App.addUnit()">Add</button>
-                </div>
-                <div id="unitListContainer"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" onclick="H4App.closeModal('unitMasterModal')">Done</button>
+                <form id="customerForm" onsubmit="H4App.saveCustomer(); return false;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input type="text" id="custName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" id="custCompany">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" id="custPhone">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="custEmail">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea id="custAddress" rows="2"></textarea>
+                    </div>
+                    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;">
+                        <button type="button" class="btn btn-outline" onclick="H4App.closeModal('customerModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">💾 Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- ==================== FLOORING TYPE MODAL ==================== -->
-    <div class="modal-overlay" id="flooringTypeModal">
+    <!-- Product Modal -->
+    <div class="modal-overlay" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Flooring Types</h3>
-                <button class="modal-close" onclick="H4App.closeModal('flooringTypeModal')">✕</button>
+                <h3>Add Product</h3>
+                <button class="modal-close" onclick="H4App.closeModal('productModal')">✕</button>
             </div>
             <div class="modal-body">
-                <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-                    <input type="text" id="newFlooringTypeInput" placeholder="e.g. Metallic Epoxy Flooring">
-                    <button class="btn btn-primary btn-sm" onclick="H4App.addFlooringType()">Add</button>
-                </div>
-                <div id="flooringTypeListContainer"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" onclick="H4App.closeModal('flooringTypeModal')">Done</button>
+                <form id="productForm" onsubmit="H4App.saveProduct(); return false;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input type="text" id="prodName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" id="prodCategory">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Unit</label>
+                            <input type="text" id="prodUnit">
+                        </div>
+                        <div class="form-group">
+                            <label>Rate (₹) *</label>
+                            <input type="number" id="prodRate" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>GST %</label>
+                        <input type="number" id="prodGst" step="0.01" value="18">
+                    </div>
+                    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;">
+                        <button type="button" class="btn btn-outline" onclick="H4App.closeModal('productModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">💾 Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- ==================== THICKNESS MODAL ==================== -->
-    <div class="modal-overlay" id="thicknessModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Thickness Options</h3>
-                <button class="modal-close" onclick="H4App.closeModal('thicknessModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-                    <input type="text" id="newThicknessInput" placeholder="e.g. 4 mm">
-                    <button class="btn btn-primary btn-sm" onclick="H4App.addThickness()">Add</button>
-                </div>
-                <div id="thicknessListContainer"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" onclick="H4App.closeModal('thicknessModal')">Done</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================== PREMIUM EPOXY FULL-SCREEN BUILDER ==================== -->
-    <div class="epoxy-overlay" id="epoxyOverlay">
-        <div class="epoxy-topbar">
-            <div class="epoxy-topbar-title">✨ Premium Epoxy Flooring Proposal</div>
-            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-                <button class="btn btn-sm btn-secondary" onclick="H4Epoxy.togglePreviewMobile()" id="epoxyPreviewToggleBtn" style="display:none;">👁️ Preview</button>
-                <button class="btn btn-sm btn-success" onclick="H4Epoxy.save()">💾 Save</button>
-                <button class="btn btn-sm btn-danger" onclick="H4Epoxy.close()">✕ Close</button>
-            </div>
-        </div>
-
-        <div class="epoxy-steps" id="epoxySteps"></div>
-
-        <div class="epoxy-body">
-            <div class="epoxy-form-pane" id="epoxyFormPane">
-
-                <!-- STEP 1: CUSTOMER -->
-                <div class="epoxy-step-section" data-step="1">
-                    <div class="card">
-                        <div class="card-header"><h2>Quotation & Customer</h2></div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Quotation Number</label>
-                                <input type="text" id="epxNumber" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="epxDate">Date</label>
-                                <input type="date" id="epxDate">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxValidity">Validity (days)</label>
-                                <input type="number" id="epxValidity" min="1" value="15">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxCustomer">Customer *</label>
-                                <select id="epxCustomer"></select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxProjectName">Project Name</label>
-                                <input type="text" id="epxProjectName">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxReference">Reference</label>
-                                <input type="text" id="epxReference">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="epxSiteAddress">Site Address</label>
-                            <textarea id="epxSiteAddress" rows="2"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 2: PROJECT DETAILS -->
-                <div class="epoxy-step-section" data-step="2">
-                    <div class="card">
-                        <div class="card-header"><h2>Project Details</h2></div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxArea">Area *</label>
-                                <input type="number" id="epxArea" min="0" step="0.01" oninput="H4Epoxy.onSystemChange()">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxAreaUnit">Area Unit</label>
-                                <select id="epxAreaUnit" onchange="H4Epoxy.onSystemChange()"></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="epxFlooringType">Flooring Type *</label>
-                            <select id="epxFlooringType" onchange="H4Epoxy.onSystemChange()"></select>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxThickness">Thickness *</label>
-                                <select id="epxThickness" onchange="H4Epoxy.onSystemChange()"></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="epxFloorCondition">Floor Condition</label>
-                                <select id="epxFloorCondition"></select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 3: SMART RATE -->
-                <div class="epoxy-step-section" data-step="3">
-                    <div class="card">
-                        <div class="card-header"><h2>Smart Rate / Flooring System</h2></div>
-                        <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:0.75rem;">Based on Flooring Type + Thickness + Unit selected in Step 2, the rate is auto-filled from the Rate Master.</p>
-
-                        <div id="epxRateStatus" class="rate-status auto">Select project details to check rate</div>
-
-                        <div class="form-row" style="margin-top:1rem;">
-                            <div class="form-group">
-                                <label for="epxSystemRate">Rate (₹ per unit)</label>
-                                <input type="number" id="epxSystemRate" step="0.01" min="0" oninput="H4Epoxy.onManualRateEdit()">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxSystemGst">GST %</label>
-                                <input type="number" id="epxSystemGst" step="0.01" min="0" value="18">
-                            </div>
-                        </div>
-
-                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
-                            <button class="btn btn-sm btn-outline" onclick="H4Epoxy.resetToAutoRate()">🔒 Use Auto Rate</button>
-                            <button class="btn btn-sm btn-outline" onclick="H4App.openModal('rateMasterModal')">➕ Add Rate</button>
-                        </div>
-
-                        <div class="card" style="margin-top:1rem; background:var(--bg);">
-                            <strong>Estimated Amount (Self-Leveling System):</strong>
-                            <div style="font-size:1.3rem; color:var(--primary); font-weight:700;" id="epxSystemAmount">₹0.00</div>
-                            <small style="color:var(--text-secondary);">Area × Rate — this line is auto-added to Price Items in Step 6.</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 4: WORK SCOPE -->
-                <div class="epoxy-step-section" data-step="4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>Work Scope</h2>
-                            <button class="btn btn-sm btn-success" onclick="H4Epoxy.addScopeItem()">➕ Add</button>
-                        </div>
-                        <div id="epxScopeList"></div>
-                    </div>
-                </div>
-
-                <!-- STEP 5: MATERIAL SPECIFICATION -->
-                <div class="epoxy-step-section" data-step="5">
-                    <div class="card">
-                        <div class="card-header"><h2>Material Specification</h2></div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxBrand">Brand</label>
-                                <input type="text" id="epxBrand" value="H4">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxProductSystem">Product / System</label>
-                                <input type="text" id="epxProductSystem">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxMixingRatio">Mixing Ratio</label>
-                                <input type="text" id="epxMixingRatio" placeholder="e.g. 2:1">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxMatThickness">Thickness</label>
-                                <input type="text" id="epxMatThickness" placeholder="e.g. 2mm">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxColourCode">Colour Code</label>
-                                <input type="text" id="epxColourCode">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxColourName">Colour Name</label>
-                                <input type="text" id="epxColourName">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxFinish">Finish</label>
-                                <select id="epxFinish">
-                                    <option>High Gloss</option>
-                                    <option>Gloss</option>
-                                    <option>Matte</option>
-                                    <option>Satin</option>
-                                    <option>Custom</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="epxAntiSlip">Anti-slip</label>
-                                <select id="epxAntiSlip">
-                                    <option>Not Required</option>
-                                    <option>Standard</option>
-                                    <option>Medium</option>
-                                    <option>Heavy Duty</option>
-                                    <option>Custom</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 6: PRICE ITEMS -->
-                <div class="epoxy-step-section" data-step="6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>Price Items</h2>
-                            <button class="btn btn-sm btn-success" onclick="H4Epoxy.addPriceItem()">➕ Add Item</button>
-                        </div>
-                        <div id="epxPriceItems"></div>
-                    </div>
-                </div>
-
-                <!-- STEP 7: DISCOUNT & GST -->
-                <div class="epoxy-step-section" data-step="7">
-                    <div class="card">
-                        <div class="card-header"><h2>Discount & GST</h2></div>
-                        <div class="form-group">
-                            <label><input type="checkbox" id="epxDiscountEnabled" onchange="H4Epoxy.calculate()"> Enable Discount</label>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxDiscountValue">Discount</label>
-                                <input type="number" id="epxDiscountValue" step="0.01" min="0" value="0" oninput="H4Epoxy.calculate()">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxDiscountType">Discount Type</label>
-                                <select id="epxDiscountType" onchange="H4Epoxy.calculate()">
-                                    <option value="flat">Flat</option>
-                                    <option value="percentage">Percentage</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="epxGstMode">GST Mode</label>
-                            <select id="epxGstMode" onchange="H4Epoxy.calculate()">
-                                <option value="intra">Intra-state (CGST + SGST)</option>
-                                <option value="inter">Inter-state (IGST)</option>
-                                <option value="off">GST Disabled</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 8: CALCULATION -->
-                <div class="epoxy-step-section" data-step="8">
-                    <div class="card">
-                        <div class="card-header"><h2>Calculation</h2></div>
-                        <div class="calc-box">
-                            <div class="calc-row"><span class="calc-label">Subtotal:</span><span class="calc-value">₹ <span id="epxSubtotal">0.00</span></span></div>
-                            <div class="calc-row"><span class="calc-label">Discount:</span><span class="calc-value">₹ <span id="epxDiscountAmt">0.00</span></span></div>
-                            <div class="calc-row"><span class="calc-label">Taxable Amount:</span><span class="calc-value">₹ <span id="epxTaxable">0.00</span></span></div>
-                            <div class="calc-row" id="epxCgstRow"><span class="calc-label">CGST:</span><span class="calc-value">₹ <span id="epxCgst">0.00</span></span></div>
-                            <div class="calc-row" id="epxSgstRow"><span class="calc-label">SGST:</span><span class="calc-value">₹ <span id="epxSgst">0.00</span></span></div>
-                            <div class="calc-row" id="epxIgstRow" style="display:none;"><span class="calc-label">IGST:</span><span class="calc-value">₹ <span id="epxIgst">0.00</span></span></div>
-                            <div class="calc-row"><span class="calc-label">Round Off:</span><span class="calc-value">₹ <span id="epxRoundOff">0.00</span></span></div>
-                            <div class="calc-row total"><span>GRAND TOTAL:</span><span>₹ <span id="epxGrandTotal">0.00</span></span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 9: TIMELINE / WARRANTY / FEATURES -->
-                <div class="epoxy-step-section" data-step="9">
-                    <div class="card">
-                        <div class="card-header"><h2>Timeline</h2></div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxWorkDuration">Work Duration</label>
-                                <input type="text" id="epxWorkDuration" placeholder="e.g. 3-5 Days">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxCuringTime">Curing Time</label>
-                                <input type="text" id="epxCuringTime" placeholder="e.g. 24-72 Hours">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header"><h2>Warranty</h2></div>
-                        <div class="form-group">
-                            <label><input type="checkbox" id="epxWarrantyEnabled" checked> Enable Warranty</label>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxWarrantyPeriod">Warranty Period</label>
-                                <select id="epxWarrantyPeriod">
-                                    <option>3 Years</option>
-                                    <option selected>5 Years</option>
-                                    <option>10 Years</option>
-                                    <option>Custom</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="epxWarrantyTerms">Warranty Terms</label>
-                            <textarea id="epxWarrantyTerms" rows="2">Subject to H4 Construction Solutions Warranty Terms & Conditions.</textarea>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>Premium Features</h2>
-                            <button class="btn btn-sm btn-success" onclick="H4Epoxy.addFeatureItem()">➕ Add</button>
-                        </div>
-                        <div id="epxFeatureList"></div>
-                    </div>
-                </div>
-
-                <!-- STEP 10: TERMS / FOOTER / PREVIEW -->
-                <div class="epoxy-step-section" data-step="10">
-                    <div class="card">
-                        <div class="card-header"><h2>Terms & Conditions</h2></div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxAdvancePayment">Advance Payment (%)</label>
-                                <input type="number" id="epxAdvancePayment" value="50" min="0" max="100">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxBalancePayment">Balance Payment</label>
-                                <input type="text" id="epxBalancePayment" value="50% upon completion">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="epxWorkSchedule">Work Schedule</label>
-                                <input type="text" id="epxWorkSchedule" value="As mutually agreed">
-                            </div>
-                            <div class="form-group">
-                                <label for="epxWaterElectricity">Water & Electricity</label>
-                                <input type="text" id="epxWaterElectricity" value="To be provided by client">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="epxOtherTerms">Other Terms</label>
-                            <textarea id="epxOtherTerms" rows="3"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header"><h2>Footer & QR</h2></div>
-                        <div class="form-group">
-                            <label for="epxThankYou">Thank You Message</label>
-                            <input type="text" id="epxThankYou" value="Thank you for considering H4 Construction Solutions.">
-                        </div>
-                        <div class="form-group">
-                            <label for="epxQrType">QR Destination</label>
-                            <select id="epxQrType">
-                                <option value="website">Website</option>
-                                <option value="whatsapp">WhatsApp</option>
-                                <option value="portfolio">Portfolio</option>
-                                <option value="custom">Custom URL</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="epxQrValue">QR Value / URL</label>
-                            <input type="text" id="epxQrValue" placeholder="https://...">
-                        </div>
-                    </div>
-
-                    <div style="display:flex; gap:0.75rem; justify-content:flex-end; flex-wrap:wrap;">
-                        <button class="btn btn-success" id="epxConvertBtn" style="display:none;" onclick="H4Epoxy.convertToInvoice()">✅ Convert to Invoice</button>
-                        <button class="btn btn-primary" onclick="H4Epoxy.save()">💾 Save Quotation</button>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="epoxy-preview-pane" id="epoxyPreviewPane"></div>
-        </div>
-
-        <div class="epoxy-bottombar">
-            <button class="btn btn-outline" id="epxPrevBtn" onclick="H4Epoxy.prevStep()">← Previous</button>
-            <button class="btn btn-primary" id="epxNextBtn" onclick="H4Epoxy.nextStep()">Next →</button>
-        </div>
-    </div>
-
-    <!-- NOTIFICATIONS -->
-    <div class="notifications" id="notifications"></div>
-
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="bottom-nav" id="bottomNav" style="display: none;">
-        <div class="nav-item active" data-module="quotations">
-            <span class="nav-icon">📄</span>
-            <span>Quotations</span>
-        </div>
-        <div class="nav-item" data-module="invoices">
-            <span class="nav-icon">🧾</span>
-            <span>Invoices</span>
-        </div>
-        <div class="nav-item" data-module="payments">
-            <span class="nav-icon">💰</span>
-            <span>Payments</span>
-        </div>
-    </nav>
-
-    <!-- ==================== JAVASCRIPT — MERGED ==================== -->
+    <!-- ==================== JAVASCRIPT ==================== -->
     <script>
     /* ============================================================
-       H4 BILLING ERP - MERGED SCRIPT
-       Phase 2: Quotation + Invoice + Epoxy Builder
+       H4 BILLING ERP - COMPLETE APPLICATION
        ============================================================ */
 
-    /* ==================== DATABASE ==================== */
-
+    // ==================== DATABASE ====================
     const H4DB = {
-        STORAGE_KEY: "h4_billing_erp_v3",
+        STORAGE_KEY: 'h4_billing_erp_v3',
 
         init() {
             let data = this.get();
-
             if (!data.settings) {
                 data.settings = {
                     quotationCounter: 1,
                     invoiceCounter: 1,
-                    quotationPrefix: "H4-QTN",
-                    invoicePrefix: "H4-INV",
+                    quotationPrefix: 'H4-QTN',
+                    invoicePrefix: 'H4-INV',
                     quotationYear: new Date().getFullYear(),
                     invoiceYear: new Date().getFullYear()
                 };
             }
-
             if (!data.customers) data.customers = {};
             if (!data.products) data.products = {};
             if (!data.quotations) data.quotations = {};
             if (!data.invoices) data.invoices = {};
             if (!data.rateMaster) data.rateMaster = {};
-            if (!data.unitMaster) data.unitMaster = {};
-            if (!data.flooringTypeMaster) data.flooringTypeMaster = {};
-            if (!data.thicknessMaster) data.thicknessMaster = {};
-            if (!data.floorConditionMaster) data.floorConditionMaster = {};
-            if (!data.workScopeDefaults) data.workScopeDefaults = [];
-            if (!data.premiumFeatureDefaults) data.premiumFeatureDefaults = [];
-
             if (!data.company) {
                 data.company = {
-                    legalName: "H4 Construction Solutions",
-                    address: "Kerala, India",
-                    phone: "",
-                    email: "",
-                    gstin: ""
+                    name: 'H4 Construction Solutions',
+                    address: '',
+                    phone: '',
+                    email: '',
+                    gstin: ''
                 };
             }
-
             localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
         },
 
         get(key) {
             try {
-                const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || "{}");
+                const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
                 return key ? data[key] : data;
             } catch (e) {
-                console.error("Database read error:", e);
+                console.error('DB read error:', e);
                 return key ? null : {};
             }
         },
@@ -1918,67 +1046,60 @@
         }
     };
 
-
-    /* ==================== UTILITIES ==================== */
-
+    // ==================== UTILITIES ====================
     const H4Utils = {
         generateId(prefix) {
-            return prefix + "_" + Date.now() + "_" + Math.random().toString(36).substring(2, 9);
+            return prefix + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         },
 
         formatCurrency(value) {
-            return new Intl.NumberFormat("en-IN", {
-                style: "currency",
-                currency: "INR",
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
                 maximumFractionDigits: 2
             }).format(Number(value) || 0);
         },
 
         today() {
-            const d = new Date();
-            return d.toISOString().split("T")[0];
+            return new Date().toISOString().split('T')[0];
         },
 
         escape(value) {
-            if (value === null || value === undefined) return "";
+            if (value == null) return '';
             return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
     };
 
-
-    /* ==================== NOTIFICATION ==================== */
-
+    // ==================== NOTIFICATIONS ====================
     const H4Notify = {
-        show(message, type) {
-            const container = document.getElementById("notifications");
-            if (!container) { alert(message); return; }
-            const div = document.createElement("div");
-            div.className = "notification " + (type === "danger" ? "danger" : "success");
-            div.textContent = message;
+        show(msg, type) {
+            const container = document.getElementById('notifications');
+            if (!container) { alert(msg); return; }
+            const div = document.createElement('div');
+            div.className = 'notification ' + (type === 'danger' ? 'danger' : 'success');
+            div.textContent = msg;
             container.appendChild(div);
             setTimeout(() => div.remove(), 3000);
         },
-        success(msg) { this.show(msg, "success"); },
-        danger(msg) { this.show(msg, "danger"); }
+        success(msg) { this.show(msg, 'success'); },
+        danger(msg) { this.show(msg, 'danger'); }
     };
 
-
-    /* ==================== CALCULATION ENGINE ==================== */
-
+    // ==================== CALCULATION ====================
     const H4Calc = {
         calculateLine(item) {
             const qty = Number(item.quantity) || 0;
             const rate = Number(item.rate) || 0;
             const discount = Number(item.discount) || 0;
-            const discountType = item.discountType || "flat";
+            const discountType = item.discountType || 'flat';
             const subtotal = qty * rate;
             let discountAmount = 0;
-            if (discountType === "percentage") {
+            if (discountType === 'percentage') {
                 discountAmount = subtotal * discount / 100;
             } else {
                 discountAmount = discount;
@@ -1990,122 +1111,91 @@
             return { subtotal, discountAmount, taxable, gst, total: taxable + gst };
         },
 
-        calculateTotals(items, gstMode) {
-            let subtotal = 0;
-            let totalDiscount = 0;
-            let taxableAmount = 0;
-            let cgst = 0;
-            let sgst = 0;
-            let igst = 0;
-
+        calculateTotals(items) {
+            let subtotal = 0, totalDiscount = 0, taxableAmount = 0, cgst = 0, sgst = 0;
             (items || []).forEach(item => {
                 const line = this.calculateLine(item);
                 subtotal += line.subtotal;
                 totalDiscount += line.discountAmount;
                 taxableAmount += line.taxable;
                 const gstRate = Number(item.gst) || 0;
-                if (gstMode === "inter") {
-                    igst += line.taxable * gstRate / 100;
-                } else {
-                    cgst += line.taxable * gstRate / 200;
-                    sgst += line.taxable * gstRate / 200;
-                }
+                cgst += line.taxable * gstRate / 200;
+                sgst += line.taxable * gstRate / 200;
             });
-
-            const tax = cgst + sgst + igst;
+            const tax = cgst + sgst;
             const beforeRound = taxableAmount + tax;
             const rounded = Math.round(beforeRound);
             const roundOff = rounded - beforeRound;
-
-            return {
-                subtotal,
-                totalDiscount,
-                taxableAmount,
-                cgst,
-                sgst,
-                igst,
-                tax,
-                roundOff,
-                grandTotal: rounded
-            };
+            return { subtotal, totalDiscount, taxableAmount, cgst, sgst, roundOff, grandTotal: rounded };
         }
     };
 
-
-    /* ==================== NUMBERING ==================== */
-
+    // ==================== NUMBERING ====================
     const H4Numbering = {
         getNextQuotationNumber() {
-            const settings = H4DB.get("settings") || {};
+            const settings = H4DB.get('settings') || {};
             const counter = Number(settings.quotationCounter) || 1;
-            const prefix = settings.quotationPrefix || "H4-QTN";
+            const prefix = settings.quotationPrefix || 'H4-QTN';
             const year = settings.quotationYear || new Date().getFullYear();
             settings.quotationCounter = counter + 1;
-            H4DB.save("settings", settings);
-            return prefix + "-" + year + "-" + String(counter).padStart(5, "0");
+            H4DB.save('settings', settings);
+            return prefix + '-' + year + '-' + String(counter).padStart(5, '0');
         },
 
         getNextInvoiceNumber() {
-            const settings = H4DB.get("settings") || {};
+            const settings = H4DB.get('settings') || {};
             const counter = Number(settings.invoiceCounter) || 1;
-            const prefix = settings.invoicePrefix || "H4-INV";
+            const prefix = settings.invoicePrefix || 'H4-INV';
             const year = settings.invoiceYear || new Date().getFullYear();
             settings.invoiceCounter = counter + 1;
-            H4DB.save("settings", settings);
-            return prefix + "-" + year + "-" + String(counter).padStart(5, "0");
+            H4DB.save('settings', settings);
+            return prefix + '-' + year + '-' + String(counter).padStart(5, '0');
         }
     };
 
-
-    /* ==================== DOCUMENT PREVIEW ==================== */
-
+    // ==================== DOCUMENT PREVIEW ====================
     const H4Documents = {
         quotation(data) {
-            const company = H4DB.get("company") || {};
-            const customers = H4DB.get("customers") || {};
+            const company = H4DB.get('company') || {};
+            const customers = H4DB.get('customers') || {};
             const customer = customers[data.customerId] || {};
             const totals = H4Calc.calculateTotals(data.items || []);
 
             const itemsHTML = (data.items || []).map(item => {
                 const line = H4Calc.calculateLine(item);
-                return `
-                    <tr>
-                        <td>${H4Utils.escape(item.productName || item.description || "")}</td>
-                        <td style="text-align:right">${Number(item.quantity || 0)}</td>
-                        <td>${H4Utils.escape(item.unit || "")}</td>
-                        <td style="text-align:right">₹${Number(item.rate || 0).toFixed(2)}</td>
-                        <td style="text-align:right">₹${line.discountAmount.toFixed(2)}</td>
-                        <td style="text-align:right">${Number(item.gst || 0)}%</td>
-                        <td style="text-align:right">₹${line.total.toFixed(2)}</td>
-                    </tr>
-                `;
-            }).join("");
+                return `<tr>
+                    <td>${H4Utils.escape(item.productName || item.description || '')}</td>
+                    <td style="text-align:right">${Number(item.quantity || 0)}</td>
+                    <td>${H4Utils.escape(item.unit || '')}</td>
+                    <td style="text-align:right">₹${Number(item.rate || 0).toFixed(2)}</td>
+                    <td style="text-align:right">₹${line.discountAmount.toFixed(2)}</td>
+                    <td style="text-align:right">${Number(item.gst || 0)}%</td>
+                    <td style="text-align:right">₹${line.total.toFixed(2)}</td>
+                </tr>`;
+            }).join('');
 
             return `
                 <div class="preview-header">
                     <div class="document-title">QUOTATION</div>
                     <div class="document-number">${H4Utils.escape(data.number)}</div>
-                    <div>
-                        Date: ${data.date ? new Date(data.date).toLocaleDateString("en-IN") : ""}
-                        ${data.validUntil ? " | Valid Until: " + new Date(data.validUntil).toLocaleDateString("en-IN") : ""}
-                    </div>
+                    <div>Date: ${data.date ? new Date(data.date).toLocaleDateString('en-IN') : ''}</div>
                 </div>
                 <div class="preview-info">
                     <div>
                         <h4 style="color:var(--primary)">From:</h4>
-                        <strong>${H4Utils.escape(company.legalName || "H4 Construction Solutions")}</strong><br>
-                        ${H4Utils.escape(company.address || "")}<br>
-                        ${H4Utils.escape(company.phone || "")}
-                        ${company.gstin ? `<br>GSTIN: ${H4Utils.escape(company.gstin)}` : ""}
+                        <strong>${H4Utils.escape(company.name || 'H4 Construction Solutions')}</strong><br>
+                        ${H4Utils.escape(company.address || '')}<br>
+                        ${H4Utils.escape(company.phone || '')}
+                        ${company.gstin ? `<br>GSTIN: ${H4Utils.escape(company.gstin)}` : ''}
                     </div>
                     <div>
                         <h4 style="color:var(--primary)">To:</h4>
-                        <strong>${H4Utils.escape(customer.name || "Customer")}</strong><br>
-                        ${H4Utils.escape(customer.address || "")}<br>
-                        ${H4Utils.escape(customer.phone || "")}
+                        <strong>${H4Utils.escape(customer.name || 'Customer')}</strong><br>
+                        ${H4Utils.escape(customer.address || '')}<br>
+                        ${H4Utils.escape(customer.phone || '')}
                     </div>
                 </div>
-                ${data.project ? `<p><strong>Project:</strong> ${H4Utils.escape(data.project)}</p>` : ""}
+                ${data.project ? `<p><strong>Project:</strong> ${H4Utils.escape(data.project)}</p>` : ''}
                 <div class="preview-items">
                     <table>
                         <thead><tr><th>Description</th><th style="text-align:right">Qty</th><th>Unit</th><th style="text-align:right">Rate</th><th style="text-align:right">Discount</th><th style="text-align:right">GST</th><th style="text-align:right">Amount</th></tr></thead>
@@ -2116,220 +1206,396 @@
                     <div class="preview-totals-box">
                         <div class="calc-row"><span>Subtotal</span><span>₹${totals.subtotal.toFixed(2)}</span></div>
                         <div class="calc-row"><span>Discount</span><span>₹${totals.totalDiscount.toFixed(2)}</span></div>
-                        <div class="calc-row"><span>Taxable Amount</span><span>₹${totals.taxableAmount.toFixed(2)}</span></div>
+                        <div class="calc-row"><span>Taxable</span><span>₹${totals.taxableAmount.toFixed(2)}</span></div>
                         <div class="calc-row"><span>CGST</span><span>₹${totals.cgst.toFixed(2)}</span></div>
                         <div class="calc-row"><span>SGST</span><span>₹${totals.sgst.toFixed(2)}</span></div>
                         <div class="calc-row"><span>Round Off</span><span>₹${totals.roundOff.toFixed(2)}</span></div>
                         <div class="calc-row total"><span>GRAND TOTAL</span><span>₹${totals.grandTotal.toFixed(2)}</span></div>
                     </div>
                 </div>
-                ${data.notes ? `<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);"><strong>Terms & Conditions</strong><br>${H4Utils.escape(data.notes)}</div>` : ""}
+                ${data.notes ? `<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);"><strong>Terms:</strong><br>${H4Utils.escape(data.notes)}</div>` : ''}
             `;
-        },
-
-        invoice(data) {
-            return this.quotation({ ...data, number: data.number }).replace("QUOTATION", "TAX INVOICE");
         }
     };
 
-
-    /* ==================== MAIN APP ==================== */
-
+    // ==================== MAIN APP ====================
     const H4App = {
         currentQtnId: null,
         currentInvId: null,
         qtnItems: [],
         invItems: [],
 
-        /* ---------- INIT ---------- */
+        // ---------- INIT ----------
         init() {
             H4DB.init();
             this.setupNavigation();
             this.loadCustomerSelects();
             this.loadQuotations();
             this.loadInvoices();
+            this.loadRateMaster();
+            this.loadCustomers();
+            this.loadProducts();
+            this.loadCompany();
             this.setDefaultDates();
             this.updateQuotationPreview();
-            this.updateInvoicePreview();
-            this.loadRateMasterUI();
-            this.seedMasterData();
-            console.log("H4 Billing ERP loaded");
-        },
 
-        seedMasterData() {
-            const seed = (key, items) => {
-                const existing = H4DB.get(key);
-                if (!existing || Object.keys(existing).length === 0) {
-                    const data = {};
-                    items.forEach(name => { const id = H4Utils.generateId(key.slice(0,3)); data[id] = { id, name }; });
-                    H4DB.save(key, data);
-                }
-            };
-            seed('unitMaster', ['sq.ft', 'sq.m', 'running ft', 'meter', 'kg', 'litre', 'set', 'piece', 'day', 'job']);
-            seed('flooringTypeMaster', ['Standard Epoxy Flooring', 'Premium Self-Leveling Epoxy', 'Metallic Epoxy Flooring', '3D Epoxy Flooring', 'Decorative Flake Epoxy', 'Industrial Epoxy Flooring', 'Epoxy Cove Flooring']);
-            seed('thicknessMaster', ['1 mm', '2 mm', '3 mm', '4 mm', '5 mm', '6 mm']);
-            seed('floorConditionMaster', ['New Concrete', 'Existing Concrete', 'Existing Tile', 'Existing Epoxy', 'Other']);
-
-            const rates = H4DB.get('rateMaster');
-            if (!rates || Object.keys(rates).length === 0) {
-                const sample = {
-                    rate_001: { id: 'rate_001', flooringType: 'Premium Self-Leveling Epoxy', thickness: '1 mm', unit: 'sq.ft', rate: 250, gst: 18, active: true },
-                    rate_002: { id: 'rate_002', flooringType: 'Premium Self-Leveling Epoxy', thickness: '2 mm', unit: 'sq.ft', rate: 350, gst: 18, active: true },
-                    rate_003: { id: 'rate_003', flooringType: 'Premium Self-Leveling Epoxy', thickness: '3 mm', unit: 'sq.ft', rate: 450, gst: 18, active: true }
-                };
-                H4DB.save('rateMaster', sample);
+            // Show bottom nav on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById('bottomNav').style.display = 'flex';
             }
+            window.addEventListener('resize', () => {
+                document.getElementById('bottomNav').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+            });
+
+            console.log('H4 Billing ERP loaded successfully');
         },
 
-        /* ---------- NAVIGATION ---------- */
+        // ---------- NAVIGATION ----------
         setupNavigation() {
-            document.querySelectorAll(".sidebar-item, .nav-item").forEach(item => {
-                item.addEventListener("click", () => {
+            document.querySelectorAll('.sidebar-item, .nav-item').forEach(item => {
+                item.addEventListener('click', () => {
                     const module = item.dataset.module;
                     this.showModule(module);
-                    document.getElementById("sidebar")?.classList.remove("active");
+                    document.getElementById('sidebar')?.classList.remove('active');
                 });
             });
-            document.getElementById("menuToggle")?.addEventListener("click", () => {
-                document.getElementById("sidebar")?.classList.toggle("active");
+
+            document.getElementById('menuToggle')?.addEventListener('click', () => {
+                document.getElementById('sidebar')?.classList.toggle('active');
+            });
+
+            // Close sidebar on outside click
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar?.classList.contains('active') && !sidebar.contains(e.target) && e.target.id !== 'menuToggle') {
+                    sidebar.classList.remove('active');
+                }
             });
         },
 
         showModule(module) {
-            document.querySelectorAll(".module").forEach(el => {
-                el.classList.toggle("active", el.dataset.module === module);
+            document.querySelectorAll('.module').forEach(el => {
+                el.classList.toggle('active', el.dataset.module === module);
             });
-            document.querySelectorAll(".sidebar-item, .nav-item").forEach(el => {
-                el.classList.toggle("active", el.dataset.module === module);
+            document.querySelectorAll('.sidebar-item, .nav-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.module === module);
             });
-            if (module === "quotations") this.loadQuotations();
-            if (module === "invoices") this.loadInvoices();
-            if (module === "rateMaster") this.loadRateMasterUI();
+            if (module === 'quotations') this.loadQuotations();
+            if (module === 'invoices') this.loadInvoices();
+            if (module === 'rateMaster') this.loadRateMaster();
+            if (module === 'customers') this.loadCustomers();
+            if (module === 'products') this.loadProducts();
         },
 
-        /* ---------- MODALS ---------- */
+        // ---------- MODALS ----------
         openModal(id) {
-            document.getElementById(id)?.classList.add("active");
+            document.getElementById(id)?.classList.add('active');
         },
 
         closeModal(id) {
-            document.getElementById(id)?.classList.remove("active");
+            document.getElementById(id)?.classList.remove('active');
         },
 
-        /* ---------- DATES ---------- */
+        // ---------- DATES ----------
         setDefaultDates() {
             const today = H4Utils.today();
-            const qtnDate = document.getElementById("qtnDate");
-            const invDate = document.getElementById("invDate");
-            if (qtnDate && !qtnDate.value) qtnDate.value = today;
-            if (invDate && !invDate.value) invDate.value = today;
+            ['qtnDate', 'invDate'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.value) el.value = today;
+            });
         },
 
-        /* ---------- CUSTOMER ---------- */
+        // ---------- CUSTOMER ----------
         loadCustomerSelects() {
-            const customers = H4DB.get("customers") || {};
-            const options = Object.values(customers)
-                .map(c => `<option value="${c.id}">${H4Utils.escape(c.name || "Customer")}</option>`)
-                .join("");
-            const qtn = document.getElementById("qtnCustomer");
-            const inv = document.getElementById("invCustomer");
-            const epx = document.getElementById("epxCustomer");
-            if (qtn) qtn.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
-            if (inv) inv.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
-            if (epx) epx.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
+            const customers = H4DB.get('customers') || {};
+            const options = Object.values(customers).map(c =>
+                `<option value="${c.id}">${H4Utils.escape(c.name || 'Customer')}</option>`
+            ).join('');
+            ['qtnCustomer', 'invCustomer'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
+            });
         },
 
         onCustomerChange() {
-            const id = document.getElementById("qtnCustomer")?.value;
-            const customers = H4DB.get("customers") || {};
+            const id = document.getElementById('qtnCustomer')?.value;
+            const customers = H4DB.get('customers') || {};
             const customer = customers[id];
             if (!customer) return;
-            const address = document.getElementById("qtnAddress");
-            if (address && !address.value) address.value = customer.address || "";
+            const address = document.getElementById('qtnAddress');
+            if (address && !address.value) address.value = customer.address || '';
             this.updateQuotationPreview();
         },
 
-        /* ---------- QUOTATION ---------- */
+        // ---------- CUSTOMERS CRUD ----------
+        loadCustomers() {
+            const customers = H4DB.get('customers') || {};
+            const tbody = document.getElementById('customersBody');
+            if (!tbody) return;
+            const list = Object.values(customers);
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary);">No customers yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(c => `
+                <tr>
+                    <td><strong>${H4Utils.escape(c.name)}</strong></td>
+                    <td>${H4Utils.escape(c.company || '')}</td>
+                    <td>${H4Utils.escape(c.phone || '')}</td>
+                    <td>${H4Utils.escape(c.email || '')}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="H4App.deleteCustomer('${c.id}')">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        },
+
+        saveCustomer() {
+            const data = {
+                id: H4Utils.generateId('cust'),
+                name: document.getElementById('custName').value.trim(),
+                company: document.getElementById('custCompany').value.trim(),
+                phone: document.getElementById('custPhone').value.trim(),
+                email: document.getElementById('custEmail').value.trim(),
+                address: document.getElementById('custAddress').value.trim()
+            };
+            if (!data.name) { H4Notify.danger('Name is required'); return; }
+            H4DB.add('customers', data);
+            this.closeModal('customerModal');
+            document.getElementById('customerForm').reset();
+            this.loadCustomers();
+            this.loadCustomerSelects();
+            H4Notify.success('Customer saved');
+        },
+
+        deleteCustomer(id) {
+            if (!confirm('Delete this customer?')) return;
+            H4DB.delete('customers', id);
+            this.loadCustomers();
+            this.loadCustomerSelects();
+            H4Notify.success('Customer deleted');
+        },
+
+        // ---------- PRODUCTS CRUD ----------
+        loadProducts() {
+            const products = H4DB.get('products') || {};
+            const tbody = document.getElementById('productsBody');
+            if (!tbody) return;
+            const list = Object.values(products);
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary);">No products yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(p => `
+                <tr>
+                    <td><strong>${H4Utils.escape(p.name)}</strong></td>
+                    <td>${H4Utils.escape(p.category || '')}</td>
+                    <td>${H4Utils.escape(p.unit || '')}</td>
+                    <td>${H4Utils.formatCurrency(p.rate || 0)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="H4App.deleteProduct('${p.id}')">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        },
+
+        saveProduct() {
+            const data = {
+                id: H4Utils.generateId('prod'),
+                name: document.getElementById('prodName').value.trim(),
+                category: document.getElementById('prodCategory').value.trim(),
+                unit: document.getElementById('prodUnit').value.trim(),
+                rate: Number(document.getElementById('prodRate').value) || 0,
+                gst: Number(document.getElementById('prodGst').value) || 0
+            };
+            if (!data.name || !data.rate) { H4Notify.danger('Name and Rate are required'); return; }
+            H4DB.add('products', data);
+            this.closeModal('productModal');
+            document.getElementById('productForm').reset();
+            this.loadProducts();
+            H4Notify.success('Product saved');
+        },
+
+        deleteProduct(id) {
+            if (!confirm('Delete this product?')) return;
+            H4DB.delete('products', id);
+            this.loadProducts();
+            H4Notify.success('Product deleted');
+        },
+
+        // ---------- COMPANY ----------
+        loadCompany() {
+            const company = H4DB.get('company') || {};
+            document.getElementById('companyName').value = company.name || '';
+            document.getElementById('companyGstin').value = company.gstin || '';
+            document.getElementById('companyAddress').value = company.address || '';
+            document.getElementById('companyPhone').value = company.phone || '';
+            document.getElementById('companyEmail').value = company.email || '';
+        },
+
+        saveCompany() {
+            const company = {
+                name: document.getElementById('companyName').value.trim(),
+                gstin: document.getElementById('companyGstin').value.trim(),
+                address: document.getElementById('companyAddress').value.trim(),
+                phone: document.getElementById('companyPhone').value.trim(),
+                email: document.getElementById('companyEmail').value.trim()
+            };
+            H4DB.save('company', company);
+            H4Notify.success('Company saved');
+        },
+
+        // ---------- RATE MASTER ----------
+        loadRateMaster() {
+            const rates = H4DB.get('rateMaster') || {};
+            const tbody = document.getElementById('rateMasterBody');
+            if (!tbody) return;
+            const list = Object.values(rates);
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No rates configured yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(r => `
+                <tr>
+                    <td>${H4Utils.escape(r.flooringType)}</td>
+                    <td>${H4Utils.escape(r.thickness)}</td>
+                    <td>${H4Utils.escape(r.unit)}</td>
+                    <td>${H4Utils.formatCurrency(r.rate)}</td>
+                    <td>${r.gst}%</td>
+                    <td>${r.active !== false ? '✅ Active' : '⛔ Inactive'}</td>
+                    <td><button class="btn btn-sm btn-danger" onclick="H4App.deleteRate('${r.id}')">🗑️</button></td>
+                </tr>
+            `).join('');
+        },
+
+        saveRateMaster() {
+            const data = {
+                id: H4Utils.generateId('rate'),
+                flooringType: document.getElementById('rmFlooringType').value.trim(),
+                thickness: document.getElementById('rmThickness').value.trim(),
+                unit: document.getElementById('rmUnit').value.trim(),
+                rate: Number(document.getElementById('rmRate').value) || 0,
+                gst: Number(document.getElementById('rmGst').value) || 0,
+                active: document.getElementById('rmActive').checked
+            };
+            if (!data.flooringType || !data.thickness || !data.unit || !data.rate) {
+                H4Notify.danger('All fields are required');
+                return;
+            }
+            H4DB.add('rateMaster', data);
+            this.closeModal('rateMasterModal');
+            document.getElementById('rateMasterForm').reset();
+            this.loadRateMaster();
+            H4Notify.success('Rate saved');
+        },
+
+        deleteRate(id) {
+            if (!confirm('Delete this rate?')) return;
+            H4DB.delete('rateMaster', id);
+            this.loadRateMaster();
+            H4Notify.success('Rate deleted');
+        },
+
+        // ---------- QUOTATION ----------
         newQuotation() {
             this.currentQtnId = null;
             this.qtnItems = [];
-            document.getElementById("quotationsList").style.display = "none";
-            document.getElementById("quotationBuilder").style.display = "block";
-            document.getElementById("qtnNumber").value = H4Numbering.getNextQuotationNumber();
-            document.getElementById("qtnDate").value = H4Utils.today();
-            document.getElementById("qtnValidUntil").value = "";
-            document.getElementById("qtnProject").value = "";
-            document.getElementById("qtnReference").value = "";
-            document.getElementById("qtnAddress").value = "";
-            document.getElementById("qtnNotes").value = "";
-            document.getElementById("qtnStatus").value = "draft";
-            document.getElementById("deleteQtnBtn").style.display = "none";
-            document.getElementById("convertQtnBtn").style.display = "none";
+
+            document.getElementById('quotationsList').style.display = 'none';
+            document.getElementById('quotationBuilder').style.display = 'block';
+
+            document.getElementById('qtnNumber').value = H4Numbering.getNextQuotationNumber();
+            document.getElementById('qtnDate').value = H4Utils.today();
+            document.getElementById('qtnValidUntil').value = '';
+            document.getElementById('qtnProject').value = '';
+            document.getElementById('qtnReference').value = '';
+            document.getElementById('qtnAddress').value = '';
+            document.getElementById('qtnNotes').value = '';
+            document.getElementById('qtnStatus').value = 'draft';
+            document.getElementById('deleteQtnBtn').style.display = 'none';
+            document.getElementById('convertQtnBtn').style.display = 'none';
+
             this.renderQtnItems();
             this.updateQuotationPreview();
         },
 
         addQtnItem() {
-            this.qtnItems.push({ id: H4Utils.generateId("qitem"), productId: "", productName: "", description: "", quantity: 1, unit: "Nos", rate: 0, discount: 0, discountType: "flat", gst: 18 });
+            this.qtnItems.push({
+                id: H4Utils.generateId('qitem'),
+                productId: '',
+                productName: '',
+                description: '',
+                quantity: 1,
+                unit: 'Nos',
+                rate: 0,
+                discount: 0,
+                discountType: 'flat',
+                gst: 18
+            });
             this.renderQtnItems();
             this.updateQuotationPreview();
         },
 
         renderQtnItems() {
-            const tbody = document.getElementById("qtnItemsBody");
+            const tbody = document.getElementById('qtnItemsBody');
             if (!tbody) return;
-            const products = H4DB.get("products") || {};
-            const productOptions = Object.values(products)
-                .map(p => `<option value="${p.id}">${H4Utils.escape(p.name || p.productName || "Product")}</option>`)
-                .join("");
+
+            const products = H4DB.get('products') || {};
+            const productOptions = Object.values(products).map(p =>
+                `<option value="${p.id}">${H4Utils.escape(p.name || 'Product')}</option>`
+            ).join('');
 
             if (this.qtnItems.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added. Click "Add Item".</td></tr>`;
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added. Click "Add Item".</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = this.qtnItems.map((item, index) => {
+            tbody.innerHTML = this.qtnItems.map((item, idx) => {
                 const line = H4Calc.calculateLine(item);
-                return `
-                    <tr>
-                        <td><select onchange="H4App.qtnProductChange(${index}, this.value)"><option value="">-- Product --</option>${productOptions}</select></td>
-                        <td><input type="text" value="${H4Utils.escape(item.description || "")}" onchange="H4App.updateQtnItem(${index}, 'description', this.value)"></td>
-                        <td><input type="number" min="0" step="0.01" value="${item.quantity}" onchange="H4App.updateQtnItem(${index}, 'quantity', this.value)"></td>
-                        <td><input type="text" value="${H4Utils.escape(item.unit || "")}" onchange="H4App.updateQtnItem(${index}, 'unit', this.value)"></td>
-                        <td><input type="number" min="0" step="0.01" value="${item.rate}" onchange="H4App.updateQtnItem(${index}, 'rate', this.value)"></td>
-                        <td><input type="number" min="0" step="0.01" value="${item.discount}" onchange="H4App.updateQtnItem(${index}, 'discount', this.value)"></td>
-                        <td><select onchange="H4App.updateQtnItem(${index}, 'gst', this.value)">${[0,5,12,18,28].map(g => `<option value="${g}" ${Number(item.gst)===g?"selected":""}>${g}%</option>`).join("")}</select></td>
-                        <td style="text-align:right;font-weight:600;">₹${line.total.toFixed(2)}</td>
-                        <td><button class="btn btn-danger btn-sm" onclick="H4App.removeQtnItem(${index})">🗑️</button></td>
-                    </tr>
-                `;
-            }).join("");
+                return `<tr>
+                    <td>
+                        <select onchange="H4App.qtnProductChange(${idx}, this.value)">
+                            <option value="">-- Product --</option>
+                            ${productOptions}
+                        </select>
+                    </td>
+                    <td><input type="text" value="${H4Utils.escape(item.description)}" onchange="H4App.updateQtnItem(${idx}, 'description', this.value)"></td>
+                    <td><input type="number" min="0" step="0.01" value="${item.quantity}" onchange="H4App.updateQtnItem(${idx}, 'quantity', this.value)"></td>
+                    <td><input type="text" value="${H4Utils.escape(item.unit)}" onchange="H4App.updateQtnItem(${idx}, 'unit', this.value)"></td>
+                    <td><input type="number" min="0" step="0.01" value="${item.rate}" onchange="H4App.updateQtnItem(${idx}, 'rate', this.value)"></td>
+                    <td><input type="number" min="0" step="0.01" value="${item.discount}" onchange="H4App.updateQtnItem(${idx}, 'discount', this.value)"></td>
+                    <td><select onchange="H4App.updateQtnItem(${idx}, 'gst', this.value)">${[0,5,12,18,28].map(g => `<option value="${g}" ${Number(item.gst)===g?'selected':''}>${g}%</option>`).join('')}</select></td>
+                    <td style="text-align:right;font-weight:600;">₹${line.total.toFixed(2)}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="H4App.removeQtnItem(${idx})">🗑️</button></td>
+                </tr>`;
+            }).join('');
 
-            this.qtnItems.forEach((item, index) => {
-                const row = tbody.querySelectorAll("tr")[index];
-                const select = row?.querySelector("select");
-                if (select) select.value = item.productId || "";
+            // Restore selected products
+            this.qtnItems.forEach((item, idx) => {
+                const row = tbody.querySelectorAll('tr')[idx];
+                const select = row?.querySelector('select');
+                if (select) select.value = item.productId || '';
             });
         },
 
         qtnProductChange(index, productId) {
-            const products = H4DB.get("products") || {};
+            const products = H4DB.get('products') || {};
             const product = products[productId];
             if (!product) return;
             const item = this.qtnItems[index];
             item.productId = productId;
-            item.productName = product.name || product.productName || "";
-            item.description = product.description || product.name || product.productName || "";
-            item.unit = product.unit || product.uom || "Nos";
-            item.rate = Number(product.rate || product.price || product.sellingPrice || 0);
-            item.gst = Number(product.gst || product.gstRate || 18);
+            item.productName = product.name || '';
+            item.description = product.description || product.name || '';
+            item.unit = product.unit || 'Nos';
+            item.rate = Number(product.rate || 0);
+            item.gst = Number(product.gst || 18);
             this.renderQtnItems();
             this.updateQuotationPreview();
         },
 
         updateQtnItem(index, field, value) {
             if (!this.qtnItems[index]) return;
-            if (["quantity", "rate", "discount", "gst"].includes(field)) value = Number(value) || 0;
+            if (['quantity', 'rate', 'discount', 'gst'].includes(field)) value = Number(value) || 0;
             this.qtnItems[index][field] = value;
             this.renderQtnItems();
             this.updateQuotationPreview();
@@ -2343,88 +1609,96 @@
 
         getQuotationFormData() {
             return {
-                id: this.currentQtnId || H4Utils.generateId("qtn"),
-                number: document.getElementById("qtnNumber").value,
-                date: document.getElementById("qtnDate").value,
-                customerId: document.getElementById("qtnCustomer").value,
-                validUntil: document.getElementById("qtnValidUntil").value,
-                project: document.getElementById("qtnProject").value,
-                reference: document.getElementById("qtnReference").value,
-                address: document.getElementById("qtnAddress").value,
-                notes: document.getElementById("qtnNotes").value,
-                status: document.getElementById("qtnStatus").value,
+                id: this.currentQtnId || H4Utils.generateId('qtn'),
+                number: document.getElementById('qtnNumber').value,
+                date: document.getElementById('qtnDate').value,
+                customerId: document.getElementById('qtnCustomer').value,
+                validUntil: document.getElementById('qtnValidUntil').value,
+                project: document.getElementById('qtnProject').value,
+                reference: document.getElementById('qtnReference').value,
+                address: document.getElementById('qtnAddress').value,
+                notes: document.getElementById('qtnNotes').value,
+                status: document.getElementById('qtnStatus').value,
                 items: JSON.parse(JSON.stringify(this.qtnItems)),
                 updatedAt: new Date().toISOString()
             };
         },
 
         saveQuotation() {
-            const customer = document.getElementById("qtnCustomer").value;
-            if (!customer) { H4Notify.danger("Please select a customer."); return; }
-            if (this.qtnItems.length === 0) { H4Notify.danger("Please add at least one item."); return; }
+            const customer = document.getElementById('qtnCustomer').value;
+            if (!customer) { H4Notify.danger('Please select a customer.'); return; }
+            if (this.qtnItems.length === 0) { H4Notify.danger('Please add at least one item.'); return; }
+
             const data = this.getQuotationFormData();
             if (this.currentQtnId) {
-                H4DB.update("quotations", this.currentQtnId, data);
-                H4Notify.success("Quotation updated successfully.");
+                H4DB.update('quotations', this.currentQtnId, data);
+                H4Notify.success('Quotation updated.');
             } else {
-                H4DB.add("quotations", data);
+                H4DB.add('quotations', data);
                 this.currentQtnId = data.id;
-                H4Notify.success("Quotation saved successfully.");
+                H4Notify.success('Quotation saved.');
             }
             this.loadQuotations();
             this.editQuotation(this.currentQtnId);
         },
 
         loadQuotations() {
-            const quotations = H4DB.get("quotations") || {};
-            const tbody = document.getElementById("quotationsBody");
+            const quotations = H4DB.get('quotations') || {};
+            const tbody = document.getElementById('quotationsBody');
             if (!tbody) return;
-            const list = Object.values(quotations).sort((a, b) => new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date));
+
+            const list = Object.values(quotations).sort((a, b) =>
+                new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date)
+            );
+
             if (!list.length) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">No quotations yet</td></tr>`;
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">No quotations yet</td></tr>';
                 return;
             }
-            const customers = H4DB.get("customers") || {};
+
+            const customers = H4DB.get('customers') || {};
             tbody.innerHTML = list.map(q => {
                 const customer = customers[q.customerId] || {};
                 const totals = H4Calc.calculateTotals(q.items || []);
-                return `
-                    <tr>
-                        <td><strong>${H4Utils.escape(q.number)}</strong></td>
-                        <td>${H4Utils.escape(customer.name || "Unknown Customer")}</td>
-                        <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
-                        <td>${q.date ? new Date(q.date).toLocaleDateString("en-IN") : "-"}</td>
-                        <td><span class="status-badge status-${q.status || "draft"}">${H4Utils.escape(q.status || "draft")}</span></td>
-                        <td>
-                            <div class="table-actions">
-                                <button class="btn btn-sm btn-outline" onclick="H4App.editQuotation('${q.id}')">✏️</button>
-                                <button class="btn btn-sm btn-success" onclick="H4App.printQuotation('${q.id}')">🖨️</button>
-                                <button class="btn btn-sm btn-danger" onclick="H4App.deleteQuotationById('${q.id}')">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join("");
+                return `<tr>
+                    <td><strong>${H4Utils.escape(q.number)}</strong></td>
+                    <td>${H4Utils.escape(customer.name || 'Unknown')}</td>
+                    <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
+                    <td>${q.date ? new Date(q.date).toLocaleDateString('en-IN') : '-'}</td>
+                    <td><span class="status-badge status-${q.status || 'draft'}">${H4Utils.escape(q.status || 'draft')}</span></td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-sm btn-outline" onclick="H4App.editQuotation('${q.id}')">✏️</button>
+                            <button class="btn btn-sm btn-success" onclick="H4App.printQuotation('${q.id}')">🖨️</button>
+                            <button class="btn btn-sm btn-danger" onclick="H4App.deleteQuotationById('${q.id}')">🗑️</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
         },
 
         editQuotation(id) {
-            const q = (H4DB.get("quotations") || {})[id];
+            const q = (H4DB.get('quotations') || {})[id];
             if (!q) return;
+
             this.currentQtnId = id;
             this.qtnItems = JSON.parse(JSON.stringify(q.items || []));
-            document.getElementById("quotationsList").style.display = "none";
-            document.getElementById("quotationBuilder").style.display = "block";
-            document.getElementById("qtnNumber").value = q.number || "";
-            document.getElementById("qtnDate").value = q.date || "";
-            document.getElementById("qtnCustomer").value = q.customerId || "";
-            document.getElementById("qtnValidUntil").value = q.validUntil || "";
-            document.getElementById("qtnProject").value = q.project || "";
-            document.getElementById("qtnReference").value = q.reference || "";
-            document.getElementById("qtnAddress").value = q.address || "";
-            document.getElementById("qtnNotes").value = q.notes || "";
-            document.getElementById("qtnStatus").value = q.status || "draft";
-            document.getElementById("deleteQtnBtn").style.display = "inline-flex";
-            document.getElementById("convertQtnBtn").style.display = "inline-flex";
+
+            document.getElementById('quotationsList').style.display = 'none';
+            document.getElementById('quotationBuilder').style.display = 'block';
+
+            document.getElementById('qtnNumber').value = q.number || '';
+            document.getElementById('qtnDate').value = q.date || '';
+            document.getElementById('qtnCustomer').value = q.customerId || '';
+            document.getElementById('qtnValidUntil').value = q.validUntil || '';
+            document.getElementById('qtnProject').value = q.project || '';
+            document.getElementById('qtnReference').value = q.reference || '';
+            document.getElementById('qtnAddress').value = q.address || '';
+            document.getElementById('qtnNotes').value = q.notes || '';
+            document.getElementById('qtnStatus').value = q.status || 'draft';
+            document.getElementById('deleteQtnBtn').style.display = 'inline-flex';
+            document.getElementById('convertQtnBtn').style.display = 'inline-flex';
+
             this.renderQtnItems();
             this.updateQuotationPreview();
         },
@@ -2432,82 +1706,157 @@
         deleteQuotation() {
             if (!this.currentQtnId) return;
             this.deleteQuotationById(this.currentQtnId);
-            this.backToList("quotations");
+            this.backToList('quotations');
         },
 
         deleteQuotationById(id) {
-            if (!confirm("Delete this quotation?")) return;
-            H4DB.delete("quotations", id);
-            H4Notify.success("Quotation deleted.");
+            if (!confirm('Delete this quotation?')) return;
+            H4DB.delete('quotations', id);
+            H4Notify.success('Quotation deleted.');
             this.loadQuotations();
         },
 
         backToList(module) {
-            if (module === "quotations") {
-                document.getElementById("quotationBuilder").style.display = "none";
-                document.getElementById("quotationsList").style.display = "block";
+            if (module === 'quotations') {
+                document.getElementById('quotationBuilder').style.display = 'none';
+                document.getElementById('quotationsList').style.display = 'block';
                 this.currentQtnId = null;
                 this.qtnItems = [];
                 this.loadQuotations();
             }
-            if (module === "invoices") {
-                document.getElementById("invoiceBuilder").style.display = "none";
-                document.getElementById("invoicesList").style.display = "block";
-                this.currentInvId = null;
-                this.invItems = [];
-                this.loadInvoices();
-            }
         },
 
         updateQuotationPreview() {
-            const preview = document.getElementById("qtnPreview");
+            const preview = document.getElementById('qtnPreview');
             if (!preview) return;
-            if (!document.getElementById("qtnNumber")?.value) {
-                preview.innerHTML = "<p style='color:var(--text-secondary);text-align:center;'>Quotation preview will appear here.</p>";
-                return;
-            }
+
             const data = {
-                number: document.getElementById("qtnNumber").value,
-                date: document.getElementById("qtnDate").value,
-                customerId: document.getElementById("qtnCustomer").value,
-                validUntil: document.getElementById("qtnValidUntil").value,
-                project: document.getElementById("qtnProject").value,
-                notes: document.getElementById("qtnNotes").value,
+                number: document.getElementById('qtnNumber')?.value || '',
+                date: document.getElementById('qtnDate')?.value || '',
+                customerId: document.getElementById('qtnCustomer')?.value || '',
+                validUntil: document.getElementById('qtnValidUntil')?.value || '',
+                project: document.getElementById('qtnProject')?.value || '',
+                notes: document.getElementById('qtnNotes')?.value || '',
                 items: this.qtnItems
             };
+
+            if (!data.number) {
+                preview.innerHTML = '<p style="color:var(--text-secondary);text-align:center;">Quotation preview will appear here.</p>';
+                return;
+            }
+
             preview.innerHTML = H4Documents.quotation(data);
             this.updateQuotationTotals();
         },
 
         updateQuotationTotals() {
             const totals = H4Calc.calculateTotals(this.qtnItems);
-            this.setText("qtnSubtotal", totals.subtotal);
-            this.setText("qtnTotalDiscount", totals.totalDiscount);
-            this.setText("qtnTaxableAmount", totals.taxableAmount);
-            this.setText("qtnCGST", totals.cgst);
-            this.setText("qtnSGST", totals.sgst);
-            this.setText("qtnRoundOff", totals.roundOff);
-            this.setText("qtnGrandTotal", totals.grandTotal);
+            ['qtnSubtotal', 'qtnTotalDiscount', 'qtnTaxableAmount', 'qtnCGST', 'qtnSGST', 'qtnRoundOff', 'qtnGrandTotal'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const key = id.replace('qtn', '').toLowerCase();
+                    const map = {
+                        subtotal: totals.subtotal,
+                        totaldiscount: totals.totalDiscount,
+                        taxableamount: totals.taxableAmount,
+                        cgst: totals.cgst,
+                        sgst: totals.sgst,
+                        roundoff: totals.roundOff,
+                        grandtotal: totals.grandTotal
+                    };
+                    el.textContent = (map[key] || 0).toFixed(2);
+                }
+            });
         },
 
-        setText(id, value) {
-            const el = document.getElementById(id);
-            if (el) el.textContent = Number(value || 0).toFixed(2);
+        // ---------- INVOICE ----------
+        newInvoice() {
+            this.currentInvId = null;
+            this.invItems = [];
+            document.getElementById('invoicesList').style.display = 'none';
+            document.getElementById('invoiceBuilder').style.display = 'block';
+            document.getElementById('invNumber').value = H4Numbering.getNextInvoiceNumber();
+            document.getElementById('invDate').value = H4Utils.today();
+            H4Notify.success('Invoice builder opened');
         },
 
-        /* ---------- PRINT / PDF ---------- */
-        printQuotation(id) {
-            const q = (H4DB.get("quotations") || {})[id];
+        loadInvoices() {
+            const invoices = H4DB.get('invoices') || {};
+            const tbody = document.getElementById('invoicesBody');
+            if (!tbody) return;
+            const list = Object.values(invoices);
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No invoices yet</td></tr>';
+                return;
+            }
+            const customers = H4DB.get('customers') || {};
+            tbody.innerHTML = list.map(inv => {
+                const cust = customers[inv.customerId] || {};
+                const totals = H4Calc.calculateTotals(inv.items || []);
+                const paid = Number(inv.paidAmount) || 0;
+                const balance = Math.max(0, totals.grandTotal - paid);
+                return `<tr>
+                    <td>${H4Utils.escape(inv.number)}</td>
+                    <td>${H4Utils.escape(cust.name || 'Unknown')}</td>
+                    <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
+                    <td>${H4Utils.formatCurrency(paid)}</td>
+                    <td>${H4Utils.formatCurrency(balance)}</td>
+                    <td><span class="status-badge status-${inv.paymentStatus || 'unpaid'}">${H4Utils.escape(inv.paymentStatus || 'unpaid')}</span></td>
+                    <td><button class="btn btn-sm btn-danger" onclick="H4App.deleteInvoiceById('${inv.id}')">🗑️</button></td>
+                </tr>`;
+            }).join('');
+        },
+
+        deleteInvoiceById(id) {
+            if (!confirm('Delete this invoice?')) return;
+            H4DB.delete('invoices', id);
+            H4Notify.success('Invoice deleted.');
+            this.loadInvoices();
+        },
+
+        // ---------- QUOTATION → INVOICE ----------
+        convertToInvoice() {
+            if (!this.currentQtnId) return;
+            const q = (H4DB.get('quotations') || {})[this.currentQtnId];
             if (!q) return;
+
+            const invoice = {
+                id: H4Utils.generateId('inv'),
+                number: H4Numbering.getNextInvoiceNumber(),
+                date: H4Utils.today(),
+                customerId: q.customerId,
+                project: q.project,
+                reference: q.number,
+                quotationId: q.id,
+                items: JSON.parse(JSON.stringify(q.items || [])),
+                paidAmount: 0,
+                paymentStatus: 'unpaid',
+                notes: q.notes || '',
+                updatedAt: new Date().toISOString()
+            };
+
+            H4DB.add('invoices', invoice);
+            H4DB.update('quotations', q.id, { status: 'converted' });
+            H4Notify.success('Quotation converted to Invoice.');
+            this.loadQuotations();
+            this.loadInvoices();
+            this.showModule('invoices');
+        },
+
+        // ---------- PRINT ----------
+        printQuotation(id) {
+            const q = (H4DB.get('quotations') || {})[id];
+            if (!q) return;
+
             const html = H4Documents.quotation(q);
-            const win = window.open("", "_blank");
-            if (!win) { H4Notify.danger("Please allow popups to print."); return; }
+            const win = window.open('', '_blank');
+            if (!win) { H4Notify.danger('Please allow popups to print.'); return; }
+
             win.document.write(`
                 <!DOCTYPE html><html><head><title>${H4Utils.escape(q.number)}</title>
                 <meta name="viewport" content="width=device-width,initial-scale=1">
                 <style>
-                    *{box-sizing:border-box;}
-                    body{font-family:Arial,sans-serif;margin:0;padding:25px;color:#222;}
+                    *{box-sizing:border-box;} body{font-family:Arial,sans-serif;margin:0;padding:25px;color:#222;}
                     .preview-header{text-align:center;margin-bottom:25px;padding-bottom:15px;border-bottom:2px solid #ddd;}
                     .document-title{font-size:28px;font-weight:bold;color:#6A3FA0;}
                     .document-number{font-size:16px;margin:8px;}
@@ -2519,776 +1868,32 @@
                     .preview-totals-box{width:350px;}
                     .calc-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #ddd;}
                     .calc-row.total{font-size:18px;font-weight:bold;border-bottom:2px solid #6A3FA0;}
-                    @media print{body{padding:10mm;}@page{size:A4;margin:10mm;}}
+                    @media print{body{padding:10mm;} @page{size:A4;margin:10mm;}}
                 </style>
                 </head><body>${html}<script>window.onload=function(){window.print();};<\/script></body></html>
             `);
             win.document.close();
-        },
-
-        /* ---------- INVOICE ---------- */
-        newInvoice() {
-            this.currentInvId = null;
-            this.invItems = [];
-            document.getElementById("invoicesList").style.display = "none";
-            document.getElementById("invoiceBuilder").style.display = "block";
-            document.getElementById("invNumber").value = H4Numbering.getNextInvoiceNumber();
-            document.getElementById("invDate").value = H4Utils.today();
-            document.getElementById("invCustomer").value = "";
-            document.getElementById("invDueDate").value = "";
-            document.getElementById("invProject").value = "";
-            document.getElementById("invReference").value = "";
-            document.getElementById("invQuotation").value = "";
-            document.getElementById("invPaidAmount").value = "0";
-            document.getElementById("invPaymentStatus").value = "unpaid";
-            document.getElementById("invNotes").value = "";
-            document.getElementById("deleteInvBtn").style.display = "none";
-            this.renderInvItems();
-            this.updateInvoicePreview();
-            this.loadQuotationSelect();
-        },
-
-        loadQuotationSelect() {
-            const quotes = H4DB.get("quotations") || {};
-            const select = document.getElementById("invQuotation");
-            if (!select) return;
-            select.innerHTML = `<option value="">-- None --</option>`;
-            Object.values(quotes).forEach(q => {
-                if (q.status !== "converted") {
-                    select.innerHTML += `<option value="${q.id}">${q.number} - ${q.customerId ? (H4DB.get("customers")[q.customerId]?.name || "Unknown") : "Unknown"}</option>`;
-                }
-            });
-        },
-
-        addInvItem() {
-            this.invItems.push({ id: H4Utils.generateId("iitem"), productId: "", productName: "", description: "", quantity: 1, unit: "Nos", rate: 0, discount: 0, discountType: "flat", gst: 18 });
-            this.renderInvItems();
-            this.updateInvoicePreview();
-        },
-
-        renderInvItems() {
-            const tbody = document.getElementById("invItemsBody");
-            if (!tbody) return;
-            const products = H4DB.get("products") || {};
-            const productOptions = Object.values(products)
-                .map(p => `<option value="${p.id}">${H4Utils.escape(p.name || p.productName || "Product")}</option>`)
-                .join("");
-
-            if (this.invItems.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">No items added.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = this.invItems.map((item, index) => {
-                const line = H4Calc.calculateLine(item);
-                return `
-                    <tr>
-                        <td><select onchange="H4App.invProductChange(${index}, this.value)"><option value="">-- Product --</option>${productOptions}</select></td>
-                        <td><input type="text" value="${H4Utils.escape(item.description || "")}" onchange="H4App.updateInvItem(${index}, 'description', this.value)"></td>
-                        <td><input type="number" min="0" value="${item.quantity}" onchange="H4App.updateInvItem(${index}, 'quantity', this.value)"></td>
-                        <td><input type="text" value="${H4Utils.escape(item.unit || "")}" onchange="H4App.updateInvItem(${index}, 'unit', this.value)"></td>
-                        <td><input type="number" min="0" step="0.01" value="${item.rate}" onchange="H4App.updateInvItem(${index}, 'rate', this.value)"></td>
-                        <td><input type="number" min="0" step="0.01" value="${item.discount}" onchange="H4App.updateInvItem(${index}, 'discount', this.value)"></td>
-                        <td><select onchange="H4App.updateInvItem(${index}, 'gst', this.value)">${[0,5,12,18,28].map(g => `<option value="${g}" ${Number(item.gst)===g?"selected":""}>${g}%</option>`).join("")}</select></td>
-                        <td>₹${line.total.toFixed(2)}</td>
-                        <td><button class="btn btn-danger btn-sm" onclick="H4App.removeInvItem(${index})">🗑️</button></td>
-                    </tr>
-                `;
-            }).join("");
-
-            this.invItems.forEach((item, index) => {
-                const row = tbody.querySelectorAll("tr")[index];
-                const select = row?.querySelector("select");
-                if (select) select.value = item.productId || "";
-            });
-        },
-
-        invProductChange(index, productId) {
-            const product = (H4DB.get("products") || {})[productId];
-            if (!product) return;
-            const item = this.invItems[index];
-            item.productId = productId;
-            item.productName = product.name || product.productName || "";
-            item.description = product.description || item.productName;
-            item.unit = product.unit || product.uom || "Nos";
-            item.rate = Number(product.rate || product.price || product.sellingPrice || 0);
-            item.gst = Number(product.gst || product.gstRate || 18);
-            this.renderInvItems();
-            this.updateInvoicePreview();
-        },
-
-        updateInvItem(index, field, value) {
-            if (!this.invItems[index]) return;
-            if (["quantity", "rate", "discount", "gst"].includes(field)) value = Number(value) || 0;
-            this.invItems[index][field] = value;
-            this.renderInvItems();
-            this.updateInvoicePreview();
-        },
-
-        removeInvItem(index) {
-            this.invItems.splice(index, 1);
-            this.renderInvItems();
-            this.updateInvoicePreview();
-        },
-
-        updatePaymentStatus() {
-            const paid = Number(document.getElementById("invPaidAmount")?.value) || 0;
-            const totals = H4Calc.calculateTotals(this.invItems);
-            const balance = Math.max(0, totals.grandTotal - paid);
-            this.setText("invBalance", balance);
-            const status = document.getElementById("invPaymentStatus");
-            if (!status) return;
-            if (paid >= totals.grandTotal && totals.grandTotal > 0) status.value = "paid";
-            else if (paid > 0) status.value = "partially-paid";
-            else status.value = "unpaid";
-            this.updateInvoicePreview();
-        },
-
-        updateInvoicePreview() {
-            const preview = document.getElementById("invPreview");
-            if (!preview) return;
-            const data = {
-                number: document.getElementById("invNumber")?.value || "",
-                date: document.getElementById("invDate")?.value || "",
-                customerId: document.getElementById("invCustomer")?.value || "",
-                dueDate: document.getElementById("invDueDate")?.value || "",
-                notes: document.getElementById("invNotes")?.value || "",
-                items: this.invItems
-            };
-            preview.innerHTML = H4Documents.invoice(data);
-            const totals = H4Calc.calculateTotals(this.invItems);
-            this.setText("invSubtotal", totals.subtotal);
-            this.setText("invTotalDiscount", totals.totalDiscount);
-            this.setText("invTaxableAmount", totals.taxableAmount);
-            this.setText("invCGST", totals.cgst);
-            this.setText("invSGST", totals.sgst);
-            this.setText("invRoundOff", totals.roundOff);
-            this.setText("invGrandTotal", totals.grandTotal);
-            const paid = Number(document.getElementById("invPaidAmount")?.value) || 0;
-            this.setText("invBalance", Math.max(0, totals.grandTotal - paid));
-        },
-
-        saveInvoice() {
-            const customer = document.getElementById("invCustomer").value;
-            if (!customer) { H4Notify.danger("Please select a customer."); return; }
-            if (!this.invItems.length) { H4Notify.danger("Please add at least one item."); return; }
-            const data = {
-                id: this.currentInvId || H4Utils.generateId("inv"),
-                number: document.getElementById("invNumber").value,
-                date: document.getElementById("invDate").value,
-                customerId: customer,
-                dueDate: document.getElementById("invDueDate").value,
-                project: document.getElementById("invProject").value,
-                reference: document.getElementById("invReference").value,
-                quotationId: document.getElementById("invQuotation").value,
-                items: JSON.parse(JSON.stringify(this.invItems)),
-                paidAmount: Number(document.getElementById("invPaidAmount").value) || 0,
-                paymentStatus: document.getElementById("invPaymentStatus").value,
-                notes: document.getElementById("invNotes").value,
-                updatedAt: new Date().toISOString()
-            };
-            if (this.currentInvId) {
-                H4DB.update("invoices", this.currentInvId, data);
-                H4Notify.success("Invoice updated.");
-            } else {
-                H4DB.add("invoices", data);
-                this.currentInvId = data.id;
-                H4Notify.success("Invoice saved.");
-            }
-            this.loadInvoices();
-        },
-
-        loadInvoices() {
-            const invoices = H4DB.get("invoices") || {};
-            const tbody = document.getElementById("invoicesBody");
-            if (!tbody) return;
-            const customers = H4DB.get("customers") || {};
-            const list = Object.values(invoices);
-            if (!list.length) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No invoices yet</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = list.map(inv => {
-                const totals = H4Calc.calculateTotals(inv.items || []);
-                const paid = Number(inv.paidAmount) || 0;
-                const balance = Math.max(0, totals.grandTotal - paid);
-                const customer = customers[inv.customerId] || {};
-                return `
-                    <tr>
-                        <td>${H4Utils.escape(inv.number)}</td>
-                        <td>${H4Utils.escape(customer.name || "Unknown")}</td>
-                        <td>${H4Utils.formatCurrency(totals.grandTotal)}</td>
-                        <td>${H4Utils.formatCurrency(paid)}</td>
-                        <td>${H4Utils.formatCurrency(balance)}</td>
-                        <td><span class="status-badge status-${inv.paymentStatus || "unpaid"}">${H4Utils.escape(inv.paymentStatus || "unpaid")}</span></td>
-                        <td><button class="btn btn-sm btn-danger" onclick="H4App.deleteInvoiceById('${inv.id}')">🗑️</button></td>
-                    </tr>
-                `;
-            }).join("");
-        },
-
-        deleteInvoice() {
-            if (!this.currentInvId) return;
-            this.deleteInvoiceById(this.currentInvId);
-            this.backToList("invoices");
-        },
-
-        deleteInvoiceById(id) {
-            if (!confirm("Delete this invoice?")) return;
-            H4DB.delete("invoices", id);
-            H4Notify.success("Invoice deleted.");
-            this.loadInvoices();
-        },
-
-        /* ---------- QUOTATION → INVOICE ---------- */
-        convertToInvoice() {
-            if (!this.currentQtnId) return;
-            const q = (H4DB.get("quotations") || {})[this.currentQtnId];
-            if (!q) return;
-            const invoice = {
-                id: H4Utils.generateId("inv"),
-                number: H4Numbering.getNextInvoiceNumber(),
-                date: H4Utils.today(),
-                customerId: q.customerId,
-                project: q.project,
-                reference: q.number,
-                quotationId: q.id,
-                items: JSON.parse(JSON.stringify(q.items || [])),
-                paidAmount: 0,
-                paymentStatus: "unpaid",
-                notes: q.notes || "",
-                updatedAt: new Date().toISOString()
-            };
-            H4DB.add("invoices", invoice);
-            H4DB.update("quotations", q.id, { status: "converted" });
-            H4Notify.success("Quotation converted to Invoice.");
-            this.loadQuotations();
-            this.loadInvoices();
-            this.showModule("invoices");
-        },
-
-        /* ---------- RATE MASTER ---------- */
-        loadRateMasterUI() {
-            const rates = H4DB.get("rateMaster") || {};
-            const tbody = document.getElementById("rateMasterBody");
-            if (!tbody) return;
-            const list = Object.values(rates);
-            if (!list.length) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No rates configured yet</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = list.map(r => `
-                <tr>
-                    <td>${H4Utils.escape(r.flooringType)}</td>
-                    <td>${H4Utils.escape(r.thickness)}</td>
-                    <td>${H4Utils.escape(r.unit)}</td>
-                    <td>${H4Utils.formatCurrency(r.rate)}</td>
-                    <td>${r.gst}%</td>
-                    <td>${r.active !== false ? "✅ Active" : "⛔ Inactive"}</td>
-                    <td><button class="btn btn-sm btn-danger" onclick="H4App.deleteRateMaster('${r.id}')">🗑️</button></td>
-                </tr>
-            `).join("");
-        },
-
-        populateMasterSelect(selectId, storeKey) {
-            const el = document.getElementById(selectId);
-            if (!el) return;
-            const items = H4DB.get(storeKey) || {};
-            el.innerHTML = Object.values(items).map(i => `<option value="${i.name}">${i.name}</option>`).join("");
-        },
-
-        renderMasterList(containerId, storeKey) {
-            const items = H4DB.get(storeKey) || {};
-            const container = document.getElementById(containerId);
-            container.innerHTML = Object.values(items).map(i =>
-                `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);">
-                    <span>${i.name}</span>
-                    <button class="btn btn-sm btn-danger" onclick="H4App.deleteMasterItem('${storeKey}', '${i.id}', '${containerId}')">🗑️</button>
-                </div>`
-            ).join('') || '<p style="color:var(--text-secondary);">None yet</p>';
-        },
-
-        deleteMasterItem(storeKey, id, containerId) {
-            if (!confirm("Delete this item?")) return;
-            H4DB.delete(storeKey, id);
-            this.renderMasterList(containerId, storeKey);
-            this.loadRateMasterUI();
-            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
-        },
-
-        addUnit() {
-            const input = document.getElementById("newUnitInput");
-            const name = input.value.trim();
-            if (!name) return;
-            H4DB.add("unitMaster", { id: H4Utils.generateId("unit"), name });
-            input.value = "";
-            this.renderMasterList("unitListContainer", "unitMaster");
-            this.loadRateMasterUI();
-            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
-        },
-
-        addFlooringType() {
-            const input = document.getElementById("newFlooringTypeInput");
-            const name = input.value.trim();
-            if (!name) return;
-            H4DB.add("flooringTypeMaster", { id: H4Utils.generateId("ft"), name });
-            input.value = "";
-            this.renderMasterList("flooringTypeListContainer", "flooringTypeMaster");
-            this.loadRateMasterUI();
-            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
-        },
-
-        addThickness() {
-            const input = document.getElementById("newThicknessInput");
-            const name = input.value.trim();
-            if (!name) return;
-            H4DB.add("thicknessMaster", { id: H4Utils.generateId("th"), name });
-            input.value = "";
-            this.renderMasterList("thicknessListContainer", "thicknessMaster");
-            this.loadRateMasterUI();
-            if (typeof H4Epoxy !== 'undefined') H4Epoxy.populateMasterDropdowns();
-        },
-
-        saveRateMaster() {
-            const form = document.getElementById("rateMasterForm");
-            const id = form.dataset.rateId || H4Utils.generateId("rate");
-            const rate = {
-                id,
-                flooringType: document.getElementById("rmFlooringType").value,
-                thickness: document.getElementById("rmThickness").value,
-                unit: document.getElementById("rmUnit").value,
-                rate: Number(document.getElementById("rmRate").value) || 0,
-                gst: Number(document.getElementById("rmGst").value) || 0,
-                active: document.getElementById("rmActive").checked
-            };
-            H4DB.add("rateMaster", rate);
-            this.closeModal("rateMasterModal");
-            this.loadRateMasterUI();
-            H4Notify.success("Rate saved.");
-        },
-
-        deleteRateMaster(id) {
-            if (!confirm("Delete this rate?")) return;
-            H4DB.delete("rateMaster", id);
-            this.loadRateMasterUI();
-            H4Notify.success("Rate deleted.");
         }
     };
 
-
-    /* ============================================================
-       EPOXY BUILDER
-       ============================================================ */
-
-    const H4Epoxy = {
-        currentStep: 1,
-        totalSteps: 10,
-        scopeItems: [],
-        featureItems: [],
-        priceItems: [],
-        isManualRate: false,
-
-        open() {
-            const overlay = document.getElementById("epoxyOverlay");
-            if (!overlay) { H4Notify.danger("Epoxy builder is not available."); return; }
-            overlay.classList.add("active");
-            this.currentStep = 1;
-            this.scopeItems = (H4DB.get("workScopeDefaults") || []).map(s => ({ name: s, checked: true }));
-            this.featureItems = (H4DB.get("premiumFeatureDefaults") || []).map(s => ({ name: s, checked: false }));
-            this.priceItems = [];
-            this.populateMasterDropdowns();
-            this.generateNumber();
-            this.renderSteps();
-            this.renderStep();
-            this.onSystemChange();
-            this.calculate();
-            document.getElementById("epxConvertBtn").style.display = "none";
-            H4Notify.success("Epoxy Proposal Builder opened.");
-        },
-
-        close() {
-            document.getElementById("epoxyOverlay")?.classList.remove("active");
-        },
-
-        togglePreviewMobile() {
-            document.getElementById("epoxyPreviewPane")?.classList.toggle("mobile-show");
-        },
-
-        populateMasterDropdowns() {
-            const sets = {
-                'epxAreaUnit': 'unitMaster',
-                'epxFlooringType': 'flooringTypeMaster',
-                'epxThickness': 'thicknessMaster',
-                'epxFloorCondition': 'floorConditionMaster'
-            };
-            Object.entries(sets).forEach(([elId, storeKey]) => {
-                const el = document.getElementById(elId);
-                if (!el) return;
-                const items = H4DB.get(storeKey) || {};
-                el.innerHTML = Object.values(items).map(i => `<option value="${i.name}">${i.name}</option>`).join("");
-            });
-        },
-
-        generateNumber() {
-            const num = H4Numbering.getNextQuotationNumber();
-            document.getElementById("epxNumber").value = num;
-            document.getElementById("epxDate").value = H4Utils.today();
-        },
-
-        renderSteps() {
-            const container = document.getElementById("epoxySteps");
-            const labels = ['Customer', 'Project', 'Smart Rate', 'Work Scope', 'Material Spec', 'Price Items', 'Discount', 'Calculation', 'Timeline', 'Final'];
-            container.innerHTML = labels.map((label, i) => {
-                const step = i + 1;
-                let cls = "epoxy-step-chip";
-                if (step === this.currentStep) cls += " active";
-                else if (step < this.currentStep) cls += " done";
-                return `<div class="${cls}" onclick="H4Epoxy.goToStep(${step})">${step}. ${label}</div>`;
-            }).join("");
-        },
-
-        renderStep() {
-            document.querySelectorAll(".epoxy-step-section").forEach(el => {
-                el.classList.toggle("active", parseInt(el.dataset.step) === this.currentStep);
-            });
-            this.renderScopeList();
-            this.renderFeatureList();
-            this.renderPriceItems();
-            this.updatePreview();
-            this.renderSteps();
-        },
-
-        goToStep(step) {
-            if (step < 1 || step > this.totalSteps) return;
-            this.currentStep = step;
-            this.renderStep();
-        },
-
-        nextStep() {
-            if (this.currentStep < this.totalSteps) {
-                this.currentStep++;
-                this.renderStep();
-            }
-        },
-
-        prevStep() {
-            if (this.currentStep > 1) {
-                this.currentStep--;
-                this.renderStep();
-            }
-        },
-
-        renderScopeList() {
-            const container = document.getElementById("epxScopeList");
-            container.innerHTML = this.scopeItems.map((item, i) => `
-                <div class="scope-item">
-                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="H4Epoxy.scopeItems[${i}].checked = this.checked; H4Epoxy.updatePreview();">
-                    <input type="text" value="${H4Utils.escape(item.name)}" onchange="H4Epoxy.scopeItems[${i}].name = this.value; H4Epoxy.updatePreview();">
-                    <button class="btn btn-sm btn-danger" onclick="H4Epoxy.scopeItems.splice(${i}, 1); H4Epoxy.renderScopeList(); H4Epoxy.updatePreview();">✕</button>
-                </div>
-            `).join('') || '<p style="color:var(--text-secondary);">No scope items</p>';
-        },
-
-        addScopeItem() {
-            this.scopeItems.push({ name: "New Scope Item", checked: true });
-            this.renderScopeList();
-            this.updatePreview();
-        },
-
-        renderFeatureList() {
-            const container = document.getElementById("epxFeatureList");
-            container.innerHTML = this.featureItems.map((item, i) => `
-                <div class="feature-item">
-                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="H4Epoxy.featureItems[${i}].checked = this.checked; H4Epoxy.updatePreview();">
-                    <input type="text" value="${H4Utils.escape(item.name)}" onchange="H4Epoxy.featureItems[${i}].name = this.value; H4Epoxy.updatePreview();">
-                    <button class="btn btn-sm btn-danger" onclick="H4Epoxy.featureItems.splice(${i}, 1); H4Epoxy.renderFeatureList(); H4Epoxy.updatePreview();">✕</button>
-                </div>
-            `).join('') || '<p style="color:var(--text-secondary);">No features</p>';
-        },
-
-        addFeatureItem() {
-            this.featureItems.push({ name: "New Feature", checked: false });
-            this.renderFeatureList();
-            this.updatePreview();
-        },
-
-        onSystemChange() {
-            const ft = document.getElementById("epxFlooringType")?.value;
-            const th = document.getElementById("epxThickness")?.value;
-            const unit = document.getElementById("epxAreaUnit")?.value;
-            const rates = H4DB.get("rateMaster") || {};
-            const match = Object.values(rates).find(r =>
-                r.active !== false && r.flooringType === ft && r.thickness === th && r.unit === unit
-            );
-            const statusEl = document.getElementById("epxRateStatus");
-            const rateInput = document.getElementById("epxSystemRate");
-            const gstInput = document.getElementById("epxSystemGst");
-
-            if (match) {
-                this.isManualRate = false;
-                rateInput.value = match.rate;
-                gstInput.value = match.gst || 18;
-                statusEl.className = "rate-status auto";
-                statusEl.innerHTML = `✅ Auto Rate: ${H4Utils.formatCurrency(match.rate)} / ${unit} (GST ${match.gst || 18}%)`;
-            } else {
-                statusEl.className = "rate-status missing";
-                statusEl.innerHTML = `⚠️ Rate not configured for ${ft} • ${th} • ${unit}. Use Rate Master to add.`;
-                if (!this.isManualRate) {
-                    rateInput.value = '';
-                }
-            }
-            this.calculateSystemAmount();
-            this.updatePreview();
-        },
-
-        onManualRateEdit() {
-            this.isManualRate = true;
-            const statusEl = document.getElementById("epxRateStatus");
-            statusEl.className = "rate-status override";
-            statusEl.innerHTML = `✏️ Manual Override: ${H4Utils.formatCurrency(document.getElementById("epxSystemRate").value)}`;
-            this.calculateSystemAmount();
-            this.updatePreview();
-        },
-
-        resetToAutoRate() {
-            this.isManualRate = false;
-            document.getElementById("epxSystemRate").value = '';
-            this.onSystemChange();
-        },
-
-        calculateSystemAmount() {
-            const area = Number(document.getElementById("epxArea")?.value) || 0;
-            const rate = Number(document.getElementById("epxSystemRate")?.value) || 0;
-            const amount = area * rate;
-            document.getElementById("epxSystemAmount").textContent = H4Utils.formatCurrency(amount);
-            // Auto-add to price items if not already present
-            if (amount > 0 && !this.priceItems.find(p => p.description === "Self-Leveling Epoxy System")) {
-                this.priceItems = this.priceItems.filter(p => p.description !== "Self-Leveling Epoxy System");
-                this.priceItems.unshift({
-                    description: "Self-Leveling Epoxy System",
-                    quantity: area,
-                    unit: document.getElementById("epxAreaUnit")?.value || "sq.ft",
-                    rate: rate,
-                    gst: Number(document.getElementById("epxSystemGst")?.value) || 18,
-                    discount: 0
-                });
-                this.renderPriceItems();
-            }
-            this.calculate();
-        },
-
-        renderPriceItems() {
-            const container = document.getElementById("epxPriceItems");
-            container.innerHTML = this.priceItems.map((item, i) => {
-                const total = (item.quantity || 0) * (item.rate || 0);
-                return `
-                    <div class="price-item-card">
-                        <div class="price-item-grid">
-                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Description</label><input type="text" value="${H4Utils.escape(item.description)}" onchange="H4Epoxy.updatePriceItem(${i}, 'description', this.value)"></div>
-                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Unit</label><input type="text" value="${H4Utils.escape(item.unit)}" onchange="H4Epoxy.updatePriceItem(${i}, 'unit', this.value)"></div>
-                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Quantity</label><input type="number" value="${item.quantity}" onchange="H4Epoxy.updatePriceItem(${i}, 'quantity', this.value)"></div>
-                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">Rate (₹)</label><input type="number" value="${item.rate}" onchange="H4Epoxy.updatePriceItem(${i}, 'rate', this.value)"></div>
-                            <div><label style="font-size:0.75rem;color:var(--text-secondary);">GST %</label><input type="number" value="${item.gst}" onchange="H4Epoxy.updatePriceItem(${i}, 'gst', this.value)"></div>
-                            <div style="display:flex;align-items:flex-end;gap:0.5rem;">
-                                <div><label style="font-size:0.75rem;color:var(--text-secondary);">Total</label><strong>₹${total.toFixed(2)}</strong></div>
-                                <button class="btn btn-danger btn-sm" onclick="H4Epoxy.removePriceItem(${i})">✕</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('') || '<p style="color:var(--text-secondary);">No price items. The system amount will auto-add.</p>';
-        },
-
-        addPriceItem() {
-            this.priceItems.push({ description: "New Item", quantity: 1, unit: "sq.ft", rate: 0, gst: 18, discount: 0 });
-            this.renderPriceItems();
-            this.calculate();
-        },
-
-        updatePriceItem(index, field, value) {
-            if (field === 'quantity' || field === 'rate' || field === 'gst') value = Number(value) || 0;
-            this.priceItems[index][field] = value;
-            this.renderPriceItems();
-            this.calculate();
-        },
-
-        removePriceItem(index) {
-            if (this.priceItems.length > 1) {
-                this.priceItems.splice(index, 1);
-                this.renderPriceItems();
-                this.calculate();
-            } else {
-                H4Notify.danger("Keep at least one price item.");
-            }
-        },
-
-        calculate() {
-            const items = this.priceItems.map(p => ({
-                quantity: p.quantity || 0,
-                rate: p.rate || 0,
-                discount: p.discount || 0,
-                gst: p.gst || 0,
-                discountType: 'flat'
-            }));
-
-            const gstMode = document.getElementById("epxGstMode")?.value || "intra";
-            const totals = H4Calc.calculateTotals(items, gstMode);
-
-            const discountEnabled = document.getElementById("epxDiscountEnabled")?.checked;
-            let discountValue = Number(document.getElementById("epxDiscountValue")?.value) || 0;
-            const discountType = document.getElementById("epxDiscountType")?.value || "flat";
-
-            let discountAmount = 0;
-            if (discountEnabled) {
-                if (discountType === "percentage") {
-                    discountAmount = totals.subtotal * discountValue / 100;
-                } else {
-                    discountAmount = discountValue;
-                }
-            }
-
-            const taxable = Math.max(0, totals.subtotal - discountAmount);
-            const gstRate = 18;
-            let cgst = 0, sgst = 0, igst = 0;
-            if (gstMode === "inter") {
-                igst = taxable * gstRate / 100;
-            } else if (gstMode === "intra") {
-                cgst = taxable * gstRate / 200;
-                sgst = taxable * gstRate / 200;
-            }
-
-            const total = taxable + cgst + sgst + igst;
-            const rounded = Math.round(total);
-            const roundOff = rounded - total;
-
-            document.getElementById("epxSubtotal").textContent = totals.subtotal.toFixed(2);
-            document.getElementById("epxDiscountAmt").textContent = discountAmount.toFixed(2);
-            document.getElementById("epxTaxable").textContent = taxable.toFixed(2);
-            document.getElementById("epxCgst").textContent = cgst.toFixed(2);
-            document.getElementById("epxSgst").textContent = sgst.toFixed(2);
-            document.getElementById("epxIgst").textContent = igst.toFixed(2);
-            document.getElementById("epxRoundOff").textContent = roundOff.toFixed(2);
-            document.getElementById("epxGrandTotal").textContent = rounded.toFixed(2);
-
-            document.getElementById("epxCgstRow").style.display = (gstMode === "intra") ? "flex" : "none";
-            document.getElementById("epxSgstRow").style.display = (gstMode === "intra") ? "flex" : "none";
-            document.getElementById("epxIgstRow").style.display = (gstMode === "inter") ? "flex" : "none";
-
-            this.updatePreview();
-        },
-
-        updatePreview() {
-            const container = document.getElementById("epoxyPreviewPane");
-            const ft = document.getElementById("epxFlooringType")?.value || "Self-Leveling Epoxy";
-            const area = Number(document.getElementById("epxArea")?.value) || 0;
-            const unit = document.getElementById("epxAreaUnit")?.value || "sq.ft";
-            const rate = Number(document.getElementById("epxSystemRate")?.value) || 0;
-            const total = area * rate;
-
-            const scopeChecked = this.scopeItems.filter(s => s.checked).map(s => s.name).join(", ");
-            const featuresChecked = this.featureItems.filter(f => f.checked).map(f => f.name).join(", ");
-
-            const grandTotal = document.getElementById("epxGrandTotal")?.textContent || "0.00";
-
-            container.innerHTML = `
-                <div class="a4-page">
-                    <div class="a4-cover">
-                        <h1>PREMIUM EPOXY FLOORING PROPOSAL</h1>
-                        <p>Luxury • Seamless • Durable • Premium Finish</p>
-                    </div>
-                    <div style="margin-bottom:1rem;">
-                        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
-                            <span><strong>Project:</strong> ${H4Utils.escape(document.getElementById("epxProjectName")?.value || "—")}</span>
-                            <span><strong>Quotation:</strong> ${H4Utils.escape(document.getElementById("epxNumber")?.value || "—")}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:0.5rem;">
-                            <span><strong>Customer:</strong> ${H4Utils.escape(document.getElementById("epxCustomer")?.value || "—")}</span>
-                            <span><strong>Date:</strong> ${H4Utils.escape(document.getElementById("epxDate")?.value || "—")}</span>
-                        </div>
-                    </div>
-
-                    <div class="a4-section-title">Project Details</div>
-                    <div class="spec-grid">
-                        <div><strong>Flooring Type</strong> ${H4Utils.escape(ft)}</div>
-                        <div><strong>Thickness</strong> ${H4Utils.escape(document.getElementById("epxThickness")?.value || "—")}</div>
-                        <div><strong>Area</strong> ${area} ${unit}</div>
-                        <div><strong>Rate</strong> ${H4Utils.formatCurrency(rate)} / ${unit}</div>
-                        <div><strong>Estimated Amount</strong> ${H4Utils.formatCurrency(total)}</div>
-                        <div><strong>Floor Condition</strong> ${H4Utils.escape(document.getElementById("epxFloorCondition")?.value || "—")}</div>
-                    </div>
-
-                    <div class="a4-section-title">Work Scope</div>
-                    <ul class="scope-list-preview">${this.scopeItems.filter(s => s.checked).map(s => `<li>${H4Utils.escape(s.name)}</li>`).join('') || '<li>No scope items selected</li>'}</ul>
-
-                    <div class="a4-section-title">Premium Features</div>
-                    <ul class="feature-list-preview">${this.featureItems.filter(f => f.checked).map(f => `<li>${H4Utils.escape(f.name)}</li>`).join('') || '<li>No premium features selected</li>'}</ul>
-
-                    <div class="a4-section-title">Price Summary</div>
-                    <div style="margin:0.5rem 0;">
-                        <div style="display:flex;justify-content:space-between;padding:0.3rem 0;border-bottom:1px solid #ddd;">
-                            <span>Grand Total</span><span style="font-weight:700;color:var(--primary);">₹${grandTotal}</span>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:1rem;padding-top:1rem;border-top:2px solid var(--primary);font-size:0.85rem;color:var(--text-secondary);text-align:center;">
-                        ${H4Utils.escape(document.getElementById("epxThankYou")?.value || "Thank you for considering H4 Construction Solutions.")}
-                    </div>
-                </div>
-            `;
-        },
-
-        save() {
-            H4Notify.success("Epoxy Proposal saved successfully! (Integration with quotation DB complete)");
-            this.close();
-        },
-
-        convertToInvoice() {
-            H4Notify.success("Epoxy proposal converted to invoice. (Integration ready)");
-            this.close();
-        }
-    };
-
-
-    /* ============================================================
-       GLOBAL INPUT LISTENERS
-       ============================================================ */
-
-    document.addEventListener("input", function(e) {
-        const id = e.target?.id || "";
-        if (id.startsWith("qtn")) H4App.updateQuotationPreview();
-        if (id.startsWith("inv")) H4App.updateInvoicePreview();
-        if (id.startsWith("epx") && !id.startsWith("epxSystem")) {
-            if (typeof H4Epoxy !== 'undefined') H4Epoxy.calculate();
-        }
-    });
-
-    document.addEventListener("change", function(e) {
-        const id = e.target?.id || "";
-        if (id.startsWith("qtn")) H4App.updateQuotationPreview();
-        if (id.startsWith("inv")) H4App.updateInvoicePreview();
-        if (id.startsWith("epx") && !id.startsWith("epxSystem")) {
-            if (typeof H4Epoxy !== 'undefined') H4Epoxy.calculate();
-        }
-        if (id === "epxGstMode" || id === "epxDiscountEnabled" || id === "epxDiscountType") {
-            if (typeof H4Epoxy !== 'undefined') H4Epoxy.calculate();
-        }
-    });
-
-
-    /* ============================================================
-       START APPLICATION
-       ============================================================ */
-
-    document.addEventListener("DOMContentLoaded", function() {
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', function() {
         H4App.init();
-        // Show bottom nav on mobile
-        if (window.innerWidth <= 768) {
-            document.getElementById("bottomNav").style.display = "flex";
-        }
-        window.addEventListener("resize", function() {
-            document.getElementById("bottomNav").style.display = window.innerWidth <= 768 ? "flex" : "none";
+
+        // Auto-close modals on outside click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
         });
     });
+
+    console.log('✅ H4 Billing ERP loaded successfully');
+    console.log('📊 Quotation module ready');
+    console.log('📦 ' + Object.keys(H4DB.get('customers') || {}).length + ' customers loaded');
+    console.log('🧾 ' + Object.keys(H4DB.get('quotations') || {}).length + ' quotations loaded');
     </script>
 </body>
 </html>
