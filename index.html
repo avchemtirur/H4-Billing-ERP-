@@ -1103,13 +1103,492 @@
             <div class="card"><p class="text-muted text-center" style="padding:1.5rem;">Payment tracking coming soon.</p></div>
         </div>
 
-        <!-- ==================== TEMPLATES (placeholder) ==================== -->
-        <div class="module" data-module="templates">
-            <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
-                <h1>📋 Templates</h1><p>Design quotation & invoice templates</p>
-            </div>
-            <div class="card"><p class="text-muted text-center" style="padding:1.5rem;">Template designer coming soon.</p></div>
+      <!-- ==================== TEMPLATES ==================== -->
+<div class="module" data-module="templates">
+
+    <div class="page-header">
+        <h1>📋 Template Designer</h1>
+        <p>Create and customize your quotation & invoice templates</p>
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>🎨 Document Template</h2>
         </div>
+
+        <div class="form-group">
+            <label for="templateName">Template Name</label>
+            <input
+                type="text"
+                id="templateName"
+                placeholder="e.g. H4 Premium Invoice"
+                value="H4 Premium Template">
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label for="templatePrimaryColor">
+                    Primary Color
+                </label>
+
+                <input
+                    type="color"
+                    id="templatePrimaryColor"
+                    value="#6A3FA0">
+            </div>
+
+            <div class="form-group">
+                <label for="templateSecondaryColor">
+                    Secondary Color
+                </label>
+
+                <input
+                    type="color"
+                    id="templateSecondaryColor"
+                    value="#8A6510">
+            </div>
+
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label for="templateFontSize">
+                    Font Size
+                </label>
+
+                <select id="templateFontSize">
+                    <option value="12">Small</option>
+                    <option value="13" selected>Medium</option>
+                    <option value="14">Large</option>
+                    <option value="16">Extra Large</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="templateHeaderAlign">
+                    Header Alignment
+                </label>
+
+                <select id="templateHeaderAlign">
+                    <option value="left">Left</option>
+                    <option value="center" selected>Center</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HEADER SETTINGS -->
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>🏢 Header</h2>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showLogo"
+                    checked>
+                Show Company Logo
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showCompanyDetails"
+                    checked>
+                Show Company Details
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showGstin"
+                    checked>
+                Show GSTIN
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- DOCUMENT SETTINGS -->
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>📄 Document Settings</h2>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showCustomer"
+                    checked>
+                Customer Details
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showProject"
+                    checked>
+                Project Name
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showHsn"
+                    checked>
+                HSN Code
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showTax"
+                    checked>
+                GST / Tax Details
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER SETTINGS -->
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>✍️ Footer</h2>
+        </div>
+
+        <div class="form-group">
+            <label for="templateTerms">
+                Terms & Conditions
+            </label>
+
+            <textarea
+                id="templateTerms"
+                rows="4"
+                placeholder="Payment terms, warranty, etc."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showSignature"
+                    checked>
+                Show Authorized Signature
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input
+                    type="checkbox"
+                    id="showThankYou"
+                    checked>
+                Show Thank You Message
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- PREVIEW -->
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>👁️ Template Preview</h2>
+        </div>
+
+        <div
+            id="templatePreview"
+            style="
+                background:white;
+                border:1px solid var(--border);
+                padding:30px;
+                max-width:794px;
+                margin:auto;
+            ">
+
+            <div
+                id="templatePreviewHeader"
+                style="
+                    text-align:center;
+                    padding-bottom:15px;
+                    border-bottom:3px solid #6A3FA0;
+                ">
+
+                <div
+                    id="templateLogoPreview"
+                    style="
+                        font-size:40px;
+                        margin-bottom:8px;
+                    ">
+                    🏢
+                </div>
+
+                <h2 style="margin:0;">
+                    H4 Construction Solutions
+                </h2>
+
+                <p style="margin:5px 0;">
+                    Kerala, India
+                </p>
+
+                <strong>
+                    GSTIN: XXXXXXXX
+                </strong>
+
+            </div>
+
+            <h1
+                style="
+                    text-align:center;
+                    margin:25px 0;
+                    color:#6A3FA0;
+                ">
+                TAX INVOICE
+            </h1>
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:20px;
+                ">
+
+                <div>
+                    <strong>Invoice No.</strong><br>
+                    H4-INV-0001
+                </div>
+
+                <div>
+                    <strong>Date</strong><br>
+                    10/08/2026
+                </div>
+
+                <div>
+                    <strong>Customer</strong><br>
+                    Customer Name
+                </div>
+
+                <div>
+                    <strong>Project</strong><br>
+                    Project Name
+                </div>
+
+            </div>
+
+            <table
+                style="
+                    width:100%;
+                    border-collapse:collapse;
+                    margin-top:25px;
+                ">
+
+                <thead>
+                    <tr
+                        style="
+                            background:#6A3FA0;
+                            color:white;
+                        ">
+
+                        <th style="padding:10px;">
+                            #
+                        </th>
+
+                        <th style="padding:10px;text-align:left;">
+                            Item
+                        </th>
+
+                        <th style="padding:10px;">
+                            Qty
+                        </th>
+
+                        <th style="padding:10px;">
+                            Rate
+                        </th>
+
+                        <th style="padding:10px;">
+                            Amount
+                        </th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td style="padding:10px;border-bottom:1px solid #ddd;">
+                            1
+                        </td>
+
+                        <td style="padding:10px;border-bottom:1px solid #ddd;">
+                            H4 Tile Adhesive
+                        </td>
+
+                        <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">
+                            10
+                        </td>
+
+                        <td style="padding:10px;border-bottom:1px solid #ddd;text-align:right;">
+                            ₹500
+                        </td>
+
+                        <td style="padding:10px;border-bottom:1px solid #ddd;text-align:right;">
+                            ₹5,000
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <div
+                style="
+                    margin-left:auto;
+                    width:300px;
+                    margin-top:20px;
+                ">
+
+                <div style="display:flex;justify-content:space-between;padding:6px;">
+                    <span>Subtotal</span>
+                    <strong>₹5,000</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;padding:6px;">
+                    <span>GST</span>
+                    <strong>₹900</strong>
+                </div>
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:space-between;
+                        padding:10px;
+                        border-top:2px solid #6A3FA0;
+                        font-size:18px;
+                        font-weight:bold;
+                        color:#6A3FA0;
+                    ">
+
+                    <span>Grand Total</span>
+                    <span>₹5,900</span>
+
+                </div>
+
+            </div>
+
+            <div
+                style="
+                    margin-top:40px;
+                    padding-top:15px;
+                    border-top:1px solid #ddd;
+                ">
+
+                <p>
+                    <strong>Terms & Conditions</strong>
+                </p>
+
+                <p id="templatePreviewTerms">
+                    Payment as agreed.
+                </p>
+
+            </div>
+
+            <div
+                style="
+                    text-align:right;
+                    margin-top:50px;
+                ">
+
+                <div
+                    style="
+                        height:50px;
+                        border-bottom:1px solid #777;
+                        width:180px;
+                        margin-left:auto;
+                    ">
+                </div>
+
+                <p>
+                    Authorized Signatory
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="card">
+
+        <div
+            style="
+                display:flex;
+                gap:10px;
+                flex-wrap:wrap;
+                justify-content:flex-end;
+            ">
+
+            <button
+                class="btn btn-outline"
+                onclick="H4Template.reset()">
+                ↩️ Reset
+            </button>
+
+            <button
+                class="btn btn-success"
+                onclick="H4Template.preview()">
+                👁️ Preview
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="H4Template.save()">
+                💾 Save Template
+            </button>
+
+            <button
+                class="btn btn-secondary"
+                onclick="H4Template.use()">
+                ✅ Use This Template
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
         <!-- ==================== BACKUP ==================== -->
         <div class="module" data-module="backup">
