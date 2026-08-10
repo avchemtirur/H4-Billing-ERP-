@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport", initial-scale=1.0">
     <title>H4 Billing ERP - Quotation & Invoice Manager</title>
     <style>
         /* ==================== GLOBAL ==================== */
@@ -1235,6 +1235,78 @@
             color: var(--text-primary);
             font-weight: 600;
         }
+
+        /* ==================== QUICK ADD BUTTON IN DROPDOWN ==================== */
+        .dropdown-add-option {
+            border-top: 1px solid var(--border);
+            padding: 0.5rem 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            background: #f8f5ff;
+            transition: background 0.15s;
+        }
+        .dropdown-add-option:hover {
+            background: #e8e0ff;
+        }
+        .dropdown-add-option .add-icon {
+            margin-right: 0.5rem;
+            font-weight: 700;
+        }
+
+        /* ==================== WHATSAPP SHARE OVERLAY ==================== */
+        .whatsapp-share-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .whatsapp-share-overlay.active {
+            display: flex;
+        }
+        .whatsapp-share-box {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .whatsapp-share-box .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #25D366;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .whatsapp-share-box .share-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .whatsapp-share-box h3 {
+            margin-bottom: 0.5rem;
+        }
+        .whatsapp-share-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        .whatsapp-share-box .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 <body>
@@ -1702,10 +1774,15 @@
                             <select id="invCategory" onchange="H4Invoice.onCategoryChange()"></select>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row" style="position:relative;">
                         <div class="form-group">
                             <label for="invCustomer">Customer *</label>
-                            <select id="invCustomer" onchange="H4Invoice.onCustomerChange()"></select>
+                            <select id="invCustomer" onchange="H4Invoice.onCustomerChange()">
+                                <option value="">-- Select Customer --</option>
+                            </select>
+                            <div style="margin-top:4px;font-size:0.8rem;">
+                                <a href="#" onclick="H4Invoice.quickAddCustomer();return false;" style="color:var(--primary);font-weight:600;text-decoration:none;">➕ Add New Customer</a>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="invProject">Project Name</label>
@@ -2560,6 +2637,19 @@
         </div>
     </div>
 
+    <!-- ==================== WHATSAPP SHARE OVERLAY ==================== -->
+    <div class="whatsapp-share-overlay" id="whatsappShareOverlay">
+        <div class="whatsapp-share-box">
+            <div class="share-icon">📤</div>
+            <h3>Generating PDF &amp; Sharing</h3>
+            <p>Please wait while we prepare your invoice for WhatsApp...</p>
+            <div class="spinner"></div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="H4Invoice.cancelWhatsApp()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
         // ==================== DEFAULT DATA ====================
@@ -2791,6 +2881,11 @@
                 this.save(category, data);
             },
 
+            getList(category) {
+                const data = this.get(category) || {};
+                return Object.values(data);
+            },
+
             export() {
                 return JSON.stringify(this.get(), null, 2);
             },
@@ -2842,6 +2937,23 @@
 
             num(v) {
                 return Number(v) || 0;
+            },
+
+            numberToWords(num) {
+                if (num === 0) return 'Zero';
+                const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+                const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+                const n = Math.floor(num);
+                let str = '';
+                if (n >= 10000000) { str += this.numberToWords(Math.floor(n / 10000000)) + ' Crore '; n %= 10000000; }
+                if (n >= 100000) { str += this.numberToWords(Math.floor(n / 100000)) + ' Lakh '; n %= 100000; }
+                if (n >= 1000) { str += this.numberToWords(Math.floor(n / 1000)) + ' Thousand '; n %= 1000; }
+                if (n >= 100) { str += this.numberToWords(Math.floor(n / 100)) + ' Hundred '; n %= 100; }
+                if (n > 0) {
+                    if (n < 20) str += a[n] + ' ';
+                    else { str += b[Math.floor(n / 10)] + ' '; if (n % 10 > 0) str += a[n % 10] + ' '; }
+                }
+                return str.trim() || 'Zero';
             }
         };
 
@@ -2952,6 +3064,8 @@
                 H4DB.init();
                 this.setupListeners();
                 this.loadData();
+                // Ensure customer dropdowns have "Add Customer" option
+                this.populateCustomerSelects();
 
                 if (window.innerWidth <= 768) {
                     document.getElementById('bottomNav').style.display = 'flex';
@@ -3032,7 +3146,7 @@
                 document.querySelectorAll('.category-filter').forEach(btn => {
                     btn.addEventListener('click', () => {
                         document.querySelectorAll('.category-filter').forEach(b => b.classList.remove(
-                        'active'));
+                            'active'));
                         btn.classList.add('active');
                         const cat = btn.dataset.cat === 'all' ? null : btn.dataset.cat;
                         this.loadProducts(cat);
@@ -3102,9 +3216,10 @@
                     item.classList.toggle('active', item.dataset.module === moduleName);
                 });
                 if (moduleName === 'quotations') this.loadQuotations();
-                if (moduleName === 'invoices') this.loadInvoices();
+                if (moduleName === 'invoices') H4Invoice.renderList();
                 if (moduleName === 'customers') this.loadCustomers();
                 if (moduleName === 'products') this.loadProducts();
+                if (moduleName === 'dashboard') this.updateDashboard();
             },
 
             loadData() {
@@ -3115,7 +3230,8 @@
                 this.loadThemes();
                 this.updateDashboard();
                 this.loadQuotations();
-                this.loadInvoices();
+                H4Invoice.renderList();
+                H4Invoice.renderFilters();
             },
 
             // ----- COMPANY -----
@@ -3267,6 +3383,8 @@
                         </tr>
                     `;
                 }).join('');
+                // Re-populate dropdowns
+                this.populateCustomerSelects();
             },
 
             saveCustomer() {
@@ -3340,14 +3458,50 @@
             populateCustomerSelects() {
                 const customers = H4DB.get('customers') || {};
                 const options = Object.values(customers).map(c =>
-                    `<option value="${c.id}">${H4Utils.escape(c.name)}</option>`
+                    `<option value="${c.id}">${H4Utils.escape(c.name)} ${c.company ? ' - '+H4Utils.escape(c.company) : ''}${c.phone ? ' (📞 '+H4Utils.escape(c.phone)+')' : ''}</option>`
                 ).join('');
+                // Add "Add Customer" option as the first item
+                const addOption = `<option value="__ADD_CUSTOMER__" style="color:var(--primary);font-weight:600;background:#f8f5ff;">➕ Add New Customer...</option>`;
+                const fullOptions = addOption + options;
+
                 ['epxCustomer', 'wpCustomer', 'invCustomer'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) {
                         const currentVal = el.value;
-                        el.innerHTML = `<option value="">-- Select Customer --</option>${options}`;
-                        if (currentVal) el.value = currentVal;
+                        el.innerHTML = `<option value="">-- Select Customer --</option>${fullOptions}`;
+                        if (currentVal && currentVal !== '__ADD_CUSTOMER__') el.value = currentVal;
+                        // Handle "Add Customer" selection
+                        el.onchange = function() {
+                            if (this.value === '__ADD_CUSTOMER__') {
+                                this.value = '';
+                                H4App.openModal('customerModal');
+                                // After customer is added, refresh dropdown
+                                const checkInterval = setInterval(() => {
+                                    const modal = document.getElementById('customerModal');
+                                    if (!modal.classList.contains('active')) {
+                                        clearInterval(checkInterval);
+                                        H4App.populateCustomerSelects();
+                                        // Re-select the new customer
+                                        const customers2 = H4DB.get('customers') || {};
+                                        const keys = Object.keys(customers2);
+                                        if (keys.length > 0) {
+                                            const latest = keys[keys.length - 1];
+                                            // Try to find the newly added one
+                                            const el2 = document.getElementById(id);
+                                            if (el2) {
+                                                const opts = el2.querySelectorAll('option');
+                                                for (let opt of opts) {
+                                                    if (opt.value === latest) {
+                                                        el2.value = latest;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }, 500);
+                            }
+                        };
                     }
                 });
             },
@@ -3645,17 +3799,12 @@
                 H4Notify.success('Quotation deleted.');
             },
 
-            // ----- INVOICES (integrated) -----
+            // ----- INVOICES -----
             loadInvoices() {
                 H4Invoice.renderList();
                 H4Invoice.renderFilters();
-                // Update dashboard count
                 const invoices = H4DB.get('invoices') || {};
                 document.getElementById('todayInvoices').textContent = Object.keys(invoices).length;
-            },
-
-            newInvoice() {
-                H4Invoice.newInvoice();
             },
 
             deleteInvoice(id) {
@@ -3670,6 +3819,7 @@
             editingId: null,
             items: [],
             draftKey: 'h4_invoice_draft',
+            _whatsappCancel: false,
 
             newInvoice() {
                 this.editingId = null;
@@ -3692,12 +3842,12 @@
                 this.calculate();
                 this.updatePreview();
                 this.loadDraft();
-                toast('New invoice builder opened.');
+                H4Notify.success('New invoice builder opened.');
             },
 
             editInvoice(id) {
                 const inv = H4DB.get('invoices')[id];
-                if (!inv) { toast('Invoice not found.', 'error'); return; }
+                if (!inv) { H4Notify.danger('Invoice not found.'); return; }
                 this.editingId = id;
                 this.items = JSON.parse(JSON.stringify(inv.items || []));
                 document.getElementById('invoiceListView').style.display = 'none';
@@ -3718,7 +3868,7 @@
                 this.renderItems();
                 this.calculate();
                 this.updatePreview();
-                toast('Editing invoice: ' + inv.number);
+                H4Notify.success('Editing invoice: ' + inv.number);
             },
 
             backToList() {
@@ -3766,7 +3916,7 @@
 
             onCustomerChange() {
                 const id = document.getElementById('invCustomer').value;
-                if (id) {
+                if (id && id !== '__ADD_CUSTOMER__') {
                     const c = H4DB.get('customers')[id];
                     if (c) {
                         const proj = document.getElementById('invProject');
@@ -3775,6 +3925,34 @@
                 }
                 this.calculate();
                 this.updatePreview();
+            },
+
+            quickAddCustomer() {
+                H4App.openModal('customerModal');
+                // After customer is added, refresh dropdown
+                const checkInterval = setInterval(() => {
+                    const modal = document.getElementById('customerModal');
+                    if (!modal.classList.contains('active')) {
+                        clearInterval(checkInterval);
+                        this.populateCustomerSelects();
+                        const customers = H4DB.get('customers') || {};
+                        const keys = Object.keys(customers);
+                        if (keys.length > 0) {
+                            const latest = keys[keys.length - 1];
+                            const el = document.getElementById('invCustomer');
+                            if (el) {
+                                const opts = el.querySelectorAll('option');
+                                for (let opt of opts) {
+                                    if (opt.value === latest) {
+                                        el.value = latest;
+                                        this.onCustomerChange();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, 500);
             },
 
             // ----- ITEMS -----
@@ -3808,9 +3986,10 @@
                     return;
                 }
                 const products = H4DB.get('products') || {};
-                const prodOptions = Object.values(products).map(p =>
-                    `<option value="${p.id}">${H4Utils.escape(p.name)}</option>`
-                ).join('');
+                const prodOptions = Object.values(products).map(p => {
+                    const categoryLabel = p.category ? ` [${p.category}]` : '';
+                    return `<option value="${p.id}">${H4Utils.escape(p.name)}${categoryLabel}</option>`;
+                }).join('');
 
                 container.innerHTML = this.items.map((item, idx) => {
                     const total = (item.quantity || 0) * (item.rate || 0);
@@ -3832,6 +4011,7 @@
                                     <div class="form-group"><label>Product</label>
                                         <select onchange="H4Invoice.onProductSelect(${idx}, this.value)">
                                             <option value="">-- Select --</option>
+                                            <option value="__ADD_PRODUCT__" style="color:var(--primary);font-weight:600;background:#f8f5ff;">➕ Add New Product...</option>
                                             ${prodOptions}
                                         </select>
                                     </div>
@@ -3872,13 +4052,56 @@
                         </div>
                     `;
                 }).join('');
-                // Re-set product selects
+
+                // Re-set product selects and handle "Add Product"
                 this.items.forEach((item, idx) => {
                     const container2 = document.getElementById('invoiceItemsContainer');
                     const cards = container2.querySelectorAll('.item-card');
                     if (cards[idx]) {
                         const select = cards[idx].querySelector('select');
                         if (select && item.productId) select.value = item.productId;
+                        // Handle "Add Product" selection
+                        if (select) {
+                            select.onchange = function() {
+                                if (this.value === '__ADD_PRODUCT__') {
+                                    this.value = '';
+                                    H4App.openModal('productModal');
+                                    // After product is added, refresh
+                                    const checkInterval = setInterval(() => {
+                                        const modal = document.getElementById(
+                                        'productModal');
+                                        if (!modal.classList.contains('active')) {
+                                            clearInterval(checkInterval);
+                                            H4Invoice.renderItems();
+                                            // Re-select the new product
+                                            const products2 = H4DB.get('products') ||
+                                            {};
+                                            const keys = Object.keys(products2);
+                                            if (keys.length > 0) {
+                                                const latest = keys[keys.length - 1];
+                                                const el = document.querySelector(
+                                                    `#invoiceItemsContainer .item-card:nth-child(${idx+1}) select`
+                                                    );
+                                                if (el) {
+                                                    const opts = el.querySelectorAll(
+                                                        'option');
+                                                    for (let opt of opts) {
+                                                        if (opt.value === latest) {
+                                                            el.value = latest;
+                                                            H4Invoice.onProductSelect(
+                                                                idx, latest);
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }, 500);
+                                } else {
+                                    H4Invoice.onProductSelect(idx, this.value);
+                                }
+                            };
+                        }
                     }
                 });
             },
@@ -4071,6 +4294,7 @@
                     category: document.getElementById('invCategory').value,
                     customerId: customerId,
                     customerName: customer.name || '',
+                    customerPhone: customer.phone || '',
                     customerSnapshot: { ...customer },
                     projectName: document.getElementById('invProject').value,
                     reference: document.getElementById('invReference').value,
@@ -4094,8 +4318,8 @@
 
             saveInvoice() {
                 const data = this.collectData();
-                if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
-                if (this.items.length === 0) { toast('Please add at least one item.', 'error'); return; }
+                if (!data.customerId || data.customerId === '__ADD_CUSTOMER__') { H4Notify.danger('Please select a valid customer.'); return; }
+                if (this.items.length === 0) { H4Notify.danger('Please add at least one item.'); return; }
 
                 this.calculate();
                 const finalData = this.collectData();
@@ -4111,11 +4335,11 @@
 
                 if (this.editingId) {
                     H4DB.update('invoices', this.editingId, finalData);
-                    toast('Invoice updated!');
+                    H4Notify.success('Invoice updated!');
                 } else {
                     H4DB.add('invoices', finalData);
                     this.editingId = finalData.id;
-                    toast('Invoice saved: ' + finalData.number);
+                    H4Notify.success('Invoice saved: ' + finalData.number);
                 }
                 localStorage.removeItem(this.draftKey);
                 document.getElementById('invDeleteBtn').style.display = 'inline-flex';
@@ -4139,7 +4363,7 @@
                 if (!this.editingId) return;
                 if (confirm('Delete this invoice?')) {
                     H4DB.delete('invoices', this.editingId);
-                    toast('Invoice deleted.');
+                    H4Notify.success('Invoice deleted.');
                     this.backToList();
                 }
             },
@@ -4149,7 +4373,7 @@
                 H4DB.delete('invoices', id);
                 H4App.loadInvoices();
                 H4App.updateDashboard();
-                toast('Invoice deleted.');
+                H4Notify.success('Invoice deleted.');
             },
 
             renderList() {
@@ -4180,7 +4404,7 @@
                 container.innerHTML = filtered.map(inv =>
                     `<tr>
                         <td><strong>${H4Utils.escape(inv.number)}</strong></td>
-                        <td>${H4Utils.escape(inv.customerName || 'Unknown')}</td>
+                        <td>${H4Utils.escape(inv.customerName || 'Unknown')}${inv.customerPhone ? '<br><small>📞 '+H4Utils.escape(inv.customerPhone)+'</small>' : ''}</td>
                         <td>${H4Utils.formatCurrency(inv.grandTotal || 0)}</td>
                         <td>${H4Utils.formatCurrency(inv.paidAmount || 0)}</td>
                         <td>${H4Utils.formatCurrency(Math.max(0, (inv.grandTotal||0) - (inv.paidAmount||0)))}</td>
@@ -4211,6 +4435,100 @@
                 document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
                 if (el) el.classList.add('active');
                 this.renderList();
+            },
+
+            getInvoiceHTML(inv) {
+                const customer = H4DB.get('customers')[inv.customerId] || {};
+                const company = H4DB.get('company') || {};
+                const templates = H4DB.get('templates') || {};
+                const template = Object.values(templates)[0] || {
+                    primary: '#6A3FA0',
+                    secondary: '#8A6510',
+                    accent: '#00BCD4',
+                    headerBg: '#6A3FA0',
+                    headerText: '#FFFFFF',
+                    tableHeader: '#6A3FA0',
+                    font: 'Arial',
+                    fontSize: 12,
+                    headingSize: 24,
+                    logoPos: 'center',
+                    showLogo: true,
+                    showSig: true,
+                    showBank: true
+                };
+
+                const itemsHtml = (inv.items || []).map((item, idx) => {
+                    const total = (item.quantity || 0) * (item.rate || 0);
+                    return `<tr>
+                        <td>${idx+1}</td>
+                        <td>${H4Utils.escape(item.description)}</td>
+                        <td>${H4Utils.escape(item.unit||'')}</td>
+                        <td style="text-align:right">${Number(item.quantity||0).toFixed(2)}</td>
+                        <td style="text-align:right">${H4Utils.formatCurrency(item.rate||0)}</td>
+                        <td style="text-align:right">${H4Utils.formatCurrency(total)}</td>
+                    </tr>`;
+                }).join('');
+
+                const logo = company.logo ? `<img src="${company.logo}" style="max-height:60px;max-width:120px;object-fit:contain;">` :
+                    '';
+                const primary = template.primary || '#6A3FA0';
+                const font = template.font || 'Arial';
+                const fontSize = template.fontSize || 12;
+                const headingSize = template.headingSize || 24;
+
+                return `
+                    <div style="font-family:${font};font-size:${fontSize}px;padding:20px;">
+                        ${template.showLogo !== false ? `<div style="display:flex;justify-content:center;margin-bottom:8px;">${logo}</div>` : ''}
+                        <div style="text-align:center;font-size:${headingSize}px;font-weight:800;color:${primary};margin-bottom:4px;">${company.brandName || company.legalName || 'INVOICE'}</div>
+                        <div style="text-align:center;font-size:${headingSize * 0.6}px;font-weight:700;color:${primary};margin-bottom:8px;">TAX INVOICE</div>
+                        <div style="text-align:center;font-size:${headingSize * 0.4}px;color:var(--text-secondary);margin-bottom:10px;">${inv.number}</div>
+                        <hr style="border:1px solid #e0e0e0;margin:8px 0;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin:8px 0;font-size:0.9rem;">
+                            <div><strong>Date</strong> ${H4Utils.formatDate(inv.date)}</div>
+                            <div><strong>Due Date</strong> ${H4Utils.formatDate(inv.dueDate)}</div>
+                            <div><strong>Customer</strong> ${H4Utils.escape(customer.name || '-')}</div>
+                            <div><strong>Phone</strong> ${H4Utils.escape(customer.phone || '-')}</div>
+                            <div><strong>Project</strong> ${H4Utils.escape(inv.projectName || '-')}</div>
+                            <div><strong>Reference</strong> ${H4Utils.escape(inv.reference || '-')}</div>
+                            ${customer.gstin ? `<div><strong>GSTIN</strong> ${H4Utils.escape(customer.gstin)}</div>` : ''}
+                        </div>
+                        <hr style="border:1px solid #e0e0e0;margin:8px 0;">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;margin:8px 0;">
+                            <thead><tr style="background:${primary};color:white;">
+                                <th style="padding:6px;text-align:left;">#</th>
+                                <th style="padding:6px;text-align:left;">Description</th>
+                                <th style="padding:6px;text-align:left;">Unit</th>
+                                <th style="padding:6px;text-align:right;">Qty</th>
+                                <th style="padding:6px;text-align:right;">Rate</th>
+                                <th style="padding:6px;text-align:right;">Amount</th>
+                            </tr></thead>
+                            <tbody>${itemsHtml || '<tr><td colspan="6" style="text-align:center;color:#999;">No items</td></tr>'}</tbody>
+                        </table>
+                        <div style="margin-top:8px;display:flex;justify-content:flex-end;">
+                            <div style="min-width:250px;">
+                                <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>${H4Utils.formatCurrency(inv.subtotal||0)}</span></div>
+                                ${inv.discountAmount ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>${H4Utils.formatCurrency(inv.discountAmount)}</span></div>` : ''}
+                                <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>${H4Utils.formatCurrency(inv.taxableAmount||0)}</span></div>
+                                ${inv.cgst ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span>${H4Utils.formatCurrency(inv.cgst)}</span></div>` : ''}
+                                ${inv.sgst ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span>${H4Utils.formatCurrency(inv.sgst)}</span></div>` : ''}
+                                ${inv.igst ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>IGST</span><span>${H4Utils.formatCurrency(inv.igst)}</span></div>` : ''}
+                                <div style="display:flex;justify-content:space-between;padding:4px 0;font-weight:800;font-size:1.1rem;border-top:2px solid ${primary};margin-top:4px;color:${primary};"><span>GRAND TOTAL</span><span>${H4Utils.formatCurrency(inv.grandTotal||0)}</span></div>
+                            </div>
+                        </div>
+                        <div style="font-size:0.8rem;font-weight:600;color:#757575;padding:4px 0;border-top:1px solid #e0e0e0;margin-top:4px;">${H4Utils.numberToWords(inv.grandTotal||0)}</div>
+                        ${inv.notes ? `<div style="margin-top:6px;padding-top:6px;border-top:1px solid #e0e0e0;font-size:0.8rem;">${H4Utils.escape(inv.notes)}</div>` : ''}
+                        ${template.showSig !== false ? `
+                            <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:flex-end;">
+                                <div>${company.legalName || ''}</div>
+                                <div style="text-align:right;">
+                                    ${company.signature ? `<img src="${company.signature}" style="max-height:50px;max-width:120px;object-fit:contain;display:block;margin-left:auto;">` : ''}
+                                    <div style="height:1px;background:#999;width:120px;margin-left:auto;"></div>
+                                    <div style="font-size:0.7rem;">${H4Utils.escape(company.signatoryName || 'Authorized Signatory')}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
             },
 
             updatePreview() {
@@ -4250,19 +4568,13 @@
 
                 const logo = company.logo ? `<img src="${company.logo}" style="max-height:60px;max-width:120px;object-fit:contain;">` :
                     '';
-
                 const primary = template.primary || '#6A3FA0';
-                const headerBg = template.headerBg || primary;
-                const headerText = template.headerText || '#FFFFFF';
-                const tableHeader = template.tableHeader || primary;
                 const font = template.font || 'Arial';
                 const fontSize = template.fontSize || 12;
                 const headingSize = template.headingSize || 24;
                 const logoPos = template.logoPos || 'center';
                 const showLogo = template.showLogo !== false;
                 const showSig = template.showSig !== false;
-                const showBank = template.showBank !== false;
-
                 const logoAlign = logoPos === 'left' ? 'flex-start' : logoPos === 'right' ? 'flex-end' : 'center';
 
                 const paymentOn = document.querySelector('#invPaymentToggle .toggle-btn.active')?.dataset.value === 'on';
@@ -4272,7 +4584,7 @@
                 container.style.fontFamily = font;
                 container.style.fontSize = fontSize + 'px';
                 container.innerHTML = `
-                    <div style="font-family:${font};font-size:${fontSize}px;">
+                    <div style="font-family:${font};font-size:${fontSize}px;padding:10px 0;">
                         ${showLogo ? `<div style="display:flex;justify-content:${logoAlign};margin-bottom:8px;">${logo}</div>` : ''}
                         <div style="text-align:center;font-size:${headingSize}px;font-weight:800;color:${primary};margin-bottom:4px;">
                             ${company.brandName || company.legalName || 'INVOICE'}
@@ -4280,221 +4592,238 @@
                         <div style="text-align:center;font-size:${headingSize * 0.6}px;font-weight:700;color:${primary};margin-bottom:8px;">
                             TAX INVOICE
                         </div>
-                        <div style="text-align:center;font-size:${headingSize * 0.4}px;color:var(--text-secondary);margin-bottom:10px;">
+                        <div style="text-align:center;font-size:${headingSize * 0.4}px;color:#757575;margin-bottom:10px;">
                             ${data.number}
                         </div>
-                        <hr class="preview-divider">
-
-                        <div class="preview-grid">
-                            <div><span class="label">Date</span> ${H4Utils.formatDate(data.date)}</div>
-                            <div><span class="label">Due Date</span> ${H4Utils.formatDate(data.dueDate)}</div>
-                            <div><span class="label">Customer</span> ${H4Utils.escape(customer.name || '-')}</div>
-                            <div><span class="label">Project</span> ${H4Utils.escape(data.projectName || '-')}</div>
-                            ${customer.address ? `<div class="full"><span class="label">Address</span> ${H4Utils.escape(customer.address)}</div>` : ''}
-                            ${customer.gstin ? `<div><span class="label">GSTIN</span> ${H4Utils.escape(customer.gstin)}</div>` : ''}
-                            ${company.gstin ? `<div><span class="label">Company GSTIN</span> ${H4Utils.escape(company.gstin)}</div>` : ''}
+                        <hr style="border:1px solid #e0e0e0;margin:6px 0;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin:6px 0;font-size:0.9rem;">
+                            <div><span style="font-weight:600;">Date</span> ${H4Utils.formatDate(data.date)}</div>
+                            <div><span style="font-weight:600;">Due Date</span> ${H4Utils.formatDate(data.dueDate)}</div>
+                            <div><span style="font-weight:600;">Customer</span> ${H4Utils.escape(customer.name || '-')}</div>
+                            <div><span style="font-weight:600;">Phone</span> ${H4Utils.escape(customer.phone || '-')}</div>
+                            <div><span style="font-weight:600;">Project</span> ${H4Utils.escape(data.projectName || '-')}</div>
+                            <div><span style="font-weight:600;">Reference</span> ${H4Utils.escape(data.reference || '-')}</div>
+                            ${customer.gstin ? `<div><span style="font-weight:600;">GSTIN</span> ${H4Utils.escape(customer.gstin)}</div>` : ''}
+                            ${company.gstin ? `<div><span style="font-weight:600;">Company GSTIN</span> ${H4Utils.escape(company.gstin)}</div>` : ''}
                         </div>
-
-                        <table class="preview-table">
-                            <thead><tr><th>#</th><th>Description</th><th>Unit</th><th style="text-align:right">Qty</th><th style="text-align:right">Rate</th><th style="text-align:right">Amount</th></tr></thead>
-                            <tbody>${itemsHtml || '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">No items</td></tr>'}</tbody>
+                        <hr style="border:1px solid #e0e0e0;margin:6px 0;">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;margin:6px 0;">
+                            <thead><tr style="background:${primary};color:white;">
+                                <th style="padding:6px;text-align:left;">#</th>
+                                <th style="padding:6px;text-align:left;">Description</th>
+                                <th style="padding:6px;text-align:left;">Unit</th>
+                                <th style="padding:6px;text-align:right;">Qty</th>
+                                <th style="padding:6px;text-align:right;">Rate</th>
+                                <th style="padding:6px;text-align:right;">Amount</th>
+                            </tr></thead>
+                            <tbody>${itemsHtml || '<tr><td colspan="6" style="text-align:center;color:#999;">No items</td></tr>'}</tbody>
                         </table>
-
-                        <div style="margin-top:8px;">
-                            <div style="display:flex;justify-content:flex-end;">
-                                <div style="min-width:250px;">
-                                    <div class="calc-row"><span>Subtotal</span><span>${H4Utils.formatCurrency(totals.subtotal)}</span></div>
-                                    ${data.discountEnabled ? `<div class="calc-row"><span>Discount</span><span>${H4Utils.formatCurrency(totals.discountAmt)}</span></div>` : ''}
-                                    <div class="calc-row"><span>Taxable</span><span>${H4Utils.formatCurrency(totals.taxable)}</span></div>
-                                    ${totals.cgst > 0 ? `<div class="calc-row"><span>CGST</span><span>${H4Utils.formatCurrency(totals.cgst)}</span></div>` : ''}
-                                    ${totals.sgst > 0 ? `<div class="calc-row"><span>SGST</span><span>${H4Utils.formatCurrency(totals.sgst)}</span></div>` : ''}
-                                    ${totals.igst > 0 ? `<div class="calc-row"><span>IGST</span><span>${H4Utils.formatCurrency(totals.igst)}</span></div>` : ''}
-                                    <div class="calc-row total"><span>GRAND TOTAL</span><span>${H4Utils.formatCurrency(totals.grandTotal)}</span></div>
-                                </div>
+                        <div style="margin-top:6px;display:flex;justify-content:flex-end;">
+                            <div style="min-width:250px;">
+                                <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>${H4Utils.formatCurrency(totals.subtotal)}</span></div>
+                                ${data.discountEnabled ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>${H4Utils.formatCurrency(totals.discountAmt)}</span></div>` : ''}
+                                <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>${H4Utils.formatCurrency(totals.taxable)}</span></div>
+                                ${totals.cgst > 0 ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span>${H4Utils.formatCurrency(totals.cgst)}</span></div>` : ''}
+                                ${totals.sgst > 0 ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span>${H4Utils.formatCurrency(totals.sgst)}</span></div>` : ''}
+                                ${totals.igst > 0 ? `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #e0e0e0;"><span>IGST</span><span>${H4Utils.formatCurrency(totals.igst)}</span></div>` : ''}
+                                <div style="display:flex;justify-content:space-between;padding:4px 0;font-weight:800;font-size:1.1rem;border-top:2px solid ${primary};margin-top:4px;color:${primary};"><span>GRAND TOTAL</span><span>${H4Utils.formatCurrency(totals.grandTotal)}</span></div>
                             </div>
                         </div>
-
-                        <div class="amount-words">${document.getElementById('invAmountWords').textContent}</div>
+                        <div style="font-size:0.8rem;font-weight:600;color:#757575;padding:4px 0;border-top:1px solid #e0e0e0;margin-top:4px;">${document.getElementById('invAmountWords').textContent}</div>
 
                         ${paymentOn ? `
-                            <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.85rem;">
+                            <div style="margin-top:4px;padding-top:4px;border-top:1px solid #e0e0e0;font-size:0.85rem;">
                                 <div><strong>Status:</strong> ${document.getElementById('invPaymentStatus').value}</div>
                                 <div><strong>Paid:</strong> ${H4Utils.formatCurrency(paidAmt)}</div>
                                 <div><strong>Balance:</strong> ${H4Utils.formatCurrency(balance)}</div>
                             </div>
                         ` : ''}
 
-                        ${showBank ? `
-                            <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.8rem;color:var(--text-secondary);">
+                        ${template.showBank !== false && company.bankName ? `
+                            <div style="margin-top:4px;padding-top:4px;border-top:1px solid #e0e0e0;font-size:0.8rem;color:#757575;">
                                 <strong>Bank:</strong> ${company.bankName || ''} · ${company.accountNumber || ''} · IFSC: ${company.ifsc || ''}
                                 ${company.upiId ? `· UPI: ${company.upiId}` : ''}
                             </div>
                         ` : ''}
 
-                        ${data.notes ? `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.8rem;">${H4Utils.escape(data.notes)}</div>` : ''}
+                        ${data.notes ? `<div style="margin-top:4px;padding-top:4px;border-top:1px solid #e0e0e0;font-size:0.8rem;">${H4Utils.escape(data.notes)}</div>` : ''}
 
-                        <div class="preview-footer">
-                            <div>
-                                <div>${company.legalName || ''}</div>
-                                <div style="font-size:0.7rem;color:var(--text-secondary);">${company.address || ''}</div>
-                            </div>
-                            ${showSig ? `
-                                <div class="sig-area">
-                                    ${company.signature ? `<img src="${company.signature}" style="max-height:50px;max-width:120px;object-fit:contain;">` : ''}
-                                    <div class="sig-line"></div>
+                        ${showSig ? `
+                            <div style="margin-top:10px;padding-top:8px;border-top:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:flex-end;">
+                                <div style="font-size:0.8rem;">${company.legalName || ''}</div>
+                                <div style="text-align:right;">
+                                    ${company.signature ? `<img src="${company.signature}" style="max-height:50px;max-width:120px;object-fit:contain;display:block;margin-left:auto;">` : ''}
+                                    <div style="height:1px;background:#999;width:120px;margin-left:auto;"></div>
                                     <div style="font-size:0.7rem;">${H4Utils.escape(company.signatoryName || 'Authorized Signatory')}</div>
                                 </div>
-                            ` : ''}
-                        </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             },
 
             printInvoice() {
-                const preview = document.getElementById('invoicePreview');
-                const html = preview.innerHTML;
+                const data = this.collectData();
+                const customer = H4DB.get('customers')[data.customerId] || {};
+                const inv = {
+                    ...data,
+                    customerName: customer.name,
+                    items: this.items,
+                    subtotal: parseFloat(document.getElementById('invSubtotal').textContent) || 0,
+                    discountAmount: parseFloat(document.getElementById('invTotalDiscount').textContent) || 0,
+                    taxableAmount: parseFloat(document.getElementById('invTaxableAmount').textContent) || 0,
+                    cgst: parseFloat(document.getElementById('invCGST').textContent) || 0,
+                    sgst: parseFloat(document.getElementById('invSGST').textContent) || 0,
+                    igst: parseFloat(document.getElementById('invIGST').textContent) || 0,
+                    roundOff: parseFloat(document.getElementById('invRoundOff').textContent) || 0,
+                    grandTotal: parseFloat(document.getElementById('invGrandTotal').textContent) || 0
+                };
+                const html = this.getInvoiceHTML(inv);
                 const win = window.open('', '_blank');
-                if (!win) { toast('Please allow popups.', 'error'); return; }
-                const styles = document.querySelector('style').innerHTML;
+                if (!win) { H4Notify.danger('Please allow popups.'); return; }
                 win.document.write(`
                     <!DOCTYPE html><html><head><title>Invoice</title>
-                    <style>${styles}</style>
-                    <style>body{padding:20px;background:#fff;}.preview-container{background:#fff;padding:0;}.preview-inner{box-shadow:none;padding:20px;max-width:100%;}.no-print{display:none;}</style>
-                    </head><body><div class="preview-container"><div class="preview-inner">${html}</div></div>
-                    <script>window.onload=function(){window.print();};<\/script>
+                    <style>body{font-family:Arial;margin:0;padding:20px;background:#fff;}</style>
+                    </head><body>${html}<script>window.onload=function(){window.print();};<\/script>
                 `);
                 win.document.close();
             },
 
             printExistingInvoice(id) {
                 const inv = H4DB.get('invoices')[id];
-                if (!inv) { toast('Invoice not found.', 'error'); return; }
-                const customer = H4DB.get('customers')[inv.customerId] || {};
-                const company = H4DB.get('company') || {};
-                const templates = H4DB.get('templates') || {};
-                const template = Object.values(templates)[0] || {
-                    primary: '#6A3FA0',
-                    secondary: '#8A6510',
-                    accent: '#00BCD4',
-                    headerBg: '#6A3FA0',
-                    headerText: '#FFFFFF',
-                    tableHeader: '#6A3FA0',
-                    font: 'Arial',
-                    fontSize: 12,
-                    headingSize: 24,
-                    logoPos: 'center',
-                    showLogo: true,
-                    showSig: true,
-                    showBank: true
-                };
-
-                const itemsHtml = (inv.items || []).map((item, idx) => {
-                    const total = (item.quantity || 0) * (item.rate || 0);
-                    return `<tr>
-                        <td>${idx+1}</td>
-                        <td>${H4Utils.escape(item.description)}</td>
-                        <td>${H4Utils.escape(item.unit||'')}</td>
-                        <td style="text-align:right">${Number(item.quantity||0).toFixed(2)}</td>
-                        <td style="text-align:right">${H4Utils.formatCurrency(item.rate||0)}</td>
-                        <td style="text-align:right">${H4Utils.formatCurrency(total)}</td>
-                    </tr>`;
-                }).join('');
-
-                const logo = company.logo ? `<img src="${company.logo}" style="max-height:60px;max-width:120px;object-fit:contain;">` :
-                    '';
-                const primary = template.primary || '#6A3FA0';
-                const font = template.font || 'Arial';
-                const fontSize = template.fontSize || 12;
-                const headingSize = template.headingSize || 24;
-
-                const previewHtml = `
-                    <div style="font-family:${font};font-size:${fontSize}px;">
-                        ${template.showLogo !== false ? `<div style="display:flex;justify-content:center;margin-bottom:8px;">${logo}</div>` : ''}
-                        <div style="text-align:center;font-size:${headingSize}px;font-weight:800;color:${primary};margin-bottom:4px;">${company.brandName || company.legalName || 'INVOICE'}</div>
-                        <div style="text-align:center;font-size:${headingSize * 0.6}px;font-weight:700;color:${primary};margin-bottom:8px;">TAX INVOICE</div>
-                        <div style="text-align:center;font-size:${headingSize * 0.4}px;color:var(--text-secondary);margin-bottom:10px;">${inv.number}</div>
-                        <hr>
-                        <div class="preview-grid">
-                            <div><span class="label">Date</span> ${H4Utils.formatDate(inv.date)}</div>
-                            <div><span class="label">Due Date</span> ${H4Utils.formatDate(inv.dueDate)}</div>
-                            <div><span class="label">Customer</span> ${H4Utils.escape(customer.name || '-')}</div>
-                            <div><span class="label">Project</span> ${H4Utils.escape(inv.projectName || '-')}</div>
-                        </div>
-                        <table class="preview-table">
-                            <thead><tr><th>#</th><th>Description</th><th>Unit</th><th style="text-align:right">Qty</th><th style="text-align:right">Rate</th><th style="text-align:right">Amount</th></tr></thead>
-                            <tbody>${itemsHtml}</tbody>
-                        </table>
-                        <div style="margin-top:8px;">
-                            <div style="display:flex;justify-content:flex-end;">
-                                <div style="min-width:250px;">
-                                    <div class="calc-row"><span>Subtotal</span><span>${H4Utils.formatCurrency(inv.subtotal||0)}</span></div>
-                                    ${inv.discountAmount ? `<div class="calc-row"><span>Discount</span><span>${H4Utils.formatCurrency(inv.discountAmount)}</span></div>` : ''}
-                                    <div class="calc-row"><span>Taxable</span><span>${H4Utils.formatCurrency(inv.taxableAmount||0)}</span></div>
-                                    ${inv.cgst ? `<div class="calc-row"><span>CGST</span><span>${H4Utils.formatCurrency(inv.cgst)}</span></div>` : ''}
-                                    ${inv.sgst ? `<div class="calc-row"><span>SGST</span><span>${H4Utils.formatCurrency(inv.sgst)}</span></div>` : ''}
-                                    ${inv.igst ? `<div class="calc-row"><span>IGST</span><span>${H4Utils.formatCurrency(inv.igst)}</span></div>` : ''}
-                                    <div class="calc-row total"><span>GRAND TOTAL</span><span>${H4Utils.formatCurrency(inv.grandTotal||0)}</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="amount-words">${H4Utils.numberToWords(inv.grandTotal||0)}</div>
-                        ${inv.notes ? `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.8rem;">${H4Utils.escape(inv.notes)}</div>` : ''}
-                        ${template.showSig !== false ? `
-                            <div class="preview-footer">
-                                <div>${company.legalName || ''}</div>
-                                <div class="sig-area">
-                                    ${company.signature ? `<img src="${company.signature}" style="max-height:50px;max-width:120px;object-fit:contain;">` : ''}
-                                    <div class="sig-line"></div>
-                                    <div style="font-size:0.7rem;">${H4Utils.escape(company.signatoryName || 'Authorized Signatory')}</div>
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-
+                if (!inv) { H4Notify.danger('Invoice not found.'); return; }
+                const html = this.getInvoiceHTML(inv);
                 const win = window.open('', '_blank');
-                if (!win) { toast('Please allow popups.', 'error'); return; }
-                const styles = document.querySelector('style').innerHTML;
+                if (!win) { H4Notify.danger('Please allow popups.'); return; }
                 win.document.write(`
                     <!DOCTYPE html><html><head><title>Invoice ${inv.number}</title>
-                    <style>${styles}</style>
-                    <style>body{padding:20px;background:#fff;}.preview-container{background:#fff;padding:0;}.preview-inner{box-shadow:none;padding:20px;max-width:100%;}</style>
-                    </head><body><div class="preview-container"><div class="preview-inner">${previewHtml}</div></div>
-                    <script>window.onload=function(){window.print();};<\/script>
+                    <style>body{font-family:Arial;margin:0;padding:20px;background:#fff;}</style>
+                    </head><body>${html}<script>window.onload=function(){window.print();};<\/script>
                 `);
                 win.document.close();
             },
 
+            // ----- WHATSAPP WITH PDF -----
             whatsappInvoice() {
                 const data = this.collectData();
+                if (!data.customerId || data.customerId === '__ADD_CUSTOMER__') { H4Notify.danger('Please select a customer.'); return; }
+                if (this.items.length === 0) { H4Notify.danger('Please add items.'); return; }
+                this._whatsappCancel = false;
+                this.showWhatsAppOverlay('Generating PDF...');
+
+                // Build invoice data
                 const customer = H4DB.get('customers')[data.customerId] || {};
-                const total = document.getElementById('invGrandTotal').textContent || '0.00';
-                const msg =
-                    `Dear ${customer.name || 'Customer'},\n\nPlease find your invoice.\n\nInvoice No: ${data.number}\nAmount: ₹${total}\n\nThank you for your business.\n\n${(H4DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
-                const phone = customer.whatsapp || customer.phone || '';
-                const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
-                if (phone) {
-                    window.open(url, '_blank');
-                } else {
-                    toast('Customer WhatsApp number not available.', 'warning');
-                }
+                const inv = {
+                    ...data,
+                    customerName: customer.name,
+                    items: this.items,
+                    subtotal: parseFloat(document.getElementById('invSubtotal').textContent) || 0,
+                    discountAmount: parseFloat(document.getElementById('invTotalDiscount').textContent) || 0,
+                    taxableAmount: parseFloat(document.getElementById('invTaxableAmount').textContent) || 0,
+                    cgst: parseFloat(document.getElementById('invCGST').textContent) || 0,
+                    sgst: parseFloat(document.getElementById('invSGST').textContent) || 0,
+                    igst: parseFloat(document.getElementById('invIGST').textContent) || 0,
+                    roundOff: parseFloat(document.getElementById('invRoundOff').textContent) || 0,
+                    grandTotal: parseFloat(document.getElementById('invGrandTotal').textContent) || 0
+                };
+
+                this.generatePDFAndWhatsApp(inv, customer);
             },
 
             whatsappExistingInvoice(id) {
                 const inv = H4DB.get('invoices')[id];
-                if (!inv) { toast('Invoice not found.', 'error'); return; }
+                if (!inv) { H4Notify.danger('Invoice not found.'); return; }
+                this._whatsappCancel = false;
+                this.showWhatsAppOverlay('Generating PDF...');
                 const customer = H4DB.get('customers')[inv.customerId] || {};
-                const msg =
-                    `Dear ${customer.name || 'Customer'},\n\nPlease find your invoice.\n\nInvoice No: ${inv.number}\nAmount: ${H4Utils.formatCurrency(inv.grandTotal||0)}\n\nThank you for your business.\n\n${(H4DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
-                const phone = customer.whatsapp || customer.phone || '';
-                const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
-                if (phone) {
-                    window.open(url, '_blank');
-                } else {
-                    toast('Customer WhatsApp number not available.', 'warning');
-                }
+                this.generatePDFAndWhatsApp(inv, customer);
             },
 
+            generatePDFAndWhatsApp(inv, customer) {
+                const html = this.getInvoiceHTML(inv);
+                // Build a clean document for PDF
+                const fullHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Invoice ${inv.number}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #fff; color: #1a1a2e; }
+                            .invoice-wrap { max-width: 794px; margin: 0 auto; }
+                            @media print { body { padding: 0; } }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="invoice-wrap">${html}</div>
+                        <script>
+                            // Auto-print after load
+                            window.onload = function() {
+                                // Wait a moment then print
+                                setTimeout(function() {
+                                    window.print();
+                                }, 500);
+                            };
+                        <\/script>
+                    </body>
+                    </html>
+                `;
+
+                // Open a new window for printing (user can save as PDF)
+                const win = window.open('', '_blank', 'width=900,height=800');
+                if (!win) {
+                    this.hideWhatsAppOverlay();
+                    H4Notify.danger('Please allow popups for PDF generation.');
+                    return;
+                }
+                win.document.write(fullHtml);
+                win.document.close();
+
+                // After print dialog, share WhatsApp
+                setTimeout(() => {
+                    this.hideWhatsAppOverlay();
+                    // Check if user cancelled
+                    if (this._whatsappCancel) return;
+
+                    // Prepare WhatsApp message
+                    const company = H4DB.get('company') || {};
+                    const msg =
+                        `Dear ${customer.name || 'Customer'},\n\nPlease find your invoice attached.\n\n📄 Invoice: ${inv.number}\n💰 Amount: ${H4Utils.formatCurrency(inv.grandTotal||0)}\n📅 Date: ${H4Utils.formatDate(inv.date)}\n\nThank you for your business!\n\n${company.brandName || company.legalName || 'H4 Construction Solutions'}`;
+
+                    // WhatsApp number
+                    const phone = customer.whatsapp || customer.phone || '';
+                    const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
+
+                    if (phone) {
+                        // Add note about PDF attachment
+                        H4Notify.success('PDF generated. After saving, share via WhatsApp.');
+                        // Open WhatsApp with message
+                        window.open(url, '_blank');
+                    } else {
+                        H4Notify.danger('Customer WhatsApp number not available.');
+                    }
+                }, 2000);
+            },
+
+            showWhatsAppOverlay(message) {
+                const overlay = document.getElementById('whatsappShareOverlay');
+                const box = overlay.querySelector('.whatsapp-share-box');
+                box.querySelector('h3').textContent = message || 'Generating PDF...';
+                box.querySelector('p').textContent = 'Please wait while we prepare your invoice...';
+                overlay.classList.add('active');
+            },
+
+            hideWhatsAppOverlay() {
+                document.getElementById('whatsappShareOverlay').classList.remove('active');
+            },
+
+            cancelWhatsApp() {
+                this._whatsappCancel = true;
+                this.hideWhatsAppOverlay();
+                H4Notify.success('WhatsApp share cancelled.');
+            },
+
+            // ----- DRAFT -----
             autoSaveDraft() {
                 const data = this.collectData();
                 if (data.items && data.items.length > 0) {
@@ -4520,7 +4849,7 @@
                             this.renderItems();
                             this.calculate();
                             this.updatePreview();
-                            toast('Draft loaded.');
+                            H4Notify.success('Draft loaded.');
                         } else {
                             localStorage.removeItem(this.draftKey);
                         }
