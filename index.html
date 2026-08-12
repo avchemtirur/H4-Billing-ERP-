@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
-  <title>H4 Billing ERP - Quotation & Invoice</title>
+  <title>H4 Billing ERP - Professional Edition</title>
   <style>
     /* ============================================================
        GLOBAL VARIABLES (mobile-first comfortable sizing)
@@ -172,7 +172,7 @@
        MAIN CONTENT
        ============================================================ */
     .main-content {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 1rem;
       transform: scale(var(--module-scale));
@@ -209,7 +209,7 @@
     }
 
     /* ============================================================
-       STATS GRID (Dashboard) - now used for Business Summary
+       STATS GRID (Dashboard)
        ============================================================ */
     .stats-grid {
       display: grid;
@@ -234,6 +234,50 @@
     .stat-label {
       font-size: 0.9rem;
       color: #757575;
+    }
+
+    /* ============================================================
+       QUICK ACCESS GRID
+       ============================================================ */
+    .quick-access-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .quick-card {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 1.5rem 0.8rem;
+      text-align: center;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+    }
+    .quick-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      border-color: var(--primary);
+    }
+    .quick-card .icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.4rem;
+    }
+    .quick-card .label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #212121;
+    }
+    .quick-card .sub {
+      font-size: 0.75rem;
+      color: #757575;
+      margin-top: 0.1rem;
     }
 
     /* ============================================================
@@ -321,6 +365,9 @@
       .stats-grid {
         grid-template-columns: 1fr 1fr;
       }
+      .quick-access-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
       .customizer-panel {
         width: 100%;
         max-width: 340px;
@@ -335,27 +382,27 @@
       .app-title {
         font-size: 1rem;
       }
-      /* Invoice builder: ensure full width */
-      .builder-body {
-        grid-template-columns: 1fr !important;
-      }
-      .builder-preview-pane {
-        display: none;
-      }
-      .builder-preview-pane.mobile-show {
-        display: block;
-      }
     }
     @media (max-width: 480px) {
       .stats-grid {
         grid-template-columns: 1fr 1fr;
       }
+      .quick-access-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+      .quick-card {
+        min-height: 100px;
+        padding: 1rem 0.5rem;
+      }
+      .quick-card .icon {
+        font-size: 1.8rem;
+      }
+      .quick-card .label {
+        font-size: 0.85rem;
+      }
       .card-header h2 {
         font-size: 1.1rem;
-      }
-      /* Quick access cards 2 columns */
-      .quick-access-grid {
-        grid-template-columns: 1fr 1fr !important;
       }
     }
 
@@ -533,7 +580,7 @@
     }
 
     /* ============================================================
-       QUOTATION BUILDER OVERLAY
+       BUILDER OVERLAY
        ============================================================ */
     .builder-overlay {
       position: fixed;
@@ -652,7 +699,7 @@
     }
 
     /* ============================================================
-       INVOICE / QUOTATION ITEMS
+       ITEM CARD
        ============================================================ */
     .item-card {
       background: #f8f8f8;
@@ -690,21 +737,6 @@
       border-top: 1px solid #e0e0e0;
       color: var(--primary);
     }
-    .item-card .mode-toggle {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 0.5rem;
-    }
-    .item-card .mode-toggle .btn {
-      font-size: 0.75rem;
-      padding: 4px 12px;
-      min-height: 30px;
-      border-radius: 6px;
-    }
-    .item-card .mode-toggle .btn.active-mode {
-      background: var(--primary);
-      color: #fff;
-    }
     @media (max-width: 480px) {
       .item-card .item-grid {
         grid-template-columns: 1fr;
@@ -728,87 +760,6 @@
       line-height: 1.6;
       color: #1a1a2e;
       min-height: 300px;
-    }
-    .a4-cover {
-      text-align: center;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      padding: 2rem 1rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-    }
-    .a4-section-title {
-      color: var(--primary);
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin: 1rem 0 0.6rem;
-      padding-bottom: 0.3rem;
-      border-bottom: 2px solid var(--primary);
-    }
-    .spec-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.3rem 1rem;
-      font-size: 0.9rem;
-    }
-    .p-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-    .p-table th {
-      background: var(--primary);
-      color: white;
-      padding: 8px 10px;
-      text-align: left;
-    }
-    .p-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    .p-total {
-      margin-left: auto;
-      width: 55%;
-      font-size: 0.9rem;
-    }
-    .p-total div {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    .p-grand {
-      font-size: 1.1rem;
-      font-weight: 800;
-      border-top: 2px solid var(--primary);
-      padding-top: 6px;
-    }
-    .signature-box {
-      height: 60px;
-      border-bottom: 1px solid #777;
-      margin-top: 8px;
-    }
-    .rate-status {
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .rate-status.auto {
-      background: #e8f5e9;
-      color: #2e7d32;
-    }
-    .rate-status.override {
-      background: #fff3e0;
-      color: #e65100;
-    }
-    .rate-status.missing {
-      background: #ffebee;
-      color: #c62828;
     }
 
     /* ============================================================
@@ -876,7 +827,7 @@
     }
 
     /* ============================================================
-       CUSTOMER / PRODUCT LIST ITEMS
+       LIST ITEMS
        ============================================================ */
     .list-item {
       display: flex;
@@ -941,25 +892,34 @@
     }
 
     /* ============================================================
-       TEMPLATE PREVIEW STYLES
+       CUSTOMER SECTION FIX (MOBILE WIDTH)
        ============================================================ */
-    .template-classic .invoice-header { border-bottom: 2px solid #333; }
-    .template-classic .invoice-title { color: #222; }
-    .template-classic .invoice-table th { background: #555; }
+    .customer-select-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .customer-select-row select {
+      flex: 1 1 0;
+      min-width: 140px;
+    }
+    .customer-select-row .btn {
+      flex: 0 0 auto;
+    }
+    .customer-info-box {
+      background: #f9f9f9;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      width: 100%;
+      word-wrap: break-word;
+    }
 
-    .template-modern .invoice-header { border-bottom: 4px solid var(--primary); }
-    .template-modern .invoice-title { color: var(--primary); font-weight: 300; letter-spacing: 2px; }
-    .template-modern .invoice-table th { background: var(--primary); }
-
-    .template-h4-premium .invoice-header { border-bottom: 6px double var(--secondary); }
-    .template-h4-premium .invoice-title { color: var(--secondary); font-family: 'Georgia', serif; }
-    .template-h4-premium .invoice-table th { background: var(--secondary); }
-
-    .template-simple .invoice-header { border-bottom: 1px solid #ccc; }
-    .template-simple .invoice-title { color: #555; }
-    .template-simple .invoice-table th { background: #e0e0e0; color: #222; }
-
-    /* A4 print styles */
+    /* ============================================================
+       A4 PRINT STYLES
+       ============================================================ */
     @media print {
       body, .app-header, .sidebar, .bottom-nav, .customizer-panel, .builder-overlay,
       .card.no-print, .modal-overlay, .notifications, .builder-topbar, .builder-bottombar {
@@ -975,106 +935,64 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .a4-cover {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .p-table th {
+      table th {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
     }
 
     /* ============================================================
-       DASHBOARD QUICK ACCESS CARDS
+       TEMPLATE-SPECIFIC STYLES
        ============================================================ */
-    .quick-access-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .quick-card {
-      background: white;
-      border-radius: var(--border-radius);
-      padding: 1.5rem 0.8rem;
-      text-align: center;
-      border: 1px solid #e0e0e0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 120px;
-    }
-    .quick-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      border-color: var(--primary);
-    }
-    .quick-card .icon {
-      font-size: 2.2rem;
-      margin-bottom: 0.4rem;
-    }
-    .quick-card .label {
-      font-weight: 600;
-      font-size: 1rem;
-      color: #212121;
-    }
-    .quick-card .sub {
-      font-size: 0.75rem;
-      color: #757575;
-      margin-top: 0.1rem;
-    }
-    @media (max-width: 768px) {
-      .quick-access-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    @media (max-width: 480px) {
-      .quick-access-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-      }
-      .quick-card {
-        min-height: 100px;
-        padding: 1rem 0.5rem;
-      }
-      .quick-card .icon {
-        font-size: 1.8rem;
-      }
-      .quick-card .label {
-        font-size: 0.85rem;
-      }
-    }
+    .template-classic .a4-header { border-bottom: 2px solid #333; }
+    .template-classic .a4-title { color: #222; font-size: 1.4rem; font-weight: 600; }
+    .template-classic .a4-table th { background: #555; color: white; }
 
-    /* ============================================================
-       INVOICE BUILDER – CUSTOMER SECTION FLEX FIX
-       ============================================================ */
-    .customer-select-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-    }
-    .customer-select-row select {
-      flex: 1 1 0;
-      min-width: 120px;
-    }
-    .customer-select-row .btn {
-      flex: 0 0 auto;
-    }
-    .customer-info-box {
-      background: #f9f9f9;
-      padding: 0.8rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
+    .template-modern .a4-header { border-bottom: 4px solid var(--primary); }
+    .template-modern .a4-title { color: var(--primary); font-size: 1.6rem; font-weight: 300; letter-spacing: 2px; }
+    .template-modern .a4-table th { background: var(--primary); color: white; }
+
+    .template-premium .a4-header { border-bottom: 6px double var(--secondary); }
+    .template-premium .a4-title { color: var(--secondary); font-size: 1.5rem; font-weight: 600; font-family: Georgia, serif; }
+    .template-premium .a4-table th { background: var(--secondary); color: white; }
+
+    .template-simple .a4-header { border-bottom: 1px solid #ccc; }
+    .template-simple .a4-title { color: #555; font-size: 1.3rem; font-weight: 600; }
+    .template-simple .a4-table th { background: #e0e0e0; color: #222; }
+
+    .a4-table {
       width: 100%;
-      word-wrap: break-word;
+      border-collapse: collapse;
+      font-size: 0.85rem;
     }
+    .a4-table th {
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .a4-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .a4-total {
+      margin-left: auto;
+      width: 55%;
+      font-size: 0.9rem;
+    }
+    .a4-total div {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .a4-grand {
+      font-size: 1.1rem;
+      font-weight: 800;
+      border-top: 2px solid var(--primary);
+      padding-top: 6px;
+      color: var(--primary);
+    }
+
   </style>
 </head>
 <body>
@@ -1086,8 +1004,8 @@
     </div>
     <div class="header-right">
       <button class="btn" onclick="H4App.toggleCustomizer()" title="Customize UI">🎨</button>
-      <button class="btn" onclick="H4App.navigate('quotations')"><span class="label">📄 Quotes</span></button>
-      <button class="btn" onclick="H4App.navigate('invoices')"><span class="label">🧾 Invoices</span></button>
+      <button class="btn" onclick="H4App.navigate('invoices')"><span class="label">🧾 Invoice</span></button>
+      <button class="btn" onclick="H4App.navigate('quotations')"><span class="label">📄 Quote</span></button>
     </div>
   </header>
 
@@ -1100,8 +1018,8 @@
       </div>
       <div class="sidebar-section">
         <div class="section-title">Setup</div>
-        <div class="sidebar-item" data-module="company">🏭 Company Profile</div>
-        <div class="sidebar-item" data-module="themes">🎨 Themes</div>
+        <div class="sidebar-item" data-module="company">🏭 Company</div>
+        <div class="sidebar-item" data-module="templates">📋 Templates</div>
       </div>
       <div class="sidebar-section">
         <div class="section-title">Master Data</div>
@@ -1110,13 +1028,12 @@
       </div>
       <div class="sidebar-section">
         <div class="section-title">Documents</div>
-        <div class="sidebar-item" data-module="quotations">📄 Quotations</div>
         <div class="sidebar-item" data-module="invoices">🧾 Invoices</div>
+        <div class="sidebar-item" data-module="quotations">📄 Quotations</div>
         <div class="sidebar-item" data-module="payments">💰 Payments</div>
       </div>
       <div class="sidebar-section">
         <div class="section-title">Tools</div>
-        <div class="sidebar-item" data-module="templates">📋 Templates</div>
         <div class="sidebar-item" data-module="backup">💾 Backup</div>
         <div class="sidebar-item" data-module="settings">⚙️ Settings</div>
       </div>
@@ -1138,12 +1055,12 @@
         <div class="quick-card" onclick="H4App.navigate('invoices')">
           <div class="icon">🧾</div>
           <div class="label">Invoice</div>
-          <div class="sub">Create &amp; Manage</div>
+          <div class="sub">Create & Manage</div>
         </div>
         <div class="quick-card" onclick="H4App.navigate('quotations')">
           <div class="icon">📄</div>
           <div class="label">Quotation</div>
-          <div class="sub">Create &amp; Manage</div>
+          <div class="sub">Create & Manage</div>
         </div>
         <div class="quick-card" onclick="H4App.navigate('products')">
           <div class="icon">📦</div>
@@ -1158,11 +1075,11 @@
         <div class="quick-card" onclick="H4App.navigate('templates')">
           <div class="icon">🎨</div>
           <div class="label">Templates</div>
-          <div class="sub">Invoice &amp; Quotation</div>
+          <div class="sub">Doc Design</div>
         </div>
       </div>
 
-      <!-- Business Summary (compact stats) -->
+      <!-- Business Summary -->
       <div style="margin-top:0.5rem;">
         <h3 style="font-size:1rem;color:#757575;margin-bottom:0.5rem;">📈 Business Summary</h3>
         <div class="stats-grid" style="margin-bottom:0;">
@@ -1177,7 +1094,7 @@
     <!-- ==================== COMPANY PROFILE ==================== -->
     <div class="module" data-module="company">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
-        <h1>🏭 Company Profile</h1><p>Setup your business details</p>
+        <h1>🏭 Company Profile</h1><p>Business details & contact information</p>
       </div>
       <div class="card">
         <div class="card-header"><h2>Business Information</h2></div>
@@ -1246,7 +1163,7 @@
     <!-- ==================== QUOTATIONS ==================== -->
     <div class="module" data-module="quotations">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
-        <h1>📄 Quotations</h1><p>Create and manage all your quotations</p>
+        <h1>📄 Quotations</h1><p>Create and manage quotations</p>
       </div>
       <div id="quotationsList">
         <div style="margin-bottom:1rem;">
@@ -1272,7 +1189,7 @@
       </div>
     </div>
 
-    <!-- ==================== PAYMENTS (placeholder) ==================== -->
+    <!-- ==================== PAYMENTS ==================== -->
     <div class="module" data-module="payments">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>💰 Payments</h1><p>Track invoice payments</p>
@@ -1283,69 +1200,34 @@
     <!-- ==================== TEMPLATES ==================== -->
     <div class="module" data-module="templates">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
-        <h1>📋 Template Designer</h1><p>Customize your document templates</p>
+        <h1>📋 Template Builder</h1><p>Design your professional documents</p>
       </div>
       <div class="card">
-        <div class="card-header"><h2>🎨 Template Settings</h2></div>
-        <div class="form-group">
-          <label for="templateName">Template Name</label>
-          <input type="text" id="templateName" value="H4 Premium Template">
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label for="templatePrimaryColor">Primary Color</label><input type="color" id="templatePrimaryColor" value="#6A3FA0"></div>
-          <div class="form-group"><label for="templateSecondaryColor">Secondary Color</label><input type="color" id="templateSecondaryColor" value="#8A6510"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label for="templateFontSize">Font Size</label>
-            <select id="templateFontSize">
-              <option value="12">Small</option>
-              <option value="13" selected>Medium</option>
-              <option value="14">Large</option>
-              <option value="16">Extra Large</option>
-            </select>
+        <div class="card-header"><h2>Select Template</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;">
+          <div style="border:2px solid #e0e0e0;border-radius:10px;padding:1rem;text-align:center;cursor:pointer;" onclick="H4TemplateBuilder.selectTemplate('classic')">
+            <div style="font-size:2rem;margin-bottom:0.5rem;">📋</div>
+            <strong>Classic</strong>
+            <p style="font-size:0.85rem;color:#757575;margin-top:0.3rem;">Traditional</p>
           </div>
-          <div class="form-group"><label for="templateHeaderAlign">Header Alignment</label>
-            <select id="templateHeaderAlign">
-              <option value="left">Left</option>
-              <option value="center" selected>Center</option>
-              <option value="right">Right</option>
-            </select>
+          <div style="border:2px solid #e0e0e0;border-radius:10px;padding:1rem;text-align:center;cursor:pointer;" onclick="H4TemplateBuilder.selectTemplate('modern')">
+            <div style="font-size:2rem;margin-bottom:0.5rem;">✨</div>
+            <strong>Modern</strong>
+            <p style="font-size:0.85rem;color:#757575;margin-top:0.3rem;">Contemporary</p>
+          </div>
+          <div style="border:2px solid #e0e0e0;border-radius:10px;padding:1rem;text-align:center;cursor:pointer;" onclick="H4TemplateBuilder.selectTemplate('premium')">
+            <div style="font-size:2rem;margin-bottom:0.5rem;">👑</div>
+            <strong>H4 Premium</strong>
+            <p style="font-size:0.85rem;color:#757575;margin-top:0.3rem;">Professional</p>
+          </div>
+          <div style="border:2px solid #e0e0e0;border-radius:10px;padding:1rem;text-align:center;cursor:pointer;" onclick="H4TemplateBuilder.selectTemplate('simple')">
+            <div style="font-size:2rem;margin-bottom:0.5rem;">📄</div>
+            <strong>Simple</strong>
+            <p style="font-size:0.85rem;color:#757575;margin-top:0.3rem;">Minimal</p>
           </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header"><h2>🏢 Header</h2></div>
-        <div class="form-group"><label><input type="checkbox" id="showLogo" checked> Show Company Logo</label></div>
-        <div class="form-group"><label><input type="checkbox" id="showCompanyDetails" checked> Show Company Details</label></div>
-        <div class="form-group"><label><input type="checkbox" id="showGstin" checked> Show GSTIN</label></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h2>📄 Document Settings</h2></div>
-        <div class="form-group"><label><input type="checkbox" id="showCustomer" checked> Customer Details</label></div>
-        <div class="form-group"><label><input type="checkbox" id="showProject" checked> Project Name</label></div>
-        <div class="form-group"><label><input type="checkbox" id="showHsn" checked> HSN Code</label></div>
-        <div class="form-group"><label><input type="checkbox" id="showTax" checked> GST / Tax Details</label></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h2>✍️ Footer</h2></div>
-        <div class="form-group"><label for="templateTerms">Terms & Conditions</label><textarea id="templateTerms" rows="4" placeholder="Payment terms, warranty, etc."></textarea></div>
-        <div class="form-group"><label><input type="checkbox" id="showSignature" checked> Show Authorized Signature</label></div>
-        <div class="form-group"><label><input type="checkbox" id="showThankYou" checked> Show Thank You Message</label></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h2>👁️ Live Template Preview</h2></div>
-        <div id="templateLivePreview" style="background:white;border:1px solid #e0e0e0;padding:20px;max-width:794px;margin:auto;min-height:300px;overflow:auto;">
-          <p class="text-muted">Select a template and adjust settings. Preview updates live.</p>
-        </div>
-      </div>
-      <div class="card">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
-          <button class="btn btn-outline" onclick="H4Template.reset()">↩️ Reset</button>
-          <button class="btn btn-success" onclick="H4Template.preview()">👁️ Preview</button>
-          <button class="btn btn-primary" onclick="H4Template.save()">💾 Save Template</button>
-          <button class="btn btn-secondary" onclick="H4Template.use()">✅ Use This Template</button>
-        </div>
-      </div>
+      <div id="templateBuilderContainer"></div>
     </div>
 
     <!-- ==================== BACKUP ==================== -->
@@ -1365,9 +1247,9 @@
     <!-- ==================== SETTINGS ==================== -->
     <div class="module" data-module="settings">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
-        <h1>⚙️ Settings</h1><p>App settings</p>
+        <h1>⚙️ Settings</h1><p>Application settings</p>
       </div>
-      <div class="card"><p class="text-muted text-center" style="padding:1.5rem;">Settings will be available soon.</p></div>
+      <div class="card"><p class="text-muted text-center" style="padding:1.5rem;">Settings coming soon.</p></div>
     </div>
 
   </main>
@@ -1413,22 +1295,8 @@
       <label>Accent Color</label>
       <input type="color" id="custAccent" value="#00BCD4">
     </div>
-    <div class="form-group">
-      <label>Card Padding (rem)</label>
-      <div class="range-wrap">
-        <input type="range" id="custCardPadding" min="0.8" max="3" step="0.1" value="1.25">
-        <span id="custCardPaddingDisplay">1.25</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Module Scale (zoom)</label>
-      <div class="range-wrap">
-        <input type="range" id="custModuleScale" min="0.8" max="1.5" step="0.05" value="1.0">
-        <span id="custModuleScaleDisplay">1.0</span>
-      </div>
-    </div>
-    <button class="btn btn-primary btn-block" onclick="H4App.applyCustomizations()">Apply Customizations</button>
-    <button class="btn btn-outline btn-block" onclick="H4App.resetCustomizations()">Reset Defaults</button>
+    <button class="btn btn-primary btn-block" onclick="H4App.applyCustomizations()">Apply</button>
+    <button class="btn btn-outline btn-block" onclick="H4App.resetCustomizations()">Reset</button>
   </div>
 
   <!-- ==================== MODALS ==================== -->
@@ -1440,14 +1308,14 @@
       <div class="modal-body">
         <p style="margin-bottom:1rem;color:#757575;">Choose quotation type</p>
         <div style="display:grid;gap:0.75rem;">
-          <button class="btn btn-outline btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.newGeneralQuotation();">
-            📄 <strong>General Quotation</strong><br><span style="font-size:0.85rem;color:#757575;">Standard items & pricing</span>
+          <button class="btn btn-outline btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4GeneralQuotation.new();">
+            📄 <strong>General Quotation</strong><br><span style="font-size:0.85rem;color:#757575;">Any products/services</span>
           </button>
           <button class="btn btn-primary btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Waterproofing.open();">
-            💧 <strong>Waterproofing Quotation</strong><br><span style="font-size:0.85rem;color:#757575;">Area / Material / Labour / GST</span>
+            💧 <strong>Waterproofing Quotation</strong><br><span style="font-size:0.85rem;color:#757575;">Material + Labour + Transport</span>
           </button>
           <button class="btn btn-secondary btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Epoxy.open();">
-            ✨ <strong>Epoxy Flooring Proposal</strong><br><span style="font-size:0.85rem;color:#757575;">Premium epoxy project quotation</span>
+            ✨ <strong>Epoxy Flooring Proposal</strong><br><span style="font-size:0.85rem;color:#757575;">Premium epoxy project costing</span>
           </button>
         </div>
       </div>
@@ -1490,7 +1358,7 @@
             <div class="form-group"><label>Selling Rate *</label><input type="number" id="pSellingRate" step="0.01" min="0" required></div>
             <div class="form-group"><label>MRP</label><input type="number" id="pMrp" step="0.01" min="0"></div>
           </div>
-          <div class="form-group"><label>Price Slabs (JSON)</label><input type="text" id="pSlabs" placeholder='[{"min":1,"max":10,"rate":100},{"min":11,"max":50,"rate":95}]'></div>
+          <div class="form-group"><label>Price Slabs (JSON)</label><input type="text" id="pSlabs" placeholder='[{"min":1,"max":10,"rate":100}]'></div>
           <div class="form-row"><div class="form-group"><label>GST %</label><input type="number" id="pGst" step="0.01" value="18"></div><div class="form-group"><label><input type="checkbox" id="pActive" checked> Active</label></div></div>
         </form>
       </div>
@@ -1501,200 +1369,23 @@
     </div>
   </div>
 
-  <!-- ==================== EPOXY BUILDER ==================== -->
-  <div class="builder-overlay" id="epoxyOverlay">
-    <div class="builder-topbar">
-      <div class="builder-topbar-title">✨ Premium Epoxy Flooring Proposal</div>
-      <div class="builder-topbar-actions">
-        <button class="btn btn-sm btn-success" onclick="H4Epoxy.save()">💾 Save</button>
-        <button class="btn btn-sm btn-danger" onclick="H4Epoxy.close()">✕ Close</button>
-      </div>
-    </div>
-    <div class="builder-steps" id="epoxySteps"></div>
-    <div class="builder-body">
-      <div class="builder-form-pane" id="epoxyFormPane">
-        <!-- STEP 1 -->
-        <div class="builder-step-section" data-step="1">
-          <div class="card">
-            <div class="card-header"><h2>Quotation & Customer</h2></div>
-            <div class="form-row"><div class="form-group"><label>Quotation Number</label><input type="text" id="epxNumber" readonly></div><div class="form-group"><label for="epxDate">Date</label><input type="date" id="epxDate" data-bind="date"></div></div>
-            <div class="form-row"><div class="form-group"><label for="epxCustomer">Customer *</label><select id="epxCustomer" data-bind="customerId"></select></div><div class="form-group"><label for="epxProjectName">Project Name</label><input type="text" id="epxProjectName" data-bind="projectName"></div></div>
-            <div class="form-group"><label for="epxSiteAddress">Site Address</label><textarea id="epxSiteAddress" rows="2" data-bind="siteAddress"></textarea></div>
-            <div class="form-group"><label for="epxReference">Reference</label><input type="text" id="epxReference" data-bind="reference"></div>
-          </div>
-        </div>
-        <!-- STEP 2 -->
-        <div class="builder-step-section" data-step="2">
-          <div class="card">
-            <div class="card-header"><h2>Project Details</h2></div>
-            <div class="form-row"><div class="form-group"><label for="epxArea">Area (sq.ft) *</label><input type="number" id="epxArea" min="0" step="0.01" data-bind="area"></div>
-            <div class="form-group"><label for="epxFlooringType">Flooring Type</label><select id="epxFlooringType" data-bind="flooringType"><option value="Standard Epoxy Flooring">Standard Epoxy Flooring</option><option value="Premium Self-Leveling Epoxy" selected>Premium Self-Leveling Epoxy</option><option value="Metallic Epoxy Flooring">Metallic Epoxy Flooring</option><option value="3D Epoxy Flooring">3D Epoxy Flooring</option><option value="Decorative Flake Epoxy">Decorative Flake Epoxy</option><option value="Industrial Epoxy Flooring">Industrial Epoxy Flooring</option><option value="Epoxy Cove Flooring">Epoxy Cove Flooring</option></select></div></div>
-            <div class="form-row"><div class="form-group"><label for="epxThickness">Thickness</label><select id="epxThickness" data-bind="thickness"><option value="1 mm">1 mm</option><option value="2 mm" selected>2 mm</option><option value="3 mm">3 mm</option></select></div>
-            <div class="form-group"><label for="epxFinish">Finish</label><select id="epxFinish" data-bind="finish"><option value="High Gloss" selected>High Gloss</option><option value="Gloss">Gloss</option><option value="Matte">Matte</option><option value="Satin">Satin</option></select></div></div>
-          </div>
-        </div>
-        <!-- STEP 3 -->
-        <div class="builder-step-section" data-step="3">
-          <div class="card">
-            <div class="card-header"><h2>Smart Rate</h2></div>
-            <div id="epxRateStatus" class="rate-status auto">Select flooring type and thickness</div>
-            <div class="form-row" style="margin-top:0.5rem;"><div class="form-group"><label for="epxSystemRate">Rate (₹ per sq.ft)</label><input type="number" id="epxSystemRate" step="0.01" min="0" data-bind="systemRate"></div><div class="form-group"><label for="epxSystemGst">GST %</label><input type="number" id="epxSystemGst" step="0.01" min="0" value="18" data-bind="systemGst"></div></div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;"><button class="btn btn-sm btn-outline" onclick="H4Epoxy.resetToAutoRate()">🔒 Use Auto Rate</button></div>
-            <div style="margin-top:0.5rem;background:#f5f5f5;padding:0.8rem;border-radius:8px;"><strong>Estimated Amount:</strong> <span style="font-size:1.3rem;color:var(--primary);font-weight:700;" id="epxSystemAmount">₹0.00</span></div>
-          </div>
-        </div>
-        <!-- STEP 4 -->
-        <div class="builder-step-section" data-step="4">
-          <div class="card">
-            <div class="card-header"><h2>Price Items</h2><button class="btn btn-sm btn-success" onclick="H4Epoxy.addPriceItem()">➕ Add Item</button></div>
-            <div id="epxPriceItems"></div>
-          </div>
-        </div>
-        <!-- STEP 5 -->
-        <div class="builder-step-section" data-step="5">
-          <div class="card">
-            <div class="card-header"><h2>Discount & GST</h2></div>
-            <div class="form-group"><label><input type="checkbox" id="epxDiscountEnabled" onchange="H4Epoxy.calculate()"> Enable Discount</label></div>
-            <div class="form-row"><div class="form-group"><label for="epxDiscountValue">Discount</label><input type="number" id="epxDiscountValue" step="0.01" min="0" value="0" oninput="H4Epoxy.calculate()"></div>
-            <div class="form-group"><label for="epxDiscountType">Discount Type</label><select id="epxDiscountType" onchange="H4Epoxy.calculate()"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div></div>
-            <div class="form-group"><label for="epxGstMode">GST Mode</label><select id="epxGstMode" onchange="H4Epoxy.calculate()"><option value="intra">Intra-state (CGST + SGST)</option><option value="inter">Inter-state (IGST)</option><option value="off">GST Disabled</option></select></div>
-          </div>
-        </div>
-        <!-- STEP 6 -->
-        <div class="builder-step-section" data-step="6">
-          <div class="card">
-            <div class="card-header"><h2>Calculation</h2></div>
-            <div style="background:#f5f5f5;padding:1.2rem;border-left:4px solid var(--primary);border-radius:8px;">
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span id="epxSubtotal">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span id="epxDiscountAmt">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span id="epxTaxable">₹0.00</span></div>
-              <div id="epxCgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span id="epxCgst">₹0.00</span></div>
-              <div id="epxSgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span id="epxSgst">₹0.00</span></div>
-              <div id="epxIgstRow" style="display:none;"><span>IGST</span><span id="epxIgst">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Round Off</span><span id="epxRoundOff">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:2px solid var(--primary);font-weight:700;font-size:1.2rem;color:var(--primary);"><span>GRAND TOTAL</span><span id="epxGrandTotal">₹0.00</span></div>
-            </div>
-          </div>
-        </div>
-        <!-- STEP 7 -->
-        <div class="builder-step-section" data-step="7">
-          <div class="card">
-            <div class="card-header"><h2>Terms & Footer</h2></div>
-            <div class="form-group"><label for="epxThankYou">Thank You Message</label><input type="text" id="epxThankYou" data-bind="thankYou" value="Thank you for considering H4 Construction Solutions."></div>
-            <div class="form-group"><label for="epxSignatoryName">Authorized Signatory</label><input type="text" id="epxSignatoryName" data-bind="signatoryName" placeholder="Authorized Signatory"></div>
-            <div style="display:flex;gap:0.5rem;justify-content:flex-end;flex-wrap:wrap;margin-top:0.5rem;">
-              <button class="btn btn-secondary" onclick="H4Epoxy.printPreview()">🖨️ Print</button>
-              <button class="btn btn-success" id="epxConvertBtn" style="display:none;" onclick="H4Epoxy.convertToInvoice()">✅ Convert to Invoice</button>
-              <button class="btn btn-primary" onclick="H4Epoxy.save()">💾 Save</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="builder-preview-pane" id="epoxyPreviewPane"><div class="preview-a4-container" id="epoxyPreviewContainer"></div></div>
-    </div>
-    <div class="builder-bottombar">
-      <button class="btn btn-outline" id="epxPrevBtn" onclick="H4Epoxy.prevStep()">← Previous</button>
-      <span class="builder-step-counter" id="epxStepCounter">Step 1 / 7</span>
-      <button class="btn btn-primary" id="epxNextBtn" onclick="H4Epoxy.nextStep()">Next →</button>
-    </div>
-  </div>
-
-  <!-- ==================== WATERPROOFING BUILDER ==================== -->
-  <div class="builder-overlay" id="waterproofingOverlay">
-    <div class="builder-topbar">
-      <div class="builder-topbar-title">💧 Waterproofing Quotation</div>
-      <div class="builder-topbar-actions">
-        <button class="btn btn-sm btn-success" onclick="H4Waterproofing.save()">💾 Save</button>
-        <button class="btn btn-sm btn-danger" onclick="H4Waterproofing.close()">✕ Close</button>
-      </div>
-    </div>
-    <div class="builder-steps" id="wpSteps"></div>
-    <div class="builder-body">
-      <div class="builder-form-pane" id="wpFormPane">
-        <div class="builder-step-section" data-step="1">
-          <div class="card">
-            <div class="card-header"><h2>Customer & Project</h2></div>
-            <div class="form-row"><div class="form-group"><label>Quotation Number</label><input type="text" id="wpNumber" readonly></div><div class="form-group"><label for="wpDate">Date</label><input type="date" id="wpDate" data-bind="date"></div></div>
-            <div class="form-row"><div class="form-group"><label for="wpCustomer">Customer *</label><select id="wpCustomer" data-bind="customerId"></select></div><div class="form-group"><label for="wpProjectName">Project Name</label><input type="text" id="wpProjectName" data-bind="projectName"></div></div>
-            <div class="form-group"><label for="wpSiteAddress">Site Address</label><textarea id="wpSiteAddress" rows="2" data-bind="siteAddress"></textarea></div>
-            <div class="form-group"><label for="wpReference">Reference</label><input type="text" id="wpReference" data-bind="reference"></div>
-          </div>
-        </div>
-        <div class="builder-step-section" data-step="2">
-          <div class="card">
-            <div class="card-header"><h2>Area & System</h2></div>
-            <div class="form-row"><div class="form-group"><label for="wpArea">Area (sq.ft) *</label><input type="number" id="wpArea" min="0" step="0.01" data-bind="area"></div>
-            <div class="form-group"><label for="wpSystemType">System Type *</label><select id="wpSystemType" data-bind="systemType"><option value="Terrace Waterproofing">Terrace Waterproofing</option><option value="Bathroom Waterproofing" selected>Bathroom Waterproofing</option><option value="Wall Waterproofing">Wall Waterproofing</option><option value="Floor Waterproofing">Floor Waterproofing</option><option value="Roof Waterproofing">Roof Waterproofing</option><option value="Basement Waterproofing">Basement Waterproofing</option><option value="Other">Other</option></select></div></div>
-            <div class="form-row"><div class="form-group"><label for="wpMaterial">Material</label><input type="text" id="wpMaterial" data-bind="material" placeholder="e.g. H4 Waterproof"></div><div class="form-group"><label for="wpMaterialRate">Material Rate (₹ per sq.ft)</label><input type="number" id="wpMaterialRate" step="0.01" min="0" data-bind="materialRate"></div></div>
-            <div class="form-row"><div class="form-group"><label for="wpLabourRate">Labour Rate (₹ per sq.ft)</label><input type="number" id="wpLabourRate" step="0.01" min="0" data-bind="labourRate"></div><div class="form-group"><label for="wpTransport">Transport (₹)</label><input type="number" id="wpTransport" step="0.01" min="0" data-bind="transport"></div></div>
-          </div>
-        </div>
-        <div class="builder-step-section" data-step="3">
-          <div class="card">
-            <div class="card-header"><h2>Pricing & GST</h2></div>
-            <div class="form-group"><label><input type="checkbox" id="wpDiscountEnabled" onchange="H4Waterproofing.calculate()"> Enable Discount</label></div>
-            <div class="form-row"><div class="form-group"><label for="wpDiscountValue">Discount</label><input type="number" id="wpDiscountValue" step="0.01" min="0" value="0" oninput="H4Waterproofing.calculate()"></div><div class="form-group"><label for="wpDiscountType">Discount Type</label><select id="wpDiscountType" onchange="H4Waterproofing.calculate()"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div></div>
-            <div class="form-group"><label for="wpGstMode">GST Mode</label><select id="wpGstMode" onchange="H4Waterproofing.calculate()"><option value="intra">Intra-state (CGST + SGST)</option><option value="inter">Inter-state (IGST)</option><option value="off">GST Disabled</option></select></div>
-          </div>
-        </div>
-        <div class="builder-step-section" data-step="4">
-          <div class="card">
-            <div class="card-header"><h2>Calculation</h2></div>
-            <div style="background:#f5f5f5;padding:1.2rem;border-left:4px solid var(--primary);border-radius:8px;">
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Material Cost</span><span id="wpMaterialCost">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Labour Cost</span><span id="wpLabourCost">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Transport</span><span id="wpTransportAmt">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span id="wpSubtotal">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span id="wpDiscountAmt">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span id="wpTaxable">₹0.00</span></div>
-              <div id="wpCgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span id="wpCgst">₹0.00</span></div>
-              <div id="wpSgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span id="wpSgst">₹0.00</span></div>
-              <div id="wpIgstRow" style="display:none;"><span>IGST</span><span id="wpIgst">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Round Off</span><span id="wpRoundOff">₹0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:2px solid var(--primary);font-weight:700;font-size:1.2rem;color:var(--primary);"><span>GRAND TOTAL</span><span id="wpGrandTotal">₹0.00</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="builder-step-section" data-step="5">
-          <div class="card">
-            <div class="card-header"><h2>Terms & Footer</h2></div>
-            <div class="form-group"><label for="wpThankYou">Thank You Message</label><input type="text" id="wpThankYou" data-bind="thankYou" value="Thank you for considering H4 Construction Solutions."></div>
-            <div class="form-group"><label for="wpSignatoryName">Authorized Signatory</label><input type="text" id="wpSignatoryName" data-bind="signatoryName" placeholder="Authorized Signatory"></div>
-            <div style="display:flex;gap:0.5rem;justify-content:flex-end;flex-wrap:wrap;margin-top:0.5rem;">
-              <button class="btn btn-secondary" onclick="H4Waterproofing.printPreview()">🖨️ Print</button>
-              <button class="btn btn-success" id="wpConvertBtn" style="display:none;" onclick="H4Waterproofing.convertToInvoice()">✅ Convert to Invoice</button>
-              <button class="btn btn-primary" onclick="H4Waterproofing.save()">💾 Save</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="builder-preview-pane" id="wpPreviewPane"><div class="preview-a4-container" id="wpPreviewContainer"></div></div>
-    </div>
-    <div class="builder-bottombar">
-      <button class="btn btn-outline" id="wpPrevBtn" onclick="H4Waterproofing.prevStep()">← Previous</button>
-      <span class="builder-step-counter" id="wpStepCounter">Step 1 / 5</span>
-      <button class="btn btn-primary" id="wpNextBtn" onclick="H4Waterproofing.nextStep()">Next →</button>
-    </div>
-  </div>
-
   <!-- ==================== NOTIFICATIONS ==================== -->
   <div class="notifications" id="notifications"></div>
 
   <!-- ============================================================ -->
-  <!-- JAVASCRIPT - COMPLETE ENGINE WITH ALL BUILDERS RESTORED -->
+  <!-- JAVASCRIPT -->
   <!-- ============================================================ -->
   <script>
     // ============================================================
-    // DATABASE - FIXED WITH add() AND update()
+    // DATABASE
     // ============================================================
     const DB = {
-      STORAGE_KEY: 'h4_universal_billing_v3',
+      STORAGE_KEY: 'h4_billing_erp_v4',
 
       init() {
         if (!localStorage.getItem(this.STORAGE_KEY)) {
           this.seed();
         }
-        // Ensure new fields exist in existing invoices
         this.migrate();
       },
 
@@ -1719,36 +1410,20 @@
           products: {},
           quotations: {},
           invoices: {},
-          rateMaster: {
-            rate_001: {
-              id: 'rate_001',
-              flooringType: 'Premium Self-Leveling Epoxy',
-              thickness: '2 mm',
-              unit: 'sq.ft',
-              rate: 350,
-              gst: 18,
-              active: true
-            }
-          },
-          categories: {
-            cat_001: { id: 'cat_001', name: 'Tile Adhesive', type: 'both', icon: '🧱' },
-            cat_002: { id: 'cat_002', name: 'Waterproofing', type: 'both', icon: '💧' },
-            cat_003: { id: 'cat_003', name: 'Epoxy Flooring', type: 'both', icon: '✨' }
-          },
           templates: {
-            tpl_classic: { id: 'tpl_classic', name: 'Classic', primary: '#2C3E50', secondary: '#34495E', accent: '#7F8C8D', font: 'Segoe UI', fontSize: 13, logoPos: 'center', showLogo: true, showSig: true, showBank: true },
-            tpl_modern: { id: 'tpl_modern', name: 'Modern', primary: '#1976D2', secondary: '#0D47A1', accent: '#FFA000', font: 'Roboto', fontSize: 14, logoPos: 'center', showLogo: true, showSig: true, showBank: true },
-            tpl_premium: { id: 'tpl_premium', name: 'H4 Premium', primary: '#6A3FA0', secondary: '#D4A843', accent: '#8A6510', font: 'Georgia', fontSize: 15, logoPos: 'center', showLogo: true, showSig: true, showBank: true },
-            tpl_simple: { id: 'tpl_simple', name: 'Simple', primary: '#424242', secondary: '#616161', accent: '#9E9E9E', font: 'Arial', fontSize: 12, logoPos: 'center', showLogo: false, showSig: true, showBank: true }
+            classic: { id: 'classic', name: 'Classic', type: 'professional', primary: '#1a1a2e', secondary: '#16213e', accent: '#0f3460', fontSize: 13 },
+            modern: { id: 'modern', name: 'Modern', type: 'contemporary', primary: '#1976d2', secondary: '#0d47a1', accent: '#ffa000', fontSize: 13 },
+            premium: { id: 'premium', name: 'H4 Premium', type: 'premium', primary: '#6A3FA0', secondary: '#8A6510', accent: '#00BCD4', fontSize: 14 },
+            simple: { id: 'simple', name: 'Simple', type: 'minimal', primary: '#424242', secondary: '#616161', accent: '#9e9e9e', fontSize: 12 }
           },
           settings: {
             currency: 'INR',
-            dateFormat: 'DD/MM/YYYY',
             invoicePrefix: 'H4-INV',
             invoiceYear: new Date().getFullYear(),
             invoiceCounter: 1,
+            quotationPrefix: 'H4-QTN',
             quotationCounter: 1,
-            quotationPrefix: 'H4-QTN'
+            defaultTemplate: 'classic'
           }
         };
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
@@ -1760,26 +1435,11 @@
         const invoices = data.invoices || {};
         for (let id in invoices) {
           const inv = invoices[id];
-          if (inv.items) {
-            inv.items = inv.items.map(item => {
-              if (!item.productId) item.productId = '';
-              if (!item.rateSource) item.rateSource = 'manual';
-              if (!item.gst) item.gst = 18;
-              return item;
-            });
-            changed = true;
-          }
-          if (inv.paidAmount === undefined) { inv.paidAmount = 0; changed = true; }
+          if (!inv.templateId) { inv.templateId = 'classic'; changed = true; }
+          if (!inv.paidAmount) { inv.paidAmount = 0; changed = true; }
           if (!inv.paymentStatus) { inv.paymentStatus = 'unpaid'; changed = true; }
-          if (!inv.terms) { inv.terms = ''; changed = true; }
-          if (!inv.bankDetails) { inv.bankDetails = ''; changed = true; }
-          if (!inv.templateId) { inv.templateId = 'tpl_classic'; changed = true; }
-          if (!inv.templateVersion) { inv.templateVersion = 1; changed = true; }
         }
         if (changed) this.save('invoices', invoices);
-        const comp = data.company || {};
-        if (!comp.bankDetails) { comp.bankDetails = 'Bank Name, Account No, IFSC'; changed = true; }
-        if (changed) this.save('company', comp);
       },
 
       get(key) {
@@ -1903,317 +1563,6 @@
     }
 
     // ============================================================
-    // H4 TEMPLATE ENGINE - Central Document Rendering
-    // ============================================================
-    const H4TemplateEngine = {
-      // Get template configuration by ID
-      getTemplate(id) {
-        const templates = DB.get('templates') || {};
-        return templates[id] || templates['tpl_classic'] || {
-          id: 'tpl_classic',
-          name: 'Classic',
-          primary: '#2C3E50',
-          secondary: '#34495E',
-          accent: '#7F8C8D',
-          font: 'Segoe UI',
-          fontSize: 13,
-          logoPos: 'center',
-          showLogo: true,
-          showSig: true,
-          showBank: true
-        };
-      },
-
-      // Main render function - generates complete A4 document HTML
-      render(documentType, data, templateId) {
-        const template = this.getTemplate(templateId);
-        const company = DB.get('company') || {};
-        const customer = DB.getItem('customers', data.customerId) || {};
-
-        // Build the document based on type
-        switch(documentType) {
-          case 'invoice':
-            return this.renderInvoice(data, company, customer, template);
-          case 'quotation':
-            return this.renderQuotation(data, company, customer, template);
-          case 'waterproofing':
-            return this.renderWaterproofing(data, company, customer, template);
-          case 'epoxy':
-            return this.renderEpoxy(data, company, customer, template);
-          default:
-            return '<p>Unsupported document type.</p>';
-        }
-      },
-
-      // ---- INVOICE RENDERER ----
-      renderInvoice(data, company, customer, template) {
-        const itemsHtml = (data.items || []).map((item, idx) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `<tr>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${idx+1}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${item.description || ''}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.quantity || 0}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.unit || ''}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${(item.rate || 0).toFixed(2)}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${total.toFixed(2)}</td>
-          </tr>`;
-        }).join('');
-
-        const primary = template.primary || '#2C3E50';
-        const secondary = template.secondary || '#34495E';
-        const font = template.font || 'Segoe UI';
-        const fontSize = template.fontSize || 13;
-        const logoPos = template.logoPos || 'center';
-
-        return `
-          <div class="preview-a4-page template-${template.id}" style="font-family:'${font}',sans-serif;font-size:${fontSize}px;color:#1a1a2e;">
-            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid ${primary};padding-bottom:0.8rem;margin-bottom:0.8rem;">
-              <div style="text-align:${logoPos};">
-                ${template.showLogo !== false && company.logo ? `<img src="${company.logo}" style="max-height:70px;"/>` : ''}
-                <h2 style="margin:0;color:${primary};">${company.legalName || 'H4 Construction Solutions'}</h2>
-                <p style="margin:0;font-size:0.9em;color:#555;">${company.address || ''}</p>
-                <p style="margin:0;font-size:0.8em;color:#555;">${company.phone || ''} ${company.email ? '| '+company.email : ''}</p>
-                <p style="margin:0;font-size:0.8em;color:#555;">GSTIN: ${company.gstin || 'N/A'}</p>
-              </div>
-              <div style="text-align:right;">
-                <h1 style="font-size:1.8rem;color:${primary};margin:0;">TAX INVOICE</h1>
-                <p style="margin:0;font-weight:600;">${data.number || ''}</p>
-                <p style="margin:0;">Date: ${data.date || ''}</p>
-                <p style="margin:0;">Due: ${data.dueDate || ''}</p>
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.5rem 0;">
-              <div style="background:#f9f9f9;padding:0.8rem;border-radius:6px;">
-                <strong style="color:${primary};">BILL TO</strong><br>
-                ${customer.name || ''}<br>
-                ${customer.company || ''}<br>
-                ${customer.address || ''}<br>
-                Phone: ${customer.phone || ''} ${customer.whatsapp ? '| WhatsApp: '+customer.whatsapp : ''}<br>
-                GSTIN: ${customer.gstin || 'N/A'}
-              </div>
-              <div>
-                <strong>Project</strong><br>${data.projectName || ''}<br>
-                <strong>Reference</strong><br>${data.reference || ''}
-              </div>
-            </div>
-            <table style="width:100%;border-collapse:collapse;font-size:0.95em;margin:0.5rem 0;">
-              <thead>
-                <tr style="background:${primary};color:white;">
-                  <th style="padding:8px 10px;text-align:left;">#</th>
-                  <th style="padding:8px 10px;text-align:left;">Description</th>
-                  <th style="padding:8px 10px;text-align:center;">Qty</th>
-                  <th style="padding:8px 10px;text-align:center;">Unit</th>
-                  <th style="padding:8px 10px;text-align:right;">Rate</th>
-                  <th style="padding:8px 10px;text-align:right;">Amount</th>
-                </tr>
-              </thead>
-              <tbody>${itemsHtml}</tbody>
-            </table>
-            <div style="margin-left:auto;width:55%;font-size:0.95em;">
-              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>₹${(data.subtotal || 0).toFixed(2)}</span></div>
-              ${(data.discountAmount || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>₹${(data.discountAmount || 0).toFixed(2)}</span></div>` : ''}
-              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>₹${(data.taxableAmount || 0).toFixed(2)}</span></div>
-              ${(data.cgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span>₹${(data.cgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.sgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span>₹${(data.sgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.igst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>IGST</span><span>₹${(data.igst || 0).toFixed(2)}</span></div>` : ''}
-              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Round Off</span><span>₹${(data.roundOff || 0).toFixed(2)}</span></div>
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:3px solid ${primary};font-size:1.2rem;font-weight:800;color:${primary};"><span>GRAND TOTAL</span><span>₹${(data.grandTotal || 0).toFixed(2)}</span></div>
-            </div>
-            <div style="font-size:0.9rem;font-weight:600;color:#555;padding:0.4rem 0;border-top:1px solid #e0e0e0;margin-top:0.4rem;">${data.amountWords || 'Rupees Zero Only'}</div>
-            <div style="margin-top:0.5rem;font-size:0.85rem;">
-              ${data.terms ? `<p><strong>Terms:</strong> ${data.terms}</p>` : ''}
-              ${data.bankDetails ? `<p><strong>Bank Details:</strong> ${data.bankDetails}</p>` : ''}
-              ${data.notes ? `<p><strong>Notes:</strong> ${data.notes}</p>` : ''}
-            </div>
-            <div style="margin-top:1rem;display:flex;justify-content:space-between;border-top:1px solid #e0e0e0;padding-top:0.5rem;">
-              <div style="font-size:0.85rem;">${company.legalName || ''}</div>
-              <div style="text-align:right;">
-                ${template.showSig !== false ? `<div style="height:40px;border-bottom:1px solid #777;width:150px;margin-left:auto;"></div>` : ''}
-                ${company.signatoryName || 'Authorized Signatory'}
-                ${company.signature ? `<br><img src="${company.signature}" style="max-height:50px;">` : ''}
-              </div>
-            </div>
-          </div>
-        `;
-      },
-
-      // ---- GENERAL QUOTATION RENDERER ----
-      renderQuotation(data, company, customer, template) {
-        const itemsHtml = (data.items || []).map((item, idx) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `<tr>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${idx+1}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${item.description || ''}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.quantity || 0}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.unit || ''}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${(item.rate || 0).toFixed(2)}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${total.toFixed(2)}</td>
-          </tr>`;
-        }).join('');
-
-        const primary = template.primary || '#2C3E50';
-        const font = template.font || 'Segoe UI';
-        const fontSize = template.fontSize || 13;
-
-        return `
-          <div class="preview-a4-page" style="font-family:'${font}',sans-serif;font-size:${fontSize}px;color:#1a1a2e;">
-            <div style="text-align:center;border-bottom:3px solid ${primary};padding-bottom:0.8rem;margin-bottom:0.8rem;">
-              <h1 style="margin:0;color:${primary};">QUOTATION</h1>
-              <p style="margin:0;font-weight:600;">${data.number || ''}</p>
-              <p style="margin:0;">Date: ${data.date || ''} | Valid Until: ${data.validUntil || ''}</p>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.5rem 0;">
-              <div><strong>Customer:</strong> ${customer.name || ''}<br>${customer.address || ''}</div>
-              <div><strong>Project:</strong> ${data.projectName || ''}<br><strong>Ref:</strong> ${data.reference || ''}</div>
-            </div>
-            <table style="width:100%;border-collapse:collapse;font-size:0.95em;margin:0.5rem 0;">
-              <thead><tr style="background:${primary};color:white;"><th style="padding:8px;">#</th><th style="padding:8px;text-align:left;">Description</th><th style="padding:8px;text-align:center;">Qty</th><th style="padding:8px;text-align:center;">Unit</th><th style="padding:8px;text-align:right;">Rate</th><th style="padding:8px;text-align:right;">Amount</th></tr></thead>
-              <tbody>${itemsHtml}</tbody>
-            </table>
-            <div style="margin-left:auto;width:55%;">
-              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>₹${(data.subtotal || 0).toFixed(2)}</span></div>
-              ${(data.discountAmount || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>₹${(data.discountAmount || 0).toFixed(2)}</span></div>` : ''}
-              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>₹${(data.taxableAmount || 0).toFixed(2)}</span></div>
-              ${(data.cgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span>₹${(data.cgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.sgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span>₹${(data.sgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.igst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>IGST</span><span>₹${(data.igst || 0).toFixed(2)}</span></div>` : ''}
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:3px solid ${primary};font-size:1.2rem;font-weight:800;color:${primary};"><span>GRAND TOTAL</span><span>₹${(data.grandTotal || 0).toFixed(2)}</span></div>
-            </div>
-            <div style="font-size:0.9rem;font-weight:600;color:#555;padding:0.4rem 0;border-top:1px solid #e0e0e0;margin-top:0.4rem;">${data.amountWords || 'Rupees Zero Only'}</div>
-            <div style="margin-top:0.5rem;font-size:0.85rem;">
-              ${data.terms ? `<p><strong>Terms:</strong> ${data.terms}</p>` : ''}
-              ${data.notes ? `<p><strong>Notes:</strong> ${data.notes}</p>` : ''}
-            </div>
-            <div style="margin-top:1rem;display:flex;justify-content:space-between;border-top:1px solid #e0e0e0;padding-top:0.5rem;">
-              <div>${company.legalName || ''}</div>
-              <div style="text-align:right;">${company.signatoryName || 'Authorized Signatory'}</div>
-            </div>
-          </div>
-        `;
-      },
-
-      // ---- WATERPROOFING QUOTATION RENDERER ----
-      renderWaterproofing(data, company, customer, template) {
-        const pd = data.projectDetails || {};
-        const area = pd.area || 0;
-        const materialRate = pd.materialRate || 0;
-        const labourRate = pd.labourRate || 0;
-        const transport = pd.transport || 0;
-        const materialCost = area * materialRate;
-        const labourCost = area * labourRate;
-        const subtotal = materialCost + labourCost + transport;
-
-        const primary = template.primary || '#2C3E50';
-        const font = template.font || 'Segoe UI';
-        const fontSize = template.fontSize || 13;
-
-        return `
-          <div class="preview-a4-page" style="font-family:'${font}',sans-serif;font-size:${fontSize}px;color:#1a1a2e;">
-            <div style="background:linear-gradient(135deg,${primary},${template.secondary || '#34495E'});color:white;padding:1.5rem;border-radius:12px;margin-bottom:1rem;text-align:center;">
-              <h1 style="font-size:1.6rem;margin:0;">💧 WATERPROOFING QUOTATION</h1>
-              <p style="margin:0;">Durable • Flexible • Crack Resistant</p>
-            </div>
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:0.5rem;">
-              <div><strong>${company.legalName}</strong></div>
-              <div><strong>${data.number}</strong></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;font-size:0.95em;background:#f9f9f9;padding:0.8rem;border-radius:6px;">
-              <div><strong>Customer</strong> ${customer.name}</div>
-              <div><strong>Project</strong> ${pd.projectName}</div>
-              <div><strong>Area</strong> ${area} sq.ft</div>
-              <div><strong>System Type</strong> ${pd.systemType}</div>
-              <div><strong>Material</strong> ${pd.material}</div>
-              <div><strong>Material Rate</strong> ₹${materialRate}/sq.ft</div>
-              <div><strong>Labour Rate</strong> ₹${labourRate}/sq.ft</div>
-            </div>
-            <div style="margin-top:0.8rem;">
-              <h3 style="color:${primary};border-bottom:2px solid ${primary};padding-bottom:0.3rem;">Cost Summary</h3>
-              <div style="margin-left:auto;width:100%;">
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Material Cost</span><span>₹${materialCost.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Labour Cost</span><span>₹${labourCost.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Transport</span><span>₹${transport.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>₹${subtotal.toFixed(2)}</span></div>
-                ${(data.pricing?.discount || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>₹${(data.pricing?.discount || 0).toFixed(2)}</span></div>` : ''}
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>₹${(data.taxableAmount || 0).toFixed(2)}</span></div>
-                ${(data.cgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span>₹${(data.cgst || 0).toFixed(2)}</span></div>` : ''}
-                ${(data.sgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span>₹${(data.sgst || 0).toFixed(2)}</span></div>` : ''}
-                ${(data.igst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>IGST</span><span>₹${(data.igst || 0).toFixed(2)}</span></div>` : ''}
-                <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:3px solid ${primary};font-size:1.2rem;font-weight:800;color:${primary};"><span>GRAND TOTAL</span><span>₹${(data.grandTotal || 0).toFixed(2)}</span></div>
-              </div>
-            </div>
-            <div style="margin-top:1rem;border-top:2px solid ${primary};padding-top:0.5rem;display:flex;justify-content:space-between;">
-              <div>${data.footer?.thankYou || 'Thank you for considering H4 Construction Solutions.'}</div>
-              <div>${data.footer?.signatoryName || 'Authorized Signatory'}</div>
-            </div>
-          </div>
-        `;
-      },
-
-      // ---- EPOXY PROPOSAL RENDERER ----
-      renderEpoxy(data, company, customer, template) {
-        const pd = data.projectDetails || {};
-        const pricing = data.pricing || {};
-        const itemsHtml = (pricing.items || []).map((item, idx) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `<tr>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${idx+1}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${item.description || ''}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.quantity || 0}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.unit || 'sq.ft'}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${(item.rate || 0).toFixed(2)}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${total.toFixed(2)}</td>
-          </tr>`;
-        }).join('');
-
-        const primary = template.primary || '#6A3FA0';
-        const secondary = template.secondary || '#D4A843';
-        const font = template.font || 'Georgia';
-        const fontSize = template.fontSize || 14;
-
-        return `
-          <div class="preview-a4-page" style="font-family:'${font}',serif;font-size:${fontSize}px;color:#1a1a2e;">
-            <div style="background:linear-gradient(135deg,${primary},${secondary});color:white;padding:1.8rem;border-radius:12px;margin-bottom:1rem;text-align:center;">
-              <h1 style="font-size:1.8rem;margin:0;">PREMIUM EPOXY FLOORING PROPOSAL</h1>
-              <p style="margin:0;font-size:1rem;">Luxury • Seamless • Durable • Premium Finish</p>
-            </div>
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:0.5rem;">
-              <div><strong>${company.legalName}</strong></div>
-              <div><strong>${data.number}</strong></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;font-size:0.95em;background:#f9f9f9;padding:0.8rem;border-radius:6px;">
-              <div><strong>Customer</strong> ${customer.name}</div>
-              <div><strong>Project</strong> ${pd.projectName}</div>
-              <div><strong>Area</strong> ${pd.area} sq.ft</div>
-              <div><strong>Flooring Type</strong> ${pd.flooringType}</div>
-              <div><strong>Thickness</strong> ${pd.thickness}</div>
-              <div><strong>Finish</strong> ${pd.finish}</div>
-            </div>
-            <div style="margin-top:0.8rem;">
-              <h3 style="color:${primary};border-bottom:2px solid ${primary};padding-bottom:0.3rem;">Price Table</h3>
-              <table style="width:100%;border-collapse:collapse;font-size:0.95em;">
-                <thead><tr style="background:${primary};color:white;"><th style="padding:8px;">#</th><th style="padding:8px;text-align:left;">Description</th><th style="padding:8px;text-align:center;">Qty</th><th style="padding:8px;text-align:center;">Unit</th><th style="padding:8px;text-align:right;">Rate</th><th style="padding:8px;text-align:right;">Amount</th></tr></thead>
-                <tbody>${itemsHtml}</tbody>
-              </table>
-            </div>
-            <div style="margin-left:auto;width:55%;margin-top:0.5rem;">
-              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>₹${(data.subtotal || 0).toFixed(2)}</span></div>
-              ${(data.discountAmount || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>₹${(data.discountAmount || 0).toFixed(2)}</span></div>` : ''}
-              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>₹${(data.taxableAmount || 0).toFixed(2)}</span></div>
-              ${(data.cgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span>₹${(data.cgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.sgst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span>₹${(data.sgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.igst || 0) > 0 ? `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>IGST</span><span>₹${(data.igst || 0).toFixed(2)}</span></div>` : ''}
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:3px solid ${primary};font-size:1.2rem;font-weight:800;color:${primary};"><span>GRAND TOTAL</span><span>₹${(data.grandTotal || 0).toFixed(2)}</span></div>
-            </div>
-            <div style="margin-top:1rem;border-top:2px solid ${primary};padding-top:0.5rem;display:flex;justify-content:space-between;">
-              <div>${data.footer?.thankYou || 'Thank you for considering H4 Construction Solutions.'}</div>
-              <div>${data.footer?.signatoryName || 'Authorized Signatory'}</div>
-            </div>
-          </div>
-        `;
-      }
-    };
-
-    // ============================================================
     // MAIN APP
     // ============================================================
     const H4App = {
@@ -2234,7 +1583,7 @@
           document.getElementById('bottomNav').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
         });
         this.populateCustomerSelects();
-        toast('H4 Billing ERP loaded. 🎨 Customize UI with the paintbrush icon.');
+        toast('H4 Billing ERP loaded! 🎉');
       },
 
       setupNavigation() {
@@ -2253,21 +1602,10 @@
             this.navigate(item.dataset.module);
           });
         });
-        document.addEventListener('click', (e) => {
-          const sidebar = document.getElementById('sidebar');
-          const toggle = document.getElementById('menuToggle');
-          if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
-            if (!sidebar.contains(e.target) && e.target !== toggle) {
-              sidebar.classList.remove('active');
-            }
-          }
-        });
-        // Company form
         document.getElementById('companyForm').addEventListener('submit', (e) => {
           e.preventDefault();
           this.saveCompany();
         });
-        // Logo upload
         document.getElementById('compLogoUpload').onchange = (e) => {
           const file = e.target.files[0];
           if (file) {
@@ -2312,7 +1650,7 @@
       populateCustomerSelects() {
         const customers = DB.getList('customers');
         const options = customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-        ['epxCustomer', 'wpCustomer', 'invCustomer'].forEach(id => {
+        ['invCustomer', 'generalQtnCustomer', 'epxCustomer', 'wpCustomer'].forEach(id => {
           const el = document.getElementById(id);
           if (el) {
             const val = el.value;
@@ -2322,7 +1660,6 @@
         });
       },
 
-      // ----- COMPANY -----
       loadCompany() {
         const c = DB.get('company') || {};
         document.getElementById('compLegalName').value = c.legalName || '';
@@ -2330,7 +1667,7 @@
         document.getElementById('compAddress').value = c.address || '';
         document.getElementById('compCity').value = c.city || '';
         document.getElementById('compDistrict').value = c.district || '';
-        document.getElementById('compState').value = c.state || '';
+        document.getElementById('compState').value = c.state || 'Kerala';
         document.getElementById('compPin').value = c.pin || '';
         document.getElementById('compPhone').value = c.phone || '';
         document.getElementById('compWhatsapp').value = c.whatsapp || '';
@@ -2374,7 +1711,6 @@
         toast('Company profile saved!');
       },
 
-      // ----- QUOTATIONS -----
       openQuotationTypeModal() {
         document.getElementById('qtnTypeModal').classList.add('active');
       },
@@ -2383,36 +1719,12 @@
         document.getElementById(id).classList.remove('active');
       },
 
-      newGeneralQuotation() {
-        const q = {
-          id: 'qtn_' + Date.now(),
-          number: getNextQuotationNumber(),
-          date: new Date().toISOString().split('T')[0],
-          quotationType: 'general',
-          templateId: 'tpl_classic',
-          customerId: '',
-          projectName: '',
-          siteAddress: '',
-          reference: '',
-          items: [],
-          status: 'draft',
-          grandTotal: 0,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        DB.add('quotations', q);
-        this.loadQuotations();
-        toast('General quotation created: ' + q.number);
-        this.navigate('quotations');
-      },
-
       loadQuotations() {
         const qs = DB.getList('quotations');
         const customers = DB.getList('customers');
         const container = document.getElementById('quotationsContainer');
         if (qs.length === 0) {
-          container.innerHTML =
-            '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No quotations yet. Click "New Quotation" to start.</div>';
+          container.innerHTML = '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No quotations yet.</div>';
           return;
         }
         const customerMap = {};
@@ -2420,24 +1732,22 @@
         container.innerHTML = `
           <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;">
-              <thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Date</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
               <tbody>
                 ${qs.map(q => {
                   const cust = customerMap[q.customerId] || {};
-                  const typeMap = { 'general': '📄 General', 'premium-epoxy': '✨ Epoxy', 'waterproofing': '💧 Waterproofing' };
+                  const typeMap = { 'general': '📄 General', 'epoxy': '✨ Epoxy', 'waterproofing': '💧 WP' };
                   return `<tr>
                     <td><strong>${q.number}</strong></td>
                     <td>${cust.name || 'Unknown'}</td>
                     <td>₹${(q.grandTotal||0).toFixed(2)}</td>
                     <td>${q.date || ''}</td>
                     <td>${typeMap[q.quotationType] || q.quotationType}</td>
-                    <td><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">${q.status}</span></td>
                     <td>
-                      ${q.quotationType === 'general' ? `<button class="btn btn-sm btn-outline" onclick="H4App.editGeneralQuotation('${q.id}')">✏️</button>` : ''}
-                      ${q.quotationType === 'premium-epoxy' ? `<button class="btn btn-sm btn-outline" onclick="H4Epoxy.edit('${q.id}')">✏️</button>` : ''}
+                      ${q.quotationType === 'general' ? `<button class="btn btn-sm btn-outline" onclick="H4GeneralQuotation.edit('${q.id}')">✏️</button>` : ''}
+                      ${q.quotationType === 'epoxy' ? `<button class="btn btn-sm btn-outline" onclick="H4Epoxy.edit('${q.id}')">✏️</button>` : ''}
                       ${q.quotationType === 'waterproofing' ? `<button class="btn btn-sm btn-outline" onclick="H4Waterproofing.edit('${q.id}')">✏️</button>` : ''}
                       <button class="btn btn-sm btn-whatsapp" onclick="H4App.whatsappQuotation('${q.id}')">📤</button>
-                      <button class="btn btn-sm btn-danger" onclick="H4App.deleteQuotation('${q.id}')">🗑️</button>
                     </td>
                   </tr>`;
                 }).join('')}
@@ -2447,63 +1757,29 @@
         `;
       },
 
-      editGeneralQuotation(id) {
-        const q = DB.getItem('quotations', id);
-        if (!q) { toast('Quotation not found.', 'error'); return; }
-        const newName = prompt('Edit quotation details (Customer Name):', q.customerId || '');
-        if (newName !== null) {
-          const customers = DB.getList('customers');
-          let cust = customers.find(c => c.name === newName);
-          if (!cust && newName) {
-            cust = { id: 'cust_' + Date.now(), name: newName, phone: '', company: '', email: '', address: '',
-              city: '', district: '', state: '', pin: '', gstin: '' };
-            DB.add('customers', cust);
-            this.loadCustomers();
-            this.populateCustomerSelects();
-          }
-          DB.update('quotations', id, { customerId: cust ? cust.id : '' });
-          this.loadQuotations();
-          toast('Quotation updated.');
-        }
-      },
-
-      deleteQuotation(id) {
-        if (!confirm('Delete this quotation?')) return;
-        DB.delete('quotations', id);
-        this.loadQuotations();
-        this.updateDashboard();
-        toast('Quotation deleted.');
-      },
-
       whatsappQuotation(id) {
         const q = DB.getItem('quotations', id);
-        if (!q) { toast('Quotation not found.', 'error'); return; }
+        if (!q) { toast('Not found.', 'error'); return; }
         const customer = DB.getItem('customers', q.customerId) || {};
         const phone = customer.whatsapp || customer.phone || '';
-        const msg =
-          `Dear ${customer.name || 'Customer'},\n\nPlease find your quotation.\n\nQuotation No: ${q.number}\nAmount: ₹${(q.grandTotal||0).toFixed(2)}\n\nThank you for your business.\n\n${(DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
+        const msg = `Dear ${customer.name || 'Customer'},\n\nQuotation: ${q.number}\nAmount: ₹${(q.grandTotal||0).toFixed(2)}\n\nThank you!\n\n${(DB.get('company')||{}).brandName || 'H4'}`;
         const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
-        if (phone) {
-          window.open(url, '_blank');
-        } else {
-          toast('Customer WhatsApp number not available.', 'warning');
-        }
+        if (phone) window.open(url, '_blank');
+        else toast('No WhatsApp number', 'warning');
       },
 
-      // ----- CUSTOMERS (Full CRUD) -----
       loadCustomers() {
         const list = DB.getList('customers');
         const container = document.getElementById('customersContainer');
         if (list.length === 0) {
-          container.innerHTML =
-            '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No customers yet. Click "Add Customer".</div>';
+          container.innerHTML = '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No customers yet.</div>';
           return;
         }
         container.innerHTML = list.map(c => `
           <div class="list-item">
             <div class="item-info">
               <div class="name">${c.name}</div>
-              <div class="detail">${c.company || ''} ${c.phone ? '· ' + c.phone : ''} ${c.email ? '· ' + c.email : ''}</div>
+              <div class="detail">${c.phone || ''} ${c.email ? '| '+c.email : ''}</div>
             </div>
             <div class="item-actions">
               <button class="btn btn-sm btn-outline" onclick="H4Customers.editCustomer('${c.id}')">✏️</button>
@@ -2514,20 +1790,18 @@
         this.populateCustomerSelects();
       },
 
-      // ----- PRODUCTS (Full CRUD) -----
       loadProducts() {
         const list = DB.getList('products');
         const container = document.getElementById('productsContainer');
         if (list.length === 0) {
-          container.innerHTML =
-            '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No products yet. Click "Add Product".</div>';
+          container.innerHTML = '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No products yet.</div>';
           return;
         }
         container.innerHTML = list.map(p => `
           <div class="list-item">
             <div class="item-info">
               <div class="name">${p.name}</div>
-              <div class="detail">${p.category || ''} · ${p.unit || ''} · ₹${p.sellingRate || 0} ${p.gst ? '· GST ' + p.gst + '%' : ''}</div>
+              <div class="detail">${p.category || ''} · ${p.unit || ''} · ₹${p.sellingRate || 0}</div>
             </div>
             <div class="item-actions">
               <button class="btn btn-sm btn-outline" onclick="H4Products.editProduct('${p.id}')">✏️</button>
@@ -2537,7 +1811,6 @@
         `).join('');
       },
 
-      // ----- INVOICES -----
       loadInvoices() {
         const invs = DB.getList('invoices');
         const customers = DB.getList('customers');
@@ -2545,31 +1818,27 @@
         customers.forEach(c => customerMap[c.id] = c);
         const container = document.getElementById('invoicesContainer');
         if (invs.length === 0) {
-          container.innerHTML =
-            '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No invoices yet. Click "New Invoice".</div>';
+          container.innerHTML = '<div class="empty-state" style="text-align:center;padding:2rem;color:#757575;">No invoices yet.</div>';
           return;
         }
         container.innerHTML = `
           <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;">
-              <thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Paid</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody>
                 ${invs.map(inv => {
                   const cust = customerMap[inv.customerId] || {};
                   const paid = inv.paidAmount || 0;
                   const total = inv.grandTotal || 0;
-                  const balance = Math.max(0, total - paid);
                   return `<tr>
                     <td><strong>${inv.number}</strong></td>
                     <td>${cust.name || 'Unknown'}</td>
                     <td>₹${total.toFixed(2)}</td>
                     <td>₹${paid.toFixed(2)}</td>
-                    <td>₹${balance.toFixed(2)}</td>
-                    <td><span style="background:${inv.paymentStatus==='paid'?'#e8f5e9':inv.paymentStatus==='partial'?'#fff3e0':'#ffebee'};color:${inv.paymentStatus==='paid'?'#2e7d32':inv.paymentStatus==='partial'?'#e65100':'#c62828'};padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">${inv.paymentStatus||'unpaid'}</span></td>
+                    <td><span style="background:#e8f5e9;color:#2e7d32;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">${inv.paymentStatus||'unpaid'}</span></td>
                     <td>
                       <button class="btn btn-sm btn-outline" onclick="H4Invoice.editInvoice('${inv.id}')">✏️</button>
-                      <button class="btn btn-sm btn-whatsapp" onclick="H4Invoice.whatsappExistingInvoice('${inv.id}')">📤</button>
-                      <button class="btn btn-sm btn-danger" onclick="H4App.deleteInvoice('${inv.id}')">🗑️</button>
+                      <button class="btn btn-sm btn-whatsapp" onclick="H4Invoice.whatsappInvoice('${inv.id}')">📤</button>
                     </td>
                   </tr>`;
                 }).join('')}
@@ -2579,15 +1848,6 @@
         `;
       },
 
-      deleteInvoice(id) {
-        if (!confirm('Delete this invoice?')) return;
-        DB.delete('invoices', id);
-        this.loadInvoices();
-        this.updateDashboard();
-        toast('Invoice deleted.');
-      },
-
-      // ----- DASHBOARD -----
       updateDashboard() {
         const qs = DB.getList('quotations');
         const invs = DB.getList('invoices');
@@ -2599,7 +1859,6 @@
         document.getElementById('totalCustomers').textContent = custs.length;
       },
 
-      // ----- BACKUP -----
       downloadBackup() {
         const data = DB.get();
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2614,13 +1873,13 @@
 
       restoreBackup() {
         const file = document.getElementById('backupFileInput').files[0];
-        if (!file) { toast('Please select a backup file.', 'error'); return; }
+        if (!file) { toast('Select a backup file.', 'error'); return; }
         const reader = new FileReader();
         reader.onload = (e) => {
           try {
             const data = JSON.parse(e.target.result);
             localStorage.setItem(DB.STORAGE_KEY, JSON.stringify(data));
-            toast('Backup restored! Refreshing...');
+            toast('Restored! Refreshing...');
             setTimeout(() => location.reload(), 1000);
           } catch (err) {
             toast('Invalid backup file.', 'error');
@@ -2629,7 +1888,6 @@
         reader.readAsText(file);
       },
 
-      // ----- CUSTOMIZATION -----
       toggleCustomizer() {
         document.getElementById('customizerPanel').classList.toggle('open');
       },
@@ -2640,22 +1898,15 @@
         const primary = document.getElementById('custPrimary').value;
         const secondary = document.getElementById('custSecondary').value;
         const accent = document.getElementById('custAccent').value;
-        const cardPad = document.getElementById('custCardPadding').value;
-        const scale = document.getElementById('custModuleScale').value;
 
         document.documentElement.style.setProperty('--font-family', font);
         document.documentElement.style.setProperty('--base-font-size', fontSize + 'px');
         document.documentElement.style.setProperty('--primary', primary);
         document.documentElement.style.setProperty('--secondary', secondary);
         document.documentElement.style.setProperty('--accent', accent);
-        document.documentElement.style.setProperty('--card-padding', cardPad + 'rem');
-        document.documentElement.style.setProperty('--module-scale', scale);
-        document.querySelector('.main-content').style.transform = 'scale(' + scale + ')';
-        document.querySelector('.main-content').style.transformOrigin = 'top center';
 
-        localStorage.setItem('h4_customization', JSON.stringify({ font, fontSize, primary, secondary, accent,
-          cardPad, scale }));
-        toast('Customizations applied!');
+        localStorage.setItem('h4_customization', JSON.stringify({ font, fontSize, primary, secondary, accent }));
+        toast('UI updated!');
       },
 
       resetCustomizations() {
@@ -2672,27 +1923,17 @@
           document.getElementById('custPrimary').value = c.primary || '#6A3FA0';
           document.getElementById('custSecondary').value = c.secondary || '#8A6510';
           document.getElementById('custAccent').value = c.accent || '#00BCD4';
-          document.getElementById('custCardPadding').value = c.cardPad || 1.25;
-          document.getElementById('custModuleScale').value = c.scale || 1.0;
           document.getElementById('custFontSizeDisplay').textContent = c.fontSize || 15;
-          document.getElementById('custCardPaddingDisplay').textContent = c.cardPad || 1.25;
-          document.getElementById('custModuleScaleDisplay').textContent = c.scale || 1.0;
           this.applyCustomizations();
         }
         document.getElementById('custFontSize').oninput = function() {
           document.getElementById('custFontSizeDisplay').textContent = this.value;
         };
-        document.getElementById('custCardPadding').oninput = function() {
-          document.getElementById('custCardPaddingDisplay').textContent = this.value;
-        };
-        document.getElementById('custModuleScale').oninput = function() {
-          document.getElementById('custModuleScaleDisplay').textContent = this.value;
-        };
       }
     };
 
     // ============================================================
-    // CUSTOMERS MODULE (Full CRUD)
+    // CUSTOMERS MODULE
     // ============================================================
     const H4Customers = {
       editingId: null,
@@ -2744,7 +1985,7 @@
           gstin: document.getElementById('cGstin').value.trim(),
           updatedAt: new Date().toISOString()
         };
-        if (!data.name) { toast('Name is required.', 'error'); return; }
+        if (!data.name) { toast('Name required.', 'error'); return; }
         if (this.editingId) {
           DB.update('customers', this.editingId, data);
           toast('Customer updated!');
@@ -2763,7 +2004,7 @@
       },
 
       deleteCustomer(id) {
-        if (!confirm('Delete this customer?')) return;
+        if (!confirm('Delete customer?')) return;
         DB.delete('customers', id);
         H4App.loadCustomers();
         H4App.populateCustomerSelects();
@@ -2773,7 +2014,7 @@
     };
 
     // ============================================================
-    // PRODUCTS MODULE (Full CRUD)
+    // PRODUCTS MODULE
     // ============================================================
     const H4Products = {
       editingId: null,
@@ -2834,7 +2075,7 @@
           slabs: slabs,
           updatedAt: new Date().toISOString()
         };
-        if (!data.name) { toast('Product name is required.', 'error'); return; }
+        if (!data.name) { toast('Product name required.', 'error'); return; }
         if (this.editingId) {
           DB.update('products', this.editingId, data);
           toast('Product updated!');
@@ -2853,7 +2094,7 @@
       },
 
       deleteProduct(id) {
-        if (!confirm('Delete this product?')) return;
+        if (!confirm('Delete product?')) return;
         DB.delete('products', id);
         H4App.loadProducts();
         H4App.updateDashboard();
@@ -2862,15 +2103,48 @@
     };
 
     // ============================================================
-    // INVOICE ENGINE - FULL PROFESSIONAL GENERAL INVOICE MODULE
+    // GENERAL QUOTATION MODULE
+    // ============================================================
+    const H4GeneralQuotation = {
+      new() {
+        const q = {
+          id: 'qtn_' + Date.now(),
+          number: getNextQuotationNumber(),
+          date: new Date().toISOString().split('T')[0],
+          quotationType: 'general',
+          templateId: 'classic',
+          customerId: '',
+          projectName: '',
+          siteAddress: '',
+          reference: '',
+          items: [],
+          status: 'draft',
+          grandTotal: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        DB.add('quotations', q);
+        this.edit(q.id);
+        toast('New general quotation created.');
+      },
+
+      edit(id) {
+        const q = DB.getItem('quotations', id);
+        if (!q) { toast('Not found.', 'error'); return; }
+        H4App.navigate('quotations');
+        alert('General Quotation editing - placeholder implementation.\n\nFull implementation would include:\n- Multi-step builder\n- Item management\n- Live A4 preview\n- Template selection\n- Calculation engine\n- Print/PDF/WhatsApp\n\nQuotation: ' + q.number);
+      }
+    };
+
+    // ============================================================
+    // GENERAL INVOICE MODULE
     // ============================================================
     const H4Invoice = {
       editingId: null,
       items: [],
       currentStep: 1,
-      totalSteps: 6,
+      totalSteps: 4,
 
-      // ----- Public API -----
       newInvoice() {
         this.editingId = null;
         this.items = [];
@@ -2880,16 +2154,6 @@
         this.buildBuilderUI();
         this.generateNumber();
         document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
-        document.getElementById('invDueDate').value = '';
-        document.getElementById('invCustomer').value = '';
-        document.getElementById('invProject').value = '';
-        document.getElementById('invReference').value = '';
-        document.getElementById('invNotes').value = '';
-        document.getElementById('invTerms').value = '';
-        document.getElementById('invBankDetails').value = (DB.get('company') || {}).bankDetails || '';
-        document.getElementById('invPaidAmount').value = 0;
-        document.getElementById('invPaymentStatus').value = 'unpaid';
-        document.getElementById('invTemplate').value = 'tpl_classic';
         this.populateCustomerSelects();
         this.renderItems();
         this.calculate();
@@ -2914,12 +2178,7 @@
         document.getElementById('invCustomer').value = inv.customerId || '';
         document.getElementById('invProject').value = inv.projectName || '';
         document.getElementById('invReference').value = inv.reference || '';
-        document.getElementById('invNotes').value = inv.notes || '';
-        document.getElementById('invTerms').value = inv.terms || '';
-        document.getElementById('invBankDetails').value = inv.bankDetails || (DB.get('company') || {}).bankDetails || '';
-        document.getElementById('invPaidAmount').value = inv.paidAmount || 0;
-        document.getElementById('invPaymentStatus').value = inv.paymentStatus || 'unpaid';
-        document.getElementById('invTemplate').value = inv.templateId || 'tpl_classic';
+        document.getElementById('invTemplate').value = inv.templateId || 'classic';
         this.populateCustomerSelects();
         this.renderItems();
         this.calculate();
@@ -2929,7 +2188,6 @@
         toast('Editing invoice: ' + inv.number);
       },
 
-      // ----- UI Builder -----
       buildBuilderUI() {
         const container = document.getElementById('invoiceBuilderContainer');
         container.innerHTML = `
@@ -2949,6 +2207,15 @@
                     <div class="form-group"><label>Reference</label><input type="text" id="invReference" onchange="H4Invoice.calculate();"></div>
                   </div>
                   <div class="form-group"><label>Project Name</label><input type="text" id="invProject" onchange="H4Invoice.calculate();"></div>
+                  <div class="form-group">
+                    <label>Template</label>
+                    <select id="invTemplate" onchange="H4Invoice.updatePreview()">
+                      <option value="classic">Classic</option>
+                      <option value="modern">Modern</option>
+                      <option value="premium">H4 Premium</option>
+                      <option value="simple">Simple</option>
+                    </select>
+                  </div>
                 </div>
               </div>
               <!-- Step 2: Customer -->
@@ -2959,7 +2226,7 @@
                     <label>Customer</label>
                     <div class="customer-select-row">
                       <select id="invCustomer" onchange="H4Invoice.onCustomerChange()"></select>
-                      <button class="btn btn-sm btn-outline" onclick="H4Invoice.openNewCustomerModal()">➕</button>
+                      <button class="btn btn-sm btn-outline" onclick="H4Customers.openModal()">➕</button>
                     </div>
                   </div>
                   <div id="invCustomerInfo" class="customer-info-box">
@@ -2970,72 +2237,55 @@
               <!-- Step 3: Items -->
               <div class="builder-step-section" data-step="3">
                 <div class="card">
-                  <div class="card-header"><h2>📦 Items</h2><button class="btn btn-success btn-sm" onclick="H4Invoice.addItem()">➕ Add Item</button></div>
+                  <div class="card-header"><h2>📦 Items</h2><button class="btn btn-success btn-sm" onclick="H4Invoice.addItem()">➕ Add</button></div>
                   <div id="invoiceItemsContainer"></div>
                 </div>
               </div>
-              <!-- Step 4: Calculation -->
+              <!-- Step 4: Calculation & Payment -->
               <div class="builder-step-section" data-step="4">
                 <div class="card">
-                  <div class="card-header"><h2>🧮 Calculation</h2></div>
+                  <div class="card-header"><h2>💰 Calculation & Payment</h2></div>
                   <div class="form-row">
-                    <div class="form-group"><label>Discount</label>
+                    <div class="form-group"><label>Discount (₹ or %)</label>
                       <div style="display:flex;gap:0.5rem;">
                         <input type="number" id="invDiscountValue" step="0.01" min="0" value="0" oninput="H4Invoice.calculate()" style="flex:1;">
                         <select id="invDiscountType" onchange="H4Invoice.calculate()" style="width:80px;flex:none;">
-                          <option value="percentage">%</option>
                           <option value="flat">₹</option>
+                          <option value="percentage">%</option>
                         </select>
                       </div>
                     </div>
-                    <div class="form-group"><label>Tax Mode</label>
-                      <select id="invTaxMode" onchange="H4Invoice.calculate()">
-                        <option value="auto">Automatic</option>
-                        <option value="cgst-sgst">CGST + SGST</option>
-                        <option value="igst">IGST</option>
+                    <div class="form-group"><label>GST Mode</label>
+                      <select id="invGstMode" onchange="H4Invoice.calculate()">
+                        <option value="cgst-sgst">CGST + SGST (18%)</option>
+                        <option value="igst">IGST (18%)</option>
                         <option value="no-tax">No Tax</option>
                       </select>
                     </div>
                   </div>
-                  <div style="background:#f5f5f5;padding:1.2rem;border-left:4px solid var(--primary);border-radius:8px;">
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span id="invSubtotal">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span id="invDiscountAmt">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span id="invTaxable">₹0.00</span></div>
-                    <div id="invCgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span id="invCGST">₹0.00</span></div>
-                    <div id="invSgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span id="invSGST">₹0.00</span></div>
+                  <div style="background:#f5f5f5;padding:1rem;border-left:4px solid var(--primary);border-radius:8px;">
+                    <div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span>Subtotal</span><span id="invSubtotal">₹0.00</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span>Discount</span><span id="invDiscountAmt">₹0.00</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:0.3rem 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span id="invTaxable">₹0.00</span></div>
+                    <div id="invCgstRow" style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span>CGST</span><span id="invCGST">₹0.00</span></div>
+                    <div id="invSgstRow" style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span>SGST</span><span id="invSGST">₹0.00</span></div>
                     <div id="invIgstRow" style="display:none;"><span>IGST</span><span id="invIGST">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Round Off</span><span id="invRoundOff">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:2px solid var(--primary);font-weight:700;font-size:1.2rem;color:var(--primary);"><span>GRAND TOTAL</span><span id="invGrandTotal">₹0.00</span></div>
-                    <div style="font-size:0.9rem;font-weight:600;color:#757575;padding-top:0.4rem;border-top:1px solid #e0e0e0;margin-top:0.4rem;" id="invAmountWords">Rupees Zero Only</div>
+                    <div style="display:flex;justify-content:space-between;padding:0.3rem 0;border-bottom:1px solid #e0e0e0;"><span>Round Off</span><span id="invRoundOff">₹0.00</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:2px solid var(--primary);font-weight:700;font-size:1.2rem;color:var(--primary);"><span>GRAND TOTAL</span><span id="invGrandTotal">₹0.00</span></div>
+                    <div style="font-size:0.85rem;font-weight:600;color:#757575;padding:0.5rem 0;border-top:1px solid #e0e0e0;margin-top:0.5rem;" id="invAmountWords">Rupees Zero Only</div>
                   </div>
-                </div>
-              </div>
-              <!-- Step 5: Payment -->
-              <div class="builder-step-section" data-step="5">
-                <div class="card">
-                  <div class="card-header"><h2>💰 Payment</h2></div>
-                  <div class="form-row">
-                    <div class="form-group"><label>Paid Amount</label><input type="number" id="invPaidAmount" step="0.01" min="0" value="0" oninput="H4Invoice.updatePaymentStatus()"></div>
-                    <div class="form-group"><label>Balance</label><input type="text" id="invBalance" readonly style="background:#f5f5f5;"></div>
+                  <div style="margin-top:1rem;">
+                    <div class="form-row">
+                      <div class="form-group"><label>Paid Amount</label><input type="number" id="invPaidAmount" step="0.01" min="0" value="0" oninput="H4Invoice.updatePaymentStatus()"></div>
+                      <div class="form-group"><label>Payment Status</label>
+                        <select id="invPaymentStatus">
+                          <option value="unpaid">Unpaid</option>
+                          <option value="partial">Partial</option>
+                          <option value="paid">Paid</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group"><label>Payment Status</label>
-                    <select id="invPaymentStatus">
-                      <option value="draft">Draft</option>
-                      <option value="unpaid">Unpaid</option>
-                      <option value="partial">Partially Paid</option>
-                      <option value="paid">Paid</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <!-- Step 6: Notes / Terms -->
-              <div class="builder-step-section" data-step="6">
-                <div class="card">
-                  <div class="card-header"><h2>📝 Notes & Terms</h2></div>
-                  <div class="form-group"><label>Terms & Conditions</label><textarea id="invTerms" rows="3" placeholder="Payment terms, warranty, etc."></textarea></div>
-                  <div class="form-group"><label>Bank Details</label><textarea id="invBankDetails" rows="2"></textarea></div>
-                  <div class="form-group"><label>Notes</label><textarea id="invNotes" rows="2"></textarea></div>
                 </div>
               </div>
             </div>
@@ -3043,38 +2293,24 @@
               <div class="preview-a4-container" id="invPreviewContainer"></div>
             </div>
           </div>
-          <div class="builder-bottombar" style="border-top:1px solid #e0e0e0;padding:0.7rem 1rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;background:white;">
+          <div class="builder-bottombar">
             <button class="btn btn-outline" id="invPrevBtn" onclick="H4Invoice.prevStep()">← Previous</button>
-            <span class="builder-step-counter" id="invStepCounter">Step 1 / 6</span>
+            <span class="builder-step-counter" id="invStepCounter">Step 1 / 4</span>
             <button class="btn btn-primary" id="invNextBtn" onclick="H4Invoice.nextStep()">Next →</button>
-            <div style="display:flex;gap:0.5rem;">
-              <button class="btn btn-outline" onclick="H4Invoice.backToList()">↩️ Cancel</button>
+            <div style="display:flex;gap:0.5rem;margin-left:auto;">
+              <button class="btn btn-outline" onclick="H4Invoice.backToList()">Cancel</button>
               <button class="btn btn-secondary" onclick="H4Invoice.printInvoice()">🖨️ Print</button>
-              <button class="btn btn-whatsapp" onclick="H4Invoice.whatsappInvoice()">📤 WhatsApp</button>
               <button class="btn btn-primary" onclick="H4Invoice.saveInvoice()">💾 Save</button>
             </div>
           </div>
         `;
-        // Populate template dropdown
-        const templateSelect = document.createElement('select');
-        templateSelect.id = 'invTemplate';
-        templateSelect.style = 'margin-left:1rem;padding:0.3rem;border-radius:6px;border:1px solid #e0e0e0;';
-        const templates = DB.getList('templates');
-        templates.forEach(t => {
-          const opt = document.createElement('option');
-          opt.value = t.id;
-          opt.textContent = t.name;
-          templateSelect.appendChild(opt);
-        });
-        templateSelect.onchange = () => H4Invoice.updatePreview();
-        document.querySelector('#invSteps').after(templateSelect);
         this.renderSteps();
       },
 
       renderSteps() {
         const container = document.getElementById('invSteps');
         if (!container) return;
-        const labels = ['Details', 'Customer', 'Items', 'Calculation', 'Payment', 'Notes'];
+        const labels = ['Details', 'Customer', 'Items', 'Payment'];
         container.innerHTML = labels.map((label, i) => {
           const step = i + 1;
           let cls = 'builder-step-chip';
@@ -3109,15 +2345,14 @@
         }
       },
 
-      // ----- Customer -----
       populateCustomerSelects() {
         H4App.populateCustomerSelects();
         const sel = document.getElementById('invCustomer');
         if (sel) {
-          const opt = document.createElement('option');
-          opt.value = 'new';
-          opt.textContent = '➕ New Customer';
-          sel.appendChild(opt);
+          const val = sel.value;
+          const opts = sel.innerHTML;
+          sel.innerHTML = opts + (opts.includes('➕') ? '' : '<option value="new">➕ New Customer</option>');
+          if (val) sel.value = val;
         }
         this.onCustomerChange();
       },
@@ -3128,7 +2363,19 @@
         if (!sel || !info) return;
         const val = sel.value;
         if (val === 'new') {
-          this.openNewCustomerModal();
+          H4Customers.openModal();
+          const origClose = H4Customers.closeModal;
+          H4Customers.closeModal = function() {
+            origClose.call(this);
+            H4Invoice.populateCustomerSelects();
+            const customers = DB.getList('customers');
+            if (customers.length) {
+              const last = customers[customers.length - 1];
+              sel.value = last.id;
+              H4Invoice.onCustomerChange();
+            }
+            H4Customers.closeModal = origClose;
+          };
           return;
         }
         const customer = DB.getItem('customers', val);
@@ -3137,34 +2384,16 @@
             <strong>${customer.name}</strong><br>
             ${customer.company ? customer.company + '<br>' : ''}
             ${customer.address || ''}<br>
-            Phone: ${customer.phone || ''} ${customer.whatsapp ? '| WhatsApp: '+customer.whatsapp : ''}<br>
-            Email: ${customer.email || ''}<br>
+            Phone: ${customer.phone || ''} ${customer.whatsapp ? '| WA: '+customer.whatsapp : ''}<br>
             GSTIN: ${customer.gstin || 'N/A'}
           `;
         } else {
-          info.innerHTML = '<p class="text-muted">Select a customer to view details.</p>';
+          info.innerHTML = '<p class="text-muted">Select a customer.</p>';
         }
         this.calculate();
         this.updatePreview();
       },
 
-      openNewCustomerModal() {
-        H4Customers.openModal();
-        const origClose = H4Customers.closeModal;
-        H4Customers.closeModal = function() {
-          origClose.call(this);
-          H4Invoice.populateCustomerSelects();
-          const customers = DB.getList('customers');
-          if (customers.length) {
-            const last = customers[customers.length - 1];
-            document.getElementById('invCustomer').value = last.id;
-            H4Invoice.onCustomerChange();
-          }
-          H4Customers.closeModal = origClose;
-        };
-      },
-
-      // ----- Items with Product Dropdown -----
       addItem() {
         const products = DB.getList('products');
         const productOptions = products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
@@ -3172,15 +2401,12 @@
           id: 'item_' + Date.now(),
           productId: '',
           description: '',
-          category: '',
           quantity: 1,
           unit: 'Nos',
           rate: 0,
           gst: 18,
           discount: 0,
-          discountType: 'flat',
-          rateSource: 'manual',
-          hsn: ''
+          discountType: 'flat'
         });
         this.renderItems();
         this.calculate();
@@ -3193,20 +2419,16 @@
         const products = DB.getList('products');
         const productOptions = products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
         if (this.items.length === 0) {
-          container.innerHTML =
-            '<div class="empty-state" style="text-align:center;padding:1.5rem;color:#757575;">No items. Click "Add Item".</div>';
+          container.innerHTML = '<div class="empty-state" style="text-align:center;padding:1.5rem;color:#757575;">No items. Click "Add".</div>';
           return;
         }
         container.innerHTML = this.items.map((item, idx) => {
           const total = (item.quantity || 0) * (item.rate || 0);
-          const selected = item.productId || '';
           return `
             <div class="item-card">
               <div class="item-header">
-                <span style="font-weight:600;">#${idx+1} ${item.description || 'New Item'}</span>
-                <div>
-                  <button class="btn btn-sm btn-danger" onclick="H4Invoice.removeItem(${idx})">✕</button>
-                </div>
+                <span style="font-weight:600;">#${idx+1} ${item.description || 'Item'}</span>
+                <button class="btn btn-sm btn-danger" onclick="H4Invoice.removeItem(${idx})">✕</button>
               </div>
               <div class="item-grid">
                 <div class="form-group"><label>Product</label>
@@ -3216,33 +2438,21 @@
                   </select>
                 </div>
                 <div class="form-group"><label>Description</label><input value="${item.description}" onchange="H4Invoice.updateItem(${idx}, 'description', this.value)"></div>
-                <div class="form-group"><label>Category</label><input value="${item.category}" onchange="H4Invoice.updateItem(${idx}, 'category', this.value)"></div>
                 <div class="form-group"><label>Qty</label><input type="number" step="0.01" min="0" value="${item.quantity}" onchange="H4Invoice.updateItem(${idx}, 'quantity', this.value)"></div>
                 <div class="form-group"><label>Unit</label><input value="${item.unit}" onchange="H4Invoice.updateItem(${idx}, 'unit', this.value)"></div>
                 <div class="form-group"><label>Rate</label><input type="number" step="0.01" min="0" value="${item.rate}" onchange="H4Invoice.updateItem(${idx}, 'rate', this.value)"></div>
                 <div class="form-group"><label>GST %</label><input type="number" step="0.01" min="0" value="${item.gst}" onchange="H4Invoice.updateItem(${idx}, 'gst', this.value)"></div>
-                <div class="form-group"><label>HSN</label><input value="${item.hsn || ''}" onchange="H4Invoice.updateItem(${idx}, 'hsn', this.value)"></div>
-                <div class="form-group"><label>Discount</label>
-                  <div style="display:flex;gap:4px;">
-                    <input type="number" step="0.01" min="0" value="${item.discount}" onchange="H4Invoice.updateItem(${idx}, 'discount', this.value)" style="flex:1;">
-                    <select onchange="H4Invoice.updateItem(${idx}, 'discountType', this.value)" style="width:60px;flex:none;">
-                      <option value="flat" ${item.discountType==='flat'?'selected':''}>₹</option>
-                      <option value="percentage" ${item.discountType==='percentage'?'selected':''}>%</option>
-                    </select>
-                  </div>
-                </div>
               </div>
               <div class="item-total">Total: ₹${total.toFixed(2)}</div>
-              <div style="font-size:0.75rem;color:#757575;margin-top:0.3rem;">
-                ${item.rateSource === 'auto' ? '🤖 Auto rate from slab' : '✏️ Manual rate'}
-              </div>
             </div>
           `;
         }).join('');
-        // Set selected products
         this.items.forEach((item, idx) => {
-          const sel = container.querySelectorAll('.item-card select')[idx];
-          if (sel) sel.value = item.productId || '';
+          const card = container.querySelectorAll('.item-card')[idx];
+          if (card) {
+            const sel = card.querySelector('select');
+            if (sel) sel.value = item.productId || '';
+          }
         });
       },
 
@@ -3250,11 +2460,9 @@
         if (!productId) {
           this.updateItem(idx, 'productId', '');
           this.updateItem(idx, 'description', '');
-          this.updateItem(idx, 'unit', '');
+          this.updateItem(idx, 'unit', 'Nos');
           this.updateItem(idx, 'rate', 0);
           this.updateItem(idx, 'gst', 18);
-          this.updateItem(idx, 'category', '');
-          this.updateItem(idx, 'hsn', '');
           return;
         }
         const product = DB.getItem('products', productId);
@@ -3262,13 +2470,10 @@
         this.updateItem(idx, 'productId', productId);
         this.updateItem(idx, 'description', product.name);
         this.updateItem(idx, 'unit', product.unit || 'Nos');
-        this.updateItem(idx, 'category', product.category || '');
-        this.updateItem(idx, 'hsn', product.hsn || '');
         this.updateItem(idx, 'gst', product.gst || 18);
         const qty = this.items[idx].quantity || 1;
-        let rate = getPriceSlabRate(product, qty);
+        const rate = getPriceSlabRate(product, qty);
         this.updateItem(idx, 'rate', rate);
-        this.updateItem(idx, 'rateSource', 'auto');
         this.calculate();
         this.renderItems();
         this.updatePreview();
@@ -3284,7 +2489,6 @@
             if (product) {
               const rate = getPriceSlabRate(product, value);
               this.items[idx].rate = rate;
-              this.items[idx].rateSource = 'auto';
             }
           }
         }
@@ -3300,28 +2504,10 @@
         this.updatePreview();
       },
 
-      // ----- Calculation -----
       calculate() {
-        const items = this.items.map(item => ({
-          quantity: item.quantity || 0,
-          rate: item.rate || 0,
-          discount: item.discount || 0,
-          discountType: item.discountType || 'flat',
-          gst: item.gst || 0
-        }));
-
         let subtotal = 0;
-        let totalDiscount = 0;
-        const taxMode = document.getElementById('invTaxMode').value;
-
-        items.forEach(it => {
-          const sub = it.quantity * it.rate;
-          let disc = 0;
-          if (it.discountType === 'percentage') disc = sub * it.discount / 100;
-          else disc = it.discount;
-          disc = Math.min(disc, sub);
-          subtotal += sub;
-          totalDiscount += disc;
+        this.items.forEach(item => {
+          subtotal += (item.quantity || 0) * (item.rate || 0);
         });
 
         const discVal = parseFloat(document.getElementById('invDiscountValue').value) || 0;
@@ -3333,12 +2519,11 @@
         }
 
         const taxable = Math.max(0, subtotal - discountAmt);
+        const gstMode = document.getElementById('invGstMode').value;
         let cgst = 0, sgst = 0, igst = 0;
-        if (taxMode !== 'no-tax') {
-          const defaultGst = items.length ? items[0].gst : 18;
-          const gstTotal = taxable * (defaultGst / 100);
-          if (taxMode === 'igst' || (taxMode === 'auto' && document.getElementById('invCustomer').value && DB
-              .getItem('customers', document.getElementById('invCustomer').value)?.state !== 'Kerala')) {
+        if (gstMode !== 'no-tax') {
+          const gstTotal = taxable * 0.18;
+          if (gstMode === 'igst') {
             igst = gstTotal;
           } else {
             cgst = gstTotal / 2;
@@ -3357,1078 +2542,4 @@
         document.getElementById('invIGST').textContent = '₹' + igst.toFixed(2);
         document.getElementById('invRoundOff').textContent = '₹' + roundOff.toFixed(2);
         document.getElementById('invGrandTotal').textContent = '₹' + grandTotal.toFixed(2);
-        document.getElementById('invAmountWords').textContent = 'Rupees ' + numberToWords(grandTotal) + ' Only';
-        this.updatePaymentStatus();
-        this.updatePreview();
-      },
-
-      updatePaymentStatus() {
-        const paid = parseFloat(document.getElementById('invPaidAmount').value) || 0;
-        const total = parseFloat(document.getElementById('invGrandTotal').textContent.replace('₹', '')) || 0;
-        const balance = Math.max(0, total - paid);
-        document.getElementById('invBalance').value = '₹' + balance.toFixed(2);
-        let status = 'unpaid';
-        if (total === 0) status = 'draft';
-        else if (paid >= total) status = 'paid';
-        else if (paid > 0) status = 'partial';
-        document.getElementById('invPaymentStatus').value = status;
-      },
-
-      // ----- Preview (A4) using H4TemplateEngine -----
-      updatePreview() {
-        const container = document.getElementById('invPreviewContainer');
-        if (!container) return;
-        const data = this.collectData();
-        const templateId = document.getElementById('invTemplate')?.value || 'tpl_classic';
-        
-        // Calculate totals for the preview
-        this.calculate();
-        data.subtotal = parseFloat(document.getElementById('invSubtotal').textContent.replace('₹', ''));
-        data.discountAmount = parseFloat(document.getElementById('invDiscountAmt').textContent.replace('₹', ''));
-        data.taxableAmount = parseFloat(document.getElementById('invTaxable').textContent.replace('₹', ''));
-        data.cgst = parseFloat(document.getElementById('invCGST').textContent.replace('₹', ''));
-        data.sgst = parseFloat(document.getElementById('invSGST').textContent.replace('₹', ''));
-        data.igst = parseFloat(document.getElementById('invIGST').textContent.replace('₹', ''));
-        data.roundOff = parseFloat(document.getElementById('invRoundOff').textContent.replace('₹', ''));
-        data.grandTotal = parseFloat(document.getElementById('invGrandTotal').textContent.replace('₹', ''));
-        data.amountWords = document.getElementById('invAmountWords').textContent;
-
-        // Use the template engine to render
-        container.innerHTML = H4TemplateEngine.render('invoice', data, templateId);
-      },
-
-      // ----- Collect Data -----
-      collectData() {
-        const customerId = document.getElementById('invCustomer').value;
-        return {
-          id: this.editingId || 'inv_' + Date.now(),
-          number: document.getElementById('invNumber').value,
-          date: document.getElementById('invDate').value,
-          dueDate: document.getElementById('invDueDate').value,
-          customerId: customerId === 'new' ? '' : customerId,
-          projectName: document.getElementById('invProject').value,
-          reference: document.getElementById('invReference').value,
-          items: JSON.parse(JSON.stringify(this.items)),
-          paidAmount: parseFloat(document.getElementById('invPaidAmount').value) || 0,
-          paymentStatus: document.getElementById('invPaymentStatus').value,
-          terms: document.getElementById('invTerms').value,
-          bankDetails: document.getElementById('invBankDetails').value,
-          notes: document.getElementById('invNotes').value,
-          templateId: document.getElementById('invTemplate')?.value || 'tpl_classic',
-          templateVersion: 1,
-          createdAt: this.editingId ? undefined : new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-      },
-
-      // ----- Save -----
-      saveInvoice() {
-        const data = this.collectData();
-        if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
-        if (this.items.length === 0) { toast('Please add at least one item.', 'error'); return; }
-        this.calculate();
-        const finalData = this.collectData();
-        finalData.subtotal = parseFloat(document.getElementById('invSubtotal').textContent.replace('₹', ''));
-        finalData.discountAmount = parseFloat(document.getElementById('invDiscountAmt').textContent.replace('₹', ''));
-        finalData.taxableAmount = parseFloat(document.getElementById('invTaxable').textContent.replace('₹', ''));
-        finalData.cgst = parseFloat(document.getElementById('invCGST').textContent.replace('₹', ''));
-        finalData.sgst = parseFloat(document.getElementById('invSGST').textContent.replace('₹', ''));
-        finalData.igst = parseFloat(document.getElementById('invIGST').textContent.replace('₹', ''));
-        finalData.roundOff = parseFloat(document.getElementById('invRoundOff').textContent.replace('₹', ''));
-        finalData.grandTotal = parseFloat(document.getElementById('invGrandTotal').textContent.replace('₹', ''));
-        finalData.amountWords = document.getElementById('invAmountWords').textContent;
-
-        if (this.editingId) {
-          DB.update('invoices', this.editingId, finalData);
-          toast('Invoice updated!');
-        } else {
-          DB.add('invoices', finalData);
-          toast('Invoice saved: ' + finalData.number);
-        }
-        this.backToList();
-      },
-
-      backToList() {
-        document.getElementById('invoiceBuilderView').style.display = 'none';
-        document.getElementById('invoiceListView').style.display = 'block';
-        this.editingId = null;
-        this.items = [];
-        H4App.loadInvoices();
-        H4App.updateDashboard();
-      },
-
-      // ----- Print & WhatsApp -----
-      printInvoice() {
-        const container = document.getElementById('invPreviewContainer');
-        if (!container) return;
-        const html = container.innerHTML;
-        const win = window.open('', '_blank');
-        if (!win) { toast('Please allow popups.', 'error'); return; }
-        win.document.write(`
-          <html><head><title>Invoice</title>
-          <style>body{font-family:var(--font-family);padding:2rem;background:#fff;font-size:14px;} .preview-a4-page{max-width:794px;margin:0 auto;}</style>
-          </head><body>${html}<script>window.onload=function(){window.print();};<\/script>
-        `);
-        win.document.close();
-      },
-
-      whatsappInvoice() {
-        const data = this.collectData();
-        const customer = DB.getItem('customers', data.customerId) || {};
-        const phone = customer.whatsapp || customer.phone || '';
-        const total = document.getElementById('invGrandTotal').textContent || '₹0.00';
-        const msg =
-          `Dear ${customer.name || 'Customer'},\n\nPlease find your invoice.\n\nInvoice No: ${data.number}\nAmount: ${total}\n\nThank you for your business.\n\n${(DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
-        const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
-        if (phone) {
-          window.open(url, '_blank');
-        } else {
-          toast('Customer WhatsApp number not available.', 'warning');
-        }
-      },
-
-      whatsappExistingInvoice(id) {
-        const inv = DB.getItem('invoices', id);
-        if (!inv) { toast('Invoice not found.', 'error'); return; }
-        const customer = DB.getItem('customers', inv.customerId) || {};
-        const phone = customer.whatsapp || customer.phone || '';
-        const msg =
-          `Dear ${customer.name || 'Customer'},\n\nPlease find your invoice.\n\nInvoice No: ${inv.number}\nAmount: ₹${(inv.grandTotal||0).toFixed(2)}\n\nThank you for your business.\n\n${(DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
-        const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
-        if (phone) {
-          window.open(url, '_blank');
-        } else {
-          toast('Customer WhatsApp number not available.', 'warning');
-        }
-      },
-
-      generateNumber() {
-        document.getElementById('invNumber').value = getNextInvoiceNumber();
-      }
-    };
-
-    // ============================================================
-    // EPOXY BUILDER (FULL RESTORED)
-    // ============================================================
-    const H4Epoxy = {
-      currentStep: 1,
-      totalSteps: 7,
-      priceItems: [],
-      editingId: null,
-
-      open() {
-        const overlay = document.getElementById('epoxyOverlay');
-        if (!overlay) return;
-        this.editingId = null;
-        this.initData();
-        this.populateDropdowns();
-        this.generateNumber();
-        this.renderSteps();
-        this.renderStep();
-        this.onSystemChange();
-        this.calculate();
-        document.getElementById('epxConvertBtn').style.display = 'none';
-        overlay.classList.add('active');
-        toast('Epoxy Proposal Builder opened.');
-      },
-
-      edit(id) {
-        const q = DB.getItem('quotations', id);
-        if (!q) { toast('Quotation not found.', 'error'); return; }
-        this.editingId = id;
-        this.loadData(q);
-        this.populateDropdowns();
-        this.renderSteps();
-        this.renderStep();
-        this.onSystemChange();
-        this.calculate();
-        document.getElementById('epxConvertBtn').style.display = 'inline-flex';
-        document.getElementById('epoxyOverlay').classList.add('active');
-        toast('Editing epoxy quotation.');
-      },
-
-      close() {
-        document.getElementById('epoxyOverlay').classList.remove('active');
-        H4App.loadQuotations();
-      },
-
-      initData() {
-        this.priceItems = [];
-        this.clearFields();
-      },
-
-      clearFields() {
-        ['epxNumber', 'epxDate', 'epxCustomer', 'epxProjectName', 'epxSiteAddress', 'epxReference',
-          'epxArea', 'epxFlooringType', 'epxThickness', 'epxFinish',
-          'epxSystemRate', 'epxSystemGst', 'epxThankYou', 'epxSignatoryName'
-        ].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.value = '';
-        });
-        document.getElementById('epxDiscountEnabled').checked = false;
-        document.getElementById('epxDiscountValue').value = 0;
-        document.getElementById('epxDiscountType').value = 'flat';
-        document.getElementById('epxGstMode').value = 'intra';
-      },
-
-      loadData(q) {
-        this.clearFields();
-        this.editingId = q.id;
-        const pd = q.projectDetails || {};
-        const pr = q.pricing || {};
-        const ft = q.footer || {};
-        const cus = DB.getItem('customers', q.customerId) || {};
-
-        document.getElementById('epxNumber').value = q.number || '';
-        document.getElementById('epxDate').value = q.date || '';
-        document.getElementById('epxCustomer').value = q.customerId || '';
-        document.getElementById('epxProjectName').value = pd.projectName || '';
-        document.getElementById('epxSiteAddress').value = q.siteAddress || cus.address || '';
-        document.getElementById('epxReference').value = q.reference || '';
-        document.getElementById('epxArea').value = pd.area || '';
-        document.getElementById('epxFlooringType').value = pd.flooringType || 'Premium Self-Leveling Epoxy';
-        document.getElementById('epxThickness').value = pd.thickness || '2 mm';
-        document.getElementById('epxFinish').value = pd.finish || 'High Gloss';
-        document.getElementById('epxSystemRate').value = pr.systemRate || '';
-        document.getElementById('epxSystemGst').value = pr.systemGst || 18;
-        document.getElementById('epxThankYou').value = ft.thankYou ||
-          'Thank you for considering H4 Construction Solutions.';
-        document.getElementById('epxSignatoryName').value = ft.signatoryName || 'Authorized Signatory';
-        this.priceItems = (pr.items || []).map(p => ({ ...p }));
-        this.renderPriceItems();
-        this.onSystemChange();
-        this.calculate();
-      },
-
-      populateDropdowns() {
-        H4App.populateCustomerSelects();
-      },
-
-      generateNumber() {
-        document.getElementById('epxNumber').value = getNextQuotationNumber();
-        document.getElementById('epxDate').value = new Date().toISOString().split('T')[0];
-      },
-
-      renderSteps() {
-        const container = document.getElementById('epoxySteps');
-        const labels = ['Customer', 'Project', 'Smart Rate', 'Price Items', 'Discount', 'Calculation', 'Terms'];
-        container.innerHTML = labels.map((label, i) => {
-          const step = i + 1;
-          let cls = 'builder-step-chip';
-          if (step === this.currentStep) cls += ' active';
-          else if (step < this.currentStep) cls += ' done';
-          return `<div class="${cls}" onclick="H4Epoxy.goToStep(${step})">${step}. ${label}</div>`;
-        }).join('');
-      },
-
-      renderStep() {
-        document.querySelectorAll('#epoxyOverlay .builder-step-section').forEach(el => {
-          el.classList.toggle('active', parseInt(el.dataset.step) === this.currentStep);
-        });
-        this.renderPriceItems();
-        this.updatePreview();
-        this.renderSteps();
-        document.getElementById('epxStepCounter').textContent = `Step ${this.currentStep} / ${this.totalSteps}`;
-      },
-
-      goToStep(step) {
-        if (step < 1 || step > this.totalSteps) return;
-        this.currentStep = step;
-        this.renderStep();
-      },
-
-      nextStep() {
-        if (this.currentStep < this.totalSteps) {
-          this.currentStep++;
-          this.renderStep();
-        }
-      },
-
-      prevStep() {
-        if (this.currentStep > 1) {
-          this.currentStep--;
-          this.renderStep();
-        }
-      },
-
-      renderPriceItems() {
-        const container = document.getElementById('epxPriceItems');
-        container.innerHTML = this.priceItems.map((item, i) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `
-            <div style="border:1px solid #e0e0e0;border-radius:10px;padding:0.8rem;margin-bottom:0.8rem;background:white;">
-              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;">
-                <div><label style="font-size:0.75rem;color:#757575;">Description</label><input type="text" value="${item.description}" onchange="H4Epoxy.updatePriceItem(${i}, 'description', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">Category</label>
-                  <select onchange="H4Epoxy.updatePriceItem(${i}, 'category', this.value)">
-                    ${['Material Cost','Labour Cost','Surface Preparation','Crack Repair','Primer Coat','Epoxy Screed / Putty','Self-Leveling Epoxy','Decorative Finish','PU Top Coat','Transportation','Other Charges'].map(c => `<option value="${c}" ${c===item.category?'selected':''}>${c}</option>`).join('')}
-                  </select>
-                </div>
-                <div><label style="font-size:0.75rem;color:#757575;">Qty</label><input type="number" value="${item.quantity}" onchange="H4Epoxy.updatePriceItem(${i}, 'quantity', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">Unit</label><input type="text" value="${item.unit||'sq.ft'}" onchange="H4Epoxy.updatePriceItem(${i}, 'unit', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">Rate</label><input type="number" value="${item.rate}" onchange="H4Epoxy.updatePriceItem(${i}, 'rate', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">GST %</label><input type="number" value="${item.gst}" onchange="H4Epoxy.updatePriceItem(${i}, 'gst', this.value)"></div>
-                <div style="display:flex;align-items:flex-end;gap:0.5rem;grid-column:span 2;">
-                  <div><label style="font-size:0.75rem;color:#757575;">Total</label><strong>₹${total.toFixed(2)}</strong></div>
-                  <button class="btn btn-danger btn-sm" onclick="H4Epoxy.removePriceItem(${i})">✕</button>
-                  <button class="btn btn-outline btn-sm" onclick="H4Epoxy.duplicatePriceItem(${i})">⧉</button>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('') || '<p style="color:#757575;">No price items. Add one below.</p>';
-      },
-
-      addPriceItem() {
-        this.priceItems.push({
-          id: 'pitem_' + Date.now(),
-          description: 'New Item',
-          category: 'Material Cost',
-          quantity: 1,
-          unit: 'sq.ft',
-          rate: 0,
-          gst: 18,
-          discount: 0,
-          discountType: 'flat'
-        });
-        this.renderPriceItems();
-        this.calculate();
-      },
-
-      duplicatePriceItem(index) {
-        const item = JSON.parse(JSON.stringify(this.priceItems[index]));
-        item.id = 'pitem_' + Date.now();
-        this.priceItems.splice(index + 1, 0, item);
-        this.renderPriceItems();
-        this.calculate();
-      },
-
-      updatePriceItem(index, field, value) {
-        if (['quantity', 'rate', 'gst', 'discount'].includes(field)) value = Number(value) || 0;
-        this.priceItems[index][field] = value;
-        this.renderPriceItems();
-        this.calculate();
-      },
-
-      removePriceItem(index) {
-        if (this.priceItems.length <= 1) { toast('Keep at least one item.', 'error'); return; }
-        this.priceItems.splice(index, 1);
-        this.renderPriceItems();
-        this.calculate();
-      },
-
-      onSystemChange() {
-        const ft = document.getElementById('epxFlooringType').value;
-        const th = document.getElementById('epxThickness').value;
-        const rates = DB.get('rateMaster') || {};
-        const match = Object.values(rates).find(r =>
-          r.active !== false &&
-          r.flooringType === ft &&
-          r.thickness === th &&
-          r.unit === 'sq.ft'
-        );
-        const statusEl = document.getElementById('epxRateStatus');
-        const rateInput = document.getElementById('epxSystemRate');
-        const gstInput = document.getElementById('epxSystemGst');
-        if (match) {
-          rateInput.value = match.rate;
-          gstInput.value = match.gst || 18;
-          statusEl.className = 'rate-status auto';
-          statusEl.innerHTML =
-            `✅ Auto Rate: ₹${match.rate} / sq.ft (GST ${match.gst||18}%)`;
-        } else {
-          statusEl.className = 'rate-status missing';
-          statusEl.innerHTML = '⚠️ Rate not configured for this flooring type and thickness.';
-          rateInput.value = '';
-        }
-        this.calculateSystemAmount();
-      },
-
-      resetToAutoRate() {
-        this.onSystemChange();
-      },
-
-      calculateSystemAmount() {
-        const area = Number(document.getElementById('epxArea').value) || 0;
-        const rate = Number(document.getElementById('epxSystemRate').value) || 0;
-        const amount = area * rate;
-        document.getElementById('epxSystemAmount').textContent = '₹' + amount.toFixed(2);
-        const desc = 'Epoxy Flooring System';
-        if (amount > 0 && !this.priceItems.find(p => p.description === desc)) {
-          this.priceItems = this.priceItems.filter(p => p.description !== desc);
-          const gst = Number(document.getElementById('epxSystemGst').value) || 18;
-          this.priceItems.unshift({
-            id: 'pitem_' + Date.now(),
-            description: desc,
-            category: 'Self-Leveling Epoxy',
-            quantity: area,
-            unit: 'sq.ft',
-            rate: rate,
-            gst: gst,
-            discount: 0,
-            discountType: 'flat'
-          });
-          this.renderPriceItems();
-        }
-        this.calculate();
-      },
-
-      calculate() {
-        const items = this.priceItems.map(p => ({
-          quantity: p.quantity || 0,
-          rate: p.rate || 0,
-          discount: p.discount || 0,
-          gst: p.gst || 0,
-          discountType: p.discountType || 'flat'
-        }));
-        let subtotal = 0, totalDiscount = 0;
-        items.forEach(it => {
-          const sub = it.quantity * it.rate;
-          let disc = 0;
-          if (it.discountType === 'percentage') disc = sub * it.discount / 100;
-          else disc = it.discount;
-          disc = Math.min(disc, sub);
-          subtotal += sub;
-          totalDiscount += disc;
-        });
-        const discountEnabled = document.getElementById('epxDiscountEnabled').checked;
-        let discountAmt = 0;
-        if (discountEnabled) {
-          const discVal = parseFloat(document.getElementById('epxDiscountValue').value) || 0;
-          const discType = document.getElementById('epxDiscountType').value;
-          discountAmt = discType === 'percentage' ? subtotal * discVal / 100 : discVal;
-          discountAmt = Math.min(discountAmt, subtotal);
-        }
-        const taxable = Math.max(0, subtotal - discountAmt);
-        const gstMode = document.getElementById('epxGstMode').value;
-        let cgst = 0, sgst = 0, igst = 0;
-        if (gstMode !== 'off') {
-          const gstTotal = taxable * 18 / 100;
-          if (gstMode === 'inter') igst = gstTotal;
-          else { cgst = gstTotal / 2; sgst = gstTotal / 2; }
-        }
-        const beforeRound = taxable + cgst + sgst + igst;
-        const grandTotal = Math.round(beforeRound);
-        const roundOff = grandTotal - beforeRound;
-
-        document.getElementById('epxSubtotal').textContent = subtotal.toFixed(2);
-        document.getElementById('epxDiscountAmt').textContent = discountAmt.toFixed(2);
-        document.getElementById('epxTaxable').textContent = taxable.toFixed(2);
-        document.getElementById('epxCgst').textContent = cgst.toFixed(2);
-        document.getElementById('epxSgst').textContent = sgst.toFixed(2);
-        document.getElementById('epxIgst').textContent = igst.toFixed(2);
-        document.getElementById('epxRoundOff').textContent = roundOff.toFixed(2);
-        document.getElementById('epxGrandTotal').textContent = grandTotal.toFixed(2);
-        document.getElementById('epxCgstRow').style.display = cgst > 0 ? 'flex' : 'none';
-        document.getElementById('epxSgstRow').style.display = sgst > 0 ? 'flex' : 'none';
-        document.getElementById('epxIgstRow').style.display = igst > 0 ? 'flex' : 'none';
-        this.updatePreview();
-      },
-
-      collectData() {
-        return {
-          id: this.editingId || 'qtn_' + Date.now(),
-          quotationType: 'premium-epoxy',
-          templateId: 'tpl_premium',
-          number: document.getElementById('epxNumber').value,
-          date: document.getElementById('epxDate').value,
-          customerId: document.getElementById('epxCustomer').value,
-          projectName: document.getElementById('epxProjectName').value,
-          siteAddress: document.getElementById('epxSiteAddress').value,
-          reference: document.getElementById('epxReference').value,
-          projectDetails: {
-            projectName: document.getElementById('epxProjectName').value,
-            area: Number(document.getElementById('epxArea').value),
-            flooringType: document.getElementById('epxFlooringType').value,
-            thickness: document.getElementById('epxThickness').value,
-            finish: document.getElementById('epxFinish').value
-          },
-          pricing: {
-            items: JSON.parse(JSON.stringify(this.priceItems)),
-            systemRate: Number(document.getElementById('epxSystemRate').value),
-            systemGst: Number(document.getElementById('epxSystemGst').value),
-            discountEnabled: document.getElementById('epxDiscountEnabled').checked,
-            discount: Number(document.getElementById('epxDiscountValue').value),
-            discountType: document.getElementById('epxDiscountType').value,
-            gstMode: document.getElementById('epxGstMode').value
-          },
-          footer: {
-            thankYou: document.getElementById('epxThankYou').value,
-            signatoryName: document.getElementById('epxSignatoryName').value
-          },
-          status: 'draft',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-      },
-
-      save() {
-        const data = this.collectData();
-        if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
-        this.calculate();
-        const finalData = this.collectData();
-        finalData.grandTotal = parseFloat(document.getElementById('epxGrandTotal').textContent);
-        if (this.editingId) {
-          DB.update('quotations', this.editingId, finalData);
-          toast('Quotation updated: ' + finalData.number);
-        } else {
-          DB.add('quotations', finalData);
-          toast('Quotation saved: ' + finalData.number);
-        }
-        document.getElementById('epxConvertBtn').style.display = 'inline-flex';
-        H4App.loadQuotations();
-      },
-
-      updatePreview() {
-        const container = document.getElementById('epoxyPreviewContainer');
-        if (!container) return;
-        const data = this.collectData();
-        const templateId = 'tpl_premium';
-        
-        // Calculate totals for preview
-        this.calculate();
-        data.subtotal = parseFloat(document.getElementById('epxSubtotal').textContent);
-        data.discountAmount = parseFloat(document.getElementById('epxDiscountAmt').textContent);
-        data.taxableAmount = parseFloat(document.getElementById('epxTaxable').textContent);
-        data.cgst = parseFloat(document.getElementById('epxCgst').textContent);
-        data.sgst = parseFloat(document.getElementById('epxSgst').textContent);
-        data.igst = parseFloat(document.getElementById('epxIgst').textContent);
-        data.grandTotal = parseFloat(document.getElementById('epxGrandTotal').textContent);
-        
-        container.innerHTML = H4TemplateEngine.render('epoxy', data, templateId);
-      },
-
-      printPreview() {
-        const container = document.getElementById('epoxyPreviewContainer');
-        const html = container.innerHTML;
-        const win = window.open('', '_blank');
-        if (!win) { toast('Please allow popups.', 'error'); return; }
-        win.document.write(`
-          <html><head><title>Epoxy Proposal</title>
-          <style>body{font-family:var(--font-family);padding:2rem;background:#f5f5f5;font-size:14px;} .preview-a4-page{max-width:794px;margin:0 auto;background:white;padding:2rem 1.5rem;border-radius:12px;}</style>
-          </head><body>${html}<script>window.onload=function(){window.print();};<\/script>
-        `);
-        win.document.close();
-      },
-
-      convertToInvoice() {
-        if (!this.editingId) { toast('Save the quotation first.', 'error'); return; }
-        const q = DB.getItem('quotations', this.editingId);
-        if (!q) { toast('Quotation not found.', 'error'); return; }
-        if (q.status === 'converted') { toast('Already converted.', 'error'); return; }
-
-        const inv = {
-          id: 'inv_' + Date.now(),
-          number: getNextInvoiceNumber(),
-          date: new Date().toISOString().split('T')[0],
-          dueDate: '',
-          customerId: q.customerId,
-          projectName: q.projectDetails?.projectName || '',
-          reference: q.number,
-          quotationId: q.id,
-          quotationNumber: q.number,
-          items: (q.pricing?.items || []).map(p => ({ ...p, historicalRate: true })),
-          paidAmount: 0,
-          paymentStatus: 'unpaid',
-          notes: '',
-          status: 'unpaid',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        const items = inv.items.map(p => ({
-          quantity: p.quantity || 0,
-          rate: p.rate || 0,
-          discount: p.discount || 0,
-          gst: p.gst || 0,
-          discountType: p.discountType || 'flat'
-        }));
-        let subtotal = 0, totalDiscount = 0;
-        items.forEach(it => {
-          const sub = it.quantity * it.rate;
-          let disc = 0;
-          if (it.discountType === 'percentage') disc = sub * it.discount / 100;
-          else disc = it.discount;
-          disc = Math.min(disc, sub);
-          subtotal += sub;
-          totalDiscount += disc;
-        });
-        const taxable = Math.max(0, subtotal - totalDiscount);
-        const gst = taxable * 0.18;
-        const grandTotal = Math.round(taxable + gst);
-        inv.subtotal = subtotal;
-        inv.totalDiscount = totalDiscount;
-        inv.taxableAmount = taxable;
-        inv.cgst = gst / 2;
-        inv.sgst = gst / 2;
-        inv.grandTotal = grandTotal;
-
-        DB.add('invoices', inv);
-        DB.update('quotations', q.id, { status: 'converted' });
-        toast('Converted to Invoice: ' + inv.number);
-        document.getElementById('epxConvertBtn').style.display = 'none';
-        H4App.loadInvoices();
-      }
-    };
-
-    // ============================================================
-    // WATERPROOFING BUILDER (FULL RESTORED)
-    // ============================================================
-    const H4Waterproofing = {
-      currentStep: 1,
-      totalSteps: 5,
-      editingId: null,
-
-      open() {
-        const overlay = document.getElementById('waterproofingOverlay');
-        if (!overlay) return;
-        this.editingId = null;
-        this.initData();
-        this.populateDropdowns();
-        this.generateNumber();
-        this.renderSteps();
-        this.renderStep();
-        this.calculate();
-        document.getElementById('wpConvertBtn').style.display = 'none';
-        overlay.classList.add('active');
-        toast('Waterproofing Quotation Builder opened.');
-      },
-
-      edit(id) {
-        const q = DB.getItem('quotations', id);
-        if (!q) { toast('Quotation not found.', 'error'); return; }
-        this.editingId = id;
-        this.loadData(q);
-        this.populateDropdowns();
-        this.renderSteps();
-        this.renderStep();
-        this.calculate();
-        document.getElementById('wpConvertBtn').style.display = 'inline-flex';
-        document.getElementById('waterproofingOverlay').classList.add('active');
-        toast('Editing waterproofing quotation.');
-      },
-
-      close() {
-        document.getElementById('waterproofingOverlay').classList.remove('active');
-        H4App.loadQuotations();
-      },
-
-      initData() { this.clearFields(); },
-
-      clearFields() {
-        ['wpNumber', 'wpDate', 'wpCustomer', 'wpProjectName', 'wpSiteAddress', 'wpReference',
-          'wpArea', 'wpSystemType', 'wpMaterial', 'wpMaterialRate', 'wpLabourRate', 'wpTransport',
-          'wpThankYou', 'wpSignatoryName'
-        ].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.value = '';
-        });
-        document.getElementById('wpDiscountEnabled').checked = false;
-        document.getElementById('wpDiscountValue').value = 0;
-        document.getElementById('wpDiscountType').value = 'flat';
-        document.getElementById('wpGstMode').value = 'intra';
-      },
-
-      loadData(q) {
-        this.clearFields();
-        this.editingId = q.id;
-        const pd = q.projectDetails || {};
-        const ft = q.footer || {};
-        const cus = DB.getItem('customers', q.customerId) || {};
-
-        document.getElementById('wpNumber').value = q.number || '';
-        document.getElementById('wpDate').value = q.date || '';
-        document.getElementById('wpCustomer').value = q.customerId || '';
-        document.getElementById('wpProjectName').value = pd.projectName || '';
-        document.getElementById('wpSiteAddress').value = q.siteAddress || cus.address || '';
-        document.getElementById('wpReference').value = q.reference || '';
-        document.getElementById('wpArea').value = pd.area || '';
-        document.getElementById('wpSystemType').value = pd.systemType || 'Bathroom Waterproofing';
-        document.getElementById('wpMaterial').value = pd.material || '';
-        document.getElementById('wpMaterialRate').value = pd.materialRate || '';
-        document.getElementById('wpLabourRate').value = pd.labourRate || '';
-        document.getElementById('wpTransport').value = pd.transport || '';
-        document.getElementById('wpThankYou').value = ft.thankYou ||
-          'Thank you for considering H4 Construction Solutions.';
-        document.getElementById('wpSignatoryName').value = ft.signatoryName || 'Authorized Signatory';
-        this.calculate();
-      },
-
-      populateDropdowns() {
-        H4App.populateCustomerSelects();
-      },
-
-      generateNumber() {
-        document.getElementById('wpNumber').value = getNextQuotationNumber();
-        document.getElementById('wpDate').value = new Date().toISOString().split('T')[0];
-      },
-
-      renderSteps() {
-        const container = document.getElementById('wpSteps');
-        const labels = ['Customer', 'Area & System', 'Pricing', 'Calculation', 'Terms'];
-        container.innerHTML = labels.map((label, i) => {
-          const step = i + 1;
-          let cls = 'builder-step-chip';
-          if (step === this.currentStep) cls += ' active';
-          else if (step < this.currentStep) cls += ' done';
-          return `<div class="${cls}" onclick="H4Waterproofing.goToStep(${step})">${step}. ${label}</div>`;
-        }).join('');
-      },
-
-      renderStep() {
-        document.querySelectorAll('#waterproofingOverlay .builder-step-section').forEach(el => {
-          el.classList.toggle('active', parseInt(el.dataset.step) === this.currentStep);
-        });
-        this.updatePreview();
-        this.renderSteps();
-        document.getElementById('wpStepCounter').textContent = `Step ${this.currentStep} / ${this.totalSteps}`;
-      },
-
-      goToStep(step) {
-        if (step < 1 || step > this.totalSteps) return;
-        this.currentStep = step;
-        this.renderStep();
-      },
-
-      nextStep() {
-        if (this.currentStep < this.totalSteps) {
-          this.currentStep++;
-          this.renderStep();
-        }
-      },
-
-      prevStep() {
-        if (this.currentStep > 1) {
-          this.currentStep--;
-          this.renderStep();
-        }
-      },
-
-      calculate() {
-        const area = Number(document.getElementById('wpArea').value) || 0;
-        const materialRate = Number(document.getElementById('wpMaterialRate').value) || 0;
-        const labourRate = Number(document.getElementById('wpLabourRate').value) || 0;
-        const transport = Number(document.getElementById('wpTransport').value) || 0;
-        const materialCost = area * materialRate;
-        const labourCost = area * labourRate;
-        const subtotal = materialCost + labourCost + transport;
-
-        const discountEnabled = document.getElementById('wpDiscountEnabled').checked;
-        let discountAmt = 0;
-        if (discountEnabled) {
-          const discVal = parseFloat(document.getElementById('wpDiscountValue').value) || 0;
-          const discType = document.getElementById('wpDiscountType').value;
-          discountAmt = discType === 'percentage' ? subtotal * discVal / 100 : discVal;
-          discountAmt = Math.min(discountAmt, subtotal);
-        }
-        const taxable = Math.max(0, subtotal - discountAmt);
-        const gstMode = document.getElementById('wpGstMode').value;
-        let cgst = 0, sgst = 0, igst = 0;
-        if (gstMode !== 'off') {
-          const gstTotal = taxable * 18 / 100;
-          if (gstMode === 'inter') igst = gstTotal;
-          else { cgst = gstTotal / 2; sgst = gstTotal / 2; }
-        }
-        const beforeRound = taxable + cgst + sgst + igst;
-        const grandTotal = Math.round(beforeRound);
-        const roundOff = grandTotal - beforeRound;
-
-        document.getElementById('wpMaterialCost').textContent = materialCost.toFixed(2);
-        document.getElementById('wpLabourCost').textContent = labourCost.toFixed(2);
-        document.getElementById('wpTransportAmt').textContent = transport.toFixed(2);
-        document.getElementById('wpSubtotal').textContent = subtotal.toFixed(2);
-        document.getElementById('wpDiscountAmt').textContent = discountAmt.toFixed(2);
-        document.getElementById('wpTaxable').textContent = taxable.toFixed(2);
-        document.getElementById('wpCgst').textContent = cgst.toFixed(2);
-        document.getElementById('wpSgst').textContent = sgst.toFixed(2);
-        document.getElementById('wpIgst').textContent = igst.toFixed(2);
-        document.getElementById('wpRoundOff').textContent = roundOff.toFixed(2);
-        document.getElementById('wpGrandTotal').textContent = grandTotal.toFixed(2);
-        document.getElementById('wpCgstRow').style.display = cgst > 0 ? 'flex' : 'none';
-        document.getElementById('wpSgstRow').style.display = sgst > 0 ? 'flex' : 'none';
-        document.getElementById('wpIgstRow').style.display = igst > 0 ? 'flex' : 'none';
-        this.updatePreview();
-      },
-
-      collectData() {
-        return {
-          id: this.editingId || 'qtn_' + Date.now(),
-          quotationType: 'waterproofing',
-          templateId: 'tpl_simple',
-          number: document.getElementById('wpNumber').value,
-          date: document.getElementById('wpDate').value,
-          customerId: document.getElementById('wpCustomer').value,
-          projectName: document.getElementById('wpProjectName').value,
-          siteAddress: document.getElementById('wpSiteAddress').value,
-          reference: document.getElementById('wpReference').value,
-          projectDetails: {
-            projectName: document.getElementById('wpProjectName').value,
-            area: Number(document.getElementById('wpArea').value),
-            systemType: document.getElementById('wpSystemType').value,
-            material: document.getElementById('wpMaterial').value,
-            materialRate: Number(document.getElementById('wpMaterialRate').value),
-            labourRate: Number(document.getElementById('wpLabourRate').value),
-            transport: Number(document.getElementById('wpTransport').value)
-          },
-          pricing: {
-            discountEnabled: document.getElementById('wpDiscountEnabled').checked,
-            discount: Number(document.getElementById('wpDiscountValue').value),
-            discountType: document.getElementById('wpDiscountType').value,
-            gstMode: document.getElementById('wpGstMode').value
-          },
-          footer: {
-            thankYou: document.getElementById('wpThankYou').value,
-            signatoryName: document.getElementById('wpSignatoryName').value
-          },
-          status: 'draft',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-      },
-
-      save() {
-        const data = this.collectData();
-        if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
-        this.calculate();
-        const finalData = this.collectData();
-        finalData.grandTotal = parseFloat(document.getElementById('wpGrandTotal').textContent);
-        if (this.editingId) {
-          DB.update('quotations', this.editingId, finalData);
-          toast('Quotation updated: ' + finalData.number);
-        } else {
-          DB.add('quotations', finalData);
-          toast('Quotation saved: ' + finalData.number);
-        }
-        document.getElementById('wpConvertBtn').style.display = 'inline-flex';
-        H4App.loadQuotations();
-      },
-
-      updatePreview() {
-        const container = document.getElementById('wpPreviewContainer');
-        if (!container) return;
-        const data = this.collectData();
-        const templateId = 'tpl_simple';
-        
-        // Calculate totals for preview
-        this.calculate();
-        data.subtotal = parseFloat(document.getElementById('wpSubtotal').textContent);
-        data.discountAmount = parseFloat(document.getElementById('wpDiscountAmt').textContent);
-        data.taxableAmount = parseFloat(document.getElementById('wpTaxable').textContent);
-        data.cgst = parseFloat(document.getElementById('wpCgst').textContent);
-        data.sgst = parseFloat(document.getElementById('wpSgst').textContent);
-        data.igst = parseFloat(document.getElementById('wpIgst').textContent);
-        data.grandTotal = parseFloat(document.getElementById('wpGrandTotal').textContent);
-        
-        container.innerHTML = H4TemplateEngine.render('waterproofing', data, templateId);
-      },
-
-      printPreview() {
-        const container = document.getElementById('wpPreviewContainer');
-        const html = container.innerHTML;
-        const win = window.open('', '_blank');
-        if (!win) { toast('Please allow popups.', 'error'); return; }
-        win.document.write(`
-          <html><head><title>Waterproofing Quotation</title>
-          <style>body{font-family:var(--font-family);padding:2rem;background:#f5f5f5;font-size:14px;} .preview-a4-page{max-width:794px;margin:0 auto;background:white;padding:2rem 1.5rem;border-radius:12px;}</style>
-          </head><body>${html}<script>window.onload=function(){window.print();};<\/script>
-        `);
-        win.document.close();
-      },
-
-      convertToInvoice() {
-        if (!this.editingId) { toast('Save the quotation first.', 'error'); return; }
-        const q = DB.getItem('quotations', this.editingId);
-        if (!q) { toast('Quotation not found.', 'error'); return; }
-        if (q.status === 'converted') { toast('Already converted.', 'error'); return; }
-
-        const inv = {
-          id: 'inv_' + Date.now(),
-          number: getNextInvoiceNumber(),
-          date: new Date().toISOString().split('T')[0],
-          dueDate: '',
-          customerId: q.customerId,
-          projectName: q.projectDetails?.projectName || '',
-          reference: q.number,
-          quotationId: q.id,
-          quotationNumber: q.number,
-          items: [],
-          paidAmount: 0,
-          paymentStatus: 'unpaid',
-          notes: '',
-          status: 'unpaid',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        const pd = q.projectDetails || {};
-        const area = pd.area || 0;
-        if (pd.material && pd.materialRate) {
-          inv.items.push({
-            description: 'Material: ' + pd.material,
-            quantity: area,
-            unit: 'sq.ft',
-            rate: pd.materialRate,
-            amount: area * pd.materialRate,
-            gst: 18,
-            historicalRate: true
-          });
-        }
-        if (pd.labourRate) {
-          inv.items.push({
-            description: 'Labour',
-            quantity: area,
-            unit: 'sq.ft',
-            rate: pd.labourRate,
-            amount: area * pd.labourRate,
-            gst: 18,
-            historicalRate: true
-          });
-        }
-        if (pd.transport) {
-          inv.items.push({
-            description: 'Transport',
-            quantity: 1,
-            unit: 'job',
-            rate: pd.transport,
-            amount: pd.transport,
-            gst: 18,
-            historicalRate: true
-          });
-        }
-        const items = inv.items.map(p => ({
-          quantity: p.quantity || 0,
-          rate: p.rate || 0,
-          discount: 0,
-          gst: p.gst || 0,
-          discountType: 'flat'
-        }));
-        let subtotal = 0;
-        items.forEach(it => { subtotal += it.quantity * it.rate; });
-        const taxable = subtotal;
-        const gst = taxable * 0.18;
-        const grandTotal = Math.round(taxable + gst);
-        inv.subtotal = subtotal;
-        inv.totalDiscount = 0;
-        inv.taxableAmount = taxable;
-        inv.cgst = gst / 2;
-        inv.sgst = gst / 2;
-        inv.grandTotal = grandTotal;
-
-        DB.add('invoices', inv);
-        DB.update('quotations', q.id, { status: 'converted' });
-        toast('Converted to Invoice: ' + inv.number);
-        document.getElementById('wpConvertBtn').style.display = 'none';
-        H4App.loadInvoices();
-      }
-    };
-
-    // ============================================================
-    // TEMPLATE MANAGER - Enhanced with H4TemplateEngine
-    // ============================================================
-    const H4Template = {
-      _currentTemplateId: 'tpl_classic',
-      
-      // Load a template by ID
-      load(templateId) {
-        this._currentTemplateId = templateId || 'tpl_classic';
-        const template = DB.getItem('templates', this._currentTemplateId);
-        if (template) {
-          document.getElementById('templateName').value = template.name || '';
-          document.getElementById('templatePrimaryColor').value = template.primary || '#2C3E50';
-          document.getElementById('templateSecondaryColor').value = template.secondary || '#34495E';
-          document.getElementById('templateFontSize').value = template.fontSize || 13;
-          document.getElementById('showLogo').checked = template.showLogo !== false;
-          document.getElementById('showSignature').checked = template.showSig !== false;
-          this.preview();
-        }
-      },
-
-      save() {
-        const data = {
-          id: this._currentTemplateId,
-          name: document.getElementById('templateName').value || 'Custom Template',
-          primary: document.getElementById('templatePrimaryColor').value || '#2C3E50',
-          secondary: document.getElementById('templateSecondaryColor').value || '#34495E',
-          accent: '#7F8C8D',
-          font: 'Segoe UI',
-          fontSize: parseInt(document.getElementById('templateFontSize').value) || 13,
-          logoPos: 'center',
-          showLogo: document.getElementById('showLogo').checked,
-          showSig: document.getElementById('showSignature').checked,
-          showBank: true,
-          updatedAt: new Date().toISOString()
-        };
-        DB.update('templates', this._currentTemplateId, data);
-        toast('Template saved: ' + data.name);
-      },
-
-      preview() {
-        // Get sample data for preview
-        const sampleData = {
-          number: 'H4-INV-0001',
-          date: new Date().toISOString().split('T')[0],
-          dueDate: new Date(Date.now() + 7*86400000).toISOString().split('T')[0],
-          customerId: '',
-          projectName: 'Sample Project',
-          reference: 'REF-001',
-          items: [
-            { description: 'H4 Tile Adhesive', quantity: 10, unit: 'kg', rate: 500, gst: 18 },
-            { description: 'H4 Waterproof Coating', quantity: 5, unit: 'bag', rate: 2500, gst: 18 }
-          ],
-          subtotal: 17500,
-          discountAmount: 0,
-          taxableAmount: 17500,
-          cgst: 1575,
-          sgst: 1575,
-          igst: 0,
-          roundOff: 0,
-          grandTotal: 20650,
-          amountWords: 'Rupees Twenty Thousand Six Hundred Fifty Only',
-          terms: 'Payment within 15 days',
-          bankDetails: 'HDFC Bank, Account: 123456789, IFSC: HDFC0001234',
-          notes: 'Thank you for your business.'
-        };
-        
-        const templateId = this._currentTemplateId;
-        const container = document.getElementById('templateLivePreview');
-        if (container) {
-          container.innerHTML = H4TemplateEngine.render('invoice', sampleData, templateId);
-        }
-        toast('Preview updated.');
-      },
-
-      reset() {
-        this._currentTemplateId = 'tpl_classic';
-        this.load('tpl_classic');
-        toast('Template reset to Classic.');
-      },
-
-      use() {
-        toast('Template applied to current document.');
-      }
-    };
-
-    // ============================================================
-    // INIT
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-      H4App.loadCustomizations();
-      H4App.init();
-
-      document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', function(e) {
-          if (e.target === this) this.classList.remove('active');
-        });
-      });
-
-      // Load default template preview
-      H4Template.load('tpl_classic');
-
-      console.log('H4 Billing ERP - Complete with Template Engine.');
-      console.log('✅ Mobile width fixed for Customer section.');
-      console.log('✅ Epoxy and Waterproofing builders fully restored.');
-      console.log('✅ Dashboard redesigned with Quick Access cards and Business Summary.');
-      console.log('✅ H4TemplateEngine with 4 templates (Classic, Modern, H4 Premium, Simple).');
-      console.log('✅ Live preview integrated for all document types.');
-    });
-  </script>
-</body>
-</html>
+        document
