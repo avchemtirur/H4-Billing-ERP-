@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
   <title>H4 Billing ERP</title>
   <style>
-    /* ============================================================
-       GLOBAL VARIABLES
-       ============================================================ */
     :root {
       --primary: #6A3FA0;
       --secondary: #8A6510;
@@ -20,8 +17,6 @@
       --module-scale: 1;
       --input-height: 52px;
       --touch-target: 48px;
-      
-      /* Card gradient defaults */
       --card-invoice-bg: linear-gradient(135deg, #6A3FA0, #00BCD4);
       --card-quotation-bg: linear-gradient(135deg, #0077B6, #00C6FF);
       --card-products-bg: linear-gradient(135deg, #F2994A, #F2C94C);
@@ -33,9 +28,7 @@
       --card-backup-bg: linear-gradient(135deg, #DC2626, #F97316);
       --card-settings-bg: linear-gradient(135deg, #1E293B, #4F46E5);
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: var(--font-family);
       font-size: var(--base-font-size);
@@ -45,10 +38,6 @@
       padding-bottom: 80px;
       transition: font-size 0.3s, font-family 0.3s;
     }
-
-    /* ============================================================
-       HEADER
-       ============================================================ */
     .app-header {
       height: var(--header-height);
       background: linear-gradient(135deg, var(--accent), var(--primary));
@@ -96,10 +85,6 @@
     .header-right .btn:hover { background: rgba(255,255,255,0.25); }
     .header-right .btn span.label { display: inline; }
     @media (max-width: 768px) { .header-right .btn span.label { display: none; } .app-title { font-size: 1rem; } }
-
-    /* ============================================================
-       SIDEBAR
-       ============================================================ */
     .sidebar {
       position: fixed;
       left: 0;
@@ -146,10 +131,6 @@
       border-left: 4px solid var(--primary);
     }
     .sidebar-item .icon { font-size: 1.3rem; width: 30px; text-align: center; }
-
-    /* ============================================================
-       MAIN CONTENT
-       ============================================================ */
     .main-content {
       max-width: 1200px;
       margin: 0 auto;
@@ -158,10 +139,6 @@
       transform-origin: top center;
       transition: transform 0.3s;
     }
-
-    /* ============================================================
-       CARDS & MODULES
-       ============================================================ */
     .card {
       background: white;
       border-radius: var(--border-radius);
@@ -183,10 +160,6 @@
       gap: 0.5rem;
     }
     .card-header h2 { font-size: 1.3rem; color: var(--primary); }
-
-    /* ============================================================
-       STATS GRID (Business Summary)
-       ============================================================ */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -203,17 +176,12 @@
     }
     .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
     .stat-label { font-size: 0.9rem; color: #757575; }
-
-    /* ============================================================
-       QUICK ACCESS GRID - PREMIUM GRADIENT CARDS
-       ============================================================ */
     .quick-access-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 1rem;
       margin-bottom: 2rem;
     }
-    
     .quick-card {
       position: relative;
       border-radius: var(--border-radius, 14px);
@@ -233,8 +201,6 @@
       transform: translateY(0);
       background: linear-gradient(135deg, #6A3FA0, #00BCD4);
     }
-    
-    /* Card shine effect */
     .quick-card::before {
       content: '';
       position: absolute;
@@ -246,12 +212,7 @@
       transition: left 0.6s ease;
       pointer-events: none;
     }
-    
-    .quick-card:hover::before {
-      left: 100%;
-    }
-    
-    /* Card glow */
+    .quick-card:hover::before { left: 100%; }
     .quick-card::after {
       content: '';
       position: absolute;
@@ -263,23 +224,15 @@
       opacity: 0;
       transition: opacity 0.4s ease;
     }
-    
-    .quick-card:hover::after {
-      opacity: 0.4;
-    }
-    
-    /* Hover animation */
+    .quick-card:hover::after { opacity: 0.4; }
     .quick-card:hover {
       transform: translateY(-6px) scale(1.02);
       box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     }
-    
     .quick-card:active {
       transform: scale(0.95);
       transition-duration: 0.1s;
     }
-    
-    /* Individual gradient backgrounds */
     .quick-card[data-card="invoice"] { background: var(--card-invoice-bg, linear-gradient(135deg, #6A3FA0, #00BCD4)); }
     .quick-card[data-card="quotation"] { background: var(--card-quotation-bg, linear-gradient(135deg, #0077B6, #00C6FF)); }
     .quick-card[data-card="products"] { background: var(--card-products-bg, linear-gradient(135deg, #F2994A, #F2C94C)); }
@@ -290,33 +243,25 @@
     .quick-card[data-card="themes"] { background: var(--card-themes-bg, linear-gradient(135deg, #0891B2, #06B6D4)); }
     .quick-card[data-card="backup"] { background: var(--card-backup-bg, linear-gradient(135deg, #DC2626, #F97316)); }
     .quick-card[data-card="settings"] { background: var(--card-settings-bg, linear-gradient(135deg, #1E293B, #4F46E5)); }
-    
     .quick-card .icon {
       font-size: 2.4rem;
       margin-bottom: 0.4rem;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
       transition: transform 0.3s ease;
     }
-    
-    .quick-card:hover .icon {
-      transform: scale(1.1) rotate(-3deg);
-    }
-    
+    .quick-card:hover .icon { transform: scale(1.1) rotate(-3deg); }
     .quick-card .label {
       font-weight: 700;
       font-size: 1rem;
       text-shadow: 0 1px 3px rgba(0,0,0,0.15);
       letter-spacing: 0.3px;
     }
-    
     .quick-card .sub {
       font-size: 0.7rem;
       opacity: 0.85;
       margin-top: 0.1rem;
       text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
-    
-    /* Card accent dot */
     .quick-card .card-accent {
       position: absolute;
       top: 10px;
@@ -327,7 +272,6 @@
       background: rgba(255,255,255,0.4);
       box-shadow: 0 0 10px rgba(255,255,255,0.2);
     }
-    
     .quick-card .card-accent::after {
       content: '';
       position: absolute;
@@ -336,15 +280,10 @@
       background: rgba(255,255,255,0.2);
       animation: pulse-dot 2s infinite;
     }
-    
     @keyframes pulse-dot {
       0%, 100% { transform: scale(1); opacity: 0.5; }
       50% { transform: scale(1.5); opacity: 0.2; }
     }
-    
-    /* ============================================================
-       THEME MANAGER - CARD GRADIENT CONTROLS
-       ============================================================ */
     .customizer-panel {
       position: fixed;
       right: 0;
@@ -400,7 +339,6 @@
     }
     .customizer-panel .form-group .range-wrap input[type="range"] { flex: 1; }
     .customizer-panel .form-group .range-wrap span { min-width: 35px; text-align: center; font-weight: 600; font-size: 0.9rem; }
-    
     .customizer-panel .card-selector {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -424,7 +362,6 @@
       color: var(--primary);
     }
     .customizer-panel .card-selector button:hover { border-color: var(--primary); }
-    
     .customizer-panel .gradient-preview {
       height: 30px;
       border-radius: 8px;
@@ -432,13 +369,11 @@
       border: 1px solid #e0e0e0;
       transition: background 0.3s;
     }
-    
     .customizer-panel .color-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.5rem;
     }
-    
     .customizer-panel .section-divider {
       border-top: 2px dashed #e0e0e0;
       margin: 1rem 0 0.8rem;
@@ -451,10 +386,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
-    /* ============================================================
-       RESPONSIVE
-       ============================================================ */
     @media (max-width: 1024px) {
       .quick-access-grid { grid-template-columns: repeat(4, 1fr); }
     }
@@ -477,10 +408,6 @@
       .quick-card .sub { font-size: 0.6rem; }
       .customizer-panel .card-selector { grid-template-columns: 1fr 1fr; }
     }
-
-    /* ============================================================
-       BOTTOM NAV
-       ============================================================ */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -511,10 +438,6 @@
     .bottom-nav .nav-item.active { color: var(--primary); font-weight: 600; }
     .bottom-nav .nav-item .nav-icon { font-size: 1.5rem; display: block; }
     @media (min-width: 769px) { .bottom-nav { display: none !important; } }
-
-    /* ============================================================
-       UTILITY CLASSES
-       ============================================================ */
     .hidden { display: none !important; }
     .text-center { text-align: center; }
     .text-muted { color: #757575; }
@@ -544,10 +467,6 @@
     .btn-whatsapp:hover { background: #1da851; }
     .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; min-height: 36px; min-width: 36px; }
     .btn-block { width: 100%; justify-content: center; }
-
-    /* ============================================================
-       FORMS
-       ============================================================ */
     .form-group { margin-bottom: 1rem; }
     .form-group label {
       display: block;
@@ -580,10 +499,6 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
     @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } .form-row-3 { grid-template-columns: 1fr; } }
-
-    /* ============================================================
-       BUILDER OVERLAY
-       ============================================================ */
     .builder-overlay {
       position: fixed;
       inset: 0;
@@ -659,10 +574,6 @@
     }
     .builder-step-counter { font-size: 0.85rem; color: #757575; display: flex; align-items: center; }
     @media (max-width: 820px) { .builder-body { grid-template-columns: 1fr; } .builder-preview-pane { display: none; } }
-
-    /* ============================================================
-       ITEM CARDS
-       ============================================================ */
     .item-card {
       background: #f8f8f8;
       border-radius: 12px;
@@ -692,10 +603,6 @@
       color: var(--primary);
     }
     @media (max-width: 480px) { .item-card .item-grid { grid-template-columns: 1fr; } }
-
-    /* ============================================================
-       PREVIEW A4
-       ============================================================ */
     .preview-a4-container { max-width: 794px; margin: 0 auto; }
     .preview-a4-page {
       background: white;
@@ -744,10 +651,6 @@
     .rate-status.auto { background: #e8f5e9; color: #2e7d32; }
     .rate-status.override { background: #fff3e0; color: #e65100; }
     .rate-status.missing { background: #ffebee; color: #c62828; }
-
-    /* ============================================================
-       MODAL OVERLAY
-       ============================================================ */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -802,10 +705,6 @@
       justify-content: flex-end;
       flex-wrap: wrap;
     }
-
-    /* ============================================================
-       LIST ITEMS
-       ============================================================ */
     .list-item {
       display: flex;
       justify-content: space-between;
@@ -819,10 +718,6 @@
     .list-item .item-info .name { font-weight: 600; font-size: 1rem; }
     .list-item .item-info .detail { font-size: 0.85rem; color: #757575; }
     .list-item .item-actions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
-
-    /* ============================================================
-       NOTIFICATIONS
-       ============================================================ */
     .notifications {
       position: fixed;
       top: 1rem;
@@ -847,10 +742,6 @@
     .notification.error { border-left-color: #c62828; }
     .notification.warning { border-left-color: #e65100; }
     @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-    /* ============================================================
-       INVOICE BUILDER – CUSTOMER SECTION FLEX FIX
-       ============================================================ */
     .customer-select-row {
       display: flex;
       flex-wrap: wrap;
@@ -868,27 +759,18 @@
       width: 100%;
       word-wrap: break-word;
     }
-
-    /* ============================================================
-       TEMPLATE PREVIEW STYLES
-       ============================================================ */
     .template-classic .invoice-header { border-bottom: 2px solid #333; }
     .template-classic .invoice-title { color: #222; }
     .template-classic .invoice-table th { background: #555; }
-
     .template-modern .invoice-header { border-bottom: 4px solid var(--primary); }
     .template-modern .invoice-title { color: var(--primary); font-weight: 300; letter-spacing: 2px; }
     .template-modern .invoice-table th { background: var(--primary); }
-
     .template-h4-premium .invoice-header { border-bottom: 6px double var(--secondary); }
     .template-h4-premium .invoice-title { color: var(--secondary); font-family: 'Georgia', serif; }
     .template-h4-premium .invoice-table th { background: var(--secondary); }
-
     .template-simple .invoice-header { border-bottom: 1px solid #ccc; }
     .template-simple .invoice-title { color: #555; }
     .template-simple .invoice-table th { background: #e0e0e0; color: #222; }
-
-    /* A4 print styles */
     @media print {
       body, .app-header, .sidebar, .bottom-nav, .customizer-panel, .builder-overlay,
       .card.no-print, .modal-overlay, .notifications, .builder-topbar, .builder-bottombar {
@@ -910,7 +792,6 @@
   </style>
 </head>
 <body>
-  <!-- HEADER -->
   <header class="app-header">
     <div class="header-left">
       <button class="menu-toggle" id="menuToggle">☰</button>
@@ -923,7 +804,6 @@
     </div>
   </header>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-inner">
       <div class="sidebar-section">
@@ -955,16 +835,12 @@
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
   <main class="main-content">
-
-    <!-- ==================== DASHBOARD ==================== -->
     <div class="module active" data-module="dashboard">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1 style="font-size:1.8rem;">📊 Dashboard</h1>
         <p style="font-size:1.1rem;">Quick access to your billing modules</p>
       </div>
-
       <div class="quick-access-grid" id="quickAccessGrid">
         <div class="quick-card" data-card="invoice" onclick="H4App.navigate('invoices')">
           <div class="card-accent"></div>
@@ -1027,7 +903,6 @@
           <div class="sub">System Settings</div>
         </div>
       </div>
-
       <div style="margin-top:0.5rem;">
         <h3 style="font-size:1rem;color:#757575;margin-bottom:0.5rem;">📈 Business Summary</h3>
         <div class="stats-grid" style="margin-bottom:0;">
@@ -1039,7 +914,6 @@
       </div>
     </div>
 
-    <!-- ==================== COMPANY PROFILE ==================== -->
     <div class="module" data-module="company">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>🏭 Company Profile</h1><p>Setup your business details</p>
@@ -1086,7 +960,6 @@
       </div>
     </div>
 
-    <!-- ==================== CUSTOMERS ==================== -->
     <div class="module" data-module="customers">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>👥 Customers</h1><p>Manage your customer database</p>
@@ -1097,7 +970,6 @@
       <div class="card" id="customersContainer"></div>
     </div>
 
-    <!-- ==================== PRODUCTS ==================== -->
     <div class="module" data-module="products">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>📦 Products</h1><p>Manage your product catalog</p>
@@ -1108,7 +980,6 @@
       <div class="card" id="productsContainer"></div>
     </div>
 
-    <!-- ==================== QUOTATIONS ==================== -->
     <div class="module" data-module="quotations">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>📄 Quotations</h1><p>Create and manage all your quotations</p>
@@ -1121,7 +992,6 @@
       </div>
     </div>
 
-    <!-- ==================== INVOICES ==================== -->
     <div class="module" data-module="invoices">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>🧾 Invoices</h1><p>Create and manage invoices</p>
@@ -1137,7 +1007,6 @@
       </div>
     </div>
 
-    <!-- ==================== PAYMENTS ==================== -->
     <div class="module" data-module="payments">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>💰 Payments</h1><p>Track invoice payments</p>
@@ -1145,7 +1014,6 @@
       <div class="card"><p class="text-muted text-center" style="padding:1.5rem;">Payment tracking coming soon.</p></div>
     </div>
 
-    <!-- ==================== TEMPLATES ==================== -->
     <div class="module" data-module="templates">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>📋 Template Designer</h1><p>Customize your document templates</p>
@@ -1213,7 +1081,6 @@
       </div>
     </div>
 
-    <!-- ==================== BACKUP ==================== -->
     <div class="module" data-module="backup">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>💾 Backup</h1><p>Backup & restore your data</p>
@@ -1227,17 +1094,14 @@
       </div>
     </div>
 
-    <!-- ==================== SETTINGS ==================== -->
     <div class="module" data-module="settings">
       <div style="background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:2rem;border-radius:16px;margin-bottom:1.5rem;">
         <h1>⚙️ Settings</h1><p>App settings</p>
       </div>
       <div class="card"><p class="text-muted text-center" style="padding:1.5rem;">Settings will be available soon.</p></div>
     </div>
-
   </main>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav" id="bottomNav">
     <div class="nav-item active" data-module="dashboard"><span class="nav-icon">📊</span>Home</div>
     <div class="nav-item" data-module="quotations"><span class="nav-icon">📄</span>Quotes</div>
@@ -1246,13 +1110,8 @@
     <div class="nav-item" data-module="settings"><span class="nav-icon">⚙️</span>Settings</div>
   </nav>
 
-  <!-- ============================================================
-       CUSTOMIZER PANEL - ENHANCED WITH GRADIENT CONTROLS
-       ============================================================ -->
   <div class="customizer-panel" id="customizerPanel">
     <h3>🎨 Theme Manager</h3>
-    
-    <!-- Global Theme Controls -->
     <div class="section-divider"><span class="section-label">🌐 Global Theme</span></div>
     <div class="form-group">
       <label>Font Family</label>
@@ -1276,10 +1135,7 @@
       <div class="form-group"><label>Secondary</label><input type="color" id="custSecondary" value="#8A6510"></div>
     </div>
     <div class="form-group"><label>Accent</label><input type="color" id="custAccent" value="#00BCD4"></div>
-    
-    <!-- Card Gradient Controls -->
     <div class="section-divider"><span class="section-label">🎴 Card Gradients</span></div>
-    
     <div class="form-group">
       <label>Select Card</label>
       <div class="card-selector" id="cardSelector">
@@ -1295,7 +1151,6 @@
         <button data-card="settings">⚙️ Settings</button>
       </div>
     </div>
-    
     <div class="form-group">
       <label>Background Type</label>
       <select id="cardBgType">
@@ -1304,13 +1159,11 @@
         <option value="solid">Solid Color</option>
       </select>
     </div>
-    
     <div class="color-row">
       <div class="form-group"><label>Color 1</label><input type="color" id="cardColor1" value="#6A3FA0"></div>
       <div class="form-group"><label>Color 2</label><input type="color" id="cardColor2" value="#00BCD4"></div>
     </div>
     <div class="form-group"><label>Color 3 (Optional)</label><input type="color" id="cardColor3" value="#ffffff"></div>
-    
     <div class="form-group">
       <label>Gradient Angle: <span id="angleDisplay">135</span>°</label>
       <div class="range-wrap">
@@ -1318,7 +1171,6 @@
         <span>360°</span>
       </div>
     </div>
-    
     <div class="form-group">
       <label>Gradient Direction</label>
       <select id="cardDirection">
@@ -1332,15 +1184,11 @@
         <option value="to top right">↗ Top Right</option>
       </select>
     </div>
-    
     <div class="form-group">
       <label>Card Preview</label>
       <div id="cardGradientPreview" style="height:40px;border-radius:8px;background:linear-gradient(135deg,#6A3FA0,#00BCD4);border:1px solid #e0e0e0;transition:background 0.3s;"></div>
     </div>
-    
-    <!-- Card Visual Controls -->
     <div class="section-divider"><span class="section-label">📐 Card Visuals</span></div>
-    
     <div class="form-group">
       <label>Border Radius</label>
       <div class="range-wrap">
@@ -1369,15 +1217,11 @@
         <span id="cardPaddingDisplay">1.5</span>rem
       </div>
     </div>
-    
     <button class="btn btn-primary btn-block" onclick="H4App.applyCustomizations()">💾 Apply Theme</button>
     <button class="btn btn-outline btn-block" onclick="H4App.resetCustomizations()">↩️ Reset Defaults</button>
     <button class="btn btn-secondary btn-block" onclick="H4App.saveCardGradients()">💾 Save Card Gradients</button>
   </div>
 
-  <!-- ==================== MODALS ==================== -->
-
-  <!-- Quotation Type Modal -->
   <div class="modal-overlay" id="qtnTypeModal">
     <div class="modal-content">
       <div class="modal-header"><h3>New Quotation</h3><button class="modal-close" onclick="H4App.closeModal('qtnTypeModal')">✕</button></div>
@@ -1398,7 +1242,6 @@
     </div>
   </div>
 
-  <!-- Customer Modal -->
   <div class="modal-overlay" id="customerModal">
     <div class="modal-content">
       <div class="modal-header"><h3 id="customerModalTitle">Add Customer</h3><button class="modal-close" onclick="H4Customers.closeModal()">✕</button></div>
@@ -1419,7 +1262,6 @@
     </div>
   </div>
 
-  <!-- Product Modal -->
   <div class="modal-overlay" id="productModal">
     <div class="modal-content">
       <div class="modal-header"><h3 id="productModalTitle">Add Product</h3><button class="modal-close" onclick="H4Products.closeModal()">✕</button></div>
@@ -1445,7 +1287,6 @@
     </div>
   </div>
 
-  <!-- ==================== EPOXY BUILDER ==================== -->
   <div class="builder-overlay" id="epoxyOverlay">
     <div class="builder-topbar">
       <div class="builder-topbar-title">✨ Premium Epoxy Flooring Proposal</div>
@@ -1529,7 +1370,6 @@
     </div>
   </div>
 
-  <!-- ==================== WATERPROOFING BUILDER ==================== -->
   <div class="builder-overlay" id="waterproofingOverlay">
     <div class="builder-topbar">
       <div class="builder-topbar-title">💧 Waterproofing Quotation</div>
@@ -1602,26 +1442,17 @@
     </div>
   </div>
 
-  <!-- ==================== NOTIFICATIONS ==================== -->
   <div class="notifications" id="notifications"></div>
 
-  <!-- ============================================================ -->
-  <!-- JAVASCRIPT - COMPLETE INTEGRATED ERP WITH GRADIENT CARDS -->
-  <!-- ============================================================ -->
   <script>
-    // ============================================================
-    // DATABASE
-    // ============================================================
-    const DB = {
+    var DB = {
       STORAGE_KEY: 'h4_universal_billing_v3',
-
-      init() {
+      init: function() {
         if (!localStorage.getItem(this.STORAGE_KEY)) { this.seed(); }
         this.migrate();
       },
-
-      seed() {
-        const data = {
+      seed: function() {
+        var data = {
           company: {
             legalName: 'H4 Construction Solutions',
             brandName: 'H4 Billing ERP',
@@ -1675,15 +1506,14 @@
         };
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
       },
-
-      migrate() {
-        const data = this.get();
-        let changed = false;
-        const invoices = data.invoices || {};
-        for (let id in invoices) {
-          const inv = invoices[id];
+      migrate: function() {
+        var data = this.get();
+        var changed = false;
+        var invoices = data.invoices || {};
+        for (var id in invoices) {
+          var inv = invoices[id];
           if (inv.items) {
-            inv.items = inv.items.map(item => {
+            inv.items = inv.items.map(function(item) {
               if (!item.productId) item.productId = '';
               if (!item.rateSource) item.rateSource = 'manual';
               if (!item.gst) item.gst = 18;
@@ -1699,7 +1529,7 @@
           if (!inv.templateVersion) { inv.templateVersion = 1; changed = true; }
         }
         if (changed) this.save('invoices', invoices);
-        const comp = data.company || {};
+        var comp = data.company || {};
         if (!comp.bankDetails) { comp.bankDetails = 'Bank Name, Account No, IFSC, UPI'; changed = true; }
         if (!data.cardGradients) {
           data.cardGradients = {
@@ -1719,73 +1549,69 @@
         if (changed) this.save('company', comp);
         if (changed && data.cardGradients) this.save('cardGradients', data.cardGradients);
       },
-
-      get(key) {
-        const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+      get: function(key) {
+        var data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
         return key ? data[key] : data;
       },
-      save(key, value) {
-        const data = this.get();
+      save: function(key, value) {
+        var data = this.get();
         data[key] = value;
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
       },
-      add(category, item) {
-        const data = this.get(category) || {};
+      add: function(category, item) {
+        var data = this.get(category) || {};
         data[item.id] = item;
         this.save(category, data);
         return item;
       },
-      update(category, id, updates) {
-        const data = this.get(category) || {};
+      update: function(category, id, updates) {
+        var data = this.get(category) || {};
         if (!data[id]) return null;
-        data[id] = { ...data[id], ...updates };
+        data[id] = Object.assign({}, data[id], updates);
         this.save(category, data);
         return data[id];
       },
-      delete(category, id) {
-        const data = this.get(category) || {};
+      delete: function(category, id) {
+        var data = this.get(category) || {};
         delete data[id];
         this.save(category, data);
       },
-      getList(category) {
-        const data = this.get(category) || {};
+      getList: function(category) {
+        var data = this.get(category) || {};
         return Object.values(data);
       },
-      getItem(category, id) {
-        const data = this.get(category) || {};
+      getItem: function(category, id) {
+        var data = this.get(category) || {};
         return data[id] || null;
       }
     };
 
-    // ============================================================
-    // UTILITIES
-    // ============================================================
     function toast(msg, type) {
-      const container = document.getElementById('notifications');
-      const div = document.createElement('div');
+      var container = document.getElementById('notifications');
+      var div = document.createElement('div');
       div.className = 'notification' + (type === 'error' ? ' error' : type === 'warning' ? ' warning' : '');
       div.textContent = msg;
       container.appendChild(div);
-      setTimeout(() => div.remove(), 3500);
+      setTimeout(function() { div.remove(); }, 3500);
     }
 
     function getNextQuotationNumber() {
-      const s = DB.get('settings');
-      const counter = s.quotationCounter || 1;
-      const prefix = s.quotationPrefix || 'H4-QTN';
-      const year = s.quotationYear || new Date().getFullYear();
-      const num = String(counter).padStart(5, '0');
+      var s = DB.get('settings');
+      var counter = s.quotationCounter || 1;
+      var prefix = s.quotationPrefix || 'H4-QTN';
+      var year = s.quotationYear || new Date().getFullYear();
+      var num = String(counter).padStart(5, '0');
       s.quotationCounter = counter + 1;
       DB.save('settings', s);
       return prefix + '-' + year + '-' + num;
     }
 
     function getNextInvoiceNumber() {
-      const s = DB.get('settings');
-      const counter = s.invoiceCounter || 1;
-      const prefix = s.invoicePrefix || 'H4-INV';
-      const year = s.invoiceYear || new Date().getFullYear();
-      const num = String(counter).padStart(5, '0');
+      var s = DB.get('settings');
+      var counter = s.invoiceCounter || 1;
+      var prefix = s.invoicePrefix || 'H4-INV';
+      var year = s.invoiceYear || new Date().getFullYear();
+      var num = String(counter).padStart(5, '0');
       s.invoiceCounter = counter + 1;
       DB.save('settings', s);
       return prefix + '-' + year + '-' + num;
@@ -1793,25 +1619,24 @@
 
     function numberToWords(num) {
       if (num === 0) return 'Zero';
-      const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
-      const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-      const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-      const n = Math.round(num);
-      const crore = Math.floor(n / 10000000);
-      const lakh = Math.floor((n % 10000000) / 100000);
-      const thousand = Math.floor((n % 100000) / 1000);
-      const remainder = n % 1000;
-      let words = '';
-      if (crore > 0) words += _helper(crore) + ' Crore ';
-      if (lakh > 0) words += _helper(lakh) + ' Lakh ';
-      if (thousand > 0) words += _helper(thousand) + ' Thousand ';
-      if (remainder > 0) words += _helper(remainder);
-
-      function _helper(val) {
-        let w = '';
-        const h = Math.floor(val / 100);
-        const t = Math.floor((val % 100) / 10);
-        const o = val % 10;
+      var ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+      var tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+      var teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+      var n = Math.round(num);
+      var crore = Math.floor(n / 10000000);
+      var lakh = Math.floor((n % 10000000) / 100000);
+      var thousand = Math.floor((n % 100000) / 1000);
+      var remainder = n % 1000;
+      var words = '';
+      if (crore > 0) words += helper(crore) + ' Crore ';
+      if (lakh > 0) words += helper(lakh) + ' Lakh ';
+      if (thousand > 0) words += helper(thousand) + ' Thousand ';
+      if (remainder > 0) words += helper(remainder);
+      function helper(val) {
+        var w = '';
+        var h = Math.floor(val / 100);
+        var t = Math.floor((val % 100) / 10);
+        var o = val % 10;
         if (h > 0) w += ones[h] + ' Hundred ';
         if (t === 1) w += teens[o];
         else if (t > 1) w += tens[t] + (o > 0 ? ' ' + ones[o] : '');
@@ -1825,32 +1650,28 @@
       if (!product.slabs || !Array.isArray(product.slabs) || product.slabs.length === 0) {
         return product.sellingRate || 0;
       }
-      const sorted = [...product.slabs].sort((a, b) => a.min - b.min);
-      for (let slab of sorted) {
+      var sorted = product.slabs.slice().sort(function(a, b) { return a.min - b.min; });
+      for (var i = 0; i < sorted.length; i++) {
+        var slab = sorted[i];
         if (qty >= slab.min && qty <= slab.max) return slab.rate;
       }
-      const last = sorted[sorted.length - 1];
+      var last = sorted[sorted.length - 1];
       if (qty > last.max) return last.rate;
       return product.sellingRate || 0;
     }
 
-    // ============================================================
-    // H4 TEMPLATE ENGINE - Central Document Rendering
-    // ============================================================
-    const H4TemplateEngine = {
-      getTemplate(id) {
-        const templates = DB.get('templates') || {};
+    var H4TemplateEngine = {
+      getTemplate: function(id) {
+        var templates = DB.get('templates') || {};
         return templates[id] || templates['tpl_classic'] || {
           id: 'tpl_classic', name: 'Classic', primary: '#2C3E50', secondary: '#34495E',
           font: 'Segoe UI', fontSize: 13, logoPos: 'center', showLogo: true, showSig: true
         };
       },
-
-      render(documentType, data, templateId) {
-        const template = this.getTemplate(templateId);
-        const company = DB.get('company') || {};
-        const customer = DB.getItem('customers', data.customerId) || {};
-
+      render: function(documentType, data, templateId) {
+        var template = this.getTemplate(templateId);
+        var company = DB.get('company') || {};
+        var customer = DB.getItem('customers', data.customerId) || {};
         switch(documentType) {
           case 'invoice': return this.renderInvoice(data, company, customer, template);
           case 'quotation': return this.renderQuotation(data, company, customer, template);
@@ -1859,230 +1680,52 @@
           default: return '<p>Unsupported document type.</p>';
         }
       },
-
-      renderInvoice(data, company, customer, template) {
-        const itemsHtml = (data.items || []).map((item, idx) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `<tr><td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${idx+1}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">${item.description || ''}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.quantity || 0}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">${item.unit || ''}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${(item.rate || 0).toFixed(2)}</td>
-            <td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹${total.toFixed(2)}</td></tr>`;
+      renderInvoice: function(data, company, customer, template) {
+        var itemsHtml = (data.items || []).map(function(item, idx) {
+          var total = (item.quantity || 0) * (item.rate || 0);
+          return '<tr><td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">' + (idx+1) + '</td><td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;">' + (item.description || '') + '</td><td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">' + (item.quantity || 0) + '</td><td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:center;">' + (item.unit || '') + '</td><td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹' + (item.rate || 0).toFixed(2) + '</td><td style="padding:6px 8px;border-bottom:1px solid #e0e0e0;text-align:right;">₹' + total.toFixed(2) + '</td></tr>';
         }).join('');
-
-        const primary = template.primary || '#2C3E50';
-        const font = template.font || 'Segoe UI';
-        const fontSize = template.fontSize || 13;
-
-        return `
-          <div class="preview-a4-page template-${template.id}" style="font-family:'${font}',sans-serif;font-size:${fontSize}px;color:#1a1a2e;">
-            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid ${primary};padding-bottom:0.8rem;margin-bottom:0.8rem;">
-              <div>
-                ${template.showLogo !== false && company.logo ? `<img src="${company.logo}" style="max-height:70px;"/>` : ''}
-                <h2 style="margin:0;color:${primary};">${company.legalName || 'H4 Construction Solutions'}</h2>
-                <p style="margin:0;font-size:0.9em;color:#555;">${company.address || ''}</p>
-                <p style="margin:0;font-size:0.8em;color:#555;">${company.phone || ''} ${company.email ? '| '+company.email : ''}</p>
-                <p style="margin:0;font-size:0.8em;color:#555;">GSTIN: ${company.gstin || 'N/A'}</p>
-              </div>
-              <div style="text-align:right;">
-                <h1 style="font-size:1.8rem;color:${primary};margin:0;">TAX INVOICE</h1>
-                <p style="margin:0;font-weight:600;">${data.number || ''}</p>
-                <p style="margin:0;">Date: ${data.date || ''}</p>
-                <p style="margin:0;">Due: ${data.dueDate || ''}</p>
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.5rem 0;">
-              <div style="background:#f9f9f9;padding:0.8rem;border-radius:6px;">
-                <strong style="color:${primary};">BILL TO</strong><br>
-                ${customer.name || ''}<br>${customer.company || ''}<br>${customer.address || ''}<br>
-                Phone: ${customer.phone || ''} ${customer.whatsapp ? '| WhatsApp: '+customer.whatsapp : ''}<br>
-                GSTIN: ${customer.gstin || 'N/A'}
-              </div>
-              <div><strong>Project</strong><br>${data.projectName || ''}<br><strong>Reference</strong><br>${data.reference || ''}</div>
-            </div>
-            <table class="p-table">
-              <thead><tr style="background:${primary};color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead>
-              <tbody>${itemsHtml}</tbody>
-            </table>
-            <div class="p-total">
-              <div><span>Subtotal</span><span>₹${(data.subtotal || 0).toFixed(2)}</span></div>
-              ${(data.discountAmount || 0) > 0 ? `<div><span>Discount</span><span>₹${(data.discountAmount || 0).toFixed(2)}</span></div>` : ''}
-              <div><span>Taxable</span><span>₹${(data.taxableAmount || 0).toFixed(2)}</span></div>
-              ${(data.cgst || 0) > 0 ? `<div><span>CGST</span><span>₹${(data.cgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.sgst || 0) > 0 ? `<div><span>SGST</span><span>₹${(data.sgst || 0).toFixed(2)}</span></div>` : ''}
-              ${(data.igst || 0) > 0 ? `<div><span>IGST</span><span>₹${(data.igst || 0).toFixed(2)}</span></div>` : ''}
-              <div><span>Round Off</span><span>₹${(data.roundOff || 0).toFixed(2)}</span></div>
-              <div class="p-grand"><span>GRAND TOTAL</span><span>₹${(data.grandTotal || 0).toFixed(2)}</span></div>
-            </div>
-            <div style="font-size:0.9rem;font-weight:600;color:#555;padding:0.4rem 0;border-top:1px solid #e0e0e0;margin-top:0.4rem;">${data.amountWords || 'Rupees Zero Only'}</div>
-            <div style="margin-top:0.5rem;font-size:0.85rem;">
-              ${data.terms ? `<p><strong>Terms:</strong> ${data.terms}</p>` : ''}
-              ${data.bankDetails ? `<p><strong>Bank Details:</strong> ${data.bankDetails}</p>` : ''}
-              ${data.notes ? `<p><strong>Notes:</strong> ${data.notes}</p>` : ''}
-            </div>
-            <div style="margin-top:1rem;display:flex;justify-content:space-between;border-top:1px solid #e0e0e0;padding-top:0.5rem;">
-              <div style="font-size:0.85rem;">${company.legalName || ''}</div>
-              <div style="text-align:right;">
-                ${template.showSig !== false ? `<div style="height:40px;border-bottom:1px solid #777;width:150px;margin-left:auto;"></div>` : ''}
-                ${company.signatoryName || 'Authorized Signatory'}
-                ${company.signature ? `<br><img src="${company.signature}" style="max-height:50px;">` : ''}
-              </div>
-            </div>
-          </div>
-        `;
+        var primary = template.primary || '#2C3E50';
+        var font = template.font || 'Segoe UI';
+        var fontSize = template.fontSize || 13;
+        return '<div class="preview-a4-page template-' + template.id + '" style="font-family:\'' + font + '\',sans-serif;font-size:' + fontSize + 'px;color:#1a1a2e;"><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid ' + primary + ';padding-bottom:0.8rem;margin-bottom:0.8rem;"><div>' + (template.showLogo !== false && company.logo ? '<img src="' + company.logo + '" style="max-height:70px;"/>' : '') + '<h2 style="margin:0;color:' + primary + ';">' + (company.legalName || 'H4 Construction Solutions') + '</h2><p style="margin:0;font-size:0.9em;color:#555;">' + (company.address || '') + '</p><p style="margin:0;font-size:0.8em;color:#555;">' + (company.phone || '') + (company.email ? '| '+company.email : '') + '</p><p style="margin:0;font-size:0.8em;color:#555;">GSTIN: ' + (company.gstin || 'N/A') + '</p></div><div style="text-align:right;"><h1 style="font-size:1.8rem;color:' + primary + ';margin:0;">TAX INVOICE</h1><p style="margin:0;font-weight:600;">' + (data.number || '') + '</p><p style="margin:0;">Date: ' + (data.date || '') + '</p><p style="margin:0;">Due: ' + (data.dueDate || '') + '</p></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.5rem 0;"><div style="background:#f9f9f9;padding:0.8rem;border-radius:6px;"><strong style="color:' + primary + ';">BILL TO</strong><br>' + (customer.name || '') + '<br>' + (customer.company || '') + '<br>' + (customer.address || '') + '<br>Phone: ' + (customer.phone || '') + (customer.whatsapp ? '| WhatsApp: '+customer.whatsapp : '') + '<br>GSTIN: ' + (customer.gstin || 'N/A') + '</div><div><strong>Project</strong><br>' + (data.projectName || '') + '<br><strong>Reference</strong><br>' + (data.reference || '') + '</div></div><table class="p-table"><thead><tr style="background:' + primary + ';color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead><tbody>' + itemsHtml + '</tbody></table><div class="p-total"><div><span>Subtotal</span><span>₹' + (data.subtotal || 0).toFixed(2) + '</span></div>' + ((data.discountAmount || 0) > 0 ? '<div><span>Discount</span><span>₹' + (data.discountAmount || 0).toFixed(2) + '</span></div>' : '') + '<div><span>Taxable</span><span>₹' + (data.taxableAmount || 0).toFixed(2) + '</span></div>' + ((data.cgst || 0) > 0 ? '<div><span>CGST</span><span>₹' + (data.cgst || 0).toFixed(2) + '</span></div>' : '') + ((data.sgst || 0) > 0 ? '<div><span>SGST</span><span>₹' + (data.sgst || 0).toFixed(2) + '</span></div>' : '') + ((data.igst || 0) > 0 ? '<div><span>IGST</span><span>₹' + (data.igst || 0).toFixed(2) + '</span></div>' : '') + '<div><span>Round Off</span><span>₹' + (data.roundOff || 0).toFixed(2) + '</span></div><div class="p-grand"><span>GRAND TOTAL</span><span>₹' + (data.grandTotal || 0).toFixed(2) + '</span></div></div><div style="font-size:0.9rem;font-weight:600;color:#555;padding:0.4rem 0;border-top:1px solid #e0e0e0;margin-top:0.4rem;">' + (data.amountWords || 'Rupees Zero Only') + '</div><div style="margin-top:0.5rem;font-size:0.85rem;">' + (data.terms ? '<p><strong>Terms:</strong> ' + data.terms + '</p>' : '') + (data.bankDetails ? '<p><strong>Bank Details:</strong> ' + data.bankDetails + '</p>' : '') + (data.notes ? '<p><strong>Notes:</strong> ' + data.notes + '</p>' : '') + '</div><div style="margin-top:1rem;display:flex;justify-content:space-between;border-top:1px solid #e0e0e0;padding-top:0.5rem;"><div style="font-size:0.85rem;">' + (company.legalName || '') + '</div><div style="text-align:right;">' + (template.showSig !== false ? '<div style="height:40px;border-bottom:1px solid #777;width:150px;margin-left:auto;"></div>' : '') + (company.signatoryName || 'Authorized Signatory') + (company.signature ? '<br><img src="' + company.signature + '" style="max-height:50px;">' : '') + '</div></div></div>';
       },
-
-      renderQuotation(data, company, customer, template) {
-        const itemsHtml = (data.items || []).map((item, idx) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `<tr><td>${idx+1}</td><td>${item.description}</td><td style="text-align:center;">${item.quantity}</td><td style="text-align:center;">${item.unit}</td><td style="text-align:right;">₹${(item.rate||0).toFixed(2)}</td><td style="text-align:right;">₹${total.toFixed(2)}</td></tr>`;
+      renderQuotation: function(data, company, customer, template) {
+        var itemsHtml = (data.items || []).map(function(item, idx) {
+          var total = (item.quantity || 0) * (item.rate || 0);
+          return '<tr><td>' + (idx+1) + '</td><td>' + item.description + '</td><td style="text-align:center;">' + item.quantity + '</td><td style="text-align:center;">' + item.unit + '</td><td style="text-align:right;">₹' + (item.rate||0).toFixed(2) + '</td><td style="text-align:right;">₹' + total.toFixed(2) + '</td></tr>';
         }).join('');
-        const primary = template.primary || '#2C3E50';
-        return `
-          <div class="preview-a4-page" style="font-family:'${template.font||'Segoe UI'}',sans-serif;font-size:${template.fontSize||13}px;">
-            <div style="text-align:center;border-bottom:3px solid ${primary};padding-bottom:0.8rem;margin-bottom:0.8rem;">
-              <h1 style="margin:0;color:${primary};">QUOTATION</h1>
-              <p style="margin:0;font-weight:600;">${data.number||''}</p>
-              <p style="margin:0;">Date: ${data.date||''} | Valid Until: ${data.validUntil||''}</p>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.5rem 0;">
-              <div><strong>Customer:</strong> ${customer.name||''}<br>${customer.address||''}</div>
-              <div><strong>Project:</strong> ${data.projectName||''}<br><strong>Ref:</strong> ${data.reference||''}</div>
-            </div>
-            <table class="p-table"><thead><tr style="background:${primary};color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead><tbody>${itemsHtml}</tbody></table>
-            <div class="p-total">
-              <div><span>Subtotal</span><span>₹${(data.subtotal||0).toFixed(2)}</span></div>
-              ${(data.discountAmount||0)>0?`<div><span>Discount</span><span>₹${(data.discountAmount||0).toFixed(2)}</span></div>`:''}
-              <div><span>Taxable</span><span>₹${(data.taxableAmount||0).toFixed(2)}</span></div>
-              ${(data.cgst||0)>0?`<div><span>CGST</span><span>₹${(data.cgst||0).toFixed(2)}</span></div>`:''}
-              ${(data.sgst||0)>0?`<div><span>SGST</span><span>₹${(data.sgst||0).toFixed(2)}</span></div>`:''}
-              ${(data.igst||0)>0?`<div><span>IGST</span><span>₹${(data.igst||0).toFixed(2)}</span></div>`:''}
-              <div class="p-grand"><span>GRAND TOTAL</span><span>₹${(data.grandTotal||0).toFixed(2)}</span></div>
-            </div>
-            <div style="font-size:0.9rem;font-weight:600;color:#555;padding:0.4rem 0;border-top:1px solid #e0e0e0;">${data.amountWords||'Rupees Zero Only'}</div>
-            <div style="margin-top:0.5rem;font-size:0.85rem;">
-              ${data.terms?`<p><strong>Terms:</strong> ${data.terms}</p>`:''}
-              ${data.notes?`<p><strong>Notes:</strong> ${data.notes}</p>`:''}
-            </div>
-            <div style="margin-top:1rem;display:flex;justify-content:space-between;border-top:1px solid #e0e0e0;padding-top:0.5rem;">
-              <div>${company.legalName||''}</div>
-              <div style="text-align:right;">${company.signatoryName||'Authorized Signatory'}</div>
-            </div>
-          </div>
-        `;
+        var primary = template.primary || '#2C3E50';
+        return '<div class="preview-a4-page" style="font-family:\'' + (template.font||'Segoe UI') + '\',sans-serif;font-size:' + (template.fontSize||13) + 'px;"><div style="text-align:center;border-bottom:3px solid ' + primary + ';padding-bottom:0.8rem;margin-bottom:0.8rem;"><h1 style="margin:0;color:' + primary + ';">QUOTATION</h1><p style="margin:0;font-weight:600;">' + (data.number||'') + '</p><p style="margin:0;">Date: ' + (data.date||'') + ' | Valid Until: ' + (data.validUntil||'') + '</p></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.5rem 0;"><div><strong>Customer:</strong> ' + (customer.name||'') + '<br>' + (customer.address||'') + '</div><div><strong>Project:</strong> ' + (data.projectName||'') + '<br><strong>Ref:</strong> ' + (data.reference||'') + '</div></div><table class="p-table"><thead><tr style="background:' + primary + ';color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead><tbody>' + itemsHtml + '</tbody></table><div class="p-total"><div><span>Subtotal</span><span>₹' + (data.subtotal||0).toFixed(2) + '</span></div>' + ((data.discountAmount||0)>0 ? '<div><span>Discount</span><span>₹' + (data.discountAmount||0).toFixed(2) + '</span></div>' : '') + '<div><span>Taxable</span><span>₹' + (data.taxableAmount||0).toFixed(2) + '</span></div>' + ((data.cgst||0)>0 ? '<div><span>CGST</span><span>₹' + (data.cgst||0).toFixed(2) + '</span></div>' : '') + ((data.sgst||0)>0 ? '<div><span>SGST</span><span>₹' + (data.sgst||0).toFixed(2) + '</span></div>' : '') + ((data.igst||0)>0 ? '<div><span>IGST</span><span>₹' + (data.igst||0).toFixed(2) + '</span></div>' : '') + '<div class="p-grand"><span>GRAND TOTAL</span><span>₹' + (data.grandTotal||0).toFixed(2) + '</span></div></div><div style="font-size:0.9rem;font-weight:600;color:#555;padding:0.4rem 0;border-top:1px solid #e0e0e0;">' + (data.amountWords||'Rupees Zero Only') + '</div><div style="margin-top:0.5rem;font-size:0.85rem;">' + (data.terms ? '<p><strong>Terms:</strong> ' + data.terms + '</p>' : '') + (data.notes ? '<p><strong>Notes:</strong> ' + data.notes + '</p>' : '') + '</div><div style="margin-top:1rem;display:flex;justify-content:space-between;border-top:1px solid #e0e0e0;padding-top:0.5rem;"><div>' + (company.legalName||'') + '</div><div style="text-align:right;">' + (company.signatoryName||'Authorized Signatory') + '</div></div></div>';
       },
-
-      renderWaterproofing(data, company, customer, template) {
-        const pd = data.projectDetails || {};
-        const area = pd.area || 0;
-        const materialRate = pd.materialRate || 0;
-        const labourRate = pd.labourRate || 0;
-        const transport = pd.transport || 0;
-        const materialCost = area * materialRate;
-        const labourCost = area * labourRate;
-        const subtotal = materialCost + labourCost + transport;
-        const primary = template.primary || '#2C3E50';
-
-        return `
-          <div class="preview-a4-page" style="font-family:'${template.font||'Segoe UI'}',sans-serif;font-size:${template.fontSize||13}px;">
-            <div style="background:linear-gradient(135deg,${primary},${template.secondary||'#34495E'});color:white;padding:1.5rem;border-radius:12px;margin-bottom:1rem;text-align:center;">
-              <h1 style="font-size:1.6rem;margin:0;">💧 WATERPROOFING QUOTATION</h1>
-              <p style="margin:0;">Durable • Flexible • Crack Resistant</p>
-            </div>
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:0.5rem;">
-              <div><strong>${company.legalName}</strong></div>
-              <div><strong>${data.number}</strong></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;font-size:0.95em;background:#f9f9f9;padding:0.8rem;border-radius:6px;">
-              <div><strong>Customer</strong> ${customer.name}</div>
-              <div><strong>Project</strong> ${pd.projectName}</div>
-              <div><strong>Area</strong> ${area} sq.ft</div>
-              <div><strong>System</strong> ${pd.systemType}</div>
-              <div><strong>Material</strong> ${pd.material}</div>
-              <div><strong>Material Rate</strong> ₹${materialRate}/sq.ft</div>
-              <div><strong>Labour Rate</strong> ₹${labourRate}/sq.ft</div>
-            </div>
-            <div style="margin-top:0.8rem;">
-              <h3 style="color:${primary};border-bottom:2px solid ${primary};padding-bottom:0.3rem;">Cost Summary</h3>
-              <div style="margin-left:auto;width:100%;">
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Material</span><span>₹${materialCost.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Labour</span><span>₹${labourCost.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Transport</span><span>₹${transport.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>₹${subtotal.toFixed(2)}</span></div>
-                ${(data.pricing?.discount||0)>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>₹${(data.pricing?.discount||0).toFixed(2)}</span></div>`:''}
-                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>₹${(data.taxableAmount||0).toFixed(2)}</span></div>
-                ${(data.cgst||0)>0?`<div><span>CGST</span><span>₹${(data.cgst||0).toFixed(2)}</span></div>`:''}
-                ${(data.sgst||0)>0?`<div><span>SGST</span><span>₹${(data.sgst||0).toFixed(2)}</span></div>`:''}
-                ${(data.igst||0)>0?`<div><span>IGST</span><span>₹${(data.igst||0).toFixed(2)}</span></div>`:''}
-                <div class="p-grand"><span>GRAND TOTAL</span><span>₹${(data.grandTotal||0).toFixed(2)}</span></div>
-              </div>
-            </div>
-            <div style="margin-top:1rem;border-top:2px solid ${primary};padding-top:0.5rem;display:flex;justify-content:space-between;">
-              <div>${data.footer?.thankYou||'Thank you for considering H4 Construction Solutions.'}</div>
-              <div>${data.footer?.signatoryName||'Authorized Signatory'}</div>
-            </div>
-          </div>
-        `;
+      renderWaterproofing: function(data, company, customer, template) {
+        var pd = data.projectDetails || {};
+        var area = pd.area || 0;
+        var materialRate = pd.materialRate || 0;
+        var labourRate = pd.labourRate || 0;
+        var transport = pd.transport || 0;
+        var materialCost = area * materialRate;
+        var labourCost = area * labourRate;
+        var subtotal = materialCost + labourCost + transport;
+        var primary = template.primary || '#2C3E50';
+        return '<div class="preview-a4-page" style="font-family:\'' + (template.font||'Segoe UI') + '\',sans-serif;font-size:' + (template.fontSize||13) + 'px;"><div style="background:linear-gradient(135deg,' + primary + ',' + (template.secondary||'#34495E') + ');color:white;padding:1.5rem;border-radius:12px;margin-bottom:1rem;text-align:center;"><h1 style="font-size:1.6rem;margin:0;">💧 WATERPROOFING QUOTATION</h1><p style="margin:0;">Durable • Flexible • Crack Resistant</p></div><div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:0.5rem;"><div><strong>' + (company.legalName) + '</strong></div><div><strong>' + (data.number) + '</strong></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;font-size:0.95em;background:#f9f9f9;padding:0.8rem;border-radius:6px;"><div><strong>Customer</strong> ' + customer.name + '</div><div><strong>Project</strong> ' + pd.projectName + '</div><div><strong>Area</strong> ' + area + ' sq.ft</div><div><strong>System</strong> ' + pd.systemType + '</div><div><strong>Material</strong> ' + pd.material + '</div><div><strong>Material Rate</strong> ₹' + materialRate + '/sq.ft</div><div><strong>Labour Rate</strong> ₹' + labourRate + '/sq.ft</div></div><div style="margin-top:0.8rem;"><h3 style="color:' + primary + ';border-bottom:2px solid ' + primary + ';padding-bottom:0.3rem;">Cost Summary</h3><div style="margin-left:auto;width:100%;"><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Material</span><span>₹' + materialCost.toFixed(2) + '</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Labour</span><span>₹' + labourCost.toFixed(2) + '</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Transport</span><span>₹' + transport.toFixed(2) + '</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span>₹' + subtotal.toFixed(2) + '</span></div>' + ((data.pricing && data.pricing.discount) ? '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span>₹' + (data.pricing.discount||0).toFixed(2) + '</span></div>' : '') + '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span>₹' + (data.taxableAmount||0).toFixed(2) + '</span></div>' + ((data.cgst||0)>0 ? '<div><span>CGST</span><span>₹' + (data.cgst||0).toFixed(2) + '</span></div>' : '') + ((data.sgst||0)>0 ? '<div><span>SGST</span><span>₹' + (data.sgst||0).toFixed(2) + '</span></div>' : '') + ((data.igst||0)>0 ? '<div><span>IGST</span><span>₹' + (data.igst||0).toFixed(2) + '</span></div>' : '') + '<div class="p-grand"><span>GRAND TOTAL</span><span>₹' + (data.grandTotal||0).toFixed(2) + '</span></div></div></div><div style="margin-top:1rem;border-top:2px solid ' + primary + ';padding-top:0.5rem;display:flex;justify-content:space-between;"><div>' + (data.footer && data.footer.thankYou ? data.footer.thankYou : 'Thank you for considering H4 Construction Solutions.') + '</div><div>' + (data.footer && data.footer.signatoryName ? data.footer.signatoryName : 'Authorized Signatory') + '</div></div></div>';
       },
-
-      renderEpoxy(data, company, customer, template) {
-        const pd = data.projectDetails || {};
-        const pricing = data.pricing || {};
-        const itemsHtml = (pricing.items || []).map((item, idx) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `<tr><td>${idx+1}</td><td>${item.description}</td><td style="text-align:center;">${item.quantity}</td><td style="text-align:center;">${item.unit||'sq.ft'}</td><td style="text-align:right;">₹${(item.rate||0).toFixed(2)}</td><td style="text-align:right;">₹${total.toFixed(2)}</td></tr>`;
+      renderEpoxy: function(data, company, customer, template) {
+        var pd = data.projectDetails || {};
+        var pricing = data.pricing || {};
+        var itemsHtml = (pricing.items || []).map(function(item, idx) {
+          var total = (item.quantity || 0) * (item.rate || 0);
+          return '<tr><td>' + (idx+1) + '</td><td>' + item.description + '</td><td style="text-align:center;">' + item.quantity + '</td><td style="text-align:center;">' + (item.unit||'sq.ft') + '</td><td style="text-align:right;">₹' + (item.rate||0).toFixed(2) + '</td><td style="text-align:right;">₹' + total.toFixed(2) + '</td></tr>';
         }).join('');
-        const primary = template.primary || '#6A3FA0';
-        const secondary = template.secondary || '#D4A843';
-
-        return `
-          <div class="preview-a4-page" style="font-family:'${template.font||'Georgia'}',serif;font-size:${template.fontSize||14}px;">
-            <div style="background:linear-gradient(135deg,${primary},${secondary});color:white;padding:1.8rem;border-radius:12px;margin-bottom:1rem;text-align:center;">
-              <h1 style="font-size:1.8rem;margin:0;">PREMIUM EPOXY FLOORING PROPOSAL</h1>
-              <p style="margin:0;font-size:1rem;">Luxury • Seamless • Durable • Premium Finish</p>
-            </div>
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:0.5rem;">
-              <div><strong>${company.legalName}</strong></div>
-              <div><strong>${data.number}</strong></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;font-size:0.95em;background:#f9f9f9;padding:0.8rem;border-radius:6px;">
-              <div><strong>Customer</strong> ${customer.name}</div>
-              <div><strong>Project</strong> ${pd.projectName}</div>
-              <div><strong>Area</strong> ${pd.area} sq.ft</div>
-              <div><strong>Type</strong> ${pd.flooringType}</div>
-              <div><strong>Thickness</strong> ${pd.thickness}</div>
-              <div><strong>Finish</strong> ${pd.finish}</div>
-            </div>
-            <div style="margin-top:0.8rem;">
-              <h3 style="color:${primary};border-bottom:2px solid ${primary};padding-bottom:0.3rem;">Price Table</h3>
-              <table class="p-table"><thead><tr style="background:${primary};color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead><tbody>${itemsHtml}</tbody></table>
-            </div>
-            <div class="p-total">
-              <div><span>Subtotal</span><span>₹${(data.subtotal||0).toFixed(2)}</span></div>
-              ${(data.discountAmount||0)>0?`<div><span>Discount</span><span>₹${(data.discountAmount||0).toFixed(2)}</span></div>`:''}
-              <div><span>Taxable</span><span>₹${(data.taxableAmount||0).toFixed(2)}</span></div>
-              ${(data.cgst||0)>0?`<div><span>CGST</span><span>₹${(data.cgst||0).toFixed(2)}</span></div>`:''}
-              ${(data.sgst||0)>0?`<div><span>SGST</span><span>₹${(data.sgst||0).toFixed(2)}</span></div>`:''}
-              ${(data.igst||0)>0?`<div><span>IGST</span><span>₹${(data.igst||0).toFixed(2)}</span></div>`:''}
-              <div class="p-grand"><span>GRAND TOTAL</span><span>₹${(data.grandTotal||0).toFixed(2)}</span></div>
-            </div>
-            <div style="margin-top:1rem;border-top:2px solid ${primary};padding-top:0.5rem;display:flex;justify-content:space-between;">
-              <div>${data.footer?.thankYou||'Thank you for considering H4 Construction Solutions.'}</div>
-              <div>${data.footer?.signatoryName||'Authorized Signatory'}</div>
-            </div>
-          </div>
-        `;
+        var primary = template.primary || '#6A3FA0';
+        var secondary = template.secondary || '#D4A843';
+        return '<div class="preview-a4-page" style="font-family:\'' + (template.font||'Georgia') + '\',serif;font-size:' + (template.fontSize||14) + 'px;"><div style="background:linear-gradient(135deg,' + primary + ',' + secondary + ');color:white;padding:1.8rem;border-radius:12px;margin-bottom:1rem;text-align:center;"><h1 style="font-size:1.8rem;margin:0;">PREMIUM EPOXY FLOORING PROPOSAL</h1><p style="margin:0;font-size:1rem;">Luxury • Seamless • Durable • Premium Finish</p></div><div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:0.5rem;"><div><strong>' + (company.legalName) + '</strong></div><div><strong>' + (data.number) + '</strong></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;font-size:0.95em;background:#f9f9f9;padding:0.8rem;border-radius:6px;"><div><strong>Customer</strong> ' + customer.name + '</div><div><strong>Project</strong> ' + pd.projectName + '</div><div><strong>Area</strong> ' + pd.area + ' sq.ft</div><div><strong>Type</strong> ' + pd.flooringType + '</div><div><strong>Thickness</strong> ' + pd.thickness + '</div><div><strong>Finish</strong> ' + pd.finish + '</div></div><div style="margin-top:0.8rem;"><h3 style="color:' + primary + ';border-bottom:2px solid ' + primary + ';padding-bottom:0.3rem;">Price Table</h3><table class="p-table"><thead><tr style="background:' + primary + ';color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead><tbody>' + itemsHtml + '</tbody></table></div><div class="p-total"><div><span>Subtotal</span><span>₹' + (data.subtotal||0).toFixed(2) + '</span></div>' + ((data.discountAmount||0)>0 ? '<div><span>Discount</span><span>₹' + (data.discountAmount||0).toFixed(2) + '</span></div>' : '') + '<div><span>Taxable</span><span>₹' + (data.taxableAmount||0).toFixed(2) + '</span></div>' + ((data.cgst||0)>0 ? '<div><span>CGST</span><span>₹' + (data.cgst||0).toFixed(2) + '</span></div>' : '') + ((data.sgst||0)>0 ? '<div><span>SGST</span><span>₹' + (data.sgst||0).toFixed(2) + '</span></div>' : '') + ((data.igst||0)>0 ? '<div><span>IGST</span><span>₹' + (data.igst||0).toFixed(2) + '</span></div>' : '') + '<div class="p-grand"><span>GRAND TOTAL</span><span>₹' + (data.grandTotal||0).toFixed(2) + '</span></div></div><div style="margin-top:1rem;border-top:2px solid ' + primary + ';padding-top:0.5rem;display:flex;justify-content:space-between;"><div>' + (data.footer && data.footer.thankYou ? data.footer.thankYou : 'Thank you for considering H4 Construction Solutions.') + '</div><div>' + (data.footer && data.footer.signatoryName ? data.footer.signatoryName : 'Authorized Signatory') + '</div></div></div>';
       }
     };
 
-    // ============================================================
-    // MAIN APP
-    // ============================================================
-    const H4App = {
+    var H4App = {
       selectedCard: 'invoice',
-      
-      init() {
+      init: function() {
         DB.init();
         this.setupNavigation();
         this.loadCompany();
@@ -2098,58 +1741,57 @@
         if (window.innerWidth <= 768) {
           document.getElementById('bottomNav').style.display = 'flex';
         }
-        window.addEventListener('resize', () => {
+        window.addEventListener('resize', function() {
           document.getElementById('bottomNav').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
         });
         this.populateCustomerSelects();
         toast('H4 Billing ERP loaded.');
       },
-
-      setupNavigation() {
-        document.getElementById('menuToggle').onclick = () => {
+      setupNavigation: function() {
+        document.getElementById('menuToggle').onclick = function() {
           document.getElementById('sidebar').classList.toggle('open');
         };
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-          item.addEventListener('click', () => {
-            const mod = item.dataset.module;
-            this.navigate(mod);
+        document.querySelectorAll('.sidebar-item').forEach(function(item) {
+          item.addEventListener('click', function() {
+            var mod = this.dataset.module;
+            H4App.navigate(mod);
             document.getElementById('sidebar').classList.remove('open');
           });
         });
-        document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
-          item.addEventListener('click', () => {
-            this.navigate(item.dataset.module);
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(function(item) {
+          item.addEventListener('click', function() {
+            H4App.navigate(this.dataset.module);
           });
         });
-        document.addEventListener('click', (e) => {
-          const sidebar = document.getElementById('sidebar');
-          const toggle = document.getElementById('menuToggle');
+        document.addEventListener('click', function(e) {
+          var sidebar = document.getElementById('sidebar');
+          var toggle = document.getElementById('menuToggle');
           if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
             if (!sidebar.contains(e.target) && e.target !== toggle) {
               sidebar.classList.remove('active');
             }
           }
         });
-        document.getElementById('companyForm').addEventListener('submit', (e) => {
+        document.getElementById('companyForm').addEventListener('submit', function(e) {
           e.preventDefault();
-          this.saveCompany();
+          H4App.saveCompany();
         });
-        document.getElementById('compLogoUpload').onchange = (e) => {
-          const file = e.target.files[0];
+        document.getElementById('compLogoUpload').onchange = function(e) {
+          var file = e.target.files[0];
           if (file) {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
+            var reader = new FileReader();
+            reader.onload = function(ev) {
               document.getElementById('compLogoImg').src = ev.target.result;
               document.getElementById('compLogoPreview').style.display = 'block';
             };
             reader.readAsDataURL(file);
           }
         };
-        document.getElementById('compSigUpload').onchange = (e) => {
-          const file = e.target.files[0];
+        document.getElementById('compSigUpload').onchange = function(e) {
+          var file = e.target.files[0];
           if (file) {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
+            var reader = new FileReader();
+            reader.onload = function(ev) {
               document.getElementById('compSigImg').src = ev.target.result;
               document.getElementById('compSigPreview').style.display = 'block';
             };
@@ -2157,40 +1799,37 @@
           }
         };
       },
-
-      navigate(module) {
-        document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
-        const target = document.querySelector(`.module[data-module="${module}"]`);
+      navigate: function(module) {
+        document.querySelectorAll('.module').forEach(function(m) { m.classList.remove('active'); });
+        var target = document.querySelector('.module[data-module="' + module + '"]');
         if (target) target.classList.add('active');
-        document.querySelectorAll('.sidebar-item').forEach(el => {
+        document.querySelectorAll('.sidebar-item').forEach(function(el) {
           el.classList.toggle('active', el.dataset.module === module);
         });
-        document.querySelectorAll('.bottom-nav .nav-item').forEach(el => {
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(function(el) {
           el.classList.toggle('active', el.dataset.module === module);
         });
-        if (module === 'quotations') this.loadQuotations();
-        if (module === 'invoices') this.loadInvoices();
-        if (module === 'dashboard') this.updateDashboard();
-        if (module === 'customers') this.loadCustomers();
-        if (module === 'products') this.loadProducts();
+        if (module === 'quotations') H4App.loadQuotations();
+        if (module === 'invoices') H4App.loadInvoices();
+        if (module === 'dashboard') H4App.updateDashboard();
+        if (module === 'customers') H4App.loadCustomers();
+        if (module === 'products') H4App.loadProducts();
         if (module === 'templates') H4Template.load('tpl_classic');
       },
-
-      populateCustomerSelects() {
-        const customers = DB.getList('customers');
-        const options = customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-        ['epxCustomer', 'wpCustomer', 'invCustomer', 'qtnCustomer'].forEach(id => {
-          const el = document.getElementById(id);
+      populateCustomerSelects: function() {
+        var customers = DB.getList('customers');
+        var options = customers.map(function(c) { return '<option value="' + c.id + '">' + c.name + '</option>'; }).join('');
+        ['epxCustomer', 'wpCustomer', 'invCustomer', 'qtnCustomer'].forEach(function(id) {
+          var el = document.getElementById(id);
           if (el) {
-            const val = el.value;
-            el.innerHTML = `<option value="">-- Select --</option>${options}`;
-            if (val && customers.find(c => c.id === val)) el.value = val;
+            var val = el.value;
+            el.innerHTML = '<option value="">-- Select --</option>' + options;
+            if (val && customers.find(function(c) { return c.id === val; })) el.value = val;
           }
         });
       },
-
-      loadCompany() {
-        const c = DB.get('company') || {};
+      loadCompany: function() {
+        var c = DB.get('company') || {};
         document.getElementById('compLegalName').value = c.legalName || '';
         document.getElementById('compBrandName').value = c.brandName || '';
         document.getElementById('compAddress').value = c.address || '';
@@ -2215,9 +1854,8 @@
           document.getElementById('compSigPreview').style.display = 'block';
         }
       },
-
-      saveCompany() {
-        const c = {
+      saveCompany: function() {
+        var c = {
           legalName: document.getElementById('compLegalName').value,
           brandName: document.getElementById('compBrandName').value,
           address: document.getElementById('compAddress').value,
@@ -2239,275 +1877,183 @@
         DB.save('company', c);
         toast('Company profile saved!');
       },
-
-      openQuotationTypeModal() {
+      openQuotationTypeModal: function() {
         document.getElementById('qtnTypeModal').classList.add('active');
       },
-
-      closeModal(id) {
+      closeModal: function(id) {
         document.getElementById(id).classList.remove('active');
       },
-
-      loadQuotations() {
-        const qs = DB.getList('quotations');
-        const customers = DB.getList('customers');
-        const container = document.getElementById('quotationsContainer');
+      loadQuotations: function() {
+        var qs = DB.getList('quotations');
+        var customers = DB.getList('customers');
+        var container = document.getElementById('quotationsContainer');
         if (qs.length === 0) {
           container.innerHTML = '<div class="text-muted text-center" style="padding:2rem;">No quotations yet. Click "New Quotation" to start.</div>';
           return;
         }
-        const customerMap = {};
-        customers.forEach(c => customerMap[c.id] = c);
-        container.innerHTML = `
-          <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;">
-              <thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Date</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody>
-                ${qs.map(q => {
-                  const cust = customerMap[q.customerId] || {};
-                  const typeMap = { 'general': '📄 General', 'premium-epoxy': '✨ Epoxy', 'waterproofing': '💧 Waterproofing' };
-                  return `<tr>
-                    <td><strong>${q.number}</strong></td>
-                    <td>${cust.name || 'Unknown'}</td>
-                    <td>₹${(q.grandTotal||0).toFixed(2)}</td>
-                    <td>${q.date || ''}</td>
-                    <td>${typeMap[q.quotationType] || q.quotationType}</td>
-                    <td><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">${q.status}</span></td>
-                    <td>
-                      ${q.quotationType === 'general' ? `<button class="btn btn-sm btn-outline" onclick="H4Quotation.edit('${q.id}')">✏️</button>` : ''}
-                      ${q.quotationType === 'premium-epoxy' ? `<button class="btn btn-sm btn-outline" onclick="H4Epoxy.edit('${q.id}')">✏️</button>` : ''}
-                      ${q.quotationType === 'waterproofing' ? `<button class="btn btn-sm btn-outline" onclick="H4Waterproofing.edit('${q.id}')">✏️</button>` : ''}
-                      <button class="btn btn-sm btn-whatsapp" onclick="H4App.whatsappQuotation('${q.id}')">📤</button>
-                      <button class="btn btn-sm btn-danger" onclick="H4App.deleteQuotation('${q.id}')">🗑️</button>
-                    </td>
-                  </tr>`;
-                }).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
+        var customerMap = {};
+        customers.forEach(function(c) { customerMap[c.id] = c; });
+        container.innerHTML = '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;"><thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Date</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + qs.map(function(q) {
+          var cust = customerMap[q.customerId] || {};
+          var typeMap = { 'general': '📄 General', 'premium-epoxy': '✨ Epoxy', 'waterproofing': '💧 Waterproofing' };
+          return '<tr><td><strong>' + q.number + '</strong></td><td>' + (cust.name || 'Unknown') + '</td><td>₹' + (q.grandTotal||0).toFixed(2) + '</td><td>' + (q.date || '') + '</td><td>' + (typeMap[q.quotationType] || q.quotationType) + '</td><td><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">' + q.status + '</span></td><td>' + (q.quotationType === 'general' ? '<button class="btn btn-sm btn-outline" onclick="H4Quotation.edit(\'' + q.id + '\')">✏️</button>' : '') + (q.quotationType === 'premium-epoxy' ? '<button class="btn btn-sm btn-outline" onclick="H4Epoxy.edit(\'' + q.id + '\')">✏️</button>' : '') + (q.quotationType === 'waterproofing' ? '<button class="btn btn-sm btn-outline" onclick="H4Waterproofing.edit(\'' + q.id + '\')">✏️</button>' : '') + '<button class="btn btn-sm btn-whatsapp" onclick="H4App.whatsappQuotation(\'' + q.id + '\')">📤</button><button class="btn btn-sm btn-danger" onclick="H4App.deleteQuotation(\'' + q.id + '\')">🗑️</button></td></tr>';
+        }).join('') + '</tbody></table></div>';
       },
-
-      deleteQuotation(id) {
+      deleteQuotation: function(id) {
         if (!confirm('Delete this quotation?')) return;
         DB.delete('quotations', id);
         this.loadQuotations();
         this.updateDashboard();
         toast('Quotation deleted.');
       },
-
-      whatsappQuotation(id) {
-        const q = DB.getItem('quotations', id);
+      whatsappQuotation: function(id) {
+        var q = DB.getItem('quotations', id);
         if (!q) { toast('Quotation not found.', 'error'); return; }
-        const customer = DB.getItem('customers', q.customerId) || {};
-        const phone = customer.whatsapp || customer.phone || '';
-        const msg = `Dear ${customer.name || 'Customer'},\n\nPlease find your quotation.\n\nQuotation No: ${q.number}\nAmount: ₹${(q.grandTotal||0).toFixed(2)}\n\nThank you for your business.\n\n${(DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
-        const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
+        var customer = DB.getItem('customers', q.customerId) || {};
+        var phone = customer.whatsapp || customer.phone || '';
+        var msg = 'Dear ' + (customer.name || 'Customer') + ',\n\nPlease find your quotation.\n\nQuotation No: ' + q.number + '\nAmount: ₹' + (q.grandTotal||0).toFixed(2) + '\n\nThank you for your business.\n\n' + ((DB.get('company')||{}).brandName || 'H4 Construction Solutions');
+        var url = 'https://wa.me/' + phone.replace(/\D/g,'') + '?text=' + encodeURIComponent(msg);
         if (phone) { window.open(url, '_blank'); } else { toast('Customer WhatsApp number not available.', 'warning'); }
       },
-
-      loadCustomers() {
-        const list = DB.getList('customers');
-        const container = document.getElementById('customersContainer');
+      loadCustomers: function() {
+        var list = DB.getList('customers');
+        var container = document.getElementById('customersContainer');
         if (list.length === 0) {
           container.innerHTML = '<div class="text-muted text-center" style="padding:2rem;">No customers yet. Click "Add Customer".</div>';
           return;
         }
-        container.innerHTML = list.map(c => `
-          <div class="list-item">
-            <div class="item-info">
-              <div class="name">${c.name}</div>
-              <div class="detail">${c.company || ''} ${c.phone ? '· ' + c.phone : ''} ${c.email ? '· ' + c.email : ''}</div>
-            </div>
-            <div class="item-actions">
-              <button class="btn btn-sm btn-outline" onclick="H4Customers.editCustomer('${c.id}')">✏️</button>
-              <button class="btn btn-sm btn-danger" onclick="H4Customers.deleteCustomer('${c.id}')">🗑️</button>
-            </div>
-          </div>
-        `).join('');
+        container.innerHTML = list.map(function(c) {
+          return '<div class="list-item"><div class="item-info"><div class="name">' + c.name + '</div><div class="detail">' + (c.company || '') + (c.phone ? '· ' + c.phone : '') + (c.email ? '· ' + c.email : '') + '</div></div><div class="item-actions"><button class="btn btn-sm btn-outline" onclick="H4Customers.editCustomer(\'' + c.id + '\')">✏️</button><button class="btn btn-sm btn-danger" onclick="H4Customers.deleteCustomer(\'' + c.id + '\')">🗑️</button></div></div>';
+        }).join('');
         this.populateCustomerSelects();
       },
-
-      loadProducts() {
-        const list = DB.getList('products');
-        const container = document.getElementById('productsContainer');
+      loadProducts: function() {
+        var list = DB.getList('products');
+        var container = document.getElementById('productsContainer');
         if (list.length === 0) {
           container.innerHTML = '<div class="text-muted text-center" style="padding:2rem;">No products yet. Click "Add Product".</div>';
           return;
         }
-        container.innerHTML = list.map(p => `
-          <div class="list-item">
-            <div class="item-info">
-              <div class="name">${p.name}</div>
-              <div class="detail">${p.category || ''} · ${p.unit || ''} · ₹${p.sellingRate || 0} ${p.gst ? '· GST ' + p.gst + '%' : ''}</div>
-            </div>
-            <div class="item-actions">
-              <button class="btn btn-sm btn-outline" onclick="H4Products.editProduct('${p.id}')">✏️</button>
-              <button class="btn btn-sm btn-danger" onclick="H4Products.deleteProduct('${p.id}')">🗑️</button>
-            </div>
-          </div>
-        `).join('');
+        container.innerHTML = list.map(function(p) {
+          return '<div class="list-item"><div class="item-info"><div class="name">' + p.name + '</div><div class="detail">' + (p.category || '') + '· ' + (p.unit || '') + '· ₹' + (p.sellingRate || 0) + (p.gst ? '· GST ' + p.gst + '%' : '') + '</div></div><div class="item-actions"><button class="btn btn-sm btn-outline" onclick="H4Products.editProduct(\'' + p.id + '\')">✏️</button><button class="btn btn-sm btn-danger" onclick="H4Products.deleteProduct(\'' + p.id + '\')">🗑️</button></div></div>';
+        }).join('');
       },
-
-      loadInvoices() {
-        const invs = DB.getList('invoices');
-        const customers = DB.getList('customers');
-        const customerMap = {};
-        customers.forEach(c => customerMap[c.id] = c);
-        const container = document.getElementById('invoicesContainer');
+      loadInvoices: function() {
+        var invs = DB.getList('invoices');
+        var customers = DB.getList('customers');
+        var customerMap = {};
+        customers.forEach(function(c) { customerMap[c.id] = c; });
+        var container = document.getElementById('invoicesContainer');
         if (invs.length === 0) {
           container.innerHTML = '<div class="text-muted text-center" style="padding:2rem;">No invoices yet. Click "New Invoice".</div>';
           return;
         }
-        container.innerHTML = `
-          <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;">
-              <thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody>
-                ${invs.map(inv => {
-                  const cust = customerMap[inv.customerId] || {};
-                  const paid = inv.paidAmount || 0;
-                  const total = inv.grandTotal || 0;
-                  const balance = Math.max(0, total - paid);
-                  return `<tr>
-                    <td><strong>${inv.number}</strong></td>
-                    <td>${cust.name || 'Unknown'}</td>
-                    <td>₹${total.toFixed(2)}</td>
-                    <td>₹${paid.toFixed(2)}</td>
-                    <td>₹${balance.toFixed(2)}</td>
-                    <td><span style="background:${inv.paymentStatus==='paid'?'#e8f5e9':inv.paymentStatus==='partial'?'#fff3e0':'#ffebee'};color:${inv.paymentStatus==='paid'?'#2e7d32':inv.paymentStatus==='partial'?'#e65100':'#c62828'};padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">${inv.paymentStatus||'unpaid'}</span></td>
-                    <td>
-                      <button class="btn btn-sm btn-outline" onclick="H4Invoice.editInvoice('${inv.id}')">✏️</button>
-                      <button class="btn btn-sm btn-whatsapp" onclick="H4Invoice.whatsappExistingInvoice('${inv.id}')">📤</button>
-                      <button class="btn btn-sm btn-danger" onclick="H4App.deleteInvoice('${inv.id}')">🗑️</button>
-                    </td>
-                  </tr>`;
-                }).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
+        container.innerHTML = '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;"><thead><tr style="background:var(--primary);color:white;"><th>#</th><th>Customer</th><th>Amount</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + invs.map(function(inv) {
+          var cust = customerMap[inv.customerId] || {};
+          var paid = inv.paidAmount || 0;
+          var total = inv.grandTotal || 0;
+          var balance = Math.max(0, total - paid);
+          return '<tr><td><strong>' + inv.number + '</strong></td><td>' + (cust.name || 'Unknown') + '</td><td>₹' + total.toFixed(2) + '</td><td>₹' + paid.toFixed(2) + '</td><td>₹' + balance.toFixed(2) + '</td><td><span style="background:' + (inv.paymentStatus==='paid'?'#e8f5e9':inv.paymentStatus==='partial'?'#fff3e0':'#ffebee') + ';color:' + (inv.paymentStatus==='paid'?'#2e7d32':inv.paymentStatus==='partial'?'#e65100':'#c62828') + ';padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">' + (inv.paymentStatus||'unpaid') + '</span></td><td><button class="btn btn-sm btn-outline" onclick="H4Invoice.editInvoice(\'' + inv.id + '\')">✏️</button><button class="btn btn-sm btn-whatsapp" onclick="H4Invoice.whatsappExistingInvoice(\'' + inv.id + '\')">📤</button><button class="btn btn-sm btn-danger" onclick="H4App.deleteInvoice(\'' + inv.id + '\')">🗑️</button></td></tr>';
+        }).join('') + '</tbody></table></div>';
       },
-
-      deleteInvoice(id) {
+      deleteInvoice: function(id) {
         if (!confirm('Delete this invoice?')) return;
         DB.delete('invoices', id);
         this.loadInvoices();
         this.updateDashboard();
         toast('Invoice deleted.');
       },
-
-      updateDashboard() {
-        const qs = DB.getList('quotations');
-        const invs = DB.getList('invoices');
-        const custs = DB.getList('customers');
-        const total = invs.reduce((s, i) => s + (i.grandTotal || 0), 0);
+      updateDashboard: function() {
+        var qs = DB.getList('quotations');
+        var invs = DB.getList('invoices');
+        var custs = DB.getList('customers');
+        var total = invs.reduce(function(s, i) { return s + (i.grandTotal || 0); }, 0);
         document.getElementById('totalRevenue').textContent = '₹' + total.toFixed(2);
         document.getElementById('totalQuotations').textContent = qs.length;
         document.getElementById('totalInvoices').textContent = invs.length;
         document.getElementById('totalCustomers').textContent = custs.length;
       },
-
-      downloadBackup() {
-        const data = DB.get();
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+      downloadBackup: function() {
+        var data = DB.get();
+        var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
         a.href = url;
         a.download = 'H4-Backup-' + new Date().toISOString().slice(0, 10) + '.json';
         a.click();
         URL.revokeObjectURL(url);
         toast('Backup downloaded!');
       },
-
-      restoreBackup() {
-        const file = document.getElementById('backupFileInput').files[0];
+      restoreBackup: function() {
+        var file = document.getElementById('backupFileInput').files[0];
         if (!file) { toast('Please select a backup file.', 'error'); return; }
-        const reader = new FileReader();
-        reader.onload = (e) => {
+        var reader = new FileReader();
+        reader.onload = function(e) {
           try {
-            const data = JSON.parse(e.target.result);
+            var data = JSON.parse(e.target.result);
             localStorage.setItem(DB.STORAGE_KEY, JSON.stringify(data));
             toast('Backup restored! Refreshing...');
-            setTimeout(() => location.reload(), 1000);
+            setTimeout(function() { location.reload(); }, 1000);
           } catch (err) {
             toast('Invalid backup file.', 'error');
           }
         };
         reader.readAsText(file);
       },
-
-      toggleCustomizer() {
+      toggleCustomizer: function() {
         document.getElementById('customizerPanel').classList.toggle('open');
       },
-
-      // ============================================================
-      // CARD GRADIENT SYSTEM
-      // ============================================================
-      
-      loadCardGradients() {
-        const gradients = DB.get('cardGradients') || {};
-        const cards = document.querySelectorAll('.quick-card');
-        cards.forEach(card => {
-          const cardName = card.dataset.card;
-          const config = gradients[cardName];
+      loadCardGradients: function() {
+        var gradients = DB.get('cardGradients') || {};
+        var cards = document.querySelectorAll('.quick-card');
+        cards.forEach(function(card) {
+          var cardName = card.dataset.card;
+          var config = gradients[cardName];
           if (config) {
-            this.applyGradientToCard(card, config);
+            H4App.applyGradientToCard(card, config);
           }
         });
       },
-
-      applyGradientToCard(card, config) {
+      applyGradientToCard: function(card, config) {
         if (!config) return;
-        let bg = '';
-        const c1 = config.color1 || '#6A3FA0';
-        const c2 = config.color2 || '#00BCD4';
-        const c3 = config.color3 || '';
-        const angle = config.angle || 135;
-        const direction = config.direction || 'to bottom right';
-        const type = config.type || 'gradient';
-        
+        var bg = '';
+        var c1 = config.color1 || '#6A3FA0';
+        var c2 = config.color2 || '#00BCD4';
+        var c3 = config.color3 || '';
+        var angle = config.angle || 135;
+        var type = config.type || 'gradient';
         if (type === 'solid') {
           bg = c1;
         } else if (type === 'radial') {
-          bg = c3 ? `radial-gradient(circle, ${c1}, ${c2}, ${c3})` : `radial-gradient(circle, ${c1}, ${c2})`;
+          bg = c3 ? 'radial-gradient(circle, ' + c1 + ', ' + c2 + ', ' + c3 + ')' : 'radial-gradient(circle, ' + c1 + ', ' + c2 + ')';
         } else {
-          // Linear gradient
           if (c3) {
-            bg = `linear-gradient(${angle}deg, ${c1}, ${c2}, ${c3})`;
+            bg = 'linear-gradient(' + angle + 'deg, ' + c1 + ', ' + c2 + ', ' + c3 + ')';
           } else {
-            bg = `linear-gradient(${angle}deg, ${c1}, ${c2})`;
+            bg = 'linear-gradient(' + angle + 'deg, ' + c1 + ', ' + c2 + ')';
           }
         }
         card.style.background = bg;
-        
-        // Update the CSS variable for the card
-        const cssVar = `--card-${card.dataset.card}-bg`;
+        var cssVar = '--card-' + card.dataset.card + '-bg';
         document.documentElement.style.setProperty(cssVar, bg);
-        
-        // Store the config on the card for reference
         card._gradientConfig = config;
       },
-
-      setupCardSelector() {
-        const selector = document.getElementById('cardSelector');
+      setupCardSelector: function() {
+        var selector = document.getElementById('cardSelector');
         if (!selector) return;
-        selector.querySelectorAll('button').forEach(btn => {
-          btn.addEventListener('click', () => {
-            selector.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            this.selectedCard = btn.dataset.card;
-            this.loadCardConfig(this.selectedCard);
+        selector.querySelectorAll('button').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            selector.querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            H4App.selectedCard = this.dataset.card;
+            H4App.loadCardConfig(H4App.selectedCard);
           });
         });
-        // Load first card config
         this.loadCardConfig('invoice');
       },
-
-      loadCardConfig(cardName) {
-        const gradients = DB.get('cardGradients') || {};
-        const config = gradients[cardName] || { type: 'gradient', color1: '#6A3FA0', color2: '#00BCD4', color3: '', angle: 135, direction: 'to bottom right' };
-        
+      loadCardConfig: function(cardName) {
+        var gradients = DB.get('cardGradients') || {};
+        var config = gradients[cardName] || { type: 'gradient', color1: '#6A3FA0', color2: '#00BCD4', color3: '', angle: 135, direction: 'to bottom right' };
         document.getElementById('cardBgType').value = config.type || 'gradient';
         document.getElementById('cardColor1').value = config.color1 || '#6A3FA0';
         document.getElementById('cardColor2').value = config.color2 || '#00BCD4';
@@ -2515,71 +2061,56 @@
         document.getElementById('cardAngle').value = config.angle || 135;
         document.getElementById('angleDisplay').textContent = config.angle || 135;
         document.getElementById('cardDirection').value = config.direction || 'to bottom right';
-        
         this.updateGradientPreview();
       },
-
-      setupCardControls() {
-        // Angle slider
+      setupCardControls: function() {
         document.getElementById('cardAngle').addEventListener('input', function() {
           document.getElementById('angleDisplay').textContent = this.value;
           H4App.updateGradientPreview();
         });
-        
-        // Color pickers
-        ['cardColor1', 'cardColor2', 'cardColor3'].forEach(id => {
-          document.getElementById(id).addEventListener('input', () => H4App.updateGradientPreview());
+        ['cardColor1', 'cardColor2', 'cardColor3'].forEach(function(id) {
+          document.getElementById(id).addEventListener('input', function() { H4App.updateGradientPreview(); });
         });
-        
-        // Background type
-        document.getElementById('cardBgType').addEventListener('change', () => H4App.updateGradientPreview());
-        
-        // Direction
-        document.getElementById('cardDirection').addEventListener('change', () => H4App.updateGradientPreview());
+        document.getElementById('cardBgType').addEventListener('change', function() { H4App.updateGradientPreview(); });
+        document.getElementById('cardDirection').addEventListener('change', function() { H4App.updateGradientPreview(); });
       },
-
-      updateGradientPreview() {
-        const type = document.getElementById('cardBgType').value;
-        const c1 = document.getElementById('cardColor1').value;
-        const c2 = document.getElementById('cardColor2').value;
-        const c3 = document.getElementById('cardColor3').value;
-        const angle = document.getElementById('cardAngle').value;
-        const direction = document.getElementById('cardDirection').value;
-        const preview = document.getElementById('cardGradientPreview');
-        
-        let bg = '';
+      updateGradientPreview: function() {
+        var type = document.getElementById('cardBgType').value;
+        var c1 = document.getElementById('cardColor1').value;
+        var c2 = document.getElementById('cardColor2').value;
+        var c3 = document.getElementById('cardColor3').value;
+        var angle = document.getElementById('cardAngle').value;
+        var preview = document.getElementById('cardGradientPreview');
+        var bg = '';
         if (type === 'solid') {
           bg = c1;
         } else if (type === 'radial') {
-          bg = c3 && c3 !== '#ffffff' ? `radial-gradient(circle, ${c1}, ${c2}, ${c3})` : `radial-gradient(circle, ${c1}, ${c2})`;
+          bg = c3 && c3 !== '#ffffff' ? 'radial-gradient(circle, ' + c1 + ', ' + c2 + ', ' + c3 + ')' : 'radial-gradient(circle, ' + c1 + ', ' + c2 + ')';
         } else {
           if (c3 && c3 !== '#ffffff') {
-            bg = `linear-gradient(${angle}deg, ${c1}, ${c2}, ${c3})`;
+            bg = 'linear-gradient(' + angle + 'deg, ' + c1 + ', ' + c2 + ', ' + c3 + ')';
           } else {
-            bg = `linear-gradient(${angle}deg, ${c1}, ${c2})`;
+            bg = 'linear-gradient(' + angle + 'deg, ' + c1 + ', ' + c2 + ')';
           }
         }
         preview.style.background = bg;
-        
-        // Update the actual card in real-time
-        const cardName = this.selectedCard;
-        const card = document.querySelector(`.quick-card[data-card="${cardName}"]`);
+        var cardName = this.selectedCard;
+        var card = document.querySelector('.quick-card[data-card="' + cardName + '"]');
         if (card) {
-          const config = {
+          var config = {
             type: type,
             color1: c1,
             color2: c2,
             color3: c3,
             angle: parseInt(angle),
-            direction: direction
+            direction: document.getElementById('cardDirection').value
           };
           this.applyGradientToCard(card, config);
         }
       },
-
-      saveCardGradients() {
-        const cardName = this.selectedCard;
-        const config = {
+      saveCardGradients: function() {
+        var cardName = this.selectedCard;
+        var config = {
           type: document.getElementById('cardBgType').value,
           color1: document.getElementById('cardColor1').value,
           color2: document.getElementById('cardColor2').value,
@@ -2587,33 +2118,23 @@
           angle: parseInt(document.getElementById('cardAngle').value),
           direction: document.getElementById('cardDirection').value
         };
-        
-        const gradients = DB.get('cardGradients') || {};
+        var gradients = DB.get('cardGradients') || {};
         gradients[cardName] = config;
         DB.save('cardGradients', gradients);
-        
-        // Apply to the card
-        const card = document.querySelector(`.quick-card[data-card="${cardName}"]`);
+        var card = document.querySelector('.quick-card[data-card="' + cardName + '"]');
         if (card) {
           this.applyGradientToCard(card, config);
         }
-        
-        toast(`Gradient saved for ${cardName} card!`);
+        toast('Gradient saved for ' + cardName + ' card!');
       },
-
-      // ============================================================
-      // THEME CUSTOMIZATION
-      // ============================================================
-      
-      applyCustomizations() {
-        const font = document.getElementById('custFontFamily').value;
-        const fontSize = document.getElementById('custFontSize').value;
-        const primary = document.getElementById('custPrimary').value;
-        const secondary = document.getElementById('custSecondary').value;
-        const accent = document.getElementById('custAccent').value;
-        const cardPad = document.getElementById('custCardPadding').value;
-        const scale = document.getElementById('custModuleScale').value;
-
+      applyCustomizations: function() {
+        var font = document.getElementById('custFontFamily').value;
+        var fontSize = document.getElementById('custFontSize').value;
+        var primary = document.getElementById('custPrimary').value;
+        var secondary = document.getElementById('custSecondary').value;
+        var accent = document.getElementById('custAccent').value;
+        var cardPad = document.getElementById('custCardPadding').value;
+        var scale = document.getElementById('custModuleScale').value;
         document.documentElement.style.setProperty('--font-family', font);
         document.documentElement.style.setProperty('--base-font-size', fontSize + 'px');
         document.documentElement.style.setProperty('--primary', primary);
@@ -2623,47 +2144,36 @@
         document.documentElement.style.setProperty('--module-scale', scale);
         document.querySelector('.main-content').style.transform = 'scale(' + scale + ')';
         document.querySelector('.main-content').style.transformOrigin = 'top center';
-        
-        // Apply card radius
-        const radius = document.getElementById('cardRadius').value;
+        var radius = document.getElementById('cardRadius').value;
         document.documentElement.style.setProperty('--border-radius', radius + 'px');
-        document.querySelectorAll('.quick-card').forEach(c => c.style.borderRadius = radius + 'px');
+        document.querySelectorAll('.quick-card').forEach(function(c) { c.style.borderRadius = radius + 'px'; });
         document.getElementById('cardRadiusDisplay').textContent = radius;
-        
-        // Apply shadow
-        const shadow = document.getElementById('cardShadow').value;
-        document.querySelectorAll('.quick-card').forEach(c => {
-          c.style.boxShadow = `0 4px ${shadow}px rgba(0,0,0,0.12)`;
+        var shadow = document.getElementById('cardShadow').value;
+        document.querySelectorAll('.quick-card').forEach(function(c) {
+          c.style.boxShadow = '0 4px ' + shadow + 'px rgba(0,0,0,0.12)';
         });
         document.getElementById('cardShadowDisplay').textContent = shadow;
-        
-        // Apply icon size
-        const iconSize = document.getElementById('cardIconSize').value;
-        document.querySelectorAll('.quick-card .icon').forEach(i => {
+        var iconSize = document.getElementById('cardIconSize').value;
+        document.querySelectorAll('.quick-card .icon').forEach(function(i) {
           i.style.fontSize = iconSize + 'px';
         });
         document.getElementById('cardIconSizeDisplay').textContent = iconSize;
-        
-        // Apply card padding
-        const padding = document.getElementById('cardPadding').value;
-        document.querySelectorAll('.quick-card').forEach(c => {
+        var padding = document.getElementById('cardPadding').value;
+        document.querySelectorAll('.quick-card').forEach(function(c) {
           c.style.padding = padding + 'rem 0.8rem';
         });
         document.getElementById('cardPaddingDisplay').textContent = padding;
-
-        localStorage.setItem('h4_customization', JSON.stringify({ font, fontSize, primary, secondary, accent, cardPad, scale, radius, shadow, iconSize, padding }));
+        localStorage.setItem('h4_customization', JSON.stringify({ font: font, fontSize: fontSize, primary: primary, secondary: secondary, accent: accent, cardPad: cardPad, scale: scale, radius: radius, shadow: shadow, iconSize: iconSize, padding: padding }));
         toast('Theme applied!');
       },
-
-      resetCustomizations() {
+      resetCustomizations: function() {
         localStorage.removeItem('h4_customization');
         location.reload();
       },
-
-      loadCustomizations() {
-        const saved = localStorage.getItem('h4_customization');
+      loadCustomizations: function() {
+        var saved = localStorage.getItem('h4_customization');
         if (saved) {
-          const c = JSON.parse(saved);
+          var c = JSON.parse(saved);
           document.getElementById('custFontFamily').value = c.font || "'Segoe UI', sans-serif";
           document.getElementById('custFontSize').value = c.fontSize || 15;
           document.getElementById('custPrimary').value = c.primary || '#6A3FA0';
@@ -2674,7 +2184,6 @@
           document.getElementById('custFontSizeDisplay').textContent = c.fontSize || 15;
           document.getElementById('custCardPaddingDisplay').textContent = c.cardPad || 1.25;
           document.getElementById('custModuleScaleDisplay').textContent = c.scale || 1.0;
-          
           if (c.radius) {
             document.getElementById('cardRadius').value = c.radius;
             document.getElementById('cardRadiusDisplay').textContent = c.radius;
@@ -2691,11 +2200,8 @@
             document.getElementById('cardPadding').value = c.padding;
             document.getElementById('cardPaddingDisplay').textContent = c.padding;
           }
-          
           this.applyCustomizations();
         }
-        
-        // Setup range displays
         document.getElementById('custFontSize').oninput = function() {
           document.getElementById('custFontSizeDisplay').textContent = this.value;
         };
@@ -2720,17 +2226,13 @@
       }
     };
 
-    // ============================================================
-    // CUSTOMERS MODULE
-    // ============================================================
-    const H4Customers = {
+    var H4Customers = {
       editingId: null,
-
-      openModal(id) {
+      openModal: function(id) {
         this.editingId = id || null;
-        const modal = document.getElementById('customerModal');
+        var modal = document.getElementById('customerModal');
         if (id) {
-          const c = DB.getItem('customers', id);
+          var c = DB.getItem('customers', id);
           if (c) {
             document.getElementById('cName').value = c.name || '';
             document.getElementById('cCompany').value = c.company || '';
@@ -2751,14 +2253,12 @@
         }
         modal.classList.add('active');
       },
-
-      closeModal() {
+      closeModal: function() {
         document.getElementById('customerModal').classList.remove('active');
         this.editingId = null;
       },
-
-      saveCustomer() {
-        const data = {
+      saveCustomer: function() {
+        var data = {
           id: this.editingId || 'cust_' + Date.now(),
           name: document.getElementById('cName').value.trim(),
           company: document.getElementById('cCompany').value.trim(),
@@ -2786,9 +2286,8 @@
         H4App.loadCustomers();
         H4App.updateDashboard();
       },
-
-      editCustomer(id) { this.openModal(id); },
-      deleteCustomer(id) {
+      editCustomer: function(id) { this.openModal(id); },
+      deleteCustomer: function(id) {
         if (!confirm('Delete this customer?')) return;
         DB.delete('customers', id);
         H4App.loadCustomers();
@@ -2798,17 +2297,13 @@
       }
     };
 
-    // ============================================================
-    // PRODUCTS MODULE
-    // ============================================================
-    const H4Products = {
+    var H4Products = {
       editingId: null,
-
-      openModal(id) {
+      openModal: function(id) {
         this.editingId = id || null;
-        const modal = document.getElementById('productModal');
+        var modal = document.getElementById('productModal');
         if (id) {
-          const p = DB.getItem('products', id);
+          var p = DB.getItem('products', id);
           if (p) {
             document.getElementById('pName').value = p.name || '';
             document.getElementById('pSku').value = p.sku || '';
@@ -2831,19 +2326,17 @@
         }
         modal.classList.add('active');
       },
-
-      closeModal() {
+      closeModal: function() {
         document.getElementById('productModal').classList.remove('active');
         this.editingId = null;
       },
-
-      saveProduct() {
-        let slabs = [];
+      saveProduct: function() {
+        var slabs = [];
         try {
-          const slabStr = document.getElementById('pSlabs').value.trim();
+          var slabStr = document.getElementById('pSlabs').value.trim();
           if (slabStr) slabs = JSON.parse(slabStr);
         } catch (e) { toast('Invalid slabs JSON.', 'error'); return; }
-        const data = {
+        var data = {
           id: this.editingId || 'prod_' + Date.now(),
           name: document.getElementById('pName').value.trim(),
           sku: document.getElementById('pSku').value.trim(),
@@ -2873,9 +2366,8 @@
         H4App.loadProducts();
         H4App.updateDashboard();
       },
-
-      editProduct(id) { this.openModal(id); },
-      deleteProduct(id) {
+      editProduct: function(id) { this.openModal(id); },
+      deleteProduct: function(id) {
         if (!confirm('Delete this product?')) return;
         DB.delete('products', id);
         H4App.loadProducts();
@@ -2884,20 +2376,16 @@
       }
     };
 
-    // ============================================================
-    // GENERAL QUOTATION MODULE
-    // ============================================================
-    const H4Quotation = {
+    var H4Quotation = {
       editingId: null,
       items: [],
       currentStep: 1,
       totalSteps: 6,
-
-      newQuotation() {
+      newQuotation: function() {
         this.editingId = null;
         this.items = [];
         this.currentStep = 1;
-        const q = {
+        var q = {
           id: 'qtn_' + Date.now(),
           number: getNextQuotationNumber(),
           date: new Date().toISOString().split('T')[0],
@@ -2919,16 +2407,15 @@
         H4App.navigate('quotations');
         this.edit(q.id);
       },
-
-      edit(id) {
-        const q = DB.getItem('quotations', id);
+      edit: function(id) {
+        var q = DB.getItem('quotations', id);
         if (!q) { toast('Quotation not found.', 'error'); return; }
         this.editingId = id;
         this.items = JSON.parse(JSON.stringify(q.items || []));
-        const newName = prompt('Edit quotation - Customer Name:', q.customerId || '');
+        var newName = prompt('Edit quotation - Customer Name:', q.customerId || '');
         if (newName !== null) {
-          const customers = DB.getList('customers');
-          let cust = customers.find(c => c.name === newName);
+          var customers = DB.getList('customers');
+          var cust = customers.find(function(c) { return c.name === newName; });
           if (!cust && newName) {
             cust = { id: 'cust_' + Date.now(), name: newName, phone: '', company: '', email: '', address: '',
               city: '', district: '', state: '', pin: '', gstin: '' };
@@ -2943,16 +2430,12 @@
       }
     };
 
-    // ============================================================
-    // INVOICE ENGINE
-    // ============================================================
-    const H4Invoice = {
+    var H4Invoice = {
       editingId: null,
       items: [],
       currentStep: 1,
       totalSteps: 6,
-
-      newInvoice() {
+      newInvoice: function() {
         this.editingId = null;
         this.items = [];
         this.currentStep = 1;
@@ -2979,9 +2462,8 @@
         this.goToStep(1);
         toast('New invoice builder opened.');
       },
-
-      editInvoice(id) {
-        const inv = DB.getItem('invoices', id);
+      editInvoice: function(id) {
+        var inv = DB.getItem('invoices', id);
         if (!inv) { toast('Invoice not found.', 'error'); return; }
         this.editingId = id;
         this.items = JSON.parse(JSON.stringify(inv.items || []));
@@ -3009,182 +2491,91 @@
         this.goToStep(1);
         toast('Editing invoice: ' + inv.number);
       },
-
-      buildBuilderUI() {
-        const container = document.getElementById('invoiceBuilderContainer');
-        container.innerHTML = `
-          <div class="builder-steps" id="invSteps"></div>
-          <div class="builder-body" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:0;">
-            <div class="builder-form-pane" id="invFormPane">
-              <div class="builder-step-section" data-step="1">
-                <div class="card"><div class="card-header"><h2>📋 Invoice Details</h2></div>
-                  <div class="form-row"><div class="form-group"><label>Invoice Number</label><input type="text" id="invNumber" readonly></div><div class="form-group"><label>Date</label><input type="date" id="invDate" onchange="H4Invoice.calculate();"></div></div>
-                  <div class="form-row"><div class="form-group"><label>Due Date</label><input type="date" id="invDueDate" onchange="H4Invoice.calculate();"></div><div class="form-group"><label>Reference</label><input type="text" id="invReference" onchange="H4Invoice.calculate();"></div></div>
-                  <div class="form-group"><label>Project Name</label><input type="text" id="invProject" onchange="H4Invoice.calculate();"></div>
-                </div>
-              </div>
-              <div class="builder-step-section" data-step="2">
-                <div class="card"><div class="card-header"><h2>👤 Customer</h2></div>
-                  <div class="form-group">
-                    <label>Customer</label>
-                    <div class="customer-select-row">
-                      <select id="invCustomer" onchange="H4Invoice.onCustomerChange()"></select>
-                      <button class="btn btn-sm btn-outline" onclick="H4Invoice.openNewCustomerModal()">➕</button>
-                    </div>
-                  </div>
-                  <div id="invCustomerInfo" class="customer-info-box">
-                    <p class="text-muted">Select a customer to view details.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="builder-step-section" data-step="3">
-                <div class="card"><div class="card-header"><h2>📦 Items</h2><button class="btn btn-success btn-sm" onclick="H4Invoice.addItem()">➕ Add Item</button></div>
-                  <div id="invoiceItemsContainer"></div>
-                </div>
-              </div>
-              <div class="builder-step-section" data-step="4">
-                <div class="card"><div class="card-header"><h2>🧮 Calculation</h2></div>
-                  <div class="form-row">
-                    <div class="form-group"><label>Discount</label>
-                      <div style="display:flex;gap:0.5rem;"><input type="number" id="invDiscountValue" step="0.01" min="0" value="0" oninput="H4Invoice.calculate()" style="flex:1;"><select id="invDiscountType" onchange="H4Invoice.calculate()" style="width:80px;"><option value="percentage">%</option><option value="flat">₹</option></select></div>
-                    </div>
-                    <div class="form-group"><label>Tax Mode</label><select id="invTaxMode" onchange="H4Invoice.calculate()"><option value="auto">Automatic</option><option value="cgst-sgst">CGST + SGST</option><option value="igst">IGST</option><option value="no-tax">No Tax</option></select></div>
-                  </div>
-                  <div style="background:#f5f5f5;padding:1.2rem;border-left:4px solid var(--primary);border-radius:8px;">
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span id="invSubtotal">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span id="invDiscountAmt">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span id="invTaxable">₹0.00</span></div>
-                    <div id="invCgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span id="invCGST">₹0.00</span></div>
-                    <div id="invSgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span id="invSGST">₹0.00</span></div>
-                    <div id="invIgstRow" style="display:none;"><span>IGST</span><span id="invIGST">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Round Off</span><span id="invRoundOff">₹0.00</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:2px solid var(--primary);font-weight:700;font-size:1.2rem;color:var(--primary);"><span>GRAND TOTAL</span><span id="invGrandTotal">₹0.00</span></div>
-                    <div style="font-size:0.9rem;font-weight:600;color:#757575;padding-top:0.4rem;border-top:1px solid #e0e0e0;margin-top:0.4rem;" id="invAmountWords">Rupees Zero Only</div>
-                  </div>
-                </div>
-              </div>
-              <div class="builder-step-section" data-step="5">
-                <div class="card"><div class="card-header"><h2>💰 Payment</h2></div>
-                  <div class="form-row"><div class="form-group"><label>Paid Amount</label><input type="number" id="invPaidAmount" step="0.01" min="0" value="0" oninput="H4Invoice.updatePaymentStatus()"></div>
-                  <div class="form-group"><label>Balance</label><input type="text" id="invBalance" readonly style="background:#f5f5f5;"></div></div>
-                  <div class="form-group"><label>Payment Status</label>
-                    <select id="invPaymentStatus"><option value="draft">Draft</option><option value="unpaid">Unpaid</option><option value="partial">Partially Paid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
-                  </div>
-                </div>
-              </div>
-              <div class="builder-step-section" data-step="6">
-                <div class="card"><div class="card-header"><h2>📝 Notes & Terms</h2></div>
-                  <div class="form-group"><label>Terms & Conditions</label><textarea id="invTerms" rows="3"></textarea></div>
-                  <div class="form-group"><label>Bank Details</label><textarea id="invBankDetails" rows="2"></textarea></div>
-                  <div class="form-group"><label>Notes</label><textarea id="invNotes" rows="2"></textarea></div>
-                </div>
-              </div>
-            </div>
-            <div class="builder-preview-pane" id="invPreviewPane">
-              <div class="preview-a4-container" id="invPreviewContainer"></div>
-            </div>
-          </div>
-          <div class="builder-bottombar">
-            <button class="btn btn-outline" id="invPrevBtn" onclick="H4Invoice.prevStep()">← Previous</button>
-            <span class="builder-step-counter" id="invStepCounter">Step 1 / 6</span>
-            <button class="btn btn-primary" id="invNextBtn" onclick="H4Invoice.nextStep()">Next →</button>
-            <div style="display:flex;gap:0.5rem;">
-              <button class="btn btn-outline" onclick="H4Invoice.backToList()">↩️ Cancel</button>
-              <button class="btn btn-secondary" onclick="H4Invoice.printInvoice()">🖨️ Print</button>
-              <button class="btn btn-whatsapp" onclick="H4Invoice.whatsappInvoice()">📤 WhatsApp</button>
-              <button class="btn btn-primary" onclick="H4Invoice.saveInvoice()">💾 Save</button>
-            </div>
-          </div>
-        `;
-        const templateSelect = document.createElement('select');
+      buildBuilderUI: function() {
+        var container = document.getElementById('invoiceBuilderContainer');
+        container.innerHTML = '<div class="builder-steps" id="invSteps"></div><div class="builder-body" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:0;"><div class="builder-form-pane" id="invFormPane"><div class="builder-step-section" data-step="1"><div class="card"><div class="card-header"><h2>📋 Invoice Details</h2></div><div class="form-row"><div class="form-group"><label>Invoice Number</label><input type="text" id="invNumber" readonly></div><div class="form-group"><label>Date</label><input type="date" id="invDate" onchange="H4Invoice.calculate();"></div></div><div class="form-row"><div class="form-group"><label>Due Date</label><input type="date" id="invDueDate" onchange="H4Invoice.calculate();"></div><div class="form-group"><label>Reference</label><input type="text" id="invReference" onchange="H4Invoice.calculate();"></div></div><div class="form-group"><label>Project Name</label><input type="text" id="invProject" onchange="H4Invoice.calculate();"></div></div></div><div class="builder-step-section" data-step="2"><div class="card"><div class="card-header"><h2>👤 Customer</h2></div><div class="form-group"><label>Customer</label><div class="customer-select-row"><select id="invCustomer" onchange="H4Invoice.onCustomerChange()"></select><button class="btn btn-sm btn-outline" onclick="H4Invoice.openNewCustomerModal()">➕</button></div></div><div id="invCustomerInfo" class="customer-info-box"><p class="text-muted">Select a customer to view details.</p></div></div></div><div class="builder-step-section" data-step="3"><div class="card"><div class="card-header"><h2>📦 Items</h2><button class="btn btn-success btn-sm" onclick="H4Invoice.addItem()">➕ Add Item</button></div><div id="invoiceItemsContainer"></div></div></div><div class="builder-step-section" data-step="4"><div class="card"><div class="card-header"><h2>🧮 Calculation</h2></div><div class="form-row"><div class="form-group"><label>Discount</label><div style="display:flex;gap:0.5rem;"><input type="number" id="invDiscountValue" step="0.01" min="0" value="0" oninput="H4Invoice.calculate()" style="flex:1;"><select id="invDiscountType" onchange="H4Invoice.calculate()" style="width:80px;"><option value="percentage">%</option><option value="flat">₹</option></select></div></div><div class="form-group"><label>Tax Mode</label><select id="invTaxMode" onchange="H4Invoice.calculate()"><option value="auto">Automatic</option><option value="cgst-sgst">CGST + SGST</option><option value="igst">IGST</option><option value="no-tax">No Tax</option></select></div></div><div style="background:#f5f5f5;padding:1.2rem;border-left:4px solid var(--primary);border-radius:8px;"><div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Subtotal</span><span id="invSubtotal">₹0.00</span></div><div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Discount</span><span id="invDiscountAmt">₹0.00</span></div><div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Taxable</span><span id="invTaxable">₹0.00</span></div><div id="invCgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>CGST</span><span id="invCGST">₹0.00</span></div><div id="invSgstRow" style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>SGST</span><span id="invSGST">₹0.00</span></div><div id="invIgstRow" style="display:none;"><span>IGST</span><span id="invIGST">₹0.00</span></div><div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #e0e0e0;"><span>Round Off</span><span id="invRoundOff">₹0.00</span></div><div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:2px solid var(--primary);font-weight:700;font-size:1.2rem;color:var(--primary);"><span>GRAND TOTAL</span><span id="invGrandTotal">₹0.00</span></div><div style="font-size:0.9rem;font-weight:600;color:#757575;padding-top:0.4rem;border-top:1px solid #e0e0e0;margin-top:0.4rem;" id="invAmountWords">Rupees Zero Only</div></div></div></div><div class="builder-step-section" data-step="5"><div class="card"><div class="card-header"><h2>💰 Payment</h2></div><div class="form-row"><div class="form-group"><label>Paid Amount</label><input type="number" id="invPaidAmount" step="0.01" min="0" value="0" oninput="H4Invoice.updatePaymentStatus()"></div><div class="form-group"><label>Balance</label><input type="text" id="invBalance" readonly style="background:#f5f5f5;"></div></div><div class="form-group"><label>Payment Status</label><select id="invPaymentStatus"><option value="draft">Draft</option><option value="unpaid">Unpaid</option><option value="partial">Partially Paid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select></div></div></div><div class="builder-step-section" data-step="6"><div class="card"><div class="card-header"><h2>📝 Notes & Terms</h2></div><div class="form-group"><label>Terms & Conditions</label><textarea id="invTerms" rows="3"></textarea></div><div class="form-group"><label>Bank Details</label><textarea id="invBankDetails" rows="2"></textarea></div><div class="form-group"><label>Notes</label><textarea id="invNotes" rows="2"></textarea></div></div></div></div><div class="builder-preview-pane" id="invPreviewPane"><div class="preview-a4-container" id="invPreviewContainer"></div></div></div><div class="builder-bottombar"><button class="btn btn-outline" id="invPrevBtn" onclick="H4Invoice.prevStep()">← Previous</button><span class="builder-step-counter" id="invStepCounter">Step 1 / 6</span><button class="btn btn-primary" id="invNextBtn" onclick="H4Invoice.nextStep()">Next →</button><div style="display:flex;gap:0.5rem;"><button class="btn btn-outline" onclick="H4Invoice.backToList()">↩️ Cancel</button><button class="btn btn-secondary" onclick="H4Invoice.printInvoice()">🖨️ Print</button><button class="btn btn-whatsapp" onclick="H4Invoice.whatsappInvoice()">📤 WhatsApp</button><button class="btn btn-primary" onclick="H4Invoice.saveInvoice()">💾 Save</button></div></div>';
+        var templateSelect = document.createElement('select');
         templateSelect.id = 'invTemplate';
         templateSelect.style = 'margin-left:1rem;padding:0.3rem;border-radius:6px;border:1px solid #e0e0e0;';
-        const templates = DB.getList('templates');
-        templates.forEach(t => {
-          const opt = document.createElement('option');
+        var templates = DB.getList('templates');
+        templates.forEach(function(t) {
+          var opt = document.createElement('option');
           opt.value = t.id;
           opt.textContent = t.name;
           templateSelect.appendChild(opt);
         });
-        templateSelect.onchange = () => H4Invoice.updatePreview();
+        templateSelect.onchange = function() { H4Invoice.updatePreview(); };
         document.querySelector('#invSteps').after(templateSelect);
         this.renderSteps();
       },
-
-      renderSteps() {
-        const container = document.getElementById('invSteps');
+      renderSteps: function() {
+        var container = document.getElementById('invSteps');
         if (!container) return;
-        const labels = ['Details', 'Customer', 'Items', 'Calculation', 'Payment', 'Notes'];
-        container.innerHTML = labels.map((label, i) => {
-          const step = i + 1;
-          let cls = 'builder-step-chip';
-          if (step === this.currentStep) cls += ' active';
-          else if (step < this.currentStep) cls += ' done';
-          return `<div class="${cls}" onclick="H4Invoice.goToStep(${step})">${step}. ${label}</div>`;
+        var labels = ['Details', 'Customer', 'Items', 'Calculation', 'Payment', 'Notes'];
+        container.innerHTML = labels.map(function(label, i) {
+          var step = i + 1;
+          var cls = 'builder-step-chip';
+          if (step === H4Invoice.currentStep) cls += ' active';
+          else if (step < H4Invoice.currentStep) cls += ' done';
+          return '<div class="' + cls + '" onclick="H4Invoice.goToStep(' + step + ')">' + step + '. ' + label + '</div>';
         }).join('');
-        document.getElementById('invStepCounter').textContent = `Step ${this.currentStep} / ${this.totalSteps}`;
+        document.getElementById('invStepCounter').textContent = 'Step ' + this.currentStep + ' / ' + this.totalSteps;
       },
-
-      goToStep(step) {
+      goToStep: function(step) {
         if (step < 1 || step > this.totalSteps) return;
         this.currentStep = step;
-        document.querySelectorAll('#invoiceBuilderContainer .builder-step-section').forEach(el => {
+        document.querySelectorAll('#invoiceBuilderContainer .builder-step-section').forEach(function(el) {
           el.classList.toggle('active', parseInt(el.dataset.step) === step);
         });
         this.renderSteps();
         this.updatePreview();
       },
-
-      nextStep() { if (this.currentStep < this.totalSteps) { this.currentStep++; this.goToStep(this.currentStep); } },
-      prevStep() { if (this.currentStep > 1) { this.currentStep--; this.goToStep(this.currentStep); } },
-
-      populateCustomerSelects() {
+      nextStep: function() { if (this.currentStep < this.totalSteps) { this.currentStep++; this.goToStep(this.currentStep); } },
+      prevStep: function() { if (this.currentStep > 1) { this.currentStep--; this.goToStep(this.currentStep); } },
+      populateCustomerSelects: function() {
         H4App.populateCustomerSelects();
-        const sel = document.getElementById('invCustomer');
+        var sel = document.getElementById('invCustomer');
         if (sel) {
-          const opt = document.createElement('option');
+          var opt = document.createElement('option');
           opt.value = 'new';
           opt.textContent = '➕ New Customer';
           sel.appendChild(opt);
         }
         this.onCustomerChange();
       },
-
-      onCustomerChange() {
-        const sel = document.getElementById('invCustomer');
-        const info = document.getElementById('invCustomerInfo');
+      onCustomerChange: function() {
+        var sel = document.getElementById('invCustomer');
+        var info = document.getElementById('invCustomerInfo');
         if (!sel || !info) return;
-        const val = sel.value;
+        var val = sel.value;
         if (val === 'new') { this.openNewCustomerModal(); return; }
-        const customer = DB.getItem('customers', val);
+        var customer = DB.getItem('customers', val);
         if (customer) {
-          info.innerHTML = `<strong>${customer.name}</strong><br>${customer.company ? customer.company + '<br>' : ''}${customer.address || ''}<br>Phone: ${customer.phone || ''} ${customer.whatsapp ? '| WhatsApp: '+customer.whatsapp : ''}<br>Email: ${customer.email || ''}<br>GSTIN: ${customer.gstin || 'N/A'}`;
+          info.innerHTML = '<strong>' + customer.name + '</strong><br>' + (customer.company ? customer.company + '<br>' : '') + (customer.address || '') + '<br>Phone: ' + (customer.phone || '') + (customer.whatsapp ? '| WhatsApp: '+customer.whatsapp : '') + '<br>Email: ' + (customer.email || '') + '<br>GSTIN: ' + (customer.gstin || 'N/A');
         } else {
           info.innerHTML = '<p class="text-muted">Select a customer to view details.</p>';
         }
         this.calculate();
         this.updatePreview();
       },
-
-      openNewCustomerModal() {
+      openNewCustomerModal: function() {
         H4Customers.openModal();
-        const origClose = H4Customers.closeModal;
+        var origClose = H4Customers.closeModal;
         H4Customers.closeModal = function() {
           origClose.call(this);
           H4Invoice.populateCustomerSelects();
-          const customers = DB.getList('customers');
+          var customers = DB.getList('customers');
           if (customers.length) {
-            const last = customers[customers.length - 1];
+            var last = customers[customers.length - 1];
             document.getElementById('invCustomer').value = last.id;
             H4Invoice.onCustomerChange();
           }
           H4Customers.closeModal = origClose;
         };
       },
-
-      addItem() {
-        const products = DB.getList('products');
-        const productOptions = products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+      addItem: function() {
+        var products = DB.getList('products');
+        var productOptions = products.map(function(p) { return '<option value="' + p.id + '">' + p.name + '</option>'; }).join('');
         this.items.push({
           id: 'item_' + Date.now(), productId: '', description: '', category: '',
           quantity: 1, unit: 'Nos', rate: 0, gst: 18, discount: 0, discountType: 'flat', rateSource: 'manual', hsn: ''
@@ -3193,45 +2584,25 @@
         this.calculate();
         this.updatePreview();
       },
-
-      renderItems() {
-        const container = document.getElementById('invoiceItemsContainer');
+      renderItems: function() {
+        var container = document.getElementById('invoiceItemsContainer');
         if (!container) return;
-        const products = DB.getList('products');
-        const productOptions = products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        var products = DB.getList('products');
+        var productOptions = products.map(function(p) { return '<option value="' + p.id + '">' + p.name + '</option>'; }).join('');
         if (this.items.length === 0) {
           container.innerHTML = '<div class="text-muted text-center" style="padding:1.5rem;">No items. Click "Add Item".</div>';
           return;
         }
-        container.innerHTML = this.items.map((item, idx) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `
-            <div class="item-card">
-              <div class="item-header"><span style="font-weight:600;">#${idx+1} ${item.description || 'New Item'}</span>
-                <button class="btn btn-sm btn-danger" onclick="H4Invoice.removeItem(${idx})">✕</button>
-              </div>
-              <div class="item-grid">
-                <div class="form-group"><label>Product</label><select onchange="H4Invoice.onProductSelect(${idx}, this.value)"><option value="">-- Select --</option>${productOptions}</select></div>
-                <div class="form-group"><label>Description</label><input value="${item.description}" onchange="H4Invoice.updateItem(${idx}, 'description', this.value)"></div>
-                <div class="form-group"><label>Qty</label><input type="number" step="0.01" min="0" value="${item.quantity}" onchange="H4Invoice.updateItem(${idx}, 'quantity', this.value)"></div>
-                <div class="form-group"><label>Unit</label><input value="${item.unit}" onchange="H4Invoice.updateItem(${idx}, 'unit', this.value)"></div>
-                <div class="form-group"><label>Rate</label><input type="number" step="0.01" min="0" value="${item.rate}" onchange="H4Invoice.updateItem(${idx}, 'rate', this.value)"></div>
-                <div class="form-group"><label>GST %</label><input type="number" step="0.01" min="0" value="${item.gst}" onchange="H4Invoice.updateItem(${idx}, 'gst', this.value)"></div>
-                <div class="form-group"><label>Discount</label>
-                  <div style="display:flex;gap:4px;"><input type="number" step="0.01" min="0" value="${item.discount}" onchange="H4Invoice.updateItem(${idx}, 'discount', this.value)" style="flex:1;"><select onchange="H4Invoice.updateItem(${idx}, 'discountType', this.value)" style="width:60px;"><option value="flat" ${item.discountType==='flat'?'selected':''}>₹</option><option value="percentage" ${item.discountType==='percentage'?'selected':''}>%</option></select></div>
-                </div>
-              </div>
-              <div class="item-total">Total: ₹${total.toFixed(2)}</div>
-            </div>
-          `;
+        container.innerHTML = this.items.map(function(item, idx) {
+          var total = (item.quantity || 0) * (item.rate || 0);
+          return '<div class="item-card"><div class="item-header"><span style="font-weight:600;">#' + (idx+1) + ' ' + (item.description || 'New Item') + '</span><button class="btn btn-sm btn-danger" onclick="H4Invoice.removeItem(' + idx + ')">✕</button></div><div class="item-grid"><div class="form-group"><label>Product</label><select onchange="H4Invoice.onProductSelect(' + idx + ', this.value)"><option value="">-- Select --</option>' + productOptions + '</select></div><div class="form-group"><label>Description</label><input value="' + item.description + '" onchange="H4Invoice.updateItem(' + idx + ', \'description\', this.value)"></div><div class="form-group"><label>Qty</label><input type="number" step="0.01" min="0" value="' + item.quantity + '" onchange="H4Invoice.updateItem(' + idx + ', \'quantity\', this.value)"></div><div class="form-group"><label>Unit</label><input value="' + item.unit + '" onchange="H4Invoice.updateItem(' + idx + ', \'unit\', this.value)"></div><div class="form-group"><label>Rate</label><input type="number" step="0.01" min="0" value="' + item.rate + '" onchange="H4Invoice.updateItem(' + idx + ', \'rate\', this.value)"></div><div class="form-group"><label>GST %</label><input type="number" step="0.01" min="0" value="' + item.gst + '" onchange="H4Invoice.updateItem(' + idx + ', \'gst\', this.value)"></div><div class="form-group"><label>Discount</label><div style="display:flex;gap:4px;"><input type="number" step="0.01" min="0" value="' + item.discount + '" onchange="H4Invoice.updateItem(' + idx + ', \'discount\', this.value)" style="flex:1;"><select onchange="H4Invoice.updateItem(' + idx + ', \'discountType\', this.value)" style="width:60px;"><option value="flat" ' + (item.discountType==='flat'?'selected':'') + '>₹</option><option value="percentage" ' + (item.discountType==='percentage'?'selected':'') + '>%</option></select></div></div></div><div class="item-total">Total: ₹' + total.toFixed(2) + '</div></div>';
         }).join('');
-        this.items.forEach((item, idx) => {
-          const sel = container.querySelectorAll('.item-card select')[idx];
+        this.items.forEach(function(item, idx) {
+          var sel = container.querySelectorAll('.item-card select')[idx];
           if (sel) sel.value = item.productId || '';
         });
       },
-
-      onProductSelect(idx, productId) {
+      onProductSelect: function(idx, productId) {
         if (!productId) {
           this.updateItem(idx, 'productId', '');
           this.updateItem(idx, 'description', '');
@@ -3240,7 +2611,7 @@
           this.updateItem(idx, 'gst', 18);
           return;
         }
-        const product = DB.getItem('products', productId);
+        var product = DB.getItem('products', productId);
         if (!product) return;
         this.updateItem(idx, 'productId', productId);
         this.updateItem(idx, 'description', product.name);
@@ -3248,22 +2619,21 @@
         this.updateItem(idx, 'category', product.category || '');
         this.updateItem(idx, 'hsn', product.hsn || '');
         this.updateItem(idx, 'gst', product.gst || 18);
-        const qty = this.items[idx].quantity || 1;
-        let rate = getPriceSlabRate(product, qty);
+        var qty = this.items[idx].quantity || 1;
+        var rate = getPriceSlabRate(product, qty);
         this.updateItem(idx, 'rate', rate);
         this.updateItem(idx, 'rateSource', 'auto');
         this.calculate();
         this.renderItems();
         this.updatePreview();
       },
-
-      updateItem(idx, field, value) {
-        if (['quantity', 'rate', 'gst', 'discount'].includes(field)) value = parseFloat(value) || 0;
+      updateItem: function(idx, field, value) {
+        if (['quantity', 'rate', 'gst', 'discount'].indexOf(field) !== -1) value = parseFloat(value) || 0;
         this.items[idx][field] = value;
         if (field === 'quantity') {
-          const productId = this.items[idx].productId;
+          var productId = this.items[idx].productId;
           if (productId) {
-            const product = DB.getItem('products', productId);
+            var product = DB.getItem('products', productId);
             if (product) {
               this.items[idx].rate = getPriceSlabRate(product, value);
               this.items[idx].rateSource = 'auto';
@@ -3274,49 +2644,47 @@
         this.calculate();
         this.updatePreview();
       },
-
-      removeItem(idx) { this.items.splice(idx, 1); this.renderItems(); this.calculate(); this.updatePreview(); },
-
-      calculate() {
-        const items = this.items.map(item => ({
-          quantity: item.quantity || 0, rate: item.rate || 0,
-          discount: item.discount || 0, discountType: item.discountType || 'flat', gst: item.gst || 0
-        }));
-        let subtotal = 0, totalDiscount = 0;
-        const taxMode = document.getElementById('invTaxMode').value;
-        items.forEach(it => {
-          const sub = it.quantity * it.rate;
-          let disc = 0;
+      removeItem: function(idx) { this.items.splice(idx, 1); this.renderItems(); this.calculate(); this.updatePreview(); },
+      calculate: function() {
+        var items = this.items.map(function(item) {
+          return { quantity: item.quantity || 0, rate: item.rate || 0,
+            discount: item.discount || 0, discountType: item.discountType || 'flat', gst: item.gst || 0 };
+        });
+        var subtotal = 0, totalDiscount = 0;
+        var taxMode = document.getElementById('invTaxMode').value;
+        items.forEach(function(it) {
+          var sub = it.quantity * it.rate;
+          var disc = 0;
           if (it.discountType === 'percentage') disc = sub * it.discount / 100;
           else disc = it.discount;
           disc = Math.min(disc, sub);
           subtotal += sub;
           totalDiscount += disc;
         });
-        const discVal = parseFloat(document.getElementById('invDiscountValue').value) || 0;
-        const discType = document.getElementById('invDiscountType').value;
-        let discountAmt = 0;
+        var discVal = parseFloat(document.getElementById('invDiscountValue').value) || 0;
+        var discType = document.getElementById('invDiscountType').value;
+        var discountAmt = 0;
         if (discVal > 0) {
           discountAmt = discType === 'percentage' ? subtotal * discVal / 100 : discVal;
           discountAmt = Math.min(discountAmt, subtotal);
         }
-        const taxable = Math.max(0, subtotal - discountAmt);
-        let cgst = 0, sgst = 0, igst = 0;
+        var taxable = Math.max(0, subtotal - discountAmt);
+        var cgst = 0, sgst = 0, igst = 0;
         if (taxMode !== 'no-tax') {
-          const defaultGst = items.length ? items[0].gst : 18;
-          const gstTotal = taxable * (defaultGst / 100);
+          var defaultGst = items.length ? items[0].gst : 18;
+          var gstTotal = taxable * (defaultGst / 100);
           if (taxMode === 'igst' || (taxMode === 'auto' && document.getElementById('invCustomer').value && DB
-              .getItem('customers', document.getElementById('invCustomer').value)?.state !== 'Kerala')) {
+              .getItem('customers', document.getElementById('invCustomer').value) && DB
+              .getItem('customers', document.getElementById('invCustomer').value).state !== 'Kerala')) {
             igst = gstTotal;
           } else {
             cgst = gstTotal / 2;
             sgst = gstTotal / 2;
           }
         }
-        const beforeRound = taxable + cgst + sgst + igst;
-        const grandTotal = Math.round(beforeRound);
-        const roundOff = grandTotal - beforeRound;
-
+        var beforeRound = taxable + cgst + sgst + igst;
+        var grandTotal = Math.round(beforeRound);
+        var roundOff = grandTotal - beforeRound;
         document.getElementById('invSubtotal').textContent = '₹' + subtotal.toFixed(2);
         document.getElementById('invDiscountAmt').textContent = '₹' + discountAmt.toFixed(2);
         document.getElementById('invTaxable').textContent = '₹' + taxable.toFixed(2);
@@ -3329,25 +2697,22 @@
         this.updatePaymentStatus();
         this.updatePreview();
       },
-
-      updatePaymentStatus() {
-        const paid = parseFloat(document.getElementById('invPaidAmount').value) || 0;
-        const total = parseFloat(document.getElementById('invGrandTotal').textContent.replace('₹', '')) || 0;
-        const balance = Math.max(0, total - paid);
+      updatePaymentStatus: function() {
+        var paid = parseFloat(document.getElementById('invPaidAmount').value) || 0;
+        var total = parseFloat(document.getElementById('invGrandTotal').textContent.replace('₹', '')) || 0;
+        var balance = Math.max(0, total - paid);
         document.getElementById('invBalance').value = '₹' + balance.toFixed(2);
-        let status = 'unpaid';
+        var status = 'unpaid';
         if (total === 0) status = 'draft';
         else if (paid >= total) status = 'paid';
         else if (paid > 0) status = 'partial';
         document.getElementById('invPaymentStatus').value = status;
       },
-
-      updatePreview() {
-        const container = document.getElementById('invPreviewContainer');
+      updatePreview: function() {
+        var container = document.getElementById('invPreviewContainer');
         if (!container) return;
-        const data = this.collectData();
-        const templateId = document.getElementById('invTemplate')?.value || 'tpl_classic';
-
+        var data = this.collectData();
+        var templateId = document.getElementById('invTemplate') ? document.getElementById('invTemplate').value : 'tpl_classic';
         this.calculate();
         data.subtotal = parseFloat(document.getElementById('invSubtotal').textContent.replace('₹', ''));
         data.discountAmount = parseFloat(document.getElementById('invDiscountAmt').textContent.replace('₹', ''));
@@ -3358,12 +2723,10 @@
         data.roundOff = parseFloat(document.getElementById('invRoundOff').textContent.replace('₹', ''));
         data.grandTotal = parseFloat(document.getElementById('invGrandTotal').textContent.replace('₹', ''));
         data.amountWords = document.getElementById('invAmountWords').textContent;
-
         container.innerHTML = H4TemplateEngine.render('invoice', data, templateId);
       },
-
-      collectData() {
-        const customerId = document.getElementById('invCustomer').value;
+      collectData: function() {
+        var customerId = document.getElementById('invCustomer').value;
         return {
           id: this.editingId || 'inv_' + Date.now(),
           number: document.getElementById('invNumber').value,
@@ -3378,18 +2741,17 @@
           terms: document.getElementById('invTerms').value,
           bankDetails: document.getElementById('invBankDetails').value,
           notes: document.getElementById('invNotes').value,
-          templateId: document.getElementById('invTemplate')?.value || 'tpl_classic',
+          templateId: document.getElementById('invTemplate') ? document.getElementById('invTemplate').value : 'tpl_classic',
           templateVersion: 1,
           updatedAt: new Date().toISOString()
         };
       },
-
-      saveInvoice() {
-        const data = this.collectData();
+      saveInvoice: function() {
+        var data = this.collectData();
         if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
         if (this.items.length === 0) { toast('Please add at least one item.', 'error'); return; }
         this.calculate();
-        const finalData = this.collectData();
+        var finalData = this.collectData();
         finalData.subtotal = parseFloat(document.getElementById('invSubtotal').textContent.replace('₹', ''));
         finalData.discountAmount = parseFloat(document.getElementById('invDiscountAmt').textContent.replace('₹', ''));
         finalData.taxableAmount = parseFloat(document.getElementById('invTaxable').textContent.replace('₹', ''));
@@ -3399,7 +2761,6 @@
         finalData.roundOff = parseFloat(document.getElementById('invRoundOff').textContent.replace('₹', ''));
         finalData.grandTotal = parseFloat(document.getElementById('invGrandTotal').textContent.replace('₹', ''));
         finalData.amountWords = document.getElementById('invAmountWords').textContent;
-
         if (this.editingId) {
           DB.update('invoices', this.editingId, finalData);
           toast('Invoice updated!');
@@ -3409,8 +2770,7 @@
         }
         this.backToList();
       },
-
-      backToList() {
+      backToList: function() {
         document.getElementById('invoiceBuilderView').style.display = 'none';
         document.getElementById('invoiceListView').style.display = 'block';
         this.editingId = null;
@@ -3418,50 +2778,42 @@
         H4App.loadInvoices();
         H4App.updateDashboard();
       },
-
-      printInvoice() {
-        const container = document.getElementById('invPreviewContainer');
+      printInvoice: function() {
+        var container = document.getElementById('invPreviewContainer');
         if (!container) return;
-        const html = container.innerHTML;
-        const win = window.open('', '_blank');
+        var html = container.innerHTML;
+        var win = window.open('', '_blank');
         if (!win) { toast('Please allow popups.', 'error'); return; }
-        win.document.write(`<html><head><title>Invoice</title><style>body{font-family:var(--font-family);padding:2rem;background:#fff;font-size:14px;}.preview-a4-page{max-width:794px;margin:0 auto;}</style></head><body>${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
+        win.document.write('<html><head><title>Invoice</title><style>body{font-family:var(--font-family);padding:2rem;background:#fff;font-size:14px;}.preview-a4-page{max-width:794px;margin:0 auto;}</style></head><body>' + html + '<script>window.onload=function(){window.print();};<\/script></body></html>');
         win.document.close();
       },
-
-      whatsappInvoice() {
-        const data = this.collectData();
-        const customer = DB.getItem('customers', data.customerId) || {};
-        const phone = customer.whatsapp || customer.phone || '';
-        const total = document.getElementById('invGrandTotal').textContent || '₹0.00';
-        const msg = `Dear ${customer.name || 'Customer'},\n\nPlease find your invoice.\n\nInvoice No: ${data.number}\nAmount: ${total}\n\nThank you for your business.\n\n${(DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
-        const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
+      whatsappInvoice: function() {
+        var data = this.collectData();
+        var customer = DB.getItem('customers', data.customerId) || {};
+        var phone = customer.whatsapp || customer.phone || '';
+        var total = document.getElementById('invGrandTotal').textContent || '₹0.00';
+        var msg = 'Dear ' + (customer.name || 'Customer') + ',\n\nPlease find your invoice.\n\nInvoice No: ' + data.number + '\nAmount: ' + total + '\n\nThank you for your business.\n\n' + ((DB.get('company')||{}).brandName || 'H4 Construction Solutions');
+        var url = 'https://wa.me/' + phone.replace(/\D/g,'') + '?text=' + encodeURIComponent(msg);
         if (phone) { window.open(url, '_blank'); } else { toast('Customer WhatsApp number not available.', 'warning'); }
       },
-
-      whatsappExistingInvoice(id) {
-        const inv = DB.getItem('invoices', id);
+      whatsappExistingInvoice: function(id) {
+        var inv = DB.getItem('invoices', id);
         if (!inv) { toast('Invoice not found.', 'error'); return; }
-        const customer = DB.getItem('customers', inv.customerId) || {};
-        const phone = customer.whatsapp || customer.phone || '';
-        const msg = `Dear ${customer.name || 'Customer'},\n\nPlease find your invoice.\n\nInvoice No: ${inv.number}\nAmount: ₹${(inv.grandTotal||0).toFixed(2)}\n\nThank you for your business.\n\n${(DB.get('company')||{}).brandName || 'H4 Construction Solutions'}`;
-        const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
+        var customer = DB.getItem('customers', inv.customerId) || {};
+        var phone = customer.whatsapp || customer.phone || '';
+        var msg = 'Dear ' + (customer.name || 'Customer') + ',\n\nPlease find your invoice.\n\nInvoice No: ' + inv.number + '\nAmount: ₹' + (inv.grandTotal||0).toFixed(2) + '\n\nThank you for your business.\n\n' + ((DB.get('company')||{}).brandName || 'H4 Construction Solutions');
+        var url = 'https://wa.me/' + phone.replace(/\D/g,'') + '?text=' + encodeURIComponent(msg);
         if (phone) { window.open(url, '_blank'); } else { toast('Customer WhatsApp number not available.', 'warning'); }
       },
-
-      generateNumber() {
+      generateNumber: function() {
         document.getElementById('invNumber').value = getNextInvoiceNumber();
       }
     };
 
-    // ============================================================
-    // EPOXY BUILDER (FULL RESTORED)
-    // ============================================================
-    const H4Epoxy = {
+    var H4Epoxy = {
       currentStep: 1, totalSteps: 7, priceItems: [], editingId: null,
-
-      open() {
-        const overlay = document.getElementById('epoxyOverlay');
+      open: function() {
+        var overlay = document.getElementById('epoxyOverlay');
         if (!overlay) return;
         this.editingId = null;
         this.initData();
@@ -3475,9 +2827,8 @@
         overlay.classList.add('active');
         toast('Epoxy Proposal Builder opened.');
       },
-
-      edit(id) {
-        const q = DB.getItem('quotations', id);
+      edit: function(id) {
+        var q = DB.getItem('quotations', id);
         if (!q) { toast('Quotation not found.', 'error'); return; }
         this.editingId = id;
         this.loadData(q);
@@ -3490,19 +2841,16 @@
         document.getElementById('epoxyOverlay').classList.add('active');
         toast('Editing epoxy quotation.');
       },
-
-      close() {
+      close: function() {
         document.getElementById('epoxyOverlay').classList.remove('active');
         H4App.loadQuotations();
       },
-
-      initData() { this.priceItems = []; this.clearFields(); },
-
-      clearFields() {
+      initData: function() { this.priceItems = []; this.clearFields(); },
+      clearFields: function() {
         ['epxNumber','epxDate','epxCustomer','epxProjectName','epxSiteAddress','epxReference',
          'epxArea','epxFlooringType','epxThickness','epxFinish','epxSystemRate','epxSystemGst',
-         'epxThankYou','epxSignatoryName'].forEach(id => {
-          const el = document.getElementById(id);
+         'epxThankYou','epxSignatoryName'].forEach(function(id) {
+          var el = document.getElementById(id);
           if (el) el.value = '';
         });
         document.getElementById('epxDiscountEnabled').checked = false;
@@ -3510,12 +2858,11 @@
         document.getElementById('epxDiscountType').value = 'flat';
         document.getElementById('epxGstMode').value = 'intra';
       },
-
-      loadData(q) {
+      loadData: function(q) {
         this.clearFields();
         this.editingId = q.id;
-        const pd = q.projectDetails || {}, pr = q.pricing || {}, ft = q.footer || {};
-        const cus = DB.getItem('customers', q.customerId) || {};
+        var pd = q.projectDetails || {}, pr = q.pricing || {}, ft = q.footer || {};
+        var cus = DB.getItem('customers', q.customerId) || {};
         document.getElementById('epxNumber').value = q.number || '';
         document.getElementById('epxDate').value = q.date || '';
         document.getElementById('epxCustomer').value = q.customerId || '';
@@ -3530,115 +2877,84 @@
         document.getElementById('epxSystemGst').value = pr.systemGst || 18;
         document.getElementById('epxThankYou').value = ft.thankYou || 'Thank you for considering H4 Construction Solutions.';
         document.getElementById('epxSignatoryName').value = ft.signatoryName || 'Authorized Signatory';
-        this.priceItems = (pr.items || []).map(p => ({ ...p }));
+        this.priceItems = (pr.items || []).map(function(p) { return Object.assign({}, p); });
         this.renderPriceItems();
         this.onSystemChange();
         this.calculate();
       },
-
-      populateDropdowns() { H4App.populateCustomerSelects(); },
-
-      generateNumber() {
+      populateDropdowns: function() { H4App.populateCustomerSelects(); },
+      generateNumber: function() {
         document.getElementById('epxNumber').value = getNextQuotationNumber();
         document.getElementById('epxDate').value = new Date().toISOString().split('T')[0];
       },
-
-      renderSteps() {
-        const container = document.getElementById('epoxySteps');
-        const labels = ['Customer','Project','Smart Rate','Price Items','Discount','Calculation','Terms'];
-        container.innerHTML = labels.map((label, i) => {
-          const step = i + 1;
-          let cls = 'builder-step-chip';
-          if (step === this.currentStep) cls += ' active';
-          else if (step < this.currentStep) cls += ' done';
-          return `<div class="${cls}" onclick="H4Epoxy.goToStep(${step})">${step}. ${label}</div>`;
+      renderSteps: function() {
+        var container = document.getElementById('epoxySteps');
+        var labels = ['Customer','Project','Smart Rate','Price Items','Discount','Calculation','Terms'];
+        container.innerHTML = labels.map(function(label, i) {
+          var step = i + 1;
+          var cls = 'builder-step-chip';
+          if (step === H4Epoxy.currentStep) cls += ' active';
+          else if (step < H4Epoxy.currentStep) cls += ' done';
+          return '<div class="' + cls + '" onclick="H4Epoxy.goToStep(' + step + ')">' + step + '. ' + label + '</div>';
         }).join('');
       },
-
-      renderStep() {
-        document.querySelectorAll('#epoxyOverlay .builder-step-section').forEach(el => {
-          el.classList.toggle('active', parseInt(el.dataset.step) === this.currentStep);
+      renderStep: function() {
+        document.querySelectorAll('#epoxyOverlay .builder-step-section').forEach(function(el) {
+          el.classList.toggle('active', parseInt(el.dataset.step) === H4Epoxy.currentStep);
         });
         this.renderPriceItems();
         this.updatePreview();
         this.renderSteps();
-        document.getElementById('epxStepCounter').textContent = `Step ${this.currentStep} / ${this.totalSteps}`;
+        document.getElementById('epxStepCounter').textContent = 'Step ' + this.currentStep + ' / ' + this.totalSteps;
       },
-
-      goToStep(step) { if (step >= 1 && step <= this.totalSteps) { this.currentStep = step; this.renderStep(); } },
-      nextStep() { if (this.currentStep < this.totalSteps) { this.currentStep++; this.renderStep(); } },
-      prevStep() { if (this.currentStep > 1) { this.currentStep--; this.renderStep(); } },
-
-      renderPriceItems() {
-        const container = document.getElementById('epxPriceItems');
-        container.innerHTML = this.priceItems.map((item, i) => {
-          const total = (item.quantity || 0) * (item.rate || 0);
-          return `
-            <div style="border:1px solid #e0e0e0;border-radius:10px;padding:0.8rem;margin-bottom:0.8rem;background:white;">
-              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;">
-                <div><label style="font-size:0.75rem;color:#757575;">Description</label><input type="text" value="${item.description}" onchange="H4Epoxy.updatePriceItem(${i}, 'description', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">Category</label>
-                  <select onchange="H4Epoxy.updatePriceItem(${i}, 'category', this.value)">
-                    ${['Material Cost','Labour Cost','Surface Preparation','Crack Repair','Primer Coat','Epoxy Screed / Putty','Self-Leveling Epoxy','Decorative Finish','PU Top Coat','Transportation','Other Charges'].map(c => `<option value="${c}" ${c===item.category?'selected':''}>${c}</option>`).join('')}
-                  </select>
-                </div>
-                <div><label style="font-size:0.75rem;color:#757575;">Qty</label><input type="number" value="${item.quantity}" onchange="H4Epoxy.updatePriceItem(${i}, 'quantity', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">Unit</label><input type="text" value="${item.unit||'sq.ft'}" onchange="H4Epoxy.updatePriceItem(${i}, 'unit', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">Rate</label><input type="number" value="${item.rate}" onchange="H4Epoxy.updatePriceItem(${i}, 'rate', this.value)"></div>
-                <div><label style="font-size:0.75rem;color:#757575;">GST %</label><input type="number" value="${item.gst}" onchange="H4Epoxy.updatePriceItem(${i}, 'gst', this.value)"></div>
-                <div style="display:flex;align-items:flex-end;gap:0.5rem;grid-column:span 2;">
-                  <div><label style="font-size:0.75rem;color:#757575;">Total</label><strong>₹${total.toFixed(2)}</strong></div>
-                  <button class="btn btn-danger btn-sm" onclick="H4Epoxy.removePriceItem(${i})">✕</button>
-                  <button class="btn btn-outline btn-sm" onclick="H4Epoxy.duplicatePriceItem(${i})">⧉</button>
-                </div>
-              </div>
-            </div>
-          `;
+      goToStep: function(step) { if (step >= 1 && step <= this.totalSteps) { this.currentStep = step; this.renderStep(); } },
+      nextStep: function() { if (this.currentStep < this.totalSteps) { this.currentStep++; this.renderStep(); } },
+      prevStep: function() { if (this.currentStep > 1) { this.currentStep--; this.renderStep(); } },
+      renderPriceItems: function() {
+        var container = document.getElementById('epxPriceItems');
+        container.innerHTML = this.priceItems.map(function(item, i) {
+          var total = (item.quantity || 0) * (item.rate || 0);
+          return '<div style="border:1px solid #e0e0e0;border-radius:10px;padding:0.8rem;margin-bottom:0.8rem;background:white;"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;"><div><label style="font-size:0.75rem;color:#757575;">Description</label><input type="text" value="' + item.description + '" onchange="H4Epoxy.updatePriceItem(' + i + ', \'description\', this.value)"></div><div><label style="font-size:0.75rem;color:#757575;">Category</label><select onchange="H4Epoxy.updatePriceItem(' + i + ', \'category\', this.value)">' + ['Material Cost','Labour Cost','Surface Preparation','Crack Repair','Primer Coat','Epoxy Screed / Putty','Self-Leveling Epoxy','Decorative Finish','PU Top Coat','Transportation','Other Charges'].map(function(c) { return '<option value="' + c + '" ' + (c===item.category?'selected':'') + '>' + c + '</option>'; }).join('') + '</select></div><div><label style="font-size:0.75rem;color:#757575;">Qty</label><input type="number" value="' + item.quantity + '" onchange="H4Epoxy.updatePriceItem(' + i + ', \'quantity\', this.value)"></div><div><label style="font-size:0.75rem;color:#757575;">Unit</label><input type="text" value="' + (item.unit||'sq.ft') + '" onchange="H4Epoxy.updatePriceItem(' + i + ', \'unit\', this.value)"></div><div><label style="font-size:0.75rem;color:#757575;">Rate</label><input type="number" value="' + item.rate + '" onchange="H4Epoxy.updatePriceItem(' + i + ', \'rate\', this.value)"></div><div><label style="font-size:0.75rem;color:#757575;">GST %</label><input type="number" value="' + item.gst + '" onchange="H4Epoxy.updatePriceItem(' + i + ', \'gst\', this.value)"></div><div style="display:flex;align-items:flex-end;gap:0.5rem;grid-column:span 2;"><div><label style="font-size:0.75rem;color:#757575;">Total</label><strong>₹' + total.toFixed(2) + '</strong></div><button class="btn btn-danger btn-sm" onclick="H4Epoxy.removePriceItem(' + i + ')">✕</button><button class="btn btn-outline btn-sm" onclick="H4Epoxy.duplicatePriceItem(' + i + ')">⧉</button></div></div></div>';
         }).join('') || '<p style="color:#757575;">No price items. Add one below.</p>';
       },
-
-      addPriceItem() {
+      addPriceItem: function() {
         this.priceItems.push({ id: 'pitem_' + Date.now(), description: 'New Item', category: 'Material Cost',
           quantity: 1, unit: 'sq.ft', rate: 0, gst: 18, discount: 0, discountType: 'flat' });
         this.renderPriceItems();
         this.calculate();
       },
-
-      duplicatePriceItem(index) {
-        const item = JSON.parse(JSON.stringify(this.priceItems[index]));
+      duplicatePriceItem: function(index) {
+        var item = JSON.parse(JSON.stringify(this.priceItems[index]));
         item.id = 'pitem_' + Date.now();
         this.priceItems.splice(index + 1, 0, item);
         this.renderPriceItems();
         this.calculate();
       },
-
-      updatePriceItem(index, field, value) {
-        if (['quantity','rate','gst','discount'].includes(field)) value = Number(value) || 0;
+      updatePriceItem: function(index, field, value) {
+        if (['quantity','rate','gst','discount'].indexOf(field) !== -1) value = Number(value) || 0;
         this.priceItems[index][field] = value;
         this.renderPriceItems();
         this.calculate();
       },
-
-      removePriceItem(index) {
+      removePriceItem: function(index) {
         if (this.priceItems.length <= 1) { toast('Keep at least one item.', 'error'); return; }
         this.priceItems.splice(index, 1);
         this.renderPriceItems();
         this.calculate();
       },
-
-      onSystemChange() {
-        const ft = document.getElementById('epxFlooringType').value;
-        const th = document.getElementById('epxThickness').value;
-        const rates = DB.get('rateMaster') || {};
-        const match = Object.values(rates).find(r => r.active !== false && r.flooringType === ft && r.thickness === th && r.unit === 'sq.ft');
-        const statusEl = document.getElementById('epxRateStatus');
-        const rateInput = document.getElementById('epxSystemRate');
-        const gstInput = document.getElementById('epxSystemGst');
+      onSystemChange: function() {
+        var ft = document.getElementById('epxFlooringType').value;
+        var th = document.getElementById('epxThickness').value;
+        var rates = DB.get('rateMaster') || {};
+        var match = Object.values(rates).find(function(r) { return r.active !== false && r.flooringType === ft && r.thickness === th && r.unit === 'sq.ft'; });
+        var statusEl = document.getElementById('epxRateStatus');
+        var rateInput = document.getElementById('epxSystemRate');
+        var gstInput = document.getElementById('epxSystemGst');
         if (match) {
           rateInput.value = match.rate;
           gstInput.value = match.gst || 18;
           statusEl.className = 'rate-status auto';
-          statusEl.innerHTML = `✅ Auto Rate: ₹${match.rate} / sq.ft (GST ${match.gst||18}%)`;
+          statusEl.innerHTML = '✅ Auto Rate: ₹' + match.rate + ' / sq.ft (GST ' + (match.gst||18) + '%)';
         } else {
           statusEl.className = 'rate-status missing';
           statusEl.innerHTML = '⚠️ Rate not configured for this flooring type and thickness.';
@@ -3646,58 +2962,54 @@
         }
         this.calculateSystemAmount();
       },
-
-      resetToAutoRate() { this.onSystemChange(); },
-
-      calculateSystemAmount() {
-        const area = Number(document.getElementById('epxArea').value) || 0;
-        const rate = Number(document.getElementById('epxSystemRate').value) || 0;
-        const amount = area * rate;
+      resetToAutoRate: function() { this.onSystemChange(); },
+      calculateSystemAmount: function() {
+        var area = Number(document.getElementById('epxArea').value) || 0;
+        var rate = Number(document.getElementById('epxSystemRate').value) || 0;
+        var amount = area * rate;
         document.getElementById('epxSystemAmount').textContent = '₹' + amount.toFixed(2);
-        const desc = 'Epoxy Flooring System';
-        if (amount > 0 && !this.priceItems.find(p => p.description === desc)) {
-          this.priceItems = this.priceItems.filter(p => p.description !== desc);
-          const gst = Number(document.getElementById('epxSystemGst').value) || 18;
+        var desc = 'Epoxy Flooring System';
+        if (amount > 0 && !this.priceItems.find(function(p) { return p.description === desc; })) {
+          this.priceItems = this.priceItems.filter(function(p) { return p.description !== desc; });
+          var gst = Number(document.getElementById('epxSystemGst').value) || 18;
           this.priceItems.unshift({ id: 'pitem_' + Date.now(), description: desc, category: 'Self-Leveling Epoxy',
             quantity: area, unit: 'sq.ft', rate: rate, gst: gst, discount: 0, discountType: 'flat' });
           this.renderPriceItems();
         }
         this.calculate();
       },
-
-      calculate() {
-        const items = this.priceItems.map(p => ({ quantity: p.quantity || 0, rate: p.rate || 0,
-          discount: p.discount || 0, gst: p.gst || 0, discountType: p.discountType || 'flat' }));
-        let subtotal = 0, totalDiscount = 0;
-        items.forEach(it => {
-          const sub = it.quantity * it.rate;
-          let disc = 0;
+      calculate: function() {
+        var items = this.priceItems.map(function(p) { return { quantity: p.quantity || 0, rate: p.rate || 0,
+          discount: p.discount || 0, gst: p.gst || 0, discountType: p.discountType || 'flat' }; });
+        var subtotal = 0, totalDiscount = 0;
+        items.forEach(function(it) {
+          var sub = it.quantity * it.rate;
+          var disc = 0;
           if (it.discountType === 'percentage') disc = sub * it.discount / 100;
           else disc = it.discount;
           disc = Math.min(disc, sub);
           subtotal += sub;
           totalDiscount += disc;
         });
-        const discountEnabled = document.getElementById('epxDiscountEnabled').checked;
-        let discountAmt = 0;
+        var discountEnabled = document.getElementById('epxDiscountEnabled').checked;
+        var discountAmt = 0;
         if (discountEnabled) {
-          const discVal = parseFloat(document.getElementById('epxDiscountValue').value) || 0;
-          const discType = document.getElementById('epxDiscountType').value;
+          var discVal = parseFloat(document.getElementById('epxDiscountValue').value) || 0;
+          var discType = document.getElementById('epxDiscountType').value;
           discountAmt = discType === 'percentage' ? subtotal * discVal / 100 : discVal;
           discountAmt = Math.min(discountAmt, subtotal);
         }
-        const taxable = Math.max(0, subtotal - discountAmt);
-        const gstMode = document.getElementById('epxGstMode').value;
-        let cgst = 0, sgst = 0, igst = 0;
+        var taxable = Math.max(0, subtotal - discountAmt);
+        var gstMode = document.getElementById('epxGstMode').value;
+        var cgst = 0, sgst = 0, igst = 0;
         if (gstMode !== 'off') {
-          const gstTotal = taxable * 18 / 100;
+          var gstTotal = taxable * 18 / 100;
           if (gstMode === 'inter') igst = gstTotal;
           else { cgst = gstTotal / 2; sgst = gstTotal / 2; }
         }
-        const beforeRound = taxable + cgst + sgst + igst;
-        const grandTotal = Math.round(beforeRound);
-        const roundOff = grandTotal - beforeRound;
-
+        var beforeRound = taxable + cgst + sgst + igst;
+        var grandTotal = Math.round(beforeRound);
+        var roundOff = grandTotal - beforeRound;
         document.getElementById('epxSubtotal').textContent = subtotal.toFixed(2);
         document.getElementById('epxDiscountAmt').textContent = discountAmt.toFixed(2);
         document.getElementById('epxTaxable').textContent = taxable.toFixed(2);
@@ -3711,8 +3023,7 @@
         document.getElementById('epxIgstRow').style.display = igst > 0 ? 'flex' : 'none';
         this.updatePreview();
       },
-
-      collectData() {
+      collectData: function() {
         return {
           id: this.editingId || 'qtn_' + Date.now(),
           quotationType: 'premium-epoxy',
@@ -3748,12 +3059,11 @@
           updatedAt: new Date().toISOString()
         };
       },
-
-      save() {
-        const data = this.collectData();
+      save: function() {
+        var data = this.collectData();
         if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
         this.calculate();
-        const finalData = this.collectData();
+        var finalData = this.collectData();
         finalData.grandTotal = parseFloat(document.getElementById('epxGrandTotal').textContent);
         if (this.editingId) {
           DB.update('quotations', this.editingId, finalData);
@@ -3765,12 +3075,11 @@
         document.getElementById('epxConvertBtn').style.display = 'inline-flex';
         H4App.loadQuotations();
       },
-
-      updatePreview() {
-        const container = document.getElementById('epoxyPreviewContainer');
+      updatePreview: function() {
+        var container = document.getElementById('epoxyPreviewContainer');
         if (!container) return;
-        const data = this.collectData();
-        const templateId = 'tpl_premium';
+        var data = this.collectData();
+        var templateId = 'tpl_premium';
         this.calculate();
         data.subtotal = parseFloat(document.getElementById('epxSubtotal').textContent);
         data.discountAmount = parseFloat(document.getElementById('epxDiscountAmt').textContent);
@@ -3781,32 +3090,30 @@
         data.grandTotal = parseFloat(document.getElementById('epxGrandTotal').textContent);
         container.innerHTML = H4TemplateEngine.render('epoxy', data, templateId);
       },
-
-      printPreview() {
-        const container = document.getElementById('epoxyPreviewContainer');
-        const html = container.innerHTML;
-        const win = window.open('', '_blank');
+      printPreview: function() {
+        var container = document.getElementById('epoxyPreviewContainer');
+        var html = container.innerHTML;
+        var win = window.open('', '_blank');
         if (!win) { toast('Please allow popups.', 'error'); return; }
-        win.document.write(`<html><head><title>Epoxy Proposal</title><style>body{font-family:var(--font-family);padding:2rem;background:#f5f5f5;font-size:14px;}.preview-a4-page{max-width:794px;margin:0 auto;background:white;padding:2rem 1.5rem;border-radius:12px;}</style></head><body>${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
+        win.document.write('<html><head><title>Epoxy Proposal</title><style>body{font-family:var(--font-family);padding:2rem;background:#f5f5f5;font-size:14px;}.preview-a4-page{max-width:794px;margin:0 auto;background:white;padding:2rem 1.5rem;border-radius:12px;}</style></head><body>' + html + '<script>window.onload=function(){window.print();};<\/script></body></html>');
         win.document.close();
       },
-
-      convertToInvoice() {
+      convertToInvoice: function() {
         if (!this.editingId) { toast('Save the quotation first.', 'error'); return; }
-        const q = DB.getItem('quotations', this.editingId);
+        var q = DB.getItem('quotations', this.editingId);
         if (!q) { toast('Quotation not found.', 'error'); return; }
         if (q.status === 'converted') { toast('Already converted.', 'error'); return; }
-        const inv = {
+        var inv = {
           id: 'inv_' + Date.now(),
           number: getNextInvoiceNumber(),
           date: new Date().toISOString().split('T')[0],
           dueDate: '',
           customerId: q.customerId,
-          projectName: q.projectDetails?.projectName || '',
+          projectName: q.projectDetails ? q.projectDetails.projectName : '',
           reference: q.number,
           quotationId: q.id,
           quotationNumber: q.number,
-          items: (q.pricing?.items || []).map(p => ({ ...p, historicalRate: true })),
+          items: (q.pricing && q.pricing.items || []).map(function(p) { return Object.assign({}, p, { historicalRate: true }); }),
           paidAmount: 0,
           paymentStatus: 'unpaid',
           notes: '',
@@ -3814,21 +3121,21 @@
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         };
-        const items = inv.items.map(p => ({ quantity: p.quantity || 0, rate: p.rate || 0,
-          discount: p.discount || 0, gst: p.gst || 0, discountType: p.discountType || 'flat' }));
-        let subtotal = 0, totalDiscount = 0;
-        items.forEach(it => {
-          const sub = it.quantity * it.rate;
-          let disc = 0;
+        var items = inv.items.map(function(p) { return { quantity: p.quantity || 0, rate: p.rate || 0,
+          discount: p.discount || 0, gst: p.gst || 0, discountType: p.discountType || 'flat' }; });
+        var subtotal = 0, totalDiscount = 0;
+        items.forEach(function(it) {
+          var sub = it.quantity * it.rate;
+          var disc = 0;
           if (it.discountType === 'percentage') disc = sub * it.discount / 100;
           else disc = it.discount;
           disc = Math.min(disc, sub);
           subtotal += sub;
           totalDiscount += disc;
         });
-        const taxable = Math.max(0, subtotal - totalDiscount);
-        const gst = taxable * 0.18;
-        const grandTotal = Math.round(taxable + gst);
+        var taxable = Math.max(0, subtotal - totalDiscount);
+        var gst = taxable * 0.18;
+        var grandTotal = Math.round(taxable + gst);
         inv.subtotal = subtotal;
         inv.totalDiscount = totalDiscount;
         inv.taxableAmount = taxable;
@@ -3843,14 +3150,10 @@
       }
     };
 
-    // ============================================================
-    // WATERPROOFING BUILDER (FULL RESTORED)
-    // ============================================================
-    const H4Waterproofing = {
+    var H4Waterproofing = {
       currentStep: 1, totalSteps: 5, editingId: null,
-
-      open() {
-        const overlay = document.getElementById('waterproofingOverlay');
+      open: function() {
+        var overlay = document.getElementById('waterproofingOverlay');
         if (!overlay) return;
         this.editingId = null;
         this.initData();
@@ -3863,9 +3166,8 @@
         overlay.classList.add('active');
         toast('Waterproofing Quotation Builder opened.');
       },
-
-      edit(id) {
-        const q = DB.getItem('quotations', id);
+      edit: function(id) {
+        var q = DB.getItem('quotations', id);
         if (!q) { toast('Quotation not found.', 'error'); return; }
         this.editingId = id;
         this.loadData(q);
@@ -3877,19 +3179,16 @@
         document.getElementById('waterproofingOverlay').classList.add('active');
         toast('Editing waterproofing quotation.');
       },
-
-      close() {
+      close: function() {
         document.getElementById('waterproofingOverlay').classList.remove('active');
         H4App.loadQuotations();
       },
-
-      initData() { this.clearFields(); },
-
-      clearFields() {
+      initData: function() { this.clearFields(); },
+      clearFields: function() {
         ['wpNumber','wpDate','wpCustomer','wpProjectName','wpSiteAddress','wpReference',
          'wpArea','wpSystemType','wpMaterial','wpMaterialRate','wpLabourRate','wpTransport',
-         'wpThankYou','wpSignatoryName'].forEach(id => {
-          const el = document.getElementById(id);
+         'wpThankYou','wpSignatoryName'].forEach(function(id) {
+          var el = document.getElementById(id);
           if (el) el.value = '';
         });
         document.getElementById('wpDiscountEnabled').checked = false;
@@ -3897,12 +3196,11 @@
         document.getElementById('wpDiscountType').value = 'flat';
         document.getElementById('wpGstMode').value = 'intra';
       },
-
-      loadData(q) {
+      loadData: function(q) {
         this.clearFields();
         this.editingId = q.id;
-        const pd = q.projectDetails || {}, ft = q.footer || {};
-        const cus = DB.getItem('customers', q.customerId) || {};
+        var pd = q.projectDetails || {}, ft = q.footer || {};
+        var cus = DB.getItem('customers', q.customerId) || {};
         document.getElementById('wpNumber').value = q.number || '';
         document.getElementById('wpDate').value = q.date || '';
         document.getElementById('wpCustomer').value = q.customerId || '';
@@ -3919,68 +3217,60 @@
         document.getElementById('wpSignatoryName').value = ft.signatoryName || 'Authorized Signatory';
         this.calculate();
       },
-
-      populateDropdowns() { H4App.populateCustomerSelects(); },
-
-      generateNumber() {
+      populateDropdowns: function() { H4App.populateCustomerSelects(); },
+      generateNumber: function() {
         document.getElementById('wpNumber').value = getNextQuotationNumber();
         document.getElementById('wpDate').value = new Date().toISOString().split('T')[0];
       },
-
-      renderSteps() {
-        const container = document.getElementById('wpSteps');
-        const labels = ['Customer','Area & System','Pricing','Calculation','Terms'];
-        container.innerHTML = labels.map((label, i) => {
-          const step = i + 1;
-          let cls = 'builder-step-chip';
-          if (step === this.currentStep) cls += ' active';
-          else if (step < this.currentStep) cls += ' done';
-          return `<div class="${cls}" onclick="H4Waterproofing.goToStep(${step})">${step}. ${label}</div>`;
+      renderSteps: function() {
+        var container = document.getElementById('wpSteps');
+        var labels = ['Customer','Area & System','Pricing','Calculation','Terms'];
+        container.innerHTML = labels.map(function(label, i) {
+          var step = i + 1;
+          var cls = 'builder-step-chip';
+          if (step === H4Waterproofing.currentStep) cls += ' active';
+          else if (step < H4Waterproofing.currentStep) cls += ' done';
+          return '<div class="' + cls + '" onclick="H4Waterproofing.goToStep(' + step + ')">' + step + '. ' + label + '</div>';
         }).join('');
       },
-
-      renderStep() {
-        document.querySelectorAll('#waterproofingOverlay .builder-step-section').forEach(el => {
-          el.classList.toggle('active', parseInt(el.dataset.step) === this.currentStep);
+      renderStep: function() {
+        document.querySelectorAll('#waterproofingOverlay .builder-step-section').forEach(function(el) {
+          el.classList.toggle('active', parseInt(el.dataset.step) === H4Waterproofing.currentStep);
         });
         this.updatePreview();
         this.renderSteps();
-        document.getElementById('wpStepCounter').textContent = `Step ${this.currentStep} / ${this.totalSteps}`;
+        document.getElementById('wpStepCounter').textContent = 'Step ' + this.currentStep + ' / ' + this.totalSteps;
       },
-
-      goToStep(step) { if (step >= 1 && step <= this.totalSteps) { this.currentStep = step; this.renderStep(); } },
-      nextStep() { if (this.currentStep < this.totalSteps) { this.currentStep++; this.renderStep(); } },
-      prevStep() { if (this.currentStep > 1) { this.currentStep--; this.renderStep(); } },
-
-      calculate() {
-        const area = Number(document.getElementById('wpArea').value) || 0;
-        const materialRate = Number(document.getElementById('wpMaterialRate').value) || 0;
-        const labourRate = Number(document.getElementById('wpLabourRate').value) || 0;
-        const transport = Number(document.getElementById('wpTransport').value) || 0;
-        const materialCost = area * materialRate;
-        const labourCost = area * labourRate;
-        const subtotal = materialCost + labourCost + transport;
-
-        const discountEnabled = document.getElementById('wpDiscountEnabled').checked;
-        let discountAmt = 0;
+      goToStep: function(step) { if (step >= 1 && step <= this.totalSteps) { this.currentStep = step; this.renderStep(); } },
+      nextStep: function() { if (this.currentStep < this.totalSteps) { this.currentStep++; this.renderStep(); } },
+      prevStep: function() { if (this.currentStep > 1) { this.currentStep--; this.renderStep(); } },
+      calculate: function() {
+        var area = Number(document.getElementById('wpArea').value) || 0;
+        var materialRate = Number(document.getElementById('wpMaterialRate').value) || 0;
+        var labourRate = Number(document.getElementById('wpLabourRate').value) || 0;
+        var transport = Number(document.getElementById('wpTransport').value) || 0;
+        var materialCost = area * materialRate;
+        var labourCost = area * labourRate;
+        var subtotal = materialCost + labourCost + transport;
+        var discountEnabled = document.getElementById('wpDiscountEnabled').checked;
+        var discountAmt = 0;
         if (discountEnabled) {
-          const discVal = parseFloat(document.getElementById('wpDiscountValue').value) || 0;
-          const discType = document.getElementById('wpDiscountType').value;
+          var discVal = parseFloat(document.getElementById('wpDiscountValue').value) || 0;
+          var discType = document.getElementById('wpDiscountType').value;
           discountAmt = discType === 'percentage' ? subtotal * discVal / 100 : discVal;
           discountAmt = Math.min(discountAmt, subtotal);
         }
-        const taxable = Math.max(0, subtotal - discountAmt);
-        const gstMode = document.getElementById('wpGstMode').value;
-        let cgst = 0, sgst = 0, igst = 0;
+        var taxable = Math.max(0, subtotal - discountAmt);
+        var gstMode = document.getElementById('wpGstMode').value;
+        var cgst = 0, sgst = 0, igst = 0;
         if (gstMode !== 'off') {
-          const gstTotal = taxable * 18 / 100;
+          var gstTotal = taxable * 18 / 100;
           if (gstMode === 'inter') igst = gstTotal;
           else { cgst = gstTotal / 2; sgst = gstTotal / 2; }
         }
-        const beforeRound = taxable + cgst + sgst + igst;
-        const grandTotal = Math.round(beforeRound);
-        const roundOff = grandTotal - beforeRound;
-
+        var beforeRound = taxable + cgst + sgst + igst;
+        var grandTotal = Math.round(beforeRound);
+        var roundOff = grandTotal - beforeRound;
         document.getElementById('wpMaterialCost').textContent = materialCost.toFixed(2);
         document.getElementById('wpLabourCost').textContent = labourCost.toFixed(2);
         document.getElementById('wpTransportAmt').textContent = transport.toFixed(2);
@@ -3997,8 +3287,7 @@
         document.getElementById('wpIgstRow').style.display = igst > 0 ? 'flex' : 'none';
         this.updatePreview();
       },
-
-      collectData() {
+      collectData: function() {
         return {
           id: this.editingId || 'qtn_' + Date.now(),
           quotationType: 'waterproofing',
@@ -4033,12 +3322,11 @@
           updatedAt: new Date().toISOString()
         };
       },
-
-      save() {
-        const data = this.collectData();
+      save: function() {
+        var data = this.collectData();
         if (!data.customerId) { toast('Please select a customer.', 'error'); return; }
         this.calculate();
-        const finalData = this.collectData();
+        var finalData = this.collectData();
         finalData.grandTotal = parseFloat(document.getElementById('wpGrandTotal').textContent);
         if (this.editingId) {
           DB.update('quotations', this.editingId, finalData);
@@ -4050,12 +3338,11 @@
         document.getElementById('wpConvertBtn').style.display = 'inline-flex';
         H4App.loadQuotations();
       },
-
-      updatePreview() {
-        const container = document.getElementById('wpPreviewContainer');
+      updatePreview: function() {
+        var container = document.getElementById('wpPreviewContainer');
         if (!container) return;
-        const data = this.collectData();
-        const templateId = 'tpl_simple';
+        var data = this.collectData();
+        var templateId = 'tpl_simple';
         this.calculate();
         data.subtotal = parseFloat(document.getElementById('wpSubtotal').textContent);
         data.discountAmount = parseFloat(document.getElementById('wpDiscountAmt').textContent);
@@ -4066,28 +3353,26 @@
         data.grandTotal = parseFloat(document.getElementById('wpGrandTotal').textContent);
         container.innerHTML = H4TemplateEngine.render('waterproofing', data, templateId);
       },
-
-      printPreview() {
-        const container = document.getElementById('wpPreviewContainer');
-        const html = container.innerHTML;
-        const win = window.open('', '_blank');
+      printPreview: function() {
+        var container = document.getElementById('wpPreviewContainer');
+        var html = container.innerHTML;
+        var win = window.open('', '_blank');
         if (!win) { toast('Please allow popups.', 'error'); return; }
-        win.document.write(`<html><head><title>Waterproofing Quotation</title><style>body{font-family:var(--font-family);padding:2rem;background:#f5f5f5;font-size:14px;}.preview-a4-page{max-width:794px;margin:0 auto;background:white;padding:2rem 1.5rem;border-radius:12px;}</style></head><body>${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
+        win.document.write('<html><head><title>Waterproofing Quotation</title><style>body{font-family:var(--font-family);padding:2rem;background:#f5f5f5;font-size:14px;}.preview-a4-page{max-width:794px;margin:0 auto;background:white;padding:2rem 1.5rem;border-radius:12px;}</style></head><body>' + html + '<script>window.onload=function(){window.print();};<\/script></body></html>');
         win.document.close();
       },
-
-      convertToInvoice() {
+      convertToInvoice: function() {
         if (!this.editingId) { toast('Save the quotation first.', 'error'); return; }
-        const q = DB.getItem('quotations', this.editingId);
+        var q = DB.getItem('quotations', this.editingId);
         if (!q) { toast('Quotation not found.', 'error'); return; }
         if (q.status === 'converted') { toast('Already converted.', 'error'); return; }
-        const inv = {
+        var inv = {
           id: 'inv_' + Date.now(),
           number: getNextInvoiceNumber(),
           date: new Date().toISOString().split('T')[0],
           dueDate: '',
           customerId: q.customerId,
-          projectName: q.projectDetails?.projectName || '',
+          projectName: q.projectDetails ? q.projectDetails.projectName : '',
           reference: q.number,
           quotationId: q.id,
           quotationNumber: q.number,
@@ -4099,8 +3384,8 @@
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         };
-        const pd = q.projectDetails || {};
-        const area = pd.area || 0;
+        var pd = q.projectDetails || {};
+        var area = pd.area || 0;
         if (pd.material && pd.materialRate) {
           inv.items.push({ description: 'Material: ' + pd.material, quantity: area, unit: 'sq.ft',
             rate: pd.materialRate, amount: area * pd.materialRate, gst: 18, historicalRate: true });
@@ -4113,12 +3398,12 @@
           inv.items.push({ description: 'Transport', quantity: 1, unit: 'job',
             rate: pd.transport, amount: pd.transport, gst: 18, historicalRate: true });
         }
-        const items = inv.items.map(p => ({ quantity: p.quantity || 0, rate: p.rate || 0, discount: 0, gst: p.gst || 0, discountType: 'flat' }));
-        let subtotal = 0;
-        items.forEach(it => { subtotal += it.quantity * it.rate; });
-        const taxable = subtotal;
-        const gst = taxable * 0.18;
-        const grandTotal = Math.round(taxable + gst);
+        var items = inv.items.map(function(p) { return { quantity: p.quantity || 0, rate: p.rate || 0, discount: 0, gst: p.gst || 0, discountType: 'flat' }; });
+        var subtotal = 0;
+        items.forEach(function(it) { subtotal += it.quantity * it.rate; });
+        var taxable = subtotal;
+        var gst = taxable * 0.18;
+        var grandTotal = Math.round(taxable + gst);
         inv.subtotal = subtotal;
         inv.totalDiscount = 0;
         inv.taxableAmount = taxable;
@@ -4133,15 +3418,11 @@
       }
     };
 
-    // ============================================================
-    // TEMPLATE MANAGER
-    // ============================================================
-    const H4Template = {
+    var H4Template = {
       _currentTemplateId: 'tpl_classic',
-
-      load(templateId) {
+      load: function(templateId) {
         this._currentTemplateId = templateId || 'tpl_classic';
-        const template = DB.getItem('templates', this._currentTemplateId);
+        var template = DB.getItem('templates', this._currentTemplateId);
         if (template) {
           document.getElementById('templateName').value = template.name || '';
           document.getElementById('templatePrimaryColor').value = template.primary || '#2C3E50';
@@ -4152,9 +3433,8 @@
           this.preview();
         }
       },
-
-      save() {
-        const data = {
+      save: function() {
+        var data = {
           id: this._currentTemplateId,
           name: document.getElementById('templateName').value || 'Custom Template',
           primary: document.getElementById('templatePrimaryColor').value || '#2C3E50',
@@ -4171,9 +3451,8 @@
         DB.update('templates', this._currentTemplateId, data);
         toast('Template saved: ' + data.name);
       },
-
-      preview() {
-        const sampleData = {
+      preview: function() {
+        var sampleData = {
           number: 'H4-INV-0001',
           date: new Date().toISOString().split('T')[0],
           dueDate: new Date(Date.now() + 7*86400000).toISOString().split('T')[0],
@@ -4189,39 +3468,27 @@
           bankDetails: 'HDFC Bank, Account: 123456789, IFSC: HDFC0001234',
           notes: 'Thank you for your business.'
         };
-        const templateId = this._currentTemplateId;
-        const container = document.getElementById('templateLivePreview');
+        var templateId = this._currentTemplateId;
+        var container = document.getElementById('templateLivePreview');
         if (container) {
           container.innerHTML = H4TemplateEngine.render('invoice', sampleData, templateId);
         }
         toast('Preview updated.');
       },
-
-      reset() { this._currentTemplateId = 'tpl_classic'; this.load('tpl_classic'); toast('Template reset to Classic.'); },
-      use() { toast('Template applied to current document.'); }
+      reset: function() { this._currentTemplateId = 'tpl_classic'; this.load('tpl_classic'); toast('Template reset to Classic.'); },
+      use: function() { toast('Template applied to current document.'); }
     };
 
-    // ============================================================
-    // INIT
-    // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
       H4App.loadCustomizations();
       H4App.init();
-
-      document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
         overlay.addEventListener('click', function(e) {
           if (e.target === this) this.classList.remove('active');
         });
       });
-
       H4Template.load('tpl_classic');
-
-      console.log('H4 Billing ERP - Complete with Gradient Cards.');
-      console.log('✅ Individual gradient colors for every card.');
-      console.log('✅ Full gradient controls in Theme Manager.');
-      console.log('✅ Card visual controls (radius, shadow, icon size, padding).');
-      console.log('✅ Smooth hover/touch animations.');
-      console.log('✅ All existing functionality preserved.');
+      console.log('H4 Billing ERP - Complete with all fixes applied.');
     });
   </script>
 </body>
