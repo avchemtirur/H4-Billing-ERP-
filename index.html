@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
   <title>H4 Billing ERP</title>
   <style>
-    /* ============================================================
-       GLOBAL VARIABLES & RESET
-       ============================================================ */
     :root {
       --primary: #6A3FA0;
       --secondary: #D4A843;
@@ -28,7 +25,6 @@
       --input-height: 48px;
       --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
     [data-theme="dark"] {
       --bg: #0f0f1a;
       --card-bg: #1a1a2e;
@@ -37,7 +33,6 @@
       --border: #2d2d44;
       --shadow: 0 2px 12px rgba(0,0,0,0.3);
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -51,17 +46,11 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
-
-    /* ============================================================
-       SCROLLBAR
-       ============================================================ */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
 
-    /* ============================================================
-       HEADER
-       ============================================================ */
+    /* ===== HEADER ===== */
     .app-header {
       height: var(--header-height);
       background: linear-gradient(135deg, var(--accent), var(--primary));
@@ -76,211 +65,49 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.12);
     }
     .header-left { display: flex; align-items: center; gap: 0.5rem; }
-    .menu-toggle {
-      background: rgba(255,255,255,0.15);
-      border: none;
-      color: #fff;
-      font-size: 1.4rem;
-      cursor: pointer;
-      padding: 0.4rem;
-      border-radius: 8px;
-      min-width: var(--touch-target);
-      min-height: var(--touch-target);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
+    .menu-toggle { background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 1.4rem; cursor: pointer; padding: 0.4rem; border-radius: 8px; min-width: var(--touch-target); min-height: var(--touch-target); display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .menu-toggle:hover { background: rgba(255,255,255,0.25); }
     .app-title { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.3px; }
     .header-right { display: flex; gap: 0.4rem; align-items: center; }
-    .header-right .btn {
-      color: #fff;
-      background: rgba(255,255,255,0.12);
-      border: none;
-      padding: 0.4rem 0.6rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      min-height: var(--touch-target);
-      min-width: var(--touch-target);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
+    .header-right .btn { color: #fff; background: rgba(255,255,255,0.12); border: none; padding: 0.4rem 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; min-height: var(--touch-target); min-width: var(--touch-target); display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .header-right .btn:hover { background: rgba(255,255,255,0.22); }
     @media (max-width: 768px) { .header-right .btn span.label { display: none; } .app-title { font-size: 1rem; } }
 
-    /* ============================================================
-       SIDEBAR
-       ============================================================ */
+    /* ===== SIDEBAR ===== */
     .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 290px;
-      background: var(--card-bg);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
-      z-index: 200;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      overflow-y: auto;
-      padding-top: var(--header-height);
-      font-size: 0.95rem;
-      border-right: 1px solid var(--border);
+      position: fixed; left: 0; top: 0; bottom: 0; width: 290px; background: var(--card-bg);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15); z-index: 200; transform: translateX(-100%);
+      transition: transform 0.3s ease; overflow-y: auto; padding-top: var(--header-height);
+      font-size: 0.95rem; border-right: 1px solid var(--border);
     }
     .sidebar.open { transform: translateX(0); }
     .sidebar .sidebar-inner { padding: 0.5rem 0; }
     .sidebar .sidebar-section { padding: 0 0.75rem; margin-bottom: 0.25rem; }
-    .sidebar .section-title {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 700;
-      padding: 0.5rem 0.5rem 0.2rem;
-      letter-spacing: 0.06em;
-    }
-    .sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--text);
-      min-height: var(--touch-target);
-    }
+    .sidebar .section-title { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 0.5rem 0.5rem 0.2rem; letter-spacing: 0.06em; }
+    .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0.8rem; border-radius: 10px; cursor: pointer; transition: all 0.15s; font-weight: 500; font-size: 0.9rem; color: var(--text); min-height: var(--touch-target); }
     .sidebar-item:hover { background: rgba(106,63,160,0.06); }
-    .sidebar-item.active {
-      background: rgba(106,63,160,0.10);
-      color: var(--primary);
-      border-left: 3px solid var(--primary);
-    }
+    .sidebar-item.active { background: rgba(106,63,160,0.10); color: var(--primary); border-left: 3px solid var(--primary); }
     .sidebar-item .icon { font-size: 1.2rem; width: 28px; text-align: center; }
 
-    /* ============================================================
-       MAIN CONTENT
-       ============================================================ */
-    .main-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0.75rem;
-    }
-
-    /* ============================================================
-       CARDS
-       ============================================================ */
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: var(--card-padding);
-      margin-bottom: 0.75rem;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      transition: background var(--transition), border var(--transition), box-shadow var(--transition);
-    }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--border);
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    /* ===== MAIN ===== */
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 0.75rem; }
+    .card { background: var(--card-bg); border-radius: var(--radius); padding: var(--card-padding); margin-bottom: 0.75rem; box-shadow: var(--shadow); border: 1px solid var(--border); transition: background var(--transition), border var(--transition), box-shadow var(--transition); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 0.5rem; }
     .card-header h2 { font-size: 1.1rem; color: var(--primary); }
-    .card-header .badge { font-size: 0.7rem; background: rgba(106,63,160,0.1); color: var(--primary); padding: 0.15rem 0.6rem; border-radius: 20px; }
 
-    /* ============================================================
-       DASHBOARD
-       ============================================================ */
-    .dashboard-hero {
-      background: linear-gradient(135deg, var(--accent), var(--primary));
-      color: #fff;
-      padding: 1rem 1.2rem;
-      border-radius: var(--radius);
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    /* ===== DASHBOARD ===== */
+    .dashboard-hero { background: linear-gradient(135deg, var(--accent), var(--primary)); color: #fff; padding: 1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
     .dashboard-hero h1 { font-size: 1.3rem; font-weight: 700; }
     .dashboard-hero p { font-size: 0.85rem; opacity: 0.9; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.6rem;
-      margin-bottom: 1rem;
-    }
-    .stat-card {
-      background: var(--card-bg);
-      padding: 0.8rem 0.4rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      text-align: center;
-      border: 1px solid var(--border);
-      transition: background var(--transition), border var(--transition);
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+    .stat-card { background: var(--card-bg); padding: 0.8rem 0.4rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; border: 1px solid var(--border); }
     .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
     .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
-
-    .quick-access-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.6rem;
-      margin-bottom: 1rem;
-    }
-    .quick-card {
-      position: relative;
-      border-radius: var(--radius);
-      padding: 1rem 0.4rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.25s var(--transition);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100px;
-      overflow: hidden;
-      border: none;
-      color: #fff;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      transform: translateY(0);
-      background: linear-gradient(135deg, #6A3FA0, #00BCD4);
-    }
-    .quick-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-      transition: left 0.5s ease;
-      pointer-events: none;
-    }
+    .quick-access-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+    .quick-card { position: relative; border-radius: var(--radius); padding: 1rem 0.4rem; text-align: center; cursor: pointer; transition: all 0.25s var(--transition); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; overflow: hidden; border: none; color: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transform: translateY(0); background: linear-gradient(135deg, #6A3FA0, #00BCD4); }
+    .quick-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); transition: left 0.5s ease; pointer-events: none; }
     .quick-card:hover::before { left: 100%; }
-    .quick-card::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: inherit;
-      background: inherit;
-      z-index: -1;
-      filter: blur(20px);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
+    .quick-card::after { content: ''; position: absolute; inset: -2px; border-radius: inherit; background: inherit; z-index: -1; filter: blur(20px); opacity: 0; transition: opacity 0.4s ease; }
     .quick-card:hover::after { opacity: 0.3; }
     .quick-card:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
     .quick-card:active { transform: scale(0.95); transition-duration: 0.1s; }
@@ -298,80 +125,22 @@
     .quick-card:hover .icon { transform: scale(1.05) rotate(-2deg); }
     .quick-card .label { font-weight: 700; font-size: 0.8rem; text-shadow: 0 1px 2px rgba(0,0,0,0.12); }
     .quick-card .sub { font-size: 0.55rem; opacity: 0.8; margin-top: 0.05rem; }
-    .quick-card .card-accent {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-    }
-    .quick-card .card-accent::after {
-      content: '';
-      position: absolute;
-      inset: -3px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      animation: pulse-dot 2s infinite;
-    }
+    .quick-card .card-accent { position: absolute; top: 8px; right: 10px; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+    .quick-card .card-accent::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; background: rgba(255,255,255,0.15); animation: pulse-dot 2s infinite; }
     @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:0.5} 50%{transform:scale(1.5);opacity:0.2} }
 
-    /* ============================================================
-       FORMS
-       ============================================================ */
+    /* ===== FORMS ===== */
     .form-group { margin-bottom: 0.8rem; }
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 0.2rem;
-    }
-    .form-group input, .form-group textarea, .form-group select {
-      width: 100%;
-      padding: 0.6rem 0.7rem;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 1rem;
-      font-family: inherit;
-      background: var(--card-bg);
-      color: var(--text);
-      min-height: var(--input-height);
-      transition: border-color 0.2s, background var(--transition), color var(--transition);
-      -webkit-appearance: none;
-      appearance: none;
-    }
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(106,63,160,0.08);
-    }
+    .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.6rem 0.7rem; border: 1.5px solid var(--border); border-radius: 10px; font-size: 1rem; font-family: inherit; background: var(--card-bg); color: var(--text); min-height: var(--input-height); transition: border-color 0.2s, background var(--transition), color var(--transition); -webkit-appearance: none; appearance: none; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106,63,160,0.08); }
     .form-group textarea { min-height: 70px; resize: vertical; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
     @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } .form-row-3 { grid-template-columns: 1fr; } }
 
-    /* ============================================================
-       BUTTONS
-       ============================================================ */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      padding: 0.6rem 1rem;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 0.9rem;
-      min-height: var(--touch-target);
-      min-width: var(--touch-target);
-      touch-action: manipulation;
-      text-decoration: none;
-    }
+    /* ===== BUTTONS ===== */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.6rem 1rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; min-height: var(--touch-target); min-width: var(--touch-target); touch-action: manipulation; text-decoration: none; }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(106,63,160,0.25); }
     .btn-secondary { background: var(--accent); color: #fff; }
@@ -385,203 +154,39 @@
     .btn-block { width: 100%; justify-content: center; }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ============================================================
-       MODULE HEADER
-       ============================================================ */
-    .module-header {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.5rem 0.75rem;
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      margin-bottom: 0.75rem;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      flex-wrap: wrap;
-      min-height: 52px;
-      transition: background var(--transition), border var(--transition);
-    }
-    .module-header .back-btn {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--primary);
-      cursor: pointer;
-      padding: 0.3rem 0.6rem;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      min-height: var(--touch-target);
-      min-width: var(--touch-target);
-      transition: background 0.2s;
-    }
+    /* ===== MODULE HEADER ===== */
+    .module-header { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; background: var(--card-bg); border-radius: var(--radius); margin-bottom: 0.75rem; box-shadow: var(--shadow); border: 1px solid var(--border); flex-wrap: wrap; min-height: 52px; }
+    .module-header .back-btn { background: none; border: none; font-size: 1rem; font-weight: 600; color: var(--primary); cursor: pointer; padding: 0.3rem 0.6rem; border-radius: 8px; display: flex; align-items: center; gap: 0.3rem; min-height: var(--touch-target); min-width: var(--touch-target); transition: background 0.2s; }
     .module-header .back-btn:hover { background: rgba(106,63,160,0.06); }
     .module-header .module-title { font-size: 1.05rem; font-weight: 700; color: var(--text); flex: 1; }
     .module-header .module-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .module-header .module-actions .btn { font-size: 0.8rem; padding: 0.4rem 0.8rem; min-height: 36px; }
 
-    /* ============================================================
-       BUILDER OVERLAY
-       ============================================================ */
-    .builder-overlay {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 3000;
-      display: none;
-      flex-direction: column;
-      transition: background var(--transition);
-    }
-    .builder-overlay.active { display: flex; }
-    .builder-topbar {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff;
-      padding: 0.6rem 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      min-height: 52px;
-    }
-    .builder-topbar .back-btn {
-      background: rgba(255,255,255,0.15);
-      border: none;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      padding: 0.3rem 0.6rem;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      min-height: var(--touch-target);
-    }
-    .builder-topbar .back-btn:hover { background: rgba(255,255,255,0.25); }
-    .builder-topbar-title { font-weight: 700; font-size: 1rem; flex: 1; }
-    .builder-topbar-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-
-    .builder-steps {
-      display: flex;
-      overflow-x: auto;
-      gap: 0.3rem;
-      padding: 0.4rem 0.6rem;
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      -webkit-overflow-scrolling: touch;
-    }
-    .builder-step-chip {
-      flex: none;
-      padding: 0.3rem 0.7rem;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      background: var(--bg);
-      color: var(--text-muted);
-      cursor: pointer;
-      white-space: nowrap;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
-    }
+    /* ===== BUILDER ===== */
+    .builder-steps { display: flex; overflow-x: auto; gap: 0.3rem; padding: 0.4rem 0.6rem; background: var(--card-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; -webkit-overflow-scrolling: touch; }
+    .builder-step-chip { flex: none; padding: 0.3rem 0.7rem; border-radius: 30px; font-size: 0.7rem; font-weight: 600; background: var(--bg); color: var(--text-muted); cursor: pointer; white-space: nowrap; border: 1px solid var(--border); transition: all 0.2s; }
     .builder-step-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
     .builder-step-chip.done { background: #e8f5e9; color: #1e7e34; border-color: #a5d6a7; }
-
-    .builder-body {
-      flex: 1;
-      overflow-y: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      padding: 0.75rem;
-      -webkit-overflow-scrolling: touch;
-    }
+    .builder-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: 0.75rem 0; }
     .builder-form-pane { overflow-y: auto; padding-right: 0.2rem; }
-    .builder-preview-pane {
-      overflow-y: auto;
-      background: var(--bg);
-      border-radius: var(--radius);
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-    }
+    .builder-preview-pane { overflow-y: auto; background: var(--bg); border-radius: var(--radius); padding: 0.75rem; border: 1px solid var(--border); }
     .builder-step-section { display: none; }
     .builder-step-section.active { display: block; }
-
-    .builder-bottombar {
-      background: var(--card-bg);
-      border-top: 1px solid var(--border);
-      padding: 0.6rem 0.8rem;
-      display: flex;
-      justify-content: space-between;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
+    .builder-bottombar { background: var(--card-bg); border-top: 1px solid var(--border); padding: 0.6rem 0.8rem; display: flex; justify-content: space-between; flex-shrink: 0; flex-wrap: wrap; gap: 0.4rem; }
     .builder-step-counter { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; }
+    @media (max-width: 820px) { .builder-body { grid-template-columns: 1fr; } .builder-preview-pane { display: none; } }
 
-    @media (max-width: 820px) {
-      .builder-body { grid-template-columns: 1fr; }
-      .builder-preview-pane { display: none; }
-      .builder-preview-pane.mobile-show { display: block; }
-    }
-
-    /* ============================================================
-       ITEM CARDS
-       ============================================================ */
-    .item-card {
-      background: var(--bg);
-      border-radius: 12px;
-      padding: 0.8rem;
-      margin-bottom: 0.6rem;
-      border: 1px solid var(--border);
-      transition: background var(--transition), border var(--transition);
-    }
-    .item-card .item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
+    /* ===== ITEM CARD ===== */
+    .item-card { background: var(--bg); border-radius: 12px; padding: 0.8rem; margin-bottom: 0.6rem; border: 1px solid var(--border); }
+    .item-card .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem; }
     .item-card .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
     .item-card .item-grid .form-group { margin-bottom: 0.2rem; }
     .item-card .item-grid .form-group label { font-size: 0.65rem; }
-    .item-card .item-total {
-      display: flex;
-      justify-content: flex-end;
-      font-weight: 700;
-      font-size: 0.9rem;
-      margin-top: 0.4rem;
-      padding-top: 0.4rem;
-      border-top: 1px solid var(--border);
-      color: var(--primary);
-    }
+    .item-card .item-total { display: flex; justify-content: flex-end; font-weight: 700; font-size: 0.9rem; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid var(--border); color: var(--primary); }
 
-    /* ============================================================
-       A4 PREVIEW
-       ============================================================ */
+    /* ===== A4 PREVIEW ===== */
     .preview-a4-container { max-width: 794px; margin: 0 auto; }
-    .preview-a4-page {
-      background: #fff;
-      border-radius: 10px;
-      padding: 1.5rem;
-      margin-bottom: 0.75rem;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-      font-size: 13px;
-      line-height: 1.5;
-      color: #1a1a2e;
-      min-height: 280px;
-      width: 210mm;
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    .preview-a4-page { background: #fff; border-radius: 10px; padding: 1.5rem; margin-bottom: 0.75rem; box-shadow: 0 2px 16px rgba(0,0,0,0.06); font-size: 13px; line-height: 1.5; color: #1a1a2e; min-height: 280px; width: 210mm; max-width: 100%; margin-left: auto; margin-right: auto; }
     .p-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
     .p-table th { background: var(--primary); color: #fff; padding: 6px 8px; text-align: left; }
     .p-table td { padding: 6px 8px; border-bottom: 1px solid #e8ecf0; }
@@ -589,245 +194,63 @@
     .p-total div { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #e8ecf0; }
     .p-grand { font-size: 1rem; font-weight: 800; border-top: 2px solid var(--primary); padding-top: 4px; }
 
-    /* ============================================================
-       BOTTOM NAV
-       ============================================================ */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--card-bg);
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-around;
-      z-index: 90;
-      padding: 4px 0 env(safe-area-inset-bottom, 4px);
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
-      height: var(--safe-bottom);
-      transition: background var(--transition), border var(--transition);
-    }
-    .bottom-nav .nav-item {
-      flex: 1;
-      text-align: center;
-      padding: 2px 0;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-size: 0.6rem;
-      transition: color 0.2s;
-      min-height: 48px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; z-index: 90; padding: 4px 0 env(safe-area-inset-bottom, 4px); box-shadow: 0 -2px 10px rgba(0,0,0,0.04); height: var(--safe-bottom); }
+    .bottom-nav .nav-item { flex: 1; text-align: center; padding: 2px 0; cursor: pointer; color: var(--text-muted); font-size: 0.6rem; transition: color 0.2s; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .bottom-nav .nav-item.active { color: var(--primary); font-weight: 600; }
     .bottom-nav .nav-item .nav-icon { font-size: 1.3rem; display: block; }
     @media (min-width: 769px) { .bottom-nav { display: none !important; } }
 
-    /* ============================================================
-       MODAL
-       ============================================================ */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      backdrop-filter: blur(4px);
-    }
+    /* ===== MODAL ===== */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
     .modal-overlay.active { display: flex; }
-    .modal-content {
-      background: var(--card-bg);
-      border-radius: 16px;
-      max-width: 600px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
-      transition: background var(--transition);
-    }
-    .modal-header {
-      padding: 0.8rem 1.2rem;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 16px 16px 0 0;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+    .modal-content { background: var(--card-bg); border-radius: 16px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+    .modal-header { padding: 0.8rem 1.2rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; display: flex; justify-content: space-between; align-items: center; border-radius: 16px 16px 0 0; position: sticky; top: 0; z-index: 10; }
     .modal-header h3 { font-size: 1.05rem; }
-    .modal-close {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.6rem;
-      cursor: pointer;
-      min-width: 44px;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
     .modal-body { padding: 1rem; }
-    .modal-footer {
-      padding: 0.8rem 1.2rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 0.6rem;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
+    .modal-footer { padding: 0.8rem 1.2rem; border-top: 1px solid var(--border); display: flex; gap: 0.6rem; justify-content: flex-end; flex-wrap: wrap; }
 
-    /* ============================================================
-       LIST ITEMS
-       ============================================================ */
-    .list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
+    /* ===== LIST ===== */
+    .list-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.4rem; }
     .list-item .item-info { flex: 1; min-width: 100px; }
     .list-item .item-info .name { font-weight: 600; font-size: 0.9rem; }
     .list-item .item-info .detail { font-size: 0.75rem; color: var(--text-muted); }
     .list-item .item-actions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
-
-    /* ============================================================
-       NOTIFICATIONS
-       ============================================================ */
-    .notifications {
-      position: fixed;
-      top: 0.75rem;
-      right: 0.75rem;
-      z-index: 5000;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      pointer-events: none;
-    }
-    .notification {
-      background: var(--card-bg);
-      border-left: 5px solid #1e7e34;
-      padding: 0.7rem 1rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      font-size: 0.9rem;
-      animation: slideIn 0.25s ease;
-      pointer-events: all;
-      color: var(--text);
-    }
-    .notification.error { border-left-color: #b71c1c; }
-    .notification.warning { border-left-color: #e65100; }
-    @keyframes slideIn { from { transform: translateX(80px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-    /* ============================================================
-       UTILITY
-       ============================================================ */
-    .hidden { display: none !important; }
-    .text-center { text-align: center; }
-    .text-muted { color: var(--text-muted); }
-    .mt-1 { margin-top: 0.5rem; }
-    .mb-1 { margin-bottom: 0.5rem; }
-    .flex-between { display: flex; justify-content: space-between; align-items: center; }
-    .flex-wrap { flex-wrap: wrap; }
-    .gap-1 { gap: 0.5rem; }
-
-    /* ============================================================
-       TABLE CONTAINER
-       ============================================================ */
     .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .table-container table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 480px; }
     .table-container th { background: var(--primary); color: #fff; padding: 8px 10px; text-align: left; white-space: nowrap; }
     .table-container td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .table-container .btn { font-size: 0.7rem; padding: 0.2rem 0.5rem; min-height: 28px; min-width: 28px; }
 
-    /* ============================================================
-       TEMPLATE CARDS
-       ============================================================ */
-    .template-card {
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem;
-      margin-bottom: 0.6rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: var(--card-bg);
-    }
-    .template-card:hover { border-color: var(--primary); }
-    .template-card.active { border-color: var(--primary); background: rgba(106,63,160,0.04); }
-    .template-card .template-name { font-weight: 700; font-size: 0.95rem; }
-    .template-card .template-badge { font-size: 0.65rem; color: #1e7e34; background: #e8f5e9; padding: 0.15rem 0.5rem; border-radius: 12px; }
-    .template-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-    @media (max-width: 480px) { .template-grid { grid-template-columns: 1fr; } }
+    /* ===== NOTIFICATIONS ===== */
+    .notifications { position: fixed; top: 0.75rem; right: 0.75rem; z-index: 5000; max-width: 380px; display: flex; flex-direction: column; gap: 0.4rem; pointer-events: none; }
+    .notification { background: var(--card-bg); border-left: 5px solid #1e7e34; padding: 0.7rem 1rem; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); font-size: 0.9rem; animation: slideIn 0.25s ease; pointer-events: all; color: var(--text); }
+    .notification.error { border-left-color: #b71c1c; }
+    .notification.warning { border-left-color: #e65100; }
+    @keyframes slideIn { from { transform: translateX(80px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-    /* ============================================================
-       EMPTY STATE
-       ============================================================ */
+    /* ===== UTILITY ===== */
+    .hidden { display: none !important; }
+    .text-center { text-align: center; }
+    .text-muted { color: var(--text-muted); }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .flex-wrap { flex-wrap: wrap; }
+    .gap-1 { gap: 0.5rem; }
     .empty-state { text-align: center; padding: 2rem 1rem; color: var(--text-muted); }
     .empty-state-icon { font-size: 3rem; margin-bottom: 0.5rem; }
     .empty-state-text { font-size: 0.9rem; }
 
-    /* ============================================================
-       RESPONSIVE
-       ============================================================ */
-    @media (max-width: 1024px) {
-      .quick-access-grid { grid-template-columns: repeat(4, 1fr); }
-    }
-    @media (max-width: 768px) {
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .quick-access-grid { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-      .dashboard-hero { padding: 0.8rem 1rem; }
-      .dashboard-hero h1 { font-size: 1.1rem; }
-      .module-header { padding: 0.4rem 0.6rem; min-height: 44px; }
-      .module-header .module-title { font-size: 0.95rem; }
-      .preview-a4-page { width: 100%; padding: 1rem; }
-    }
-    @media (max-width: 480px) {
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
-      .stat-card { padding: 0.5rem 0.3rem; }
-      .stat-value { font-size: 1.2rem; }
-      .quick-access-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.4rem; }
-      .quick-card { min-height: 80px; padding: 0.7rem 0.3rem; }
-      .quick-card .icon { font-size: 1.5rem; }
-      .quick-card .label { font-size: 0.7rem; }
-      .quick-card .sub { font-size: 0.5rem; }
-      .card { padding: 0.7rem; }
-      .card-header h2 { font-size: 1rem; }
-      .form-group input, .form-group textarea, .form-group select { font-size: 0.95rem; min-height: 44px; }
-      .btn { font-size: 0.8rem; padding: 0.5rem 0.7rem; min-height: 40px; }
-    }
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) { .quick-access-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr 1fr; } .quick-access-grid { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; } .dashboard-hero { padding: 0.8rem 1rem; } .dashboard-hero h1 { font-size: 1.1rem; } .module-header { padding: 0.4rem 0.6rem; min-height: 44px; } .module-header .module-title { font-size: 0.95rem; } .preview-a4-page { width: 100%; padding: 1rem; } }
+    @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.4rem; } .stat-card { padding: 0.5rem 0.3rem; } .stat-value { font-size: 1.2rem; } .quick-access-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.4rem; } .quick-card { min-height: 80px; padding: 0.7rem 0.3rem; } .quick-card .icon { font-size: 1.5rem; } .quick-card .label { font-size: 0.7rem; } .quick-card .sub { font-size: 0.5rem; } .card { padding: 0.7rem; } .card-header h2 { font-size: 1rem; } .form-group input, .form-group textarea, .form-group select { font-size: 0.95rem; min-height: 44px; } .btn { font-size: 0.8rem; padding: 0.5rem 0.7rem; min-height: 40px; } }
 
-    /* ============================================================
-       PRINT
-       ============================================================ */
+    /* ===== PRINT ===== */
     @media print {
       body, .app-header, .sidebar, .bottom-nav, .customizer-panel, .builder-overlay,
       .card.no-print, .modal-overlay, .notifications, .builder-topbar, .builder-bottombar,
-      .module-header, .dashboard-hero, .quick-access-grid, .stats-grid {
-        display: none !important;
-      }
-      .preview-a4-page {
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0.4in !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        background: white !important;
-        width: 100% !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+      .module-header, .dashboard-hero, .quick-access-grid, .stats-grid { display: none !important; }
+      .preview-a4-page { box-shadow: none !important; border: none !important; padding: 0.4in !important; margin: 0 !important; border-radius: 0 !important; background: white !important; width: 100% !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       .p-table th { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       .main-content { padding: 0 !important; max-width: 100% !important; }
       .module { display: block !important; }
@@ -837,9 +260,7 @@
   </style>
 </head>
 <body>
-  <!-- ============================================================
-       HEADER
-       ============================================================ -->
+  <!-- HEADER -->
   <header class="app-header" id="appHeader">
     <div class="header-left">
       <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
@@ -852,9 +273,7 @@
     </div>
   </header>
 
-  <!-- ============================================================
-       SIDEBAR
-       ============================================================ -->
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-inner">
       <div class="sidebar-section"><div class="section-title">Dashboard</div>
@@ -881,14 +300,10 @@
     </div>
   </aside>
 
-  <!-- ============================================================
-       MAIN CONTENT
-       ============================================================ -->
+  <!-- MAIN -->
   <main class="main-content" id="mainContent"></main>
 
-  <!-- ============================================================
-       BOTTOM NAV
-       ============================================================ -->
+  <!-- BOTTOM NAV -->
   <nav class="bottom-nav" id="bottomNav">
     <div class="nav-item active" data-module="dashboard"><span class="nav-icon">📊</span>Home</div>
     <div class="nav-item" data-module="quotations"><span class="nav-icon">📄</span>Quotes</div>
@@ -897,9 +312,7 @@
     <div class="nav-item" data-module="settings"><span class="nav-icon">⚙️</span>Settings</div>
   </nav>
 
-  <!-- ============================================================
-       MODALS
-       ============================================================ -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="qtnTypeModal">
     <div class="modal-content">
       <div class="modal-header"><h3>New Quotation</h3><button class="modal-close" onclick="H4App.closeModal('qtnTypeModal')">✕</button></div>
@@ -907,8 +320,8 @@
         <p style="margin-bottom:0.8rem;color:var(--text-muted);">Choose quotation type</p>
         <div style="display:grid;gap:0.6rem;">
           <button class="btn btn-outline btn-block" style="justify-content:flex-start;padding:0.8rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Quotation.newQuotation();">📄 <strong>General Quotation</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Standard items & pricing</span></button>
-          <button class="btn btn-primary btn-block" style="justify-content:flex-start;padding:0.8rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.toast('Waterproofing builder coming soon.','warning');">💧 <strong>Waterproofing Quotation</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.8);">Area / Material / Labour / GST</span></button>
-          <button class="btn btn-secondary btn-block" style="justify-content:flex-start;padding:0.8rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.toast('Epoxy builder coming soon.','warning');">✨ <strong>Epoxy Flooring Proposal</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.8);">Premium epoxy project quotation</span></button>
+          <button class="btn btn-primary btn-block" style="justify-content:flex-start;padding:0.8rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.toast('Waterproofing builder coming soon.','warning');">💧 <strong>Waterproofing Quotation</strong></button>
+          <button class="btn btn-secondary btn-block" style="justify-content:flex-start;padding:0.8rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.toast('Epoxy builder coming soon.','warning');">✨ <strong>Epoxy Flooring Proposal</strong></button>
         </div>
       </div>
     </div>
@@ -946,14 +359,9 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       NOTIFICATIONS
-       ============================================================ -->
+  <!-- NOTIFICATIONS -->
   <div class="notifications" id="notifications"></div>
 
-  <!-- ============================================================
-       JAVASCRIPT
-       ============================================================ -->
   <script>
     // ============================================================
     // TOAST
@@ -968,138 +376,6 @@
     }
 
     // ============================================================
-    // DB - IndexedDB + localStorage hybrid
-    // ============================================================
-    var DB = {
-      STORAGE_KEY: 'h4_erp_v1',
-      _db: null,
-      _ready: false,
-
-      init: function() {
-        return new Promise(function(resolve, reject) {
-          var request = indexedDB.open('H4BillingERP', 1);
-          request.onupgradeneeded = function(e) {
-            var db = e.target.result;
-            if (!db.objectStoreNames.contains('company')) db.createObjectStore('company', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('customers')) db.createObjectStore('customers', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('products')) db.createObjectStore('products', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('invoices')) db.createObjectStore('invoices', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('quotations')) db.createObjectStore('quotations', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('payments')) db.createObjectStore('payments', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('templates')) db.createObjectStore('templates', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('images')) db.createObjectStore('images', { keyPath: 'id' });
-            if (!db.objectStoreNames.contains('fonts')) db.createObjectStore('fonts', { keyPath: 'id' });
-          };
-          request.onsuccess = function(e) {
-            DB._db = e.target.result;
-            DB._ready = true;
-            DB._initLocalStorage();
-            resolve();
-          };
-          request.onerror = function(e) { reject(e.target.error); };
-        });
-      },
-
-      _initLocalStorage: function() {
-        if (!localStorage.getItem(DB.STORAGE_KEY)) {
-          var defaults = {
-            theme: 'light',
-            uiScale: 100,
-            invoiceTemplate: 'tpl_premium',
-            quotationTemplate: 'tpl_premium',
-            currency: 'INR',
-            gstEnabled: true,
-            taxMode: 'intra',
-            roundOff: true,
-            amountInWords: true
-          };
-          localStorage.setItem(DB.STORAGE_KEY, JSON.stringify(defaults));
-        }
-        // Seed default templates if empty
-        this.getAll('templates').then(function(templates) {
-          if (templates.length === 0) {
-            var defaultTemplates = [
-              { id: 'tpl_classic', name: 'Classic', type: 'invoice', primary: '#2C3E50', secondary: '#34495E', font: 'Segoe UI', fontSize: 13, showLogo: true, showSig: true },
-              { id: 'tpl_modern', name: 'Modern', type: 'invoice', primary: '#1976D2', secondary: '#0D47A1', font: 'Roboto', fontSize: 14, showLogo: true, showSig: true },
-              { id: 'tpl_premium', name: 'H4 Premium', type: 'invoice', primary: '#6A3FA0', secondary: '#D4A843', font: 'Georgia', fontSize: 15, showLogo: true, showSig: true },
-              { id: 'tpl_simple', name: 'Simple', type: 'invoice', primary: '#424242', secondary: '#616161', font: 'Arial', fontSize: 12, showLogo: false, showSig: true },
-              { id: 'tpl_q_classic', name: 'Classic', type: 'quotation', primary: '#2C3E50', secondary: '#34495E', font: 'Segoe UI', fontSize: 13, showLogo: true, showSig: true },
-              { id: 'tpl_q_premium', name: 'H4 Premium', type: 'quotation', primary: '#6A3FA0', secondary: '#D4A843', font: 'Georgia', fontSize: 15, showLogo: true, showSig: true }
-            ];
-            defaultTemplates.forEach(function(t) { DB.put('templates', t); });
-          }
-        });
-      },
-
-      getSettings: function() {
-        try { return JSON.parse(localStorage.getItem(DB.STORAGE_KEY) || '{}'); } catch(e) { return {}; }
-      },
-      saveSettings: function(settings) {
-        localStorage.setItem(DB.STORAGE_KEY, JSON.stringify(settings));
-      },
-
-      getAll: function(store) {
-        return new Promise(function(resolve, reject) {
-          if (!DB._ready) { reject(new Error('DB not ready')); return; }
-          var tx = DB._db.transaction(store, 'readonly');
-          var req = tx.objectStore(store).getAll();
-          req.onsuccess = function() { resolve(req.result || []); };
-          req.onerror = function() { reject(req.error); };
-        });
-      },
-
-      get: function(store, id) {
-        return new Promise(function(resolve, reject) {
-          if (!DB._ready) { reject(new Error('DB not ready')); return; }
-          var tx = DB._db.transaction(store, 'readonly');
-          var req = tx.objectStore(store).get(id);
-          req.onsuccess = function() { resolve(req.result || null); };
-          req.onerror = function() { reject(req.error); };
-        });
-      },
-
-      put: function(store, data) {
-        return new Promise(function(resolve, reject) {
-          if (!DB._ready) { reject(new Error('DB not ready')); return; }
-          var tx = DB._db.transaction(store, 'readwrite');
-          var req = tx.objectStore(store).put(data);
-          req.onsuccess = function() { resolve(data); };
-          req.onerror = function() { reject(req.error); };
-        });
-      },
-
-      delete: function(store, id) {
-        return new Promise(function(resolve, reject) {
-          if (!DB._ready) { reject(new Error('DB not ready')); return; }
-          var tx = DB._db.transaction(store, 'readwrite');
-          var req = tx.objectStore(store).delete(id);
-          req.onsuccess = function() { resolve(); };
-          req.onerror = function() { reject(req.error); };
-        });
-      },
-
-      getList: function(store) { return this.getAll(store); },
-
-      getItem: function(store, id) { return this.get(store, id); },
-
-      addItem: function(store, item) {
-        if (!item.id) item.id = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-        return this.put(store, item);
-      },
-
-      updateItem: function(store, id, updates) {
-        var self = this;
-        return this.get(store, id).then(function(item) {
-          if (!item) return null;
-          var merged = Object.assign({}, item, updates);
-          return self.put(store, merged);
-        });
-      },
-
-      deleteItem: function(store, id) { return this.delete(store, id); }
-    };
-
-    // ============================================================
     // HELPERS
     // ============================================================
     function escapeHtml(text) {
@@ -1110,13 +386,13 @@
     }
 
     function generateNumber(prefix) {
-      var settings = DB.getSettings();
+      var settings = H4App.getSettingsSync();
       var year = new Date().getFullYear();
       var key = prefix + '_counter';
       var counter = settings[key] || 1;
       var num = String(counter).padStart(4, '0');
       settings[key] = counter + 1;
-      DB.saveSettings(settings);
+      H4App.saveSettingsSync(settings);
       return prefix + '-' + year + '-' + num;
     }
 
@@ -1164,97 +440,356 @@
     }
 
     // ============================================================
-    // TEMPLATE RENDERER
+    // DATABASE MANAGER - SINGLE SOURCE OF TRUTH
     // ============================================================
-    var H4Template = {
-      getTemplate: function(id) {
-        return DB.get('templates', id).then(function(t) {
-          return t || { id: 'tpl_premium', name: 'H4 Premium', primary: '#6A3FA0', secondary: '#D4A843', font: 'Georgia', fontSize: 15, showLogo: true, showSig: true };
+    var DB = {
+      _db: null,
+      _ready: false,
+      _initialized: false,
+
+      // Constants
+      DB_NAME: 'H4BillingERP',
+      DB_VERSION: 1,
+
+      // ===== INIT =====
+      init: function() {
+        return new Promise(function(resolve, reject) {
+          if (DB._initialized) { resolve(DB._db); return; }
+          console.log('[H4 DB] Opening database...');
+          var request = indexedDB.open(DB.DB_NAME, DB.DB_VERSION);
+
+          request.onupgradeneeded = function(event) {
+            var db = event.target.result;
+            console.log('[H4 DB] Upgrade oldVersion=' + event.oldVersion + ' newVersion=' + event.newVersion);
+            // Create stores only if they don't exist
+            var stores = ['company', 'customers', 'products', 'invoices', 'quotations', 'payments', 'templates', 'images', 'fonts'];
+            stores.forEach(function(name) {
+              if (!db.objectStoreNames.contains(name)) {
+                var store = db.createObjectStore(name, { keyPath: 'id' });
+                console.log('[H4 DB] Created store: ' + name);
+                // Create indexes
+                if (name === 'customers') {
+                  store.createIndex('name', 'name', { unique: false });
+                  store.createIndex('phone', 'phone', { unique: false });
+                  store.createIndex('createdAt', 'createdAt', { unique: false });
+                } else if (name === 'products') {
+                  store.createIndex('name', 'name', { unique: false });
+                  store.createIndex('sku', 'sku', { unique: false });
+                  store.createIndex('category', 'category', { unique: false });
+                } else if (name === 'invoices') {
+                  store.createIndex('number', 'number', { unique: true });
+                  store.createIndex('customerId', 'customerId', { unique: false });
+                  store.createIndex('date', 'date', { unique: false });
+                  store.createIndex('status', 'status', { unique: false });
+                } else if (name === 'quotations') {
+                  store.createIndex('number', 'number', { unique: true });
+                  store.createIndex('customerId', 'customerId', { unique: false });
+                  store.createIndex('date', 'date', { unique: false });
+                  store.createIndex('status', 'status', { unique: false });
+                } else if (name === 'payments') {
+                  store.createIndex('paymentNumber', 'paymentNumber', { unique: true });
+                  store.createIndex('invoiceId', 'invoiceId', { unique: false });
+                  store.createIndex('customerId', 'customerId', { unique: false });
+                } else if (name === 'templates') {
+                  store.createIndex('type', 'type', { unique: false });
+                  store.createIndex('name', 'name', { unique: false });
+                } else if (name === 'images') {
+                  store.createIndex('name', 'name', { unique: false });
+                  store.createIndex('assignment', 'assignment', { unique: false });
+                } else if (name === 'fonts') {
+                  store.createIndex('name', 'name', { unique: false });
+                }
+              }
+            });
+            // Settings store for key-value
+            if (!db.objectStoreNames.contains('settings')) {
+              db.createObjectStore('settings', { keyPath: 'key' });
+              console.log('[H4 DB] Created store: settings');
+            }
+          };
+
+          request.onsuccess = function(event) {
+            DB._db = event.target.result;
+            DB._ready = true;
+            DB._initialized = true;
+            console.log('[H4 DB] Database opened successfully');
+            // Handle version change from other tabs
+            DB._db.onversionchange = function() {
+              DB._db.close();
+              console.log('[H4 DB] Database closed due to version change');
+            };
+            // Seed defaults if needed
+            DB.seedDefaults().then(function() {
+              resolve(DB._db);
+            }).catch(function(err) {
+              console.warn('[H4 DB] Seed defaults warning:', err);
+              resolve(DB._db);
+            });
+          };
+
+          request.onerror = function(event) {
+            console.error('[H4 DB] Open error:', request.error);
+            reject(request.error);
+          };
+
+          request.onblocked = function() {
+            console.warn('[H4 DB] Database upgrade blocked by another tab.');
+            reject(new Error('Database upgrade is blocked by another browser tab. Please close other tabs with H4 Billing ERP and try again.'));
+          };
         });
       },
 
+      // ===== SEED DEFAULTS =====
+      seedDefaults: function() {
+        var self = this;
+        return new Promise(function(resolve) {
+          // Check settings
+          self.get('settings', 'app_settings').then(function(settings) {
+            if (!settings) {
+              var defaultSettings = {
+                key: 'app_settings',
+                theme: 'light',
+                uiScale: 100,
+                invoiceTemplate: 'tpl_premium',
+                quotationTemplate: 'tpl_premium',
+                currency: 'INR',
+                gstEnabled: true,
+                taxMode: 'intra',
+                roundOff: true,
+                amountInWords: true,
+                gstRate: 18,
+                cgstRate: 9,
+                sgstRate: 9,
+                igstRate: 18
+              };
+              self.put('settings', defaultSettings).catch(function(e) { console.warn('Settings seed error', e); });
+              console.log('[H4 DB] Default settings created');
+            }
+          }).catch(function() { /* ignore */ });
+
+          // Check templates
+          self.getAll('templates').then(function(templates) {
+            if (templates.length === 0) {
+              var defaultTemplates = [
+                { id: 'tpl_classic', name: 'Classic', type: 'invoice', primary: '#2C3E50', secondary: '#34495E', font: 'Segoe UI', fontSize: 13, showLogo: true, showSig: true },
+                { id: 'tpl_modern', name: 'Modern', type: 'invoice', primary: '#1976D2', secondary: '#0D47A1', font: 'Roboto', fontSize: 14, showLogo: true, showSig: true },
+                { id: 'tpl_premium', name: 'H4 Premium', type: 'invoice', primary: '#6A3FA0', secondary: '#D4A843', font: 'Georgia', fontSize: 15, showLogo: true, showSig: true },
+                { id: 'tpl_simple', name: 'Simple', type: 'invoice', primary: '#424242', secondary: '#616161', font: 'Arial', fontSize: 12, showLogo: false, showSig: true },
+                { id: 'tpl_q_classic', name: 'Classic', type: 'quotation', primary: '#2C3E50', secondary: '#34495E', font: 'Segoe UI', fontSize: 13, showLogo: true, showSig: true },
+                { id: 'tpl_q_premium', name: 'H4 Premium', type: 'quotation', primary: '#6A3FA0', secondary: '#D4A843', font: 'Georgia', fontSize: 15, showLogo: true, showSig: true }
+              ];
+              var ps = defaultTemplates.map(function(t) { return self.put('templates', t).catch(function(e) { console.warn('Template seed error', e); }); });
+              Promise.all(ps).then(function() { console.log('[H4 DB] Default templates created'); resolve(); });
+            } else {
+              resolve();
+            }
+          }).catch(function() { resolve(); });
+        });
+      },
+
+      // ===== CRUD =====
+      get: function(store, id) {
+        return new Promise(function(resolve, reject) {
+          if (!DB._ready) { reject(new Error('Database not ready')); return; }
+          try {
+            var tx = DB._db.transaction(store, 'readonly');
+            var req = tx.objectStore(store).get(id);
+            req.onsuccess = function() { resolve(req.result || null); };
+            req.onerror = function() { reject(req.error); };
+          } catch (e) { reject(e); }
+        });
+      },
+
+      getAll: function(store) {
+        return new Promise(function(resolve, reject) {
+          if (!DB._ready) { reject(new Error('Database not ready')); return; }
+          try {
+            var tx = DB._db.transaction(store, 'readonly');
+            var req = tx.objectStore(store).getAll();
+            req.onsuccess = function() { resolve(req.result || []); };
+            req.onerror = function() { reject(req.error); };
+          } catch (e) { reject(e); }
+        });
+      },
+
+      put: function(store, data) {
+        return new Promise(function(resolve, reject) {
+          if (!DB._ready) { reject(new Error('Database not ready')); return; }
+          if (!data.id && store !== 'settings') {
+            data.id = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+          }
+          try {
+            var tx = DB._db.transaction(store, 'readwrite');
+            var req = tx.objectStore(store).put(data);
+            req.onsuccess = function() { resolve(data); };
+            req.onerror = function() { reject(req.error); };
+          } catch (e) { reject(e); }
+        });
+      },
+
+      delete: function(store, id) {
+        return new Promise(function(resolve, reject) {
+          if (!DB._ready) { reject(new Error('Database not ready')); return; }
+          try {
+            var tx = DB._db.transaction(store, 'readwrite');
+            var req = tx.objectStore(store).delete(id);
+            req.onsuccess = function() { resolve(); };
+            req.onerror = function() { reject(req.error); };
+          } catch (e) { reject(e); }
+        });
+      },
+
+      getByIndex: function(store, indexName, value) {
+        return new Promise(function(resolve, reject) {
+          if (!DB._ready) { reject(new Error('Database not ready')); return; }
+          try {
+            var tx = DB._db.transaction(store, 'readonly');
+            var index = tx.objectStore(store).index(indexName);
+            var req = index.getAll(value);
+            req.onsuccess = function() { resolve(req.result || []); };
+            req.onerror = function() { reject(req.error); };
+          } catch (e) { reject(e); }
+        });
+      },
+
+      count: function(store) {
+        return new Promise(function(resolve, reject) {
+          if (!DB._ready) { reject(new Error('Database not ready')); return; }
+          try {
+            var tx = DB._db.transaction(store, 'readonly');
+            var req = tx.objectStore(store).count();
+            req.onsuccess = function() { resolve(req.result || 0); };
+            req.onerror = function() { reject(req.error); };
+          } catch (e) { reject(e); }
+        });
+      },
+
+      clear: function(store) {
+        return new Promise(function(resolve, reject) {
+          if (!DB._ready) { reject(new Error('Database not ready')); return; }
+          try {
+            var tx = DB._db.transaction(store, 'readwrite');
+            var req = tx.objectStore(store).clear();
+            req.onsuccess = function() { resolve(); };
+            req.onerror = function() { reject(req.error); };
+          } catch (e) { reject(e); }
+        });
+      },
+
+      // ===== HEALTH =====
+      healthCheck: function() {
+        return new Promise(function(resolve) {
+          if (!DB._ready) { resolve(false); return; }
+          try {
+            var tx = DB._db.transaction('settings', 'readonly');
+            var req = tx.objectStore('settings').get('app_settings');
+            req.onsuccess = function() { resolve(true); };
+            req.onerror = function() { resolve(false); };
+          } catch (e) { resolve(false); }
+        });
+      },
+
+      // ===== CLOSE =====
+      close: function() {
+        if (DB._db) {
+          DB._db.close();
+          DB._db = null;
+          DB._ready = false;
+          DB._initialized = false;
+        }
+      }
+    };
+
+    // ============================================================
+    // TEMPLATE RENDERER
+    // ============================================================
+    var H4Template = {
       renderDocument: function(type, data, templateId) {
         var self = this;
-        return this.getTemplate(templateId || 'tpl_premium').then(function(template) {
-          return DB.get('company', 'main').then(function(company) {
-            company = company || {};
-            var customer = data.customer || {};
-            var items = data.items || [];
-            var settings = DB.getSettings();
+        return new Promise(function(resolve, reject) {
+          var tid = templateId || 'tpl_premium';
+          DB.get('templates', tid).then(function(template) {
+            template = template || { id: 'tpl_premium', name: 'H4 Premium', primary: '#6A3FA0', secondary: '#D4A843', font: 'Georgia', fontSize: 15, showLogo: true, showSig: true };
+            DB.get('settings', 'app_settings').then(function(settings) {
+              settings = settings || {};
+              DB.get('company', 'main').then(function(company) {
+                company = company || {};
+                var customer = data.customer || {};
+                var items = data.items || [];
+                var primary = template.primary || '#6A3FA0';
+                var font = template.font || 'Georgia';
+                var fs = template.fontSize || 14;
 
-            var primary = template.primary || '#6A3FA0';
-            var font = template.font || 'Georgia';
-            var fs = template.fontSize || 14;
+                var itemsHtml = items.map(function(item, idx) {
+                  var total = (item.quantity || 0) * (item.rate || 0);
+                  var discAmount = total * (item.discount || 0) / 100;
+                  var taxable = total - discAmount;
+                  return '<tr><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;">' + (idx + 1) +
+                    '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;">' + escapeHtml(item.description || '') +
+                    (item.hsn ? ' <small style="color:#888;">HSN:' + escapeHtml(item.hsn) + '</small>' : '') +
+                    '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:center;">' + (item.quantity || 0) +
+                    '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:center;">' + escapeHtml(item.unit || '') +
+                    '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:right;">₹' + (item.rate || 0).toFixed(2) +
+                    '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:right;">' + (item.gst || 0) + '%' +
+                    '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:right;">₹' + taxable.toFixed(2) + '</td></tr>';
+                }).join('');
 
-            var itemsHtml = items.map(function(item, idx) {
-              var total = (item.quantity || 0) * (item.rate || 0);
-              var discAmount = total * (item.discount || 0) / 100;
-              var taxable = total - discAmount;
-              return '<tr><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;">' + (idx + 1) +
-                '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;">' + escapeHtml(item.description || '') +
-                (item.hsn ? ' <small style="color:#888;">HSN:' + escapeHtml(item.hsn) + '</small>' : '') +
-                '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:center;">' + (item.quantity || 0) +
-                '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:center;">' + escapeHtml(item.unit || '') +
-                '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:right;">₹' + (item.rate || 0).toFixed(2) +
-                '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:right;">' + (item.gst || 0) + '%' +
-                '</td><td style="padding:4px 6px;border-bottom:1px solid #e8ecf0;text-align:right;">₹' + taxable.toFixed(2) + '</td></tr>';
-            }).join('');
+                var subtotal = data.subtotal || 0;
+                var discountAmount = data.discountAmount || 0;
+                var taxableAmount = data.taxableAmount || subtotal - discountAmount;
+                var cgst = data.cgst || 0;
+                var sgst = data.sgst || 0;
+                var igst = data.igst || 0;
+                var grandTotal = data.grandTotal || 0;
+                var roundOff = data.roundOff || 0;
+                var amountWords = data.amountWords || 'Rupees ' + numberToWords(grandTotal) + ' Only';
+                var gstMode = data.gstMode || settings.taxMode || 'intra';
+                var showCgst = gstMode === 'intra' || gstMode === 'cgst-sgst';
+                var showIgst = gstMode === 'inter';
+                var gstEnabled = settings.gstEnabled !== false;
+                var title = type === 'invoice' ? 'TAX INVOICE' : 'QUOTATION';
+                var logoHtml = '';
+                if (template.showLogo !== false && company.logo) {
+                  logoHtml = '<img src="' + company.logo + '" style="max-height:60px;"/>';
+                }
 
-            var subtotal = data.subtotal || 0;
-            var discountAmount = data.discountAmount || 0;
-            var taxableAmount = data.taxableAmount || subtotal - discountAmount;
-            var cgst = data.cgst || 0;
-            var sgst = data.sgst || 0;
-            var igst = data.igst || 0;
-            var grandTotal = data.grandTotal || 0;
-            var roundOff = data.roundOff || 0;
-            var amountWords = data.amountWords || 'Rupees ' + numberToWords(grandTotal) + ' Only';
-            var gstMode = data.gstMode || settings.taxMode || 'intra';
-            var showCgst = gstMode === 'intra' || gstMode === 'cgst-sgst';
-            var showIgst = gstMode === 'inter';
-            var gstEnabled = settings.gstEnabled !== false;
+                var html = '<div class="preview-a4-page" style="font-family:\'' + font + '\',sans-serif;font-size:' + fs + 'px;color:#1a1a2e;">' +
+                  '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid ' + primary + ';padding-bottom:0.6rem;margin-bottom:0.6rem;flex-wrap:wrap;">' +
+                  '<div>' + logoHtml +
+                  '<h2 style="margin:0;color:' + primary + ';">' + escapeHtml(company.legalName || 'H4 Construction Solutions') + '</h2>' +
+                  '<p style="margin:0;font-size:0.85em;color:#555;">' + escapeHtml(company.address || '') + '</p>' +
+                  '<p style="margin:0;font-size:0.75em;color:#555;">' + escapeHtml(company.phone || '') + (company.email ? ' | ' + escapeHtml(company.email) : '') + '</p>' +
+                  '<p style="margin:0;font-size:0.75em;color:#555;">GSTIN: ' + escapeHtml(company.gstin || 'N/A') + '</p></div>' +
+                  '<div style="text-align:right;"><h1 style="font-size:1.6rem;color:' + primary + ';margin:0;">' + title + '</h1>' +
+                  '<p style="margin:0;font-weight:600;">' + escapeHtml(data.number || '') + '</p><p style="margin:0;">Date: ' + escapeHtml(data.date || '') +
+                  (data.dueDate ? ' | Due: ' + escapeHtml(data.dueDate) : '') + '</p></div></div>' +
+                  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.4rem 0;"><div style="background:#f5f7fa;padding:0.6rem;border-radius:6px;"><strong style="color:' + primary + ';">BILL TO</strong><br>' +
+                  escapeHtml(customer.name || '') + '<br>' + escapeHtml(customer.company || '') + '<br>' + escapeHtml(customer.address || '') +
+                  '<br>Phone: ' + escapeHtml(customer.phone || '') + (customer.whatsapp ? ' | WhatsApp: ' + escapeHtml(customer.whatsapp) : '') +
+                  '<br>GSTIN: ' + escapeHtml(customer.gstin || 'N/A') + '</div>' +
+                  '<div><strong>Project</strong><br>' + escapeHtml(data.projectName || '') + (data.reference ? '<br><strong>Ref:</strong> ' + escapeHtml(data.reference) : '') + '</div></div>' +
+                  '<table class="p-table"><thead><tr style="background:' + primary + ';color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">GST%</th><th style="text-align:right;">Amount</th></tr></thead><tbody>' + itemsHtml + '</tbody></table>' +
+                  '<div class="p-total"><div><span>Subtotal</span><span>₹' + subtotal.toFixed(2) + '</span></div>' +
+                  (discountAmount > 0 ? '<div><span>Discount</span><span>₹' + discountAmount.toFixed(2) + '</span></div>' : '') +
+                  '<div><span>Taxable</span><span>₹' + taxableAmount.toFixed(2) + '</span></div>' +
+                  (showCgst && cgst > 0 ? '<div><span>CGST</span><span>₹' + cgst.toFixed(2) + '</span></div>' : '') +
+                  (showCgst && sgst > 0 ? '<div><span>SGST</span><span>₹' + sgst.toFixed(2) + '</span></div>' : '') +
+                  (showIgst && igst > 0 ? '<div><span>IGST</span><span>₹' + igst.toFixed(2) + '</span></div>' : '') +
+                  (roundOff !== 0 ? '<div><span>Round Off</span><span>₹' + roundOff.toFixed(2) + '</span></div>' : '') +
+                  '<div class="p-grand"><span>GRAND TOTAL</span><span>₹' + grandTotal.toFixed(2) + '</span></div></div>' +
+                  '<div style="font-size:0.85rem;font-weight:600;color:#555;padding:0.3rem 0;border-top:1px solid #e8ecf0;margin-top:0.3rem;">' + amountWords + '</div>' +
+                  (data.terms ? '<div style="margin-top:0.4rem;font-size:0.8rem;"><p><strong>Terms:</strong> ' + escapeHtml(data.terms) + '</p></div>' : '') +
+                  (data.bankDetails ? '<div style="margin-top:0.2rem;font-size:0.8rem;"><p><strong>Bank Details:</strong> ' + escapeHtml(data.bankDetails) + '</p></div>' : '') +
+                  (data.notes ? '<div style="margin-top:0.2rem;font-size:0.8rem;"><p><strong>Notes:</strong> ' + escapeHtml(data.notes) + '</p></div>' : '') +
+                  '<div style="margin-top:0.6rem;display:flex;justify-content:space-between;border-top:1px solid #e8ecf0;padding-top:0.4rem;">' +
+                  '<div style="font-size:0.8rem;">' + escapeHtml(company.legalName || '') + '</div>' +
+                  (template.showSig !== false ? '<div style="text-align:right;"><div style="height:30px;border-bottom:1px solid #777;width:120px;margin-left:auto;"></div>' + (company.signatoryName || 'Authorized Signatory') + '</div>' : '') +
+                  '</div></div>';
 
-            var title = type === 'invoice' ? 'TAX INVOICE' : 'QUOTATION';
-            var logoHtml = '';
-            if (template.showLogo !== false && company.logo) {
-              logoHtml = '<img src="' + company.logo + '" style="max-height:60px;"/>';
-            }
-
-            var html = '<div class="preview-a4-page" style="font-family:\'' + font + '\',sans-serif;font-size:' + fs + 'px;color:#1a1a2e;">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid ' + primary + ';padding-bottom:0.6rem;margin-bottom:0.6rem;flex-wrap:wrap;">' +
-              '<div>' + logoHtml +
-              '<h2 style="margin:0;color:' + primary + ';">' + escapeHtml(company.legalName || 'H4 Construction Solutions') + '</h2>' +
-              '<p style="margin:0;font-size:0.85em;color:#555;">' + escapeHtml(company.address || '') + '</p>' +
-              '<p style="margin:0;font-size:0.75em;color:#555;">' + escapeHtml(company.phone || '') + (company.email ? ' | ' + escapeHtml(company.email) : '') + '</p>' +
-              '<p style="margin:0;font-size:0.75em;color:#555;">GSTIN: ' + escapeHtml(company.gstin || 'N/A') + '</p></div>' +
-              '<div style="text-align:right;"><h1 style="font-size:1.6rem;color:' + primary + ';margin:0;">' + title + '</h1>' +
-              '<p style="margin:0;font-weight:600;">' + escapeHtml(data.number || '') + '</p><p style="margin:0;">Date: ' + escapeHtml(data.date || '') +
-              (data.dueDate ? ' | Due: ' + escapeHtml(data.dueDate) : '') + '</p></div></div>' +
-              '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.4rem 0;"><div style="background:#f5f7fa;padding:0.6rem;border-radius:6px;"><strong style="color:' + primary + ';">BILL TO</strong><br>' +
-              escapeHtml(customer.name || '') + '<br>' + escapeHtml(customer.company || '') + '<br>' + escapeHtml(customer.address || '') +
-              '<br>Phone: ' + escapeHtml(customer.phone || '') + (customer.whatsapp ? ' | WhatsApp: ' + escapeHtml(customer.whatsapp) : '') +
-              '<br>GSTIN: ' + escapeHtml(customer.gstin || 'N/A') + '</div>' +
-              '<div><strong>Project</strong><br>' + escapeHtml(data.projectName || '') + (data.reference ? '<br><strong>Ref:</strong> ' + escapeHtml(data.reference) : '') + '</div></div>' +
-              '<table class="p-table"><thead><tr style="background:' + primary + ';color:white;"><th>#</th><th style="text-align:left;">Description</th><th style="text-align:center;">Qty</th><th style="text-align:center;">Unit</th><th style="text-align:right;">Rate</th><th style="text-align:right;">GST%</th><th style="text-align:right;">Amount</th></tr></thead><tbody>' + itemsHtml + '</tbody></table>' +
-              '<div class="p-total"><div><span>Subtotal</span><span>₹' + subtotal.toFixed(2) + '</span></div>' +
-              (discountAmount > 0 ? '<div><span>Discount</span><span>₹' + discountAmount.toFixed(2) + '</span></div>' : '') +
-              '<div><span>Taxable</span><span>₹' + taxableAmount.toFixed(2) + '</span></div>' +
-              (showCgst && cgst > 0 ? '<div><span>CGST</span><span>₹' + cgst.toFixed(2) + '</span></div>' : '') +
-              (showCgst && sgst > 0 ? '<div><span>SGST</span><span>₹' + sgst.toFixed(2) + '</span></div>' : '') +
-              (showIgst && igst > 0 ? '<div><span>IGST</span><span>₹' + igst.toFixed(2) + '</span></div>' : '') +
-              (roundOff !== 0 ? '<div><span>Round Off</span><span>₹' + roundOff.toFixed(2) + '</span></div>' : '') +
-              '<div class="p-grand"><span>GRAND TOTAL</span><span>₹' + grandTotal.toFixed(2) + '</span></div></div>' +
-              '<div style="font-size:0.85rem;font-weight:600;color:#555;padding:0.3rem 0;border-top:1px solid #e8ecf0;margin-top:0.3rem;">' + amountWords + '</div>' +
-              (data.terms ? '<div style="margin-top:0.4rem;font-size:0.8rem;"><p><strong>Terms:</strong> ' + escapeHtml(data.terms) + '</p></div>' : '') +
-              (data.bankDetails ? '<div style="margin-top:0.2rem;font-size:0.8rem;"><p><strong>Bank Details:</strong> ' + escapeHtml(data.bankDetails) + '</p></div>' : '') +
-              (data.notes ? '<div style="margin-top:0.2rem;font-size:0.8rem;"><p><strong>Notes:</strong> ' + escapeHtml(data.notes) + '</p></div>' : '') +
-              '<div style="margin-top:0.6rem;display:flex;justify-content:space-between;border-top:1px solid #e8ecf0;padding-top:0.4rem;">' +
-              '<div style="font-size:0.8rem;">' + escapeHtml(company.legalName || '') + '</div>' +
-              (template.showSig !== false ? '<div style="text-align:right;"><div style="height:30px;border-bottom:1px solid #777;width:120px;margin-left:auto;"></div>' + (company.signatoryName || 'Authorized Signatory') + '</div>' : '') +
-              '</div></div>';
-
-            return html;
-          });
+                resolve(html);
+              }).catch(reject);
+            }).catch(reject);
+          }).catch(reject);
         });
       },
 
@@ -1273,21 +808,82 @@
     var H4App = {
       currentModule: 'dashboard',
       _cardClickLock: false,
+      _initialized: false,
 
+      // ===== INIT =====
       init: function() {
         var self = this;
+        // Show loading state
+        var main = document.getElementById('mainContent');
+        if (main) {
+          main.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--text-muted);"><div style="font-size:2rem;margin-bottom:0.5rem;">⏳</div><div>Initializing local database...</div></div>';
+        }
+
         DB.init().then(function() {
+          console.log('[H4 App] Database initialized');
+          return DB.healthCheck();
+        }).then(function(healthy) {
+          if (!healthy) {
+            console.warn('[H4 App] Health check failed, retrying...');
+            return DB.init().then(function() { return DB.healthCheck(); });
+          }
+          return true;
+        }).then(function() {
+          console.log('[H4 App] Health check passed');
+          self._initialized = true;
           self.setupNavigation();
           self.setupCardClicks();
           self.loadTheme();
           self.navigate('dashboard');
-          toast('H4 Billing ERP loaded.');
-        }).catch(function(e) {
-          console.error('DB init error:', e);
-          toast('Error initializing database. Please refresh.', 'error');
+          toast('H4 Billing ERP ready.');
+        }).catch(function(err) {
+          console.error('[H4 App] Database initialization failed:', err);
+          self.showRecoveryUI(err);
         });
       },
 
+      // ===== RECOVERY UI =====
+      showRecoveryUI: function(err) {
+        var main = document.getElementById('mainContent');
+        if (!main) return;
+        var msg = err && err.message ? err.message : 'Unknown database error.';
+        main.innerHTML = '<div style="max-width:500px;margin:2rem auto;text-align:center;padding:2rem 1rem;background:var(--card-bg);border-radius:var(--radius);border:1px solid var(--border);">' +
+          '<div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>' +
+          '<h2 style="font-size:1.2rem;margin-bottom:0.5rem;color:var(--text);">Database Issue</h2>' +
+          '<p style="color:var(--text-muted);margin-bottom:1rem;">' + escapeHtml(msg) + '</p>' +
+          '<div style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;">' +
+          '<button class="btn btn-primary" onclick="H4App.retryInit()">🔄 Retry</button>' +
+          '<button class="btn btn-outline" onclick="H4App.exportBackup()">📤 Export Backup</button>' +
+          '</div>' +
+          '<details style="margin-top:1rem;text-align:left;font-size:0.8rem;color:var(--text-muted);">' +
+          '<summary>Technical Details</summary>' +
+          '<pre style="background:var(--bg);padding:0.6rem;border-radius:6px;overflow:auto;margin-top:0.4rem;font-size:0.75rem;">' + escapeHtml(JSON.stringify(err, null, 2)) + '</pre>' +
+          '</details></div>';
+      },
+
+      retryInit: function() {
+        DB.close();
+        this._initialized = false;
+        this.init();
+      },
+
+      exportBackup: function() {
+        H4App.downloadBackup();
+      },
+
+      // ===== SETTINGS HELPERS =====
+      getSettingsSync: function() {
+        try {
+          var data = localStorage.getItem('h4_settings');
+          return data ? JSON.parse(data) : {};
+        } catch (e) { return {}; }
+      },
+
+      saveSettingsSync: function(settings) {
+        localStorage.setItem('h4_settings', JSON.stringify(settings));
+      },
+
+      // ===== NAVIGATION =====
       setupNavigation: function() {
         var toggle = document.getElementById('menuToggle');
         if (toggle) {
@@ -1315,7 +911,6 @@
             }
           });
         }
-        // Close sidebar on outside click
         document.addEventListener('click', function(e) {
           var sidebarEl = document.getElementById('sidebar');
           var toggleEl = document.getElementById('menuToggle');
@@ -1405,44 +1000,20 @@
         if (!container) return;
         var html = '';
         switch (module) {
-          case 'dashboard':
-            html = this.renderDashboard();
-            break;
-          case 'company':
-            html = this.renderCompany();
-            break;
-          case 'customers':
-            html = this.renderCustomers();
-            break;
-          case 'products':
-            html = this.renderProducts();
-            break;
-          case 'quotations':
-            html = this.renderQuotations();
-            break;
-          case 'invoices':
-            html = this.renderInvoices();
-            break;
-          case 'templates':
-            html = this.renderTemplatesModule();
-            break;
-          case 'payments':
-            html = this.renderPaymentsModule();
-            break;
-          case 'backup':
-            html = this.renderBackupModule();
-            break;
-          case 'settings':
-            html = this.renderSettingsModule();
-            break;
-          case 'themes':
-            html = this.renderThemesModule();
-            break;
-          default:
-            html = '<div class="card"><p>Module not found.</p></div>';
+          case 'dashboard': html = this.renderDashboard(); break;
+          case 'company': html = this.renderCompany(); break;
+          case 'customers': html = this.renderCustomers(); break;
+          case 'products': html = this.renderProducts(); break;
+          case 'quotations': html = this.renderQuotations(); break;
+          case 'invoices': html = this.renderInvoices(); break;
+          case 'templates': html = this.renderTemplatesModule(); break;
+          case 'payments': html = this.renderPaymentsModule(); break;
+          case 'backup': html = this.renderBackupModule(); break;
+          case 'settings': html = this.renderSettingsModule(); break;
+          case 'themes': html = this.renderThemesModule(); break;
+          default: html = '<div class="card"><p>Module not found.</p></div>';
         }
         container.innerHTML = html;
-        // Re-bind events after render
         if (module === 'dashboard') { this.setupCardClicks(); this.updateDashboard(); }
         if (module === 'company') { this.bindCompanyEvents(); }
         if (module === 'customers') { this.loadCustomers(); }
@@ -1451,7 +1022,6 @@
         if (module === 'invoices') { this.loadInvoices(); }
         if (module === 'templates') { this.loadTemplates(); }
         if (module === 'themes') { this.renderThemes(); }
-        // Back buttons
         container.querySelectorAll('.back-btn').forEach(function(btn) {
           btn.onclick = function(e) {
             e.preventDefault();
@@ -1461,9 +1031,7 @@
         });
       },
 
-      // ============================================================
-      // DASHBOARD
-      // ============================================================
+      // ===== DASHBOARD =====
       renderDashboard: function() {
         return '<div class="dashboard-hero"><div><h1>📊 Dashboard</h1><p>Quick access to your billing modules</p></div></div>' +
           '<div class="quick-access-grid" id="quickAccessGrid">' +
@@ -1486,9 +1054,9 @@
 
       updateDashboard: function() {
         var self = this;
-        DB.getList('invoices').then(function(invs) {
-          DB.getList('quotations').then(function(qs) {
-            DB.getList('customers').then(function(custs) {
+        DB.getAll('invoices').then(function(invs) {
+          DB.getAll('quotations').then(function(qs) {
+            DB.getAll('customers').then(function(custs) {
               var total = invs.reduce(function(s, i) { return s + (i.grandTotal || 0); }, 0);
               var rev = document.getElementById('totalRevenue');
               if (rev) rev.textContent = '₹' + total.toFixed(2);
@@ -1503,9 +1071,7 @@
         });
       },
 
-      // ============================================================
-      // COMPANY
-      // ============================================================
+      // ===== COMPANY =====
       renderCompany: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">🏭 Company Profile</span></div>' +
           '<div class="card"><div class="card-header"><h2>Business Information</h2></div><form id="companyForm">' +
@@ -1567,7 +1133,6 @@
       },
 
       loadCompany: function() {
-        var self = this;
         DB.get('company', 'main').then(function(c) {
           c = c || {};
           var setVal = function(id, val) { var el = document.getElementById(id); if (el) el.value = val || ''; };
@@ -1633,9 +1198,7 @@
         }).catch(function(e) { toast('Error saving: ' + e.message, 'error'); });
       },
 
-      // ============================================================
-      // CUSTOMERS
-      // ============================================================
+      // ===== CUSTOMERS =====
       renderCustomers: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">👥 Customers</span><div class="module-actions"><button class="btn btn-primary btn-sm" onclick="H4Customers.openModal()">➕ Add</button></div></div><div class="card" id="customersContainer"><p class="text-muted text-center" style="padding:1rem;">Loading customers...</p></div>';
       },
@@ -1643,7 +1206,7 @@
       loadCustomers: function() {
         var container = document.getElementById('customersContainer');
         if (!container) return;
-        DB.getList('customers').then(function(list) {
+        DB.getAll('customers').then(function(list) {
           if (list.length === 0) {
             container.innerHTML = '<p class="text-muted text-center" style="padding:1.5rem;">No customers yet. Click "Add Customer".</p>';
             return;
@@ -1654,9 +1217,7 @@
         });
       },
 
-      // ============================================================
-      // PRODUCTS
-      // ============================================================
+      // ===== PRODUCTS =====
       renderProducts: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">📦 Products</span><div class="module-actions"><button class="btn btn-primary btn-sm" onclick="H4Products.openModal()">➕ Add</button></div></div><div class="card" id="productsContainer"><p class="text-muted text-center" style="padding:1rem;">Loading products...</p></div>';
       },
@@ -1664,7 +1225,7 @@
       loadProducts: function() {
         var container = document.getElementById('productsContainer');
         if (!container) return;
-        DB.getList('products').then(function(list) {
+        DB.getAll('products').then(function(list) {
           if (list.length === 0) {
             container.innerHTML = '<p class="text-muted text-center" style="padding:1.5rem;">No products yet. Click "Add Product".</p>';
             return;
@@ -1675,9 +1236,7 @@
         });
       },
 
-      // ============================================================
-      // QUOTATIONS
-      // ============================================================
+      // ===== QUOTATIONS =====
       renderQuotations: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">📄 Quotations</span><div class="module-actions"><button class="btn btn-primary btn-sm" onclick="H4App.openQuotationTypeModal()">➕ New</button></div></div><div class="card" id="quotationsContainer"><p class="text-muted text-center" style="padding:1rem;">Loading quotations...</p></div>';
       },
@@ -1685,8 +1244,7 @@
       loadQuotations: function() {
         var container = document.getElementById('quotationsContainer');
         if (!container) return;
-        var self = this;
-        DB.getList('quotations').then(function(qs) {
+        DB.getAll('quotations').then(function(qs) {
           if (qs.length === 0) {
             container.innerHTML = '<p class="text-muted text-center" style="padding:1.5rem;">No quotations yet. Click "New Quotation".</p>';
             return;
@@ -1709,9 +1267,7 @@
         if (modal) modal.classList.remove('active');
       },
 
-      // ============================================================
-      // INVOICES
-      // ============================================================
+      // ===== INVOICES =====
       renderInvoices: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">🧾 Invoices</span><div class="module-actions"><button class="btn btn-primary btn-sm" onclick="H4Invoice.newInvoice()">➕ New</button></div></div><div id="invoiceListView"><div class="card" id="invoicesContainer"><p class="text-muted text-center" style="padding:1rem;">Loading invoices...</p></div></div><div id="invoiceBuilderView" style="display:none;"><div id="invoiceBuilderContainer"></div></div>';
       },
@@ -1719,7 +1275,7 @@
       loadInvoices: function() {
         var container = document.getElementById('invoicesContainer');
         if (!container) return;
-        DB.getList('invoices').then(function(invs) {
+        DB.getAll('invoices').then(function(invs) {
           if (invs.length === 0) {
             container.innerHTML = '<p class="text-muted text-center" style="padding:1.5rem;">No invoices yet. Click "New Invoice".</p>';
             return;
@@ -1737,16 +1293,14 @@
 
       deleteInvoice: function(id) {
         if (!confirm('Delete this invoice?')) return;
-        DB.deleteItem('invoices', id).then(function() {
+        DB.delete('invoices', id).then(function() {
           H4App.loadInvoices();
           H4App.updateDashboard();
           toast('Invoice deleted.');
         });
       },
 
-      // ============================================================
-      // TEMPLATES
-      // ============================================================
+      // ===== TEMPLATES =====
       renderTemplatesModule: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">📋 Template Manager</span></div>' +
           '<div class="card"><div class="card-header"><h2>Default Templates</h2></div>' +
@@ -1758,118 +1312,127 @@
 
       loadTemplates: function() {
         var self = this;
-        DB.getList('templates').then(function(templates) {
-          var settings = DB.getSettings();
-          var invDefault = settings.invoiceTemplate || 'tpl_premium';
-          var qtnDefault = settings.quotationTemplate || 'tpl_premium';
+        DB.getAll('templates').then(function(templates) {
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var invDefault = settings.invoiceTemplate || 'tpl_premium';
+            var qtnDefault = settings.quotationTemplate || 'tpl_premium';
 
-          // Populate selects
-          var invSelect = document.getElementById('defaultInvoiceTemplate');
-          var qtnSelect = document.getElementById('defaultQuotationTemplate');
-          if (invSelect) {
-            invSelect.innerHTML = templates.filter(function(t) { return t.type === 'invoice' || !t.type; }).map(function(t) {
-              return '<option value="' + t.id + '" ' + (t.id === invDefault ? 'selected' : '') + '>' + escapeHtml(t.name) + '</option>';
-            }).join('');
-          }
-          if (qtnSelect) {
-            qtnSelect.innerHTML = templates.filter(function(t) { return t.type === 'quotation' || !t.type; }).map(function(t) {
-              return '<option value="' + t.id + '" ' + (t.id === qtnDefault ? 'selected' : '') + '>' + escapeHtml(t.name) + '</option>';
-            }).join('');
-          }
+            var invSelect = document.getElementById('defaultInvoiceTemplate');
+            var qtnSelect = document.getElementById('defaultQuotationTemplate');
+            if (invSelect) {
+              invSelect.innerHTML = templates.filter(function(t) { return t.type === 'invoice' || !t.type; }).map(function(t) {
+                return '<option value="' + t.id + '" ' + (t.id === invDefault ? 'selected' : '') + '>' + escapeHtml(t.name) + '</option>';
+              }).join('');
+            }
+            if (qtnSelect) {
+              qtnSelect.innerHTML = templates.filter(function(t) { return t.type === 'quotation' || !t.type; }).map(function(t) {
+                return '<option value="' + t.id + '" ' + (t.id === qtnDefault ? 'selected' : '') + '>' + escapeHtml(t.name) + '</option>';
+              }).join('');
+            }
 
-          // Render grids
-          var invGrid = document.getElementById('invoiceTemplateGrid');
-          var qtnGrid = document.getElementById('quotationTemplateGrid');
-          if (invGrid) {
-            invGrid.innerHTML = templates.filter(function(t) { return t.type === 'invoice' || !t.type; }).map(function(t) {
-              var isDefault = t.id === invDefault;
-              return '<div class="template-card' + (isDefault ? ' active' : '') + '"><div class="flex-between"><span class="template-name">' + escapeHtml(t.name) + '</span>' + (isDefault ? '<span class="template-badge">✅ Default</span>' : '') + '</div><div style="font-size:0.8rem;color:var(--text-muted);">' + escapeHtml(t.primary) + ' · ' + escapeHtml(t.font) + ' ' + (t.fontSize || 14) + 'px</div><div class="template-actions" style="margin-top:0.4rem;display:flex;gap:0.3rem;flex-wrap:wrap;"><button class="btn btn-sm btn-outline" onclick="H4App.previewTemplate(\'' + t.id + '\',\'invoice\')">👁️</button>' + (!isDefault ? '<button class="btn btn-sm btn-primary" onclick="H4App.setDefaultTemplate(\'invoice\',\'' + t.id + '\')">⭐ Default</button>' : '') + '</div></div>';
-            }).join('');
-          }
-          if (qtnGrid) {
-            qtnGrid.innerHTML = templates.filter(function(t) { return t.type === 'quotation' || !t.type; }).map(function(t) {
-              var isDefault = t.id === qtnDefault;
-              return '<div class="template-card' + (isDefault ? ' active' : '') + '"><div class="flex-between"><span class="template-name">' + escapeHtml(t.name) + '</span>' + (isDefault ? '<span class="template-badge">✅ Default</span>' : '') + '</div><div style="font-size:0.8rem;color:var(--text-muted);">' + escapeHtml(t.primary) + ' · ' + escapeHtml(t.font) + ' ' + (t.fontSize || 14) + 'px</div><div class="template-actions" style="margin-top:0.4rem;display:flex;gap:0.3rem;flex-wrap:wrap;"><button class="btn btn-sm btn-outline" onclick="H4App.previewTemplate(\'' + t.id + '\',\'quotation\')">👁️</button>' + (!isDefault ? '<button class="btn btn-sm btn-primary" onclick="H4App.setDefaultTemplate(\'quotation\',\'' + t.id + '\')">⭐ Default</button>' : '') + '</div></div>';
-            }).join('');
-          }
-        });
-      },
-
-      setDefaultTemplate: function(type, id) {
-        var settings = DB.getSettings();
-        if (type === 'invoice') settings.invoiceTemplate = id;
-        else settings.quotationTemplate = id;
-        DB.saveSettings(settings);
-        toast('Default ' + type + ' template updated.');
-        this.loadTemplates();
-      },
-
-      previewTemplate: function(id, type) {
-        var self = this;
-        DB.get('templates', id).then(function(template) {
-          if (!template) { toast('Template not found.', 'error'); return; }
-          var sampleData = {
-            number: type === 'invoice' ? 'H4-INV-0001' : 'H4-QTN-0001',
-            date: new Date().toISOString().split('T')[0],
-            dueDate: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
-            customer: { name: 'Sample Customer', address: 'Sample Address', phone: '9876543210', gstin: '22AAAAA0000A1Z5' },
-            items: [{ description: 'H4 Tile Adhesive', quantity: 10, unit: 'kg', rate: 500, gst: 18, hsn: '1234' },
-              { description: 'H4 Waterproof Coating', quantity: 5, unit: 'bag', rate: 2500, gst: 18, hsn: '5678' }],
-            subtotal: 17500,
-            discountAmount: 0,
-            taxableAmount: 17500,
-            cgst: 1575,
-            sgst: 1575,
-            igst: 0,
-            roundOff: 0,
-            grandTotal: 20650,
-            amountWords: 'Rupees Twenty Thousand Six Hundred Fifty Only',
-            terms: 'Payment within 15 days',
-            bankDetails: 'HDFC Bank, Account: 123456789, IFSC: HDFC0001234',
-            notes: 'Thank you for your business.',
-            gstMode: 'intra'
-          };
-          H4Template.renderDocument(type === 'invoice' ? 'invoice' : 'quotation', sampleData, id).then(function(html) {
-            var modal = document.createElement('div');
-            modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);overflow:auto;padding:20px;backdrop-filter:blur(4px);';
-            modal.innerHTML = '<div style="max-width:900px;margin:20px auto;background:var(--card-bg);border-radius:12px;overflow:hidden;"><div style="padding:12px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;"><strong>📄 Template Preview</strong><button class="btn btn-danger" onclick="this.closest(\'div\').parentElement.remove()">✕ Close</button></div><div style="padding:20px;">' + html + '</div></div>';
-            document.body.appendChild(modal);
+            var invGrid = document.getElementById('invoiceTemplateGrid');
+            var qtnGrid = document.getElementById('quotationTemplateGrid');
+            if (invGrid) {
+              invGrid.innerHTML = templates.filter(function(t) { return t.type === 'invoice' || !t.type; }).map(function(t) {
+                var isDefault = t.id === invDefault;
+                return '<div class="template-card' + (isDefault ? ' active' : '') + '"><div class="flex-between"><span class="template-name">' + escapeHtml(t.name) + '</span>' + (isDefault ? '<span class="template-badge">✅ Default</span>' : '') + '</div><div style="font-size:0.8rem;color:var(--text-muted);">' + escapeHtml(t.primary) + ' · ' + escapeHtml(t.font) + ' ' + (t.fontSize || 14) + 'px</div><div class="template-actions" style="margin-top:0.4rem;display:flex;gap:0.3rem;flex-wrap:wrap;"><button class="btn btn-sm btn-outline" onclick="H4App.previewTemplate(\'' + t.id + '\',\'invoice\')">👁️</button>' + (!isDefault ? '<button class="btn btn-sm btn-primary" onclick="H4App.setDefaultTemplate(\'invoice\',\'' + t.id + '\')">⭐ Default</button>' : '') + '</div></div>';
+              }).join('');
+            }
+            if (qtnGrid) {
+              qtnGrid.innerHTML = templates.filter(function(t) { return t.type === 'quotation' || !t.type; }).map(function(t) {
+                var isDefault = t.id === qtnDefault;
+                return '<div class="template-card' + (isDefault ? ' active' : '') + '"><div class="flex-between"><span class="template-name">' + escapeHtml(t.name) + '</span>' + (isDefault ? '<span class="template-badge">✅ Default</span>' : '') + '</div><div style="font-size:0.8rem;color:var(--text-muted);">' + escapeHtml(t.primary) + ' · ' + escapeHtml(t.font) + ' ' + (t.fontSize || 14) + 'px</div><div class="template-actions" style="margin-top:0.4rem;display:flex;gap:0.3rem;flex-wrap:wrap;"><button class="btn btn-sm btn-outline" onclick="H4App.previewTemplate(\'' + t.id + '\',\'quotation\')">👁️</button>' + (!isDefault ? '<button class="btn btn-sm btn-primary" onclick="H4App.setDefaultTemplate(\'quotation\',\'' + t.id + '\')">⭐ Default</button>' : '') + '</div></div>';
+              }).join('');
+            }
           });
         });
       },
 
-      // ============================================================
-      // THEMES
-      // ============================================================
+      setDefaultTemplate: function(type, id) {
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          if (type === 'invoice') settings.invoiceTemplate = id;
+          else settings.quotationTemplate = id;
+          DB.put('settings', settings).then(function() {
+            toast('Default ' + type + ' template updated.');
+            self.loadTemplates();
+          });
+        });
+      },
+
+      previewTemplate: function(id, type) {
+        var sampleData = {
+          number: type === 'invoice' ? 'H4-INV-0001' : 'H4-QTN-0001',
+          date: new Date().toISOString().split('T')[0],
+          dueDate: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+          customer: { name: 'Sample Customer', address: 'Sample Address', phone: '9876543210', gstin: '22AAAAA0000A1Z5' },
+          items: [{ description: 'H4 Tile Adhesive', quantity: 10, unit: 'kg', rate: 500, gst: 18, hsn: '1234' },
+            { description: 'H4 Waterproof Coating', quantity: 5, unit: 'bag', rate: 2500, gst: 18, hsn: '5678' }],
+          subtotal: 17500,
+          discountAmount: 0,
+          taxableAmount: 17500,
+          cgst: 1575,
+          sgst: 1575,
+          igst: 0,
+          roundOff: 0,
+          grandTotal: 20650,
+          amountWords: 'Rupees Twenty Thousand Six Hundred Fifty Only',
+          terms: 'Payment within 15 days',
+          bankDetails: 'HDFC Bank, Account: 123456789, IFSC: HDFC0001234',
+          notes: 'Thank you for your business.',
+          gstMode: 'intra'
+        };
+        var self = this;
+        H4Template.renderDocument(type === 'invoice' ? 'invoice' : 'quotation', sampleData, id).then(function(html) {
+          var modal = document.createElement('div');
+          modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);overflow:auto;padding:20px;backdrop-filter:blur(4px);';
+          modal.innerHTML = '<div style="max-width:900px;margin:20px auto;background:var(--card-bg);border-radius:12px;overflow:hidden;"><div style="padding:12px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;"><strong>📄 Template Preview</strong><button class="btn btn-danger" onclick="this.closest(\'div\').parentElement.remove()">✕ Close</button></div><div style="padding:20px;">' + html + '</div></div>';
+          document.body.appendChild(modal);
+        });
+      },
+
+      // ===== THEMES =====
       renderThemesModule: function() {
-        var settings = DB.getSettings();
-        var theme = settings.theme || 'light';
-        return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">🎨 Theme Manager</span></div>' +
-          '<div class="card"><div class="card-header"><h2>Appearance</h2></div>' +
-          '<div class="form-group"><label>Theme</label><select id="themeSelect" onchange="H4App.setTheme(this.value)">' +
-          '<option value="light" ' + (theme === 'light' ? 'selected' : '') + '>☀️ Light</option>' +
-          '<option value="dark" ' + (theme === 'dark' ? 'selected' : '') + '>🌙 Dark</option>' +
-          '<option value="system" ' + (theme === 'system' ? 'selected' : '') + '>🔄 System</option></select></div>' +
-          '<div class="form-group"><label>UI Scale</label><select id="uiScaleSelect" onchange="H4App.setUIScale(this.value)">' +
-          '<option value="90">90%</option><option value="100" selected>100%</option><option value="110">110%</option><option value="120">120%</option><option value="130">130%</option></select></div></div>';
+        var self = this;
+        return new Promise(function(resolve) {
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var theme = settings.theme || 'light';
+            var html = '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">🎨 Theme Manager</span></div>' +
+              '<div class="card"><div class="card-header"><h2>Appearance</h2></div>' +
+              '<div class="form-group"><label>Theme</label><select id="themeSelect" onchange="H4App.setTheme(this.value)">' +
+              '<option value="light" ' + (theme === 'light' ? 'selected' : '') + '>☀️ Light</option>' +
+              '<option value="dark" ' + (theme === 'dark' ? 'selected' : '') + '>🌙 Dark</option>' +
+              '<option value="system" ' + (theme === 'system' ? 'selected' : '') + '>🔄 System</option></select></div>' +
+              '<div class="form-group"><label>UI Scale</label><select id="uiScaleSelect" onchange="H4App.setUIScale(this.value)">' +
+              '<option value="90">90%</option><option value="100" selected>100%</option><option value="110">110%</option><option value="120">120%</option><option value="130">130%</option></select></div></div>';
+            document.getElementById('mainContent').innerHTML = html;
+            var scale = settings.uiScale || 100;
+            var el = document.getElementById('uiScaleSelect');
+            if (el) el.value = scale;
+            document.documentElement.style.setProperty('--base-font-size', (15 * scale / 100) + 'px');
+            document.querySelector('.main-content').style.transform = 'scale(' + (scale / 100) + ')';
+            document.querySelector('.main-content').style.transformOrigin = 'top center';
+          });
+        });
       },
 
       renderThemes: function() {
-        var settings = DB.getSettings();
-        var scale = settings.uiScale || 100;
-        var el = document.getElementById('uiScaleSelect');
-        if (el) el.value = scale;
-        document.documentElement.style.setProperty('--base-font-size', (15 * scale / 100) + 'px');
-        document.querySelector('.main-content').style.transform = 'scale(' + (scale / 100) + ')';
-        document.querySelector('.main-content').style.transformOrigin = 'top center';
+        this.renderThemesModule();
       },
 
       setTheme: function(theme) {
-        var settings = DB.getSettings();
-        settings.theme = theme;
-        DB.saveSettings(settings);
-        this.applyTheme(theme);
-        toast('Theme updated.');
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          settings.theme = theme;
+          DB.put('settings', settings).then(function() {
+            self.applyTheme(theme);
+            toast('Theme updated.');
+          });
+        });
       },
 
       applyTheme: function(theme) {
@@ -1877,35 +1440,44 @@
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         document.documentElement.setAttribute('data-theme', theme);
-        document.getElementById('themeToggle').textContent = theme === 'dark' ? '☀️' : '🌓';
+        var toggle = document.getElementById('themeToggle');
+        if (toggle) toggle.textContent = theme === 'dark' ? '☀️' : '🌓';
       },
 
       setUIScale: function(scale) {
-        var settings = DB.getSettings();
-        settings.uiScale = parseInt(scale) || 100;
-        DB.saveSettings(settings);
-        this.renderThemes();
-        toast('UI scale updated.');
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          settings.uiScale = parseInt(scale) || 100;
+          DB.put('settings', settings).then(function() {
+            self.renderThemes();
+            toast('UI scale updated.');
+          });
+        });
       },
 
       toggleTheme: function() {
-        var settings = DB.getSettings();
-        var current = settings.theme || 'light';
-        var next = current === 'light' ? 'dark' : 'light';
-        this.setTheme(next);
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          var current = settings.theme || 'light';
+          var next = current === 'light' ? 'dark' : 'light';
+          self.setTheme(next);
+        });
       },
 
       loadTheme: function() {
-        var settings = DB.getSettings();
-        var theme = settings.theme || 'light';
-        this.applyTheme(theme);
-        var el = document.getElementById('themeSelect');
-        if (el) el.value = theme;
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          var theme = settings.theme || 'light';
+          self.applyTheme(theme);
+          var el = document.getElementById('themeSelect');
+          if (el) el.value = theme;
+        });
       },
 
-      // ============================================================
-      // BACKUP
-      // ============================================================
+      // ===== BACKUP =====
       renderBackupModule: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">💾 Backup</span></div>' +
           '<div class="card"><button class="btn btn-primary btn-block" onclick="H4App.downloadBackup()">📥 Download Backup</button>' +
@@ -1914,18 +1486,16 @@
       },
 
       renderBackup: function() {
-        // Already rendered via renderBackupModule
+        // Already rendered
       },
 
       downloadBackup: function() {
-        var self = this;
         var stores = ['company', 'customers', 'products', 'invoices', 'quotations', 'payments', 'templates', 'images', 'fonts'];
-        var promises = stores.map(function(s) { return DB.getList(s); });
+        var promises = stores.map(function(s) { return DB.getAll(s); });
         Promise.all(promises).then(function(results) {
           var data = {
             version: 'H4-ERP-1.0',
             createdAt: new Date().toISOString(),
-            localStorage: localStorage.getItem(DB.STORAGE_KEY),
             stores: {}
           };
           stores.forEach(function(s, i) { data.stores[s] = results[i]; });
@@ -1956,9 +1526,6 @@
               return Promise.all(ps);
             });
             Promise.all(promises).then(function() {
-              if (data.localStorage) {
-                localStorage.setItem(DB.STORAGE_KEY, data.localStorage);
-              }
               toast('Backup restored! Refreshing...');
               setTimeout(function() { location.reload(); }, 1200);
             });
@@ -1967,34 +1534,40 @@
         reader.readAsText(input.files[0]);
       },
 
-      // ============================================================
-      // SETTINGS
-      // ============================================================
+      // ===== SETTINGS =====
       renderSettingsModule: function() {
-        var settings = DB.getSettings();
-        return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">⚙️ Settings</span></div>' +
-          '<div class="card"><div class="card-header"><h2>General</h2></div>' +
-          '<div class="form-group"><label>Currency</label><select id="settingsCurrency" onchange="H4App.saveSetting(\'currency\', this.value)"><option value="INR" ' + (settings.currency === 'INR' ? 'selected' : '') + '>₹ INR</option><option value="USD" ' + (settings.currency === 'USD' ? 'selected' : '') + '>$ USD</option></select></div>' +
-          '<div class="form-group"><label><input type="checkbox" id="settingsGstEnabled" ' + (settings.gstEnabled !== false ? 'checked' : '') + ' onchange="H4App.saveSetting(\'gstEnabled\', this.checked)"> GST Enabled</label></div>' +
-          '<div class="form-group"><label>Tax Mode</label><select id="settingsTaxMode" onchange="H4App.saveSetting(\'taxMode\', this.value)"><option value="intra" ' + (settings.taxMode === 'intra' ? 'selected' : '') + '>CGST + SGST</option><option value="inter" ' + (settings.taxMode === 'inter' ? 'selected' : '') + '>IGST</option><option value="off" ' + (settings.taxMode === 'off' ? 'selected' : '') + '>No Tax</option></select></div>' +
-          '<div class="form-group"><label><input type="checkbox" id="settingsRoundOff" ' + (settings.roundOff !== false ? 'checked' : '') + ' onchange="H4App.saveSetting(\'roundOff\', this.checked)"> Round Off</label></div>' +
-          '<div class="form-group"><label><input type="checkbox" id="settingsAmountWords" ' + (settings.amountInWords !== false ? 'checked' : '') + ' onchange="H4App.saveSetting(\'amountInWords\', this.checked)"> Amount in Words</label></div></div>';
+        var self = this;
+        return new Promise(function(resolve) {
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var html = '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">⚙️ Settings</span></div>' +
+              '<div class="card"><div class="card-header"><h2>General</h2></div>' +
+              '<div class="form-group"><label>Currency</label><select id="settingsCurrency" onchange="H4App.saveSetting(\'currency\', this.value)"><option value="INR" ' + (settings.currency === 'INR' ? 'selected' : '') + '>₹ INR</option><option value="USD" ' + (settings.currency === 'USD' ? 'selected' : '') + '>$ USD</option></select></div>' +
+              '<div class="form-group"><label><input type="checkbox" id="settingsGstEnabled" ' + (settings.gstEnabled !== false ? 'checked' : '') + ' onchange="H4App.saveSetting(\'gstEnabled\', this.checked)"> GST Enabled</label></div>' +
+              '<div class="form-group"><label>Tax Mode</label><select id="settingsTaxMode" onchange="H4App.saveSetting(\'taxMode\', this.value)"><option value="intra" ' + (settings.taxMode === 'intra' ? 'selected' : '') + '>CGST + SGST</option><option value="inter" ' + (settings.taxMode === 'inter' ? 'selected' : '') + '>IGST</option><option value="off" ' + (settings.taxMode === 'off' ? 'selected' : '') + '>No Tax</option></select></div>' +
+              '<div class="form-group"><label>GST Rate %</label><input type="number" id="settingsGstRate" step="0.01" min="0" value="' + (settings.gstRate || 18) + '" onchange="H4App.saveSetting(\'gstRate\', parseFloat(this.value) || 0)"></div>' +
+              '<div class="form-group"><label><input type="checkbox" id="settingsRoundOff" ' + (settings.roundOff !== false ? 'checked' : '') + ' onchange="H4App.saveSetting(\'roundOff\', this.checked)"> Round Off</label></div>' +
+              '<div class="form-group"><label><input type="checkbox" id="settingsAmountWords" ' + (settings.amountInWords !== false ? 'checked' : '') + ' onchange="H4App.saveSetting(\'amountInWords\', this.checked)"> Amount in Words</label></div></div>';
+            document.getElementById('mainContent').innerHTML = html;
+          });
+        });
       },
 
       renderSettings: function() {
-        // Already rendered via renderSettingsModule
+        this.renderSettingsModule();
       },
 
       saveSetting: function(key, value) {
-        var settings = DB.getSettings();
-        settings[key] = value;
-        DB.saveSettings(settings);
-        toast('Setting updated.');
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          settings[key] = value;
+          DB.put('settings', settings).then(function() {
+            toast('Setting updated.');
+          });
+        });
       },
 
-      // ============================================================
-      // PAYMENTS
-      // ============================================================
+      // ===== PAYMENTS =====
       renderPaymentsModule: function() {
         return '<div class="module-header"><button class="back-btn" data-back="dashboard">← Back</button><span class="module-title">💰 Payments</span></div><div class="card"><p class="text-muted text-center" style="padding:1.5rem;">Payment tracking coming soon.</p></div>';
       },
@@ -2003,9 +1576,7 @@
         // Already rendered
       },
 
-      // ============================================================
-      // TOAST
-      // ============================================================
+      // ===== TOAST =====
       toast: toast
     };
 
@@ -2090,7 +1661,7 @@
 
       deleteCustomer: function(id) {
         if (!confirm('Delete this customer?')) return;
-        DB.deleteItem('customers', id).then(function() {
+        DB.delete('customers', id).then(function() {
           H4App.loadCustomers();
           H4App.updateDashboard();
           toast('Customer deleted.');
@@ -2182,7 +1753,7 @@
 
       deleteProduct: function(id) {
         if (!confirm('Delete this product?')) return;
-        DB.deleteItem('products', id).then(function() {
+        DB.delete('products', id).then(function() {
           H4App.loadProducts();
           toast('Product deleted.');
         });
@@ -2213,17 +1784,16 @@
       renderForm: function() {
         return '<div class="module-header"><button class="back-btn" onclick="H4App.navigate(\'quotations\')">← Back</button><span class="module-title">📄 New Quotation</span></div>' +
           '<div id="quotationForm"><div class="builder-steps" id="qtnSteps"><div class="builder-step-chip active" onclick="H4Quotation.showStep(1)">1. Details</div><div class="builder-step-chip" onclick="H4Quotation.showStep(2)">2. Items</div><div class="builder-step-chip" onclick="H4Quotation.showStep(3)">3. Review</div></div>' +
-          '<div class="builder-body" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;padding:0.75rem 0;">' +
-          '<div class="builder-form-pane"><div id="qtnStep1" class="builder-step-section active"><div class="card"><div class="card-header"><h2>📋 Quotation Details</h2></div><div class="form-row"><div class="form-group"><label>Quotation Number</label><input type="text" id="quotNumber" readonly></div><div class="form-group"><label>Date</label><input type="date" id="quotDate"></div></div><div class="form-row"><div class="form-group"><label>Customer *</label><select id="quotCustomer"></select></div><div class="form-group"><label>Valid Till</label><input type="date" id="quotValidTill"></div></div><div class="form-row"><div class="form-group"><label>Status</label><select id="quotStatus"><option value="draft">Draft</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div><div class="form-group"><label>Project</label><input type="text" id="quotProject"></div></div><div class="form-group"><label>Notes</label><textarea id="quotNotes" rows="2"></textarea></div><button class="btn btn-primary" onclick="H4Quotation.showStep(2)">Next →</button></div></div>' +
+          '<div class="builder-body"><div class="builder-form-pane"><div id="qtnStep1" class="builder-step-section active"><div class="card"><div class="card-header"><h2>📋 Quotation Details</h2></div><div class="form-row"><div class="form-group"><label>Quotation Number</label><input type="text" id="quotNumber" readonly></div><div class="form-group"><label>Date</label><input type="date" id="quotDate"></div></div><div class="form-row"><div class="form-group"><label>Customer *</label><select id="quotCustomer"></select></div><div class="form-group"><label>Valid Till</label><input type="date" id="quotValidTill"></div></div><div class="form-row"><div class="form-group"><label>Status</label><select id="quotStatus"><option value="draft">Draft</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div><div class="form-group"><label>Project</label><input type="text" id="quotProject"></div></div><div class="form-group"><label>Notes</label><textarea id="quotNotes" rows="2"></textarea></div><button class="btn btn-primary" onclick="H4Quotation.showStep(2)">Next →</button></div></div>' +
           '<div id="qtnStep2" class="builder-step-section"><div class="card"><div class="card-header"><h2>📦 Items</h2><button class="btn btn-success btn-sm" onclick="H4Quotation.addItem()">➕ Add Item</button></div><div id="quotationItemsContainer"></div><div style="margin-top:0.6rem;display:flex;gap:0.4rem;"><button class="btn btn-outline" onclick="H4Quotation.showStep(1)">← Back</button><button class="btn btn-primary" onclick="H4Quotation.showStep(3)">Next →</button></div></div></div>' +
           '<div id="qtnStep3" class="builder-step-section"><div class="card"><div class="card-header"><h2>🧾 Review & Save</h2></div><div style="background:var(--bg);padding:1rem;border-radius:8px;margin-bottom:0.6rem;"><div class="flex-between" style="padding:4px 0;border-bottom:1px solid var(--border);"><span>Subtotal</span><span id="qtnSubtotal">₹0.00</span></div><div class="flex-between" style="padding:4px 0;border-bottom:1px solid var(--border);"><span>GST</span><span id="qtnGST">₹0.00</span></div><div class="flex-between" style="padding:8px 0;border-bottom:2px solid var(--primary);font-weight:700;font-size:1.1rem;"><span>Grand Total</span><span id="qtnGrandTotal">₹0.00</span></div></div><div style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:0.4rem;"><table style="width:100%;border-collapse:collapse;font-size:0.8rem;"><thead><tr style="background:var(--bg);"><th style="padding:4px;text-align:left;">Description</th><th style="padding:4px;text-align:center;">Qty</th><th style="padding:4px;text-align:right;">Rate</th><th style="padding:4px;text-align:right;">Amount</th></tr></thead><tbody id="qtnPreviewItems"></tbody></table></div><div style="margin-top:0.6rem;display:flex;gap:0.4rem;flex-wrap:wrap;"><button class="btn btn-outline" onclick="H4Quotation.showStep(2)">← Back</button><button class="btn btn-success" onclick="H4Quotation.saveQuotation()">💾 Save Quotation</button></div></div></div></div>' +
-          '<div class="builder-preview-pane" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.75rem;"><div id="qtnLivePreview" style="font-size:0.8rem;color:var(--text-muted);">Live preview will appear here.</div></div></div></div>';
+          '<div class="builder-preview-pane"><div id="qtnLivePreview" style="font-size:0.8rem;color:var(--text-muted);">Live preview will appear here.</div></div></div></div>';
       },
 
       populateCustomerSelects: function() {
         var el = document.getElementById('quotCustomer');
         if (!el) return;
-        DB.getList('customers').then(function(customers) {
+        DB.getAll('customers').then(function(customers) {
           el.innerHTML = '<option value="">-- Select Customer --</option>' +
             customers.map(function(c) { return '<option value="' + c.id + '">' + escapeHtml(c.name) + '</option>'; }).join('');
         });
@@ -2321,7 +1891,7 @@
         var container = document.getElementById('quotationItemsContainer');
         if (!container) return;
         var self = this;
-        DB.getList('products').then(function(products) {
+        DB.getAll('products').then(function(products) {
           var productOptions = products.filter(function(p) { return p.active !== false; }).map(function(p) {
             return '<option value="' + p.id + '">' + escapeHtml(p.name) + '</option>';
           }).join('');
@@ -2345,30 +1915,33 @@
         var subtotal = 0,
           taxableTotal = 0,
           totalGST = 0;
-        var settings = DB.getSettings();
-        var gstMode = settings.taxMode || 'intra';
-        this.items.forEach(function(item) {
-          var qty = Number(item.quantity) || 0;
-          var rate = Number(item.rate) || 0;
-          var discount = Number(item.discount) || 0;
-          var gst = Number(item.gst) || 0;
-          var amount = qty * rate;
-          var discountAmount = amount * discount / 100;
-          var taxable = amount - discountAmount;
-          var gstAmount = taxable * gst / 100;
-          subtotal += amount;
-          taxableTotal += taxable;
-          totalGST += gstAmount;
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          var gstMode = settings.taxMode || 'intra';
+          self.items.forEach(function(item) {
+            var qty = Number(item.quantity) || 0;
+            var rate = Number(item.rate) || 0;
+            var discount = Number(item.discount) || 0;
+            var gst = Number(item.gst) || 0;
+            var amount = qty * rate;
+            var discountAmount = amount * discount / 100;
+            var taxable = amount - discountAmount;
+            var gstAmount = taxable * gst / 100;
+            subtotal += amount;
+            taxableTotal += taxable;
+            totalGST += gstAmount;
+          });
+          var cgst = gstMode === 'intra' ? totalGST / 2 : 0;
+          var sgst = gstMode === 'intra' ? totalGST / 2 : 0;
+          var igst = gstMode === 'inter' ? totalGST : 0;
+          var grandTotal = taxableTotal + totalGST;
+          var setText = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = '₹' + Number(val).toFixed(2); };
+          setText('qtnSubtotal', taxableTotal);
+          setText('qtnGST', totalGST);
+          setText('qtnGrandTotal', grandTotal);
+          self._calcData = { subtotal: taxableTotal, gst: totalGST, grandTotal: grandTotal, cgst: cgst, sgst: sgst, igst: igst };
         });
-        var cgst = gstMode === 'intra' ? totalGST / 2 : 0;
-        var sgst = gstMode === 'intra' ? totalGST / 2 : 0;
-        var igst = gstMode === 'inter' ? totalGST : 0;
-        var grandTotal = taxableTotal + totalGST;
-        var setText = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = '₹' + Number(val).toFixed(2); };
-        setText('qtnSubtotal', taxableTotal);
-        setText('qtnGST', totalGST);
-        setText('qtnGrandTotal', grandTotal);
-        this._calcData = { subtotal: taxableTotal, gst: totalGST, grandTotal: grandTotal, cgst: cgst, sgst: sgst, igst: igst };
       },
 
       updatePreview: function() {
@@ -2384,12 +1957,14 @@
         data.igst = calc.igst || 0;
         data.grandTotal = calc.grandTotal || 0;
         data.amountWords = 'Rupees ' + numberToWords(data.grandTotal) + ' Only';
-        var settings = DB.getSettings();
-        var templateId = settings.quotationTemplate || 'tpl_premium';
-        H4Template.renderQuotation(data, templateId).then(function(html) {
-          container.innerHTML = html;
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          var templateId = settings.quotationTemplate || 'tpl_premium';
+          H4Template.renderQuotation(data, templateId).then(function(html) {
+            container.innerHTML = html;
+          });
         });
-        // Preview items table
         var tbody = document.getElementById('qtnPreviewItems');
         if (tbody) {
           tbody.innerHTML = this.items.map(function(item) {
@@ -2456,13 +2031,15 @@
         var self = this;
         DB.get('quotations', id).then(function(q) {
           if (!q) { toast('Quotation not found.', 'error'); return; }
-          var settings = DB.getSettings();
-          var templateId = settings.quotationTemplate || 'tpl_premium';
-          H4Template.renderQuotation(q, templateId).then(function(html) {
-            var modal = document.createElement('div');
-            modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);overflow:auto;padding:20px;backdrop-filter:blur(4px);';
-            modal.innerHTML = '<div style="max-width:900px;margin:20px auto;background:var(--card-bg);border-radius:12px;overflow:hidden;"><div style="padding:12px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;"><strong>📄 Quotation: ' + escapeHtml(q.number) + '</strong><div><button class="btn btn-success" onclick="H4Quotation.printQuotation(\'' + id + '\')">🖨️ Print</button><button class="btn btn-danger" onclick="this.closest(\'div\').parentElement.remove()">✕ Close</button></div></div><div style="padding:20px;">' + html + '</div></div>';
-            document.body.appendChild(modal);
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var templateId = settings.quotationTemplate || 'tpl_premium';
+            H4Template.renderQuotation(q, templateId).then(function(html) {
+              var modal = document.createElement('div');
+              modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);overflow:auto;padding:20px;backdrop-filter:blur(4px);';
+              modal.innerHTML = '<div style="max-width:900px;margin:20px auto;background:var(--card-bg);border-radius:12px;overflow:hidden;"><div style="padding:12px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;"><strong>📄 Quotation: ' + escapeHtml(q.number) + '</strong><div><button class="btn btn-success" onclick="H4Quotation.printQuotation(\'' + id + '\')">🖨️ Print</button><button class="btn btn-danger" onclick="this.closest(\'div\').parentElement.remove()">✕ Close</button></div></div><div style="padding:20px;">' + html + '</div></div>';
+              document.body.appendChild(modal);
+            });
           });
         });
       },
@@ -2471,13 +2048,15 @@
         var self = this;
         DB.get('quotations', id).then(function(q) {
           if (!q) { toast('Quotation not found.', 'error'); return; }
-          var settings = DB.getSettings();
-          var templateId = settings.quotationTemplate || 'tpl_premium';
-          H4Template.renderQuotation(q, templateId).then(function(html) {
-            var win = window.open('', '_blank');
-            if (!win) { toast('Please allow pop-ups.', 'error'); return; }
-            win.document.write('<!DOCTYPE html><html><head><title>' + escapeHtml(q.number) + '</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>@page{size:A4;margin:12mm;}body{margin:0;font-family:Arial,sans-serif;background:white;}.preview-a4-page{padding:0.2in;max-width:794px;margin:0 auto;}.p-table{width:100%;border-collapse:collapse;font-size:0.8rem;}.p-table th{background:#6A3FA0;color:white;padding:6px 8px;text-align:left;}.p-table td{padding:6px 8px;border-bottom:1px solid #e8ecf0;}.p-total{margin-left:auto;width:55%;font-size:0.85rem;}.p-total div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8ecf0;}.p-grand{font-size:1rem;font-weight:800;border-top:2px solid #6A3FA0;padding-top:4px;}@media print{body{background:white;}}</style></head><body>' + html + '<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script></body></html>');
-            win.document.close();
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var templateId = settings.quotationTemplate || 'tpl_premium';
+            H4Template.renderQuotation(q, templateId).then(function(html) {
+              var win = window.open('', '_blank');
+              if (!win) { toast('Please allow pop-ups.', 'error'); return; }
+              win.document.write('<!DOCTYPE html><html><head><title>' + escapeHtml(q.number) + '</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>@page{size:A4;margin:12mm;}body{margin:0;font-family:Arial,sans-serif;background:white;}.preview-a4-page{padding:0.2in;max-width:794px;margin:0 auto;}.p-table{width:100%;border-collapse:collapse;font-size:0.8rem;}.p-table th{background:#6A3FA0;color:white;padding:6px 8px;text-align:left;}.p-table td{padding:6px 8px;border-bottom:1px solid #e8ecf0;}.p-total{margin-left:auto;width:55%;font-size:0.85rem;}.p-total div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8ecf0;}.p-grand{font-size:1rem;font-weight:800;border-top:2px solid #6A3FA0;padding-top:4px;}@media print{body{background:white;}}</style></head><body>' + html + '<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script></body></html>');
+              win.document.close();
+            });
           });
         });
       },
@@ -2491,7 +2070,7 @@
           DB.get('customers', customerId).then(function(customer) {
             var phone = customer ? (customer.whatsapp || customer.phone) : '';
             if (!phone) { toast('Customer WhatsApp number not available.', 'warning'); return; }
-            var msg = 'Dear ' + (customer ? customer.name : 'Customer') + ',\n\nPlease find your quotation:\n\nQuotation No: ' + q.number + '\nDate: ' + q.date + '\nTotal: ₹' + Number(q.grandTotal || 0).toFixed(2) + '\n\nThank you for your business.\n\n' + ((DB.getSettings() || {}).brandName || 'H4 Construction Solutions');
+            var msg = 'Dear ' + (customer ? customer.name : 'Customer') + ',\n\nPlease find your quotation:\n\nQuotation No: ' + q.number + '\nDate: ' + q.date + '\nTotal: ₹' + Number(q.grandTotal || 0).toFixed(2) + '\n\nThank you for your business.\n\n' + ((DB.get('settings') || {}).brandName || 'H4 Construction Solutions');
             var url = 'https://wa.me/' + phone.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg);
             window.open(url, '_blank');
           });
@@ -2500,7 +2079,7 @@
 
       deleteQuotation: function(id) {
         if (!confirm('Delete this quotation?')) return;
-        DB.deleteItem('quotations', id).then(function() {
+        DB.delete('quotations', id).then(function() {
           H4App.loadQuotations();
           H4App.updateDashboard();
           toast('Quotation deleted.');
@@ -2538,7 +2117,7 @@
 
       renderForm: function() {
         return '<div class="module-header"><button class="back-btn" onclick="H4App.navigate(\'invoices\')">← Back</button><span class="module-title">🧾 New Invoice</span></div>' +
-          '<div id="invoiceForm"><div class="builder-steps" id="invSteps"></div><div class="builder-body" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;padding:0.75rem 0;"><div class="builder-form-pane" id="invFormPane">' +
+          '<div id="invoiceForm"><div class="builder-steps" id="invSteps"></div><div class="builder-body"><div class="builder-form-pane" id="invFormPane">' +
           '<div class="builder-step-section" data-step="1"><div class="card"><div class="card-header"><h2>📋 Invoice Details</h2></div><div class="form-row"><div class="form-group"><label>Invoice Number</label><input type="text" id="invNumber" readonly></div><div class="form-group"><label>Date</label><input type="date" id="invDate" onchange="H4Invoice.onFieldChange()"></div></div><div class="form-row"><div class="form-group"><label>Due Date</label><input type="date" id="invDueDate" onchange="H4Invoice.onFieldChange()"></div><div class="form-group"><label>Reference</label><input type="text" id="invReference" onchange="H4Invoice.onFieldChange()"></div></div><div class="form-group"><label>Project Name</label><input type="text" id="invProject" onchange="H4Invoice.onFieldChange()"></div><button class="btn btn-primary" onclick="H4Invoice.goToStep(2)">Next →</button></div></div>' +
           '<div class="builder-step-section" data-step="2"><div class="card"><div class="card-header"><h2>👤 Customer</h2></div><div class="form-group"><label>Customer *</label><select id="invCustomer" onchange="H4Invoice.onCustomerChange()" style="min-height:var(--input-height);"><option value="">-- Select Customer --</option></select></div><div id="invCustomerInfo" style="background:var(--bg);padding:0.6rem;border-radius:8px;font-size:0.85rem;margin-top:0.3rem;"><p class="text-muted">Select a customer to view details.</p></div><div style="margin-top:0.6rem;display:flex;gap:0.4rem;"><button class="btn btn-outline" onclick="H4Invoice.goToStep(1)">← Back</button><button class="btn btn-primary" onclick="H4Invoice.goToStep(3)">Next →</button></div></div></div>' +
           '<div class="builder-step-section" data-step="3"><div class="card"><div class="card-header"><h2>📦 Items</h2><button class="btn btn-success btn-sm" onclick="H4Invoice.addItem()">➕ Add Item</button></div><div id="invoiceItemsContainer"></div><div style="margin-top:0.6rem;display:flex;gap:0.4rem;"><button class="btn btn-outline" onclick="H4Invoice.goToStep(2)">← Back</button><button class="btn btn-primary" onclick="H4Invoice.goToStep(4)">Next →</button></div></div></div>' +
@@ -2552,10 +2131,9 @@
       populateCustomerSelects: function() {
         var el = document.getElementById('invCustomer');
         if (!el) return;
-        DB.getList('customers').then(function(customers) {
+        DB.getAll('customers').then(function(customers) {
           el.innerHTML = '<option value="">-- Select Customer --</option>' +
             customers.map(function(c) { return '<option value="' + c.id + '">' + escapeHtml(c.name) + '</option>'; }).join('');
-          // Add new customer option
           var opt = document.createElement('option');
           opt.value = 'new';
           opt.textContent = '➕ New Customer';
@@ -2595,7 +2173,7 @@
           H4Invoice.populateCustomerSelects();
           var sel = document.getElementById('invCustomer');
           if (sel) {
-            DB.getList('customers').then(function(list) {
+            DB.getAll('customers').then(function(list) {
               if (list.length) {
                 var last = list[list.length - 1];
                 sel.value = last.id;
@@ -2727,7 +2305,7 @@
         var container = document.getElementById('invoiceItemsContainer');
         if (!container) return;
         var self = this;
-        DB.getList('products').then(function(products) {
+        DB.getAll('products').then(function(products) {
           var productOptions = products.filter(function(p) { return p.active !== false; }).map(function(p) {
             return '<option value="' + p.id + '">' + escapeHtml(p.name) + '</option>';
           }).join('');
@@ -2768,35 +2346,38 @@
         var cgst = 0,
           sgst = 0,
           igst = 0;
-        var settings = DB.getSettings();
-        if (taxMode !== 'off' && settings.gstEnabled !== false) {
-          var gstRate = items.length > 0 ? items[0].gst : 18;
-          var gstTotal = taxable * (gstRate / 100);
-          if (taxMode === 'inter') { igst = gstTotal; } else { cgst = gstTotal / 2;
-            sgst = gstTotal / 2; }
-        }
-        var beforeRound = taxable + cgst + sgst + igst;
-        var grandTotal = Math.round(beforeRound);
-        var roundOff = grandTotal - beforeRound;
-        var setText = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = '₹' + Number(val).toFixed(2); };
-        setText('invSubtotal', subtotal);
-        setText('invDiscountAmt', discountAmt);
-        setText('invTaxable', taxable);
-        setText('invCGST', cgst);
-        setText('invSGST', sgst);
-        setText('invIGST', igst);
-        setText('invRoundOff', roundOff);
-        setText('invGrandTotal', grandTotal);
-        var wordsEl = document.getElementById('invAmountWords');
-        if (wordsEl) wordsEl.textContent = 'Rupees ' + numberToWords(grandTotal) + ' Only';
-        var cgstRow = document.getElementById('invCgstRow');
-        var sgstRow = document.getElementById('invSgstRow');
-        var igstRow = document.getElementById('invIgstRow');
-        if (cgstRow) cgstRow.style.display = cgst > 0 ? 'flex' : 'none';
-        if (sgstRow) sgstRow.style.display = sgst > 0 ? 'flex' : 'none';
-        if (igstRow) igstRow.style.display = igst > 0 ? 'flex' : 'none';
-        this._calcData = { subtotal: subtotal, discountAmount: discountAmt, taxableAmount: taxable, cgst: cgst, sgst: sgst, igst: igst, roundOff: roundOff, grandTotal: grandTotal, amountWords: 'Rupees ' + numberToWords(grandTotal) + ' Only' };
-        this.updatePaymentStatus();
+        var self = this;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          if (taxMode !== 'off' && settings.gstEnabled !== false) {
+            var gstRate = items.length > 0 ? items[0].gst : (settings.gstRate || 18);
+            var gstTotal = taxable * (gstRate / 100);
+            if (taxMode === 'inter') { igst = gstTotal; } else { cgst = gstTotal / 2;
+              sgst = gstTotal / 2; }
+          }
+          var beforeRound = taxable + cgst + sgst + igst;
+          var grandTotal = Math.round(beforeRound);
+          var roundOff = grandTotal - beforeRound;
+          var setText = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = '₹' + Number(val).toFixed(2); };
+          setText('invSubtotal', subtotal);
+          setText('invDiscountAmt', discountAmt);
+          setText('invTaxable', taxable);
+          setText('invCGST', cgst);
+          setText('invSGST', sgst);
+          setText('invIGST', igst);
+          setText('invRoundOff', roundOff);
+          setText('invGrandTotal', grandTotal);
+          var wordsEl = document.getElementById('invAmountWords');
+          if (wordsEl) wordsEl.textContent = 'Rupees ' + numberToWords(grandTotal) + ' Only';
+          var cgstRow = document.getElementById('invCgstRow');
+          var sgstRow = document.getElementById('invSgstRow');
+          var igstRow = document.getElementById('invIgstRow');
+          if (cgstRow) cgstRow.style.display = cgst > 0 ? 'flex' : 'none';
+          if (sgstRow) sgstRow.style.display = sgst > 0 ? 'flex' : 'none';
+          if (igstRow) igstRow.style.display = igst > 0 ? 'flex' : 'none';
+          self._calcData = { subtotal: subtotal, discountAmount: discountAmt, taxableAmount: taxable, cgst: cgst, sgst: sgst, igst: igst, roundOff: roundOff, grandTotal: grandTotal, amountWords: 'Rupees ' + numberToWords(grandTotal) + ' Only' };
+          self.updatePaymentStatus();
+        });
       },
 
       updatePaymentStatus: function() {
@@ -2822,21 +2403,23 @@
         if (!container) return;
         var data = this.collectData();
         var calc = this._calcData || {};
-        var settings = DB.getSettings();
-        var templateId = settings.invoiceTemplate || 'tpl_premium';
-        data.subtotal = calc.subtotal || 0;
-        data.discountAmount = calc.discountAmount || 0;
-        data.taxableAmount = calc.taxableAmount || 0;
-        data.cgst = calc.cgst || 0;
-        data.sgst = calc.sgst || 0;
-        data.igst = calc.igst || 0;
-        data.roundOff = calc.roundOff || 0;
-        data.grandTotal = calc.grandTotal || 0;
-        data.amountWords = calc.amountWords || 'Rupees Zero Only';
-        data.gstMode = document.getElementById('invTaxMode')?.value || 'intra';
         var self = this;
-        H4Template.renderInvoice(data, templateId).then(function(html) {
-          container.innerHTML = html;
+        DB.get('settings', 'app_settings').then(function(settings) {
+          settings = settings || {};
+          var templateId = settings.invoiceTemplate || 'tpl_premium';
+          data.subtotal = calc.subtotal || 0;
+          data.discountAmount = calc.discountAmount || 0;
+          data.taxableAmount = calc.taxableAmount || 0;
+          data.cgst = calc.cgst || 0;
+          data.sgst = calc.sgst || 0;
+          data.igst = calc.igst || 0;
+          data.roundOff = calc.roundOff || 0;
+          data.grandTotal = calc.grandTotal || 0;
+          data.amountWords = calc.amountWords || 'Rupees Zero Only';
+          data.gstMode = document.getElementById('invTaxMode')?.value || 'intra';
+          H4Template.renderInvoice(data, templateId).then(function(html) {
+            container.innerHTML = html;
+          });
         });
       },
 
@@ -2898,13 +2481,15 @@
         var self = this;
         DB.get('invoices', id).then(function(inv) {
           if (!inv) { toast('Invoice not found.', 'error'); return; }
-          var settings = DB.getSettings();
-          var templateId = settings.invoiceTemplate || 'tpl_premium';
-          H4Template.renderInvoice(inv, templateId).then(function(html) {
-            var modal = document.createElement('div');
-            modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);overflow:auto;padding:20px;backdrop-filter:blur(4px);';
-            modal.innerHTML = '<div style="max-width:900px;margin:20px auto;background:var(--card-bg);border-radius:12px;overflow:hidden;"><div style="padding:12px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;"><strong>🧾 Invoice: ' + escapeHtml(inv.number) + '</strong><div><button class="btn btn-success" onclick="H4Invoice.printInvoiceById(\'' + id + '\')">🖨️ Print</button><button class="btn btn-danger" onclick="this.closest(\'div\').parentElement.remove()">✕ Close</button></div></div><div style="padding:20px;">' + html + '</div></div>';
-            document.body.appendChild(modal);
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var templateId = settings.invoiceTemplate || 'tpl_premium';
+            H4Template.renderInvoice(inv, templateId).then(function(html) {
+              var modal = document.createElement('div');
+              modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);overflow:auto;padding:20px;backdrop-filter:blur(4px);';
+              modal.innerHTML = '<div style="max-width:900px;margin:20px auto;background:var(--card-bg);border-radius:12px;overflow:hidden;"><div style="padding:12px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;justify-content:space-between;align-items:center;"><strong>🧾 Invoice: ' + escapeHtml(inv.number) + '</strong><div><button class="btn btn-success" onclick="H4Invoice.printInvoiceById(\'' + id + '\')">🖨️ Print</button><button class="btn btn-danger" onclick="this.closest(\'div\').parentElement.remove()">✕ Close</button></div></div><div style="padding:20px;">' + html + '</div></div>';
+              document.body.appendChild(modal);
+            });
           });
         });
       },
@@ -2928,13 +2513,15 @@
           data.grandTotal = calc.grandTotal || 0;
           data.amountWords = calc.amountWords || 'Rupees Zero Only';
           data.gstMode = document.getElementById('invTaxMode')?.value || 'intra';
-          var settings = DB.getSettings();
-          var templateId = settings.invoiceTemplate || 'tpl_premium';
-          H4Template.renderInvoice(data, templateId).then(function(html) {
-            var win = window.open('', '_blank');
-            if (!win) { toast('Please allow pop-ups.', 'error'); return; }
-            win.document.write('<!DOCTYPE html><html><head><title>Invoice</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>@page{size:A4;margin:12mm;}body{margin:0;font-family:Arial,sans-serif;background:white;}.preview-a4-page{padding:0.2in;max-width:794px;margin:0 auto;}.p-table{width:100%;border-collapse:collapse;font-size:0.8rem;}.p-table th{background:#6A3FA0;color:white;padding:6px 8px;text-align:left;}.p-table td{padding:6px 8px;border-bottom:1px solid #e8ecf0;}.p-total{margin-left:auto;width:55%;font-size:0.85rem;}.p-total div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8ecf0;}.p-grand{font-size:1rem;font-weight:800;border-top:2px solid #6A3FA0;padding-top:4px;}@media print{body{background:white;}}</style></head><body>' + html + '<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script></body></html>');
-            win.document.close();
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var templateId = settings.invoiceTemplate || 'tpl_premium';
+            H4Template.renderInvoice(data, templateId).then(function(html) {
+              var win = window.open('', '_blank');
+              if (!win) { toast('Please allow pop-ups.', 'error'); return; }
+              win.document.write('<!DOCTYPE html><html><head><title>Invoice</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>@page{size:A4;margin:12mm;}body{margin:0;font-family:Arial,sans-serif;background:white;}.preview-a4-page{padding:0.2in;max-width:794px;margin:0 auto;}.p-table{width:100%;border-collapse:collapse;font-size:0.8rem;}.p-table th{background:#6A3FA0;color:white;padding:6px 8px;text-align:left;}.p-table td{padding:6px 8px;border-bottom:1px solid #e8ecf0;}.p-total{margin-left:auto;width:55%;font-size:0.85rem;}.p-total div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8ecf0;}.p-grand{font-size:1rem;font-weight:800;border-top:2px solid #6A3FA0;padding-top:4px;}@media print{body{background:white;}}</style></head><body>' + html + '<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script></body></html>');
+              win.document.close();
+            });
           });
         });
       },
@@ -2943,13 +2530,15 @@
         var self = this;
         DB.get('invoices', id).then(function(inv) {
           if (!inv) { toast('Invoice not found.', 'error'); return; }
-          var settings = DB.getSettings();
-          var templateId = settings.invoiceTemplate || 'tpl_premium';
-          H4Template.renderInvoice(inv, templateId).then(function(html) {
-            var win = window.open('', '_blank');
-            if (!win) { toast('Please allow pop-ups.', 'error'); return; }
-            win.document.write('<!DOCTYPE html><html><head><title>Invoice</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>@page{size:A4;margin:12mm;}body{margin:0;font-family:Arial,sans-serif;background:white;}.preview-a4-page{padding:0.2in;max-width:794px;margin:0 auto;}.p-table{width:100%;border-collapse:collapse;font-size:0.8rem;}.p-table th{background:#6A3FA0;color:white;padding:6px 8px;text-align:left;}.p-table td{padding:6px 8px;border-bottom:1px solid #e8ecf0;}.p-total{margin-left:auto;width:55%;font-size:0.85rem;}.p-total div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8ecf0;}.p-grand{font-size:1rem;font-weight:800;border-top:2px solid #6A3FA0;padding-top:4px;}@media print{body{background:white;}}</style></head><body>' + html + '<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script></body></html>');
-            win.document.close();
+          DB.get('settings', 'app_settings').then(function(settings) {
+            settings = settings || {};
+            var templateId = settings.invoiceTemplate || 'tpl_premium';
+            H4Template.renderInvoice(inv, templateId).then(function(html) {
+              var win = window.open('', '_blank');
+              if (!win) { toast('Please allow pop-ups.', 'error'); return; }
+              win.document.write('<!DOCTYPE html><html><head><title>Invoice</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>@page{size:A4;margin:12mm;}body{margin:0;font-family:Arial,sans-serif;background:white;}.preview-a4-page{padding:0.2in;max-width:794px;margin:0 auto;}.p-table{width:100%;border-collapse:collapse;font-size:0.8rem;}.p-table th{background:#6A3FA0;color:white;padding:6px 8px;text-align:left;}.p-table td{padding:6px 8px;border-bottom:1px solid #e8ecf0;}.p-total{margin-left:auto;width:55%;font-size:0.85rem;}.p-total div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8ecf0;}.p-grand{font-size:1rem;font-weight:800;border-top:2px solid #6A3FA0;padding-top:4px;}@media print{body{background:white;}}</style></head><body>' + html + '<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script></body></html>');
+              win.document.close();
+            });
           });
         });
       },
@@ -2962,7 +2551,7 @@
           var phone = customer ? (customer.whatsapp || customer.phone) : '';
           if (!phone) { toast('Customer WhatsApp number not available.', 'warning'); return; }
           var total = document.getElementById('invGrandTotal')?.textContent || '₹0.00';
-          var msg = 'Dear ' + (customer ? customer.name : 'Customer') + ',\n\nPlease find your invoice.\n\nInvoice No: ' + data.number + '\nAmount: ' + total + '\n\nThank you for your business.\n\n' + ((DB.getSettings() || {}).brandName || 'H4 Construction Solutions');
+          var msg = 'Dear ' + (customer ? customer.name : 'Customer') + ',\n\nPlease find your invoice.\n\nInvoice No: ' + data.number + '\nAmount: ' + total + '\n\nThank you for your business.\n\n' + ((DB.get('settings') || {}).brandName || 'H4 Construction Solutions');
           var url = 'https://wa.me/' + phone.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg);
           window.open(url, '_blank');
         });
@@ -2977,7 +2566,7 @@
           DB.get('customers', customerId).then(function(customer) {
             var phone = customer ? (customer.whatsapp || customer.phone) : '';
             if (!phone) { toast('Customer WhatsApp number not available.', 'warning'); return; }
-            var msg = 'Dear ' + (customer ? customer.name : 'Customer') + ',\n\nPlease find your invoice.\n\nInvoice No: ' + inv.number + '\nAmount: ₹' + Number(inv.grandTotal || 0).toFixed(2) + '\n\nThank you for your business.\n\n' + ((DB.getSettings() || {}).brandName || 'H4 Construction Solutions');
+            var msg = 'Dear ' + (customer ? customer.name : 'Customer') + ',\n\nPlease find your invoice.\n\nInvoice No: ' + inv.number + '\nAmount: ₹' + Number(inv.grandTotal || 0).toFixed(2) + '\n\nThank you for your business.\n\n' + ((DB.get('settings') || {}).brandName || 'H4 Construction Solutions');
             var url = 'https://wa.me/' + phone.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg);
             window.open(url, '_blank');
           });
@@ -3023,46 +2612,39 @@
     document.addEventListener('DOMContentLoaded', function() {
       // Expose H4Invoice.editInvoice for the list
       H4Invoice.editInvoice = H4Invoice.editInvoice || function(id) {
-        H4Invoice.editingId = id;
-        H4Invoice.newInvoice(); // Will be overridden with edit logic
-        // Actually we need to implement edit properly
-        H4Invoice.editInvoice = function(id) {
-          var self = this;
-          DB.get('invoices', id).then(function(inv) {
-            if (!inv) { toast('Invoice not found.', 'error'); return; }
-            self.editingId = id;
-            self.items = JSON.parse(JSON.stringify(inv.items || []));
-            self.currentStep = 1;
-            self._calcData = {};
-            var container = document.getElementById('mainContent');
-            if (!container) return;
-            container.innerHTML = self.renderForm();
-            document.getElementById('invNumber').value = inv.number || '';
-            document.getElementById('invDate').value = inv.date || '';
-            document.getElementById('invDueDate').value = inv.dueDate || '';
-            document.getElementById('invCustomer').value = inv.customerId || '';
-            document.getElementById('invProject').value = inv.projectName || '';
-            document.getElementById('invReference').value = inv.reference || '';
-            document.getElementById('invNotes').value = inv.notes || '';
-            document.getElementById('invTerms').value = inv.terms || '';
-            document.getElementById('invBankDetails').value = inv.bankDetails || '';
-            document.getElementById('invPaidAmount').value = inv.paidAmount || 0;
-            document.getElementById('invPaymentStatus').value = inv.paymentStatus || 'unpaid';
-            self.populateCustomerSelects();
-            self.renderItems();
-            self.calculate();
-            self.updatePreview();
-            self.renderSteps();
-            self.goToStep(1);
-            toast('Editing invoice: ' + inv.number);
-          });
-        };
-        H4Invoice.editInvoice(id);
+        var self = this;
+        DB.get('invoices', id).then(function(inv) {
+          if (!inv) { toast('Invoice not found.', 'error'); return; }
+          self.editingId = id;
+          self.items = JSON.parse(JSON.stringify(inv.items || []));
+          self.currentStep = 1;
+          self._calcData = {};
+          var container = document.getElementById('mainContent');
+          if (!container) return;
+          container.innerHTML = self.renderForm();
+          document.getElementById('invNumber').value = inv.number || '';
+          document.getElementById('invDate').value = inv.date || '';
+          document.getElementById('invDueDate').value = inv.dueDate || '';
+          document.getElementById('invCustomer').value = inv.customerId || '';
+          document.getElementById('invProject').value = inv.projectName || '';
+          document.getElementById('invReference').value = inv.reference || '';
+          document.getElementById('invNotes').value = inv.notes || '';
+          document.getElementById('invTerms').value = inv.terms || '';
+          document.getElementById('invBankDetails').value = inv.bankDetails || '';
+          document.getElementById('invPaidAmount').value = inv.paidAmount || 0;
+          document.getElementById('invPaymentStatus').value = inv.paymentStatus || 'unpaid';
+          self.populateCustomerSelects();
+          self.renderItems();
+          self.calculate();
+          self.updatePreview();
+          self.renderSteps();
+          self.goToStep(1);
+          toast('Editing invoice: ' + inv.number);
+        });
       };
 
       H4App.init();
 
-      // Close modals on overlay click
       document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
         overlay.addEventListener('click', function(e) {
           if (e.target === this) this.classList.remove('active');
