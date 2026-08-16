@@ -11,10 +11,28 @@
  * When data changes in one module, other modules are notified.
  * 
  * ============================================================
+ * EVENT COUNT: 24
+ * ============================================================
+ * 
+ * Database: 1
+ * Customer: 3
+ * Product: 3
+ * Company: 1
+ * Invoice: 3
+ * Quotation: 3
+ * Payment: 3
+ * Template: 3
+ * Image: 1
+ * Font: 1
+ * Settings: 1
+ * Theme: 1
+ * TOTAL: 24
+ * 
+ * ============================================================
  * WHAT IT DOES
  * ============================================================
  * 
- * - Central event names (EVENTS object)
+ * - Central event names (EVENTS object) - 24 events
  * - Dispatch events (emit)
  * - Listen for events (on)
  * - Remove listeners (off)
@@ -74,72 +92,90 @@
  * 
  * IMPORTANT: Do NOT use different names in different modules.
  * Always use these constants.
+ * 
+ * TOTAL EVENTS: 24
  */
 export const EVENTS = {
     // ============================================================
-    // DATABASE EVENTS
+    // DATABASE EVENTS - 1
     // ============================================================
     DATABASE_READY: 'h4:database-ready',
 
     // ============================================================
-    // CUSTOMER EVENTS
+    // CUSTOMER EVENTS - 3
     // ============================================================
     CUSTOMER_ADDED: 'h4:customer-added',
     CUSTOMER_UPDATED: 'h4:customer-updated',
     CUSTOMER_DELETED: 'h4:customer-deleted',
 
     // ============================================================
-    // PRODUCT EVENTS
+    // PRODUCT EVENTS - 3
     // ============================================================
     PRODUCT_ADDED: 'h4:product-added',
     PRODUCT_UPDATED: 'h4:product-updated',
     PRODUCT_DELETED: 'h4:product-deleted',
 
     // ============================================================
-    // COMPANY EVENTS
+    // COMPANY EVENTS - 1
     // ============================================================
     COMPANY_UPDATED: 'h4:company-updated',
 
     // ============================================================
-    // INVOICE EVENTS
+    // INVOICE EVENTS - 3
     // ============================================================
     INVOICE_CREATED: 'h4:invoice-created',
     INVOICE_UPDATED: 'h4:invoice-updated',
     INVOICE_DELETED: 'h4:invoice-deleted',
 
     // ============================================================
-    // QUOTATION EVENTS
+    // QUOTATION EVENTS - 3
     // ============================================================
     QUOTATION_CREATED: 'h4:quotation-created',
     QUOTATION_UPDATED: 'h4:quotation-updated',
     QUOTATION_DELETED: 'h4:quotation-deleted',
 
     // ============================================================
-    // PAYMENT EVENTS
+    // PAYMENT EVENTS - 3
     // ============================================================
     PAYMENT_ADDED: 'h4:payment-added',
     PAYMENT_UPDATED: 'h4:payment-updated',
     PAYMENT_DELETED: 'h4:payment-deleted',
 
     // ============================================================
-    // TEMPLATE EVENTS
+    // TEMPLATE EVENTS - 3
     // ============================================================
     TEMPLATE_ADDED: 'h4:template-added',
     TEMPLATE_UPDATED: 'h4:template-updated',
     TEMPLATE_DELETED: 'h4:template-deleted',
 
     // ============================================================
-    // IMAGE / FONT EVENTS
+    // IMAGE EVENTS - 1
     // ============================================================
     IMAGE_UPDATED: 'h4:image-updated',
+
+    // ============================================================
+    // FONT EVENTS - 1
+    // ============================================================
     FONT_UPDATED: 'h4:font-updated',
 
     // ============================================================
-    // SETTINGS / THEME EVENTS
+    // SETTINGS EVENTS - 1
     // ============================================================
     SETTINGS_UPDATED: 'h4:settings-updated',
+
+    // ============================================================
+    // THEME EVENTS - 1
+    // ============================================================
     THEME_UPDATED: 'h4:theme-updated'
 };
+
+// ============================================================
+// EVENT COUNT VALIDATION
+// ============================================================
+
+// Total: 1 + 3 + 3 + 1 + 3 + 3 + 3 + 3 + 1 + 1 + 1 + 1 = 24
+const EVENT_COUNT = Object.keys(EVENTS).length;
+console.log(`📡 Events loaded: ${EVENT_COUNT} events`);
 
 // ============================================================
 // EVENT BUS CLASS
@@ -569,7 +605,8 @@ class EventBus {
             activeListenerIds: this._activeListeners.size,
             historySize: this._history.length,
             events: events,
-            debug: this._debug
+            debug: this._debug,
+            totalEventTypes: Object.keys(EVENTS).length
         };
     }
 
@@ -715,43 +752,25 @@ async function addPayment(paymentData) {
 // Invoice module listening for customer updates
 const unsubscribeCustomer = eventBus.on(EVENTS.CUSTOMER_ADDED, (payload) => {
     console.log('New customer added:', payload.payload.name);
-    // Refresh customer dropdown
     refreshCustomerDropdown();
 });
 
 // Dashboard listening for invoice changes
 eventBus.on(EVENTS.INVOICE_CREATED, (payload) => {
     console.log('Invoice created:', payload.payload.id);
-    // Update dashboard KPI
     updateDashboardStats();
 });
 
 // Quotation listening for product changes
 eventBus.on(EVENTS.PRODUCT_UPDATED, (payload) => {
     console.log('Product updated:', payload.payload.id);
-    // Refresh product selector with new data
     refreshProductSelector();
 });
 
 // Invoice listening for payment changes
 eventBus.on(EVENTS.PAYMENT_ADDED, (payload) => {
     console.log('Payment added:', payload.payload.amount);
-    // Update invoice payment status
     updateInvoicePaymentStatus(payload.payload.invoiceId);
-});
-
-// Template module listening for template changes
-eventBus.on(EVENTS.TEMPLATE_UPDATED, (payload) => {
-    console.log('Template updated:', payload.payload.id);
-    // Refresh template preview
-    refreshTemplatePreview();
-});
-
-// Settings module listening for settings changes
-eventBus.on(EVENTS.SETTINGS_UPDATED, (payload) => {
-    console.log('Settings updated');
-    // Update GST rates, units, etc.
-    reloadSettings();
 });
 
 
@@ -759,7 +778,6 @@ eventBus.on(EVENTS.SETTINGS_UPDATED, (payload) => {
 // LISTEN ONCE
 // ============================================================
 
-// Only listen for the first database ready event
 eventBus.once(EVENTS.DATABASE_READY, (payload) => {
     console.log('Database is ready! Loading data...');
     loadInitialData();
@@ -770,13 +788,8 @@ eventBus.once(EVENTS.DATABASE_READY, (payload) => {
 // UNSUBSCRIBE
 // ============================================================
 
-// Remove listener
 unsubscribeCustomer();
-
-// Remove all listeners for an event
 eventBus.offAll(EVENTS.CUSTOMER_ADDED);
-
-// Remove all listeners
 eventBus.offAll();
 
 
@@ -809,14 +822,12 @@ invoiceBus.on(EVENTS.CUSTOMER_UPDATED, (payload) => {
 // DEBUGGING
 // ============================================================
 
-// Enable debug mode
 eventBus.setDebug(true);
 
-// Get statistics
 const stats = eventBus.getStats();
 console.log('Event bus stats:', stats);
+console.log('Total event types:', stats.totalEventTypes); // Should be 24
 
-// Get event history
 const history = eventBus.getHistory(10);
 console.log('Recent events:', history);
 */
@@ -825,8 +836,23 @@ console.log('Recent events:', history);
 // SUMMARY
 // ============================================================
 // 
+// TOTAL EVENTS: 24
+// 
+// Database: 1
+// Customer: 3
+// Product: 3
+// Company: 1
+// Invoice: 3
+// Quotation: 3
+// Payment: 3
+// Template: 3
+// Image: 1
+// Font: 1
+// Settings: 1
+// Theme: 1
+// 
 // WHAT IT DOES:
-// - Central event names (EVENTS object)
+// - Central event names (EVENTS object) - 24 events
 // - Dispatch events (emit / emitSync)
 // - Listen for events (on / once)
 // - Remove listeners (off / offAll)
@@ -840,22 +866,4 @@ console.log('Recent events:', history);
 // - Does NOT calculate GST/discounts
 // - Does NOT render UI
 // - Does NOT contain business logic
-// 
-// EVENTS:
-// - DATABASE_READY
-// - CUSTOMER_ADDED, CUSTOMER_UPDATED, CUSTOMER_DELETED
-// - PRODUCT_ADDED, PRODUCT_UPDATED, PRODUCT_DELETED
-// - COMPANY_UPDATED
-// - INVOICE_CREATED, INVOICE_UPDATED, INVOICE_DELETED
-// - QUOTATION_CREATED, QUOTATION_UPDATED, QUOTATION_DELETED
-// - PAYMENT_ADDED, PAYMENT_UPDATED, PAYMENT_DELETED
-// - TEMPLATE_ADDED, TEMPLATE_UPDATED, TEMPLATE_DELETED
-// - IMAGE_UPDATED, FONT_UPDATED
-// - SETTINGS_UPDATED, THEME_UPDATED
-// 
-// WHY IT'S NEEDED:
-// - Without events.js, modules don't know about data changes
-// - Customer added → invoice.html doesn't know → stale data
-// - Product updated → quotation.html doesn't know → wrong rates
-// - Payment added → dashboard doesn't know → wrong outstanding
 // ============================================================
