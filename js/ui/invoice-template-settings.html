@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>H4 Billing ERP - Invoice Template Settings</title>
+    <style>
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .app-header {
+            background: #ffffff;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-header .brand h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #6C3BC5;
+        }
+
+        .app-header .brand span {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #6C3BC5;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #4A2A8A;
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #1a1a2e;
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #6C3BC5;
+            border: 1px solid #6C3BC5;
+        }
+
+        .btn-outline:hover {
+            background: #6C3BC5;
+            color: #ffffff;
+        }
+
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        .btn-xs {
+            padding: 2px 8px;
+            font-size: 11px;
+        }
+
+        /* ============================================================
+           MAIN LAYOUT
+           ============================================================ */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .page-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* ============================================================
+           TEMPLATE LIST
+           ============================================================ */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .template-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .template-card:hover {
+            border-color: #6C3BC5;
+            box-shadow: 0 4px 16px rgba(108, 59, 197, 0.12);
+        }
+
+        .template-card.active {
+            border-color: #6C3BC5;
+            background: #f8f4ff;
+        }
+
+        .template-card .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-default {
+            background: #6C3BC5;
+            color: #ffffff;
+        }
+
+        .badge-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-inactive {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .template-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .template-card .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .template-card .card-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin: 4px 0 8px 0;
+        }
+
+        .template-card .card-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+
+        .template-card .card-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        /* ============================================================
+           MODAL / EDITOR
+           ============================================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-close:hover {
+            color: #1a1a2e;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+           FORM
+           ============================================================ */
+        .form-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .form-section h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .form-group .help-text {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #ffffff;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #6C3BC5;
+            box-shadow: 0 0 0 3px rgba(108, 59, 197, 0.1);
+        }
+
+        .form-control[type="color"] {
+            padding: 2px;
+            height: 40px;
+            width: 60px;
+        }
+
+        select.form-control {
+            appearance: auto;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #6C3BC5;
+        }
+
+        .form-check label {
+            font-size: 13px;
+            font-weight: 400;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .form-check-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 4px;
+        }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease;
+            min-width: 280px;
+        }
+
+        .toast-success {
+            background: #10b981;
+        }
+
+        .toast-error {
+            background: #ef4444;
+        }
+
+        .toast-warning {
+            background: #f59e0b;
+        }
+
+        .toast-info {
+            background: #3b82f6;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .app-header {
+                padding: 12px 16px;
+            }
+
+            .app-header .brand h1 {
+                font-size: 17px;
+            }
+
+            .main-content {
+                padding: 12px;
+            }
+
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                max-width: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+                margin: 0;
+            }
+
+            .modal-body {
+                padding: 16px;
+            }
+
+            .header-actions .btn span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .template-card {
+                padding: 14px;
+            }
+
+            .form-check-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================================
+           LOADING
+           ============================================================ */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e9ecef;
+            border-top: 3px solid #6C3BC5;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ============================================================
+           SWITCH / TOGGLE
+           ============================================================ */
+        .toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #d1d5db;
+            border-radius: 22px;
+            transition: 0.3s;
+        }
+
+        .toggle .slider::before {
+            content: "";
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: #ffffff;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle input:checked + .slider {
+            background: #6C3BC5;
+        }
+
+        .toggle input:checked + .slider::before {
+            transform: translateX(18px);
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header class="app-header">
+        <div class="brand">
+            <h1>🏗️ H4 Billing ERP</h1>
+            <span>Invoice Template Settings</span>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary" id="newTemplateBtn">
+                <span>+</span> <span>New Template</span>
+            </button>
+            <button class="btn btn-secondary" id="backBtn">← Back</button>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    MAIN CONTENT
+    ============================================================ -->
+    <main class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h2>Invoice Templates</h2>
+                <p>Create and manage invoice templates for your business</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline" id="refreshBtn">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <!-- Template Grid -->
+        <div id="templateGrid" class="template-grid">
+            <!-- Templates will be rendered here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display:none;">
+            <div class="icon">📄</div>
+            <h3>No Templates Found</h3>
+            <p>Create your first invoice template to get started.</p>
+            <button class="btn btn-primary" id="emptyNewBtn" style="margin-top:16px;">+ Create Template</button>
+        </div>
+
+    </main>
+
+    <!-- ============================================================
+    TEMPLATE EDITOR MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="editorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="editorTitle">Create Invoice Template</h3>
+                <button class="modal-close" id="editorCloseBtn">✕</button>
+            </div>
+            <div class="modal-body" id="editorBody">
+                <!-- Form will be rendered here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="editorCancelBtn">Cancel</button>
+                <button class="btn btn-success" id="editorSaveBtn">💾 Save Template</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    LOADING OVERLAY
+    ============================================================ -->
+    <div id="loadingOverlay" class="loading" style="display:none;">
+        <div class="spinner"></div>
+        <span>Loading...</span>
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script type="module">
+        // ============================================================
+        // CORRECTED IMPORTS (from js/ui/ location)
+        // ============================================================
+
+        import { templateService } from '../services/template-service.js';
+        import { eventBus, EVENTS } from '../core/events.js';
+        import { state } from '../core/state.js';
+
+        // ============================================================
+        // STATE
+        // ============================================================
+
+        let templates = [];
+        let editingTemplate = null;
+        let isEditMode = false;
+        const TEMPLATE_TYPE = 'invoice';
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+
+        const templateGrid = document.getElementById('templateGrid');
+        const emptyState = document.getElementById('emptyState');
+        const editorModal = document.getElementById('editorModal');
+        const editorBody = document.getElementById('editorBody');
+        const editorTitle = document.getElementById('editorTitle');
+        const editorSaveBtn = document.getElementById('editorSaveBtn');
+        const editorCancelBtn = document.getElementById('editorCancelBtn');
+        const editorCloseBtn = document.getElementById('editorCloseBtn');
+        const newTemplateBtn = document.getElementById('newTemplateBtn');
+        const emptyNewBtn = document.getElementById('emptyNewBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const backBtn = document.getElementById('backBtn');
+        const toastContainer = document.getElementById('toastContainer');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ============================================================
+        // LOADING
+        // ============================================================
+
+        function showLoading(show) {
+            loadingOverlay.style.display = show ? 'flex' : 'none';
+        }
+
+        // ============================================================
+        // RENDER TEMPLATES
+        // ============================================================
+
+        function renderTemplates() {
+            const invoiceTemplates = templates.filter(t => t.type === TEMPLATE_TYPE);
+
+            if (invoiceTemplates.length === 0) {
+                templateGrid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            templateGrid.innerHTML = invoiceTemplates.map(t => `
+                <div class="template-card ${t.isDefault ? 'active' : ''}" data-id="${t.id}">
+                    <div class="card-header">
+                        <span class="card-title">${escapeHtml(t.name)}</span>
+                        <div>
+                            ${t.isDefault ? '<span class="badge badge-default">Default</span>' : ''}
+                            <span class="badge ${t.active ? 'badge-active' : 'badge-inactive'}">
+                                ${t.active ? 'Active' : 'Inactive'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-subtitle">Version ${t.version} · ${t.description || 'No description'}</div>
+                    <div class="card-meta">
+                        <span>🆔 ${escapeHtml(t.templateId)}</span>
+                        ${t.isLatest ? '<span class="badge badge-active" style="font-size:10px;">Latest</span>' : ''}
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-sm edit-btn" data-id="${t.id}">✏️ Edit</button>
+                        <button class="btn btn-outline btn-sm duplicate-btn" data-id="${t.id}">📋 Duplicate</button>
+                        ${t.isDefault ? '' : `<button class="btn btn-outline btn-sm set-default-btn" data-id="${t.id}">⭐ Set Default</button>`}
+                        ${t.isDefault ? '' : `<button class="btn btn-danger btn-sm delete-btn" data-id="${t.id}">🗑️ Delete</button>`}
+                        <button class="btn btn-secondary btn-sm toggle-active-btn" data-id="${t.id}">
+                            ${t.active ? '🔇 Deactivate' : '🔊 Activate'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => openEditor(btn.dataset.id));
+            });
+
+            document.querySelectorAll('.duplicate-btn').forEach(btn => {
+                btn.addEventListener('click', () => duplicateTemplate(btn.dataset.id));
+            });
+
+            document.querySelectorAll('.set-default-btn').forEach(btn => {
+                btn.addEventListener('click', () => setDefaultTemplate(btn.dataset.id));
+            });
+
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => deleteTemplate(btn.dataset.id));
+            });
+
+            document.querySelectorAll('.toggle-active-btn').forEach(btn => {
+                btn.addEventListener('click', () => toggleActive(btn.dataset.id));
+            });
+
+            // Card click to edit
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.card-actions')) return;
+                    openEditor(card.dataset.id);
+                });
+            });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return String(str).replace(/[&<>"']/g, function(s) {
+                return map[s] || s;
+            });
+        }
+
+        // ============================================================
+        // LOAD TEMPLATES
+        // ============================================================
+
+        async function loadTemplates() {
+            showLoading(true);
+            try {
+                await templateService.initialize();
+                templates = await templateService.getTemplates({ type: TEMPLATE_TYPE });
+                renderTemplates();
+                showToast('Templates loaded successfully', 'success');
+            } catch (error) {
+                console.error('Failed to load templates:', error);
+                showToast('Failed to load templates: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================================
+        // OPEN EDITOR
+        // ============================================================
+
+        function openEditor(id = null) {
+            isEditMode = !!id;
+            editingTemplate = id ? templates.find(t => t.id === id) : null;
+
+            if (isEditMode && !editingTemplate) {
+                showToast('Template not found', 'error');
+                return;
+            }
+
+            editorTitle.textContent = isEditMode ? 'Edit Invoice Template' : 'Create Invoice Template';
+            editorBody.innerHTML = buildEditorForm(editingTemplate);
+            editorModal.classList.add('open');
+
+            // Add event listeners for toggle switches
+            document.querySelectorAll('.toggle input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const target = this.dataset.target;
+                    const container = document.getElementById(target);
+                    if (container) {
+                        container.style.display = this.checked ? 'block' : 'none';
+                    }
+                });
+                // Trigger initial state
+                const target = input.dataset.target;
+                const container = document.getElementById(target);
+                if (container) {
+                    container.style.display = input.checked ? 'block' : 'none';
+                }
+            });
+
+            // Add event listeners for visibility checkboxes
+            document.querySelectorAll('.visibility-checkbox').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const target = this.dataset.target;
+                    const container = document.getElementById(target);
+                    if (container) {
+                        container.style.display = this.checked ? 'block' : 'none';
+                    }
+                });
+                // Trigger initial state
+                const target = cb.dataset.target;
+                const container = document.getElementById(target);
+                if (container) {
+                    container.style.display = cb.checked ? 'block' : 'none';
+                }
+            });
+        }
+
+        function closeEditor() {
+            editorModal.classList.remove('open');
+            editingTemplate = null;
+            isEditMode = false;
+        }
+
+        // ============================================================
+        // BUILD EDITOR FORM
+        // ============================================================
+
+        function buildEditorForm(template) {
+            const t = template || {};
+            const config = t.config || {};
+            const page = config.page || {};
+            const header = config.header || {};
+            const logo = header.logo || {};
+            const company = header.company || {};
+            const docTitle = header.documentTitle || {};
+            const numConfig = header.invoiceNumber || {};
+            const dateConfig = header.date || {};
+            const customer = config.customer || {};
+            const doc = config.document || {};
+            const itemTable = config.itemTable || {};
+            const columns = itemTable.columns || [];
+            const totals = config.totals || {};
+            const payment = config.payment || {};
+            const upi = config.upi || {};
+            const signature = config.signature || {};
+            const terms = config.terms || {};
+            const footer = config.footer || {};
+            const fonts = config.fonts || {};
+            const spacing = config.spacing || {};
+            const visibility = config.visibility || {};
+
+            return `
+                <div class="form-section">
+                    <h4>📋 Basic Information</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Template Name *</label>
+                            <input type="text" class="form-control" id="templateName" value="${escapeHtml(t.name || '')}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" id="templateDescription" value="${escapeHtml(t.description || '')}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Template ID</label>
+                            <input type="text" class="form-control" id="templateId" value="${escapeHtml(t.templateId || '')}" ${isEditMode ? 'readonly' : ''}>
+                            <div class="help-text">${isEditMode ? 'Template ID cannot be changed' : 'Auto-generated if left empty'}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check" style="margin-top:22px;">
+                                <input type="checkbox" id="templateActive" ${t.active !== false ? 'checked' : ''}>
+                                <label for="templateActive">Active</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="templateDefault" ${t.isDefault ? 'checked' : ''}>
+                                <label for="templateDefault">Set as Default</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>📄 Page Layout</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Page Size</label>
+                            <select class="form-control" id="pageSize">
+                                <option value="A4" ${page.size === 'A4' ? 'selected' : ''}>A4</option>
+                                <option value="A3" ${page.size === 'A3' ? 'selected' : ''}>A3</option>
+                                <option value="A5" ${page.size === 'A5' ? 'selected' : ''}>A5</option>
+                                <option value="Letter" ${page.size === 'Letter' ? 'selected' : ''}>Letter</option>
+                                <option value="Legal" ${page.size === 'Legal' ? 'selected' : ''}>Legal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Orientation</label>
+                            <select class="form-control" id="pageOrientation">
+                                <option value="portrait" ${page.orientation === 'portrait' ? 'selected' : ''}>Portrait</option>
+                                <option value="landscape" ${page.orientation === 'landscape' ? 'selected' : ''}>Landscape</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Top Margin (mm)</label>
+                            <input type="number" class="form-control" id="marginTop" value="${page.margins?.top || 20}">
+                        </div>
+                        <div class="form-group">
+                            <label>Right Margin (mm)</label>
+                            <input type="number" class="form-control" id="marginRight" value="${page.margins?.right || 15}">
+                        </div>
+                        <div class="form-group">
+                            <label>Bottom Margin (mm)</label>
+                            <input type="number" class="form-control" id="marginBottom" value="${page.margins?.bottom || 20}">
+                        </div>
+                        <div class="form-group">
+                            <label>Left Margin (mm)</label>
+                            <input type="number" class="form-control" id="marginLeft" value="${page.margins?.left || 15}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Background Color</label>
+                        <input type="color" class="form-control" id="pageBackground" value="${page.background || '#ffffff'}">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>🔷 Header</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="headerEnabled" data-target="headerDetails" ${header.enabled !== false ? 'checked' : ''}>
+                        <label for="headerEnabled">Enable Header</label>
+                    </div>
+                    <div id="headerDetails" style="${header.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Header Height (mm)</label>
+                                <input type="number" class="form-control" id="headerHeight" value="${header.height || 80}">
+                            </div>
+                            <div class="form-group">
+                                <label>Header Background</label>
+                                <input type="color" class="form-control" id="headerBackground" value="${header.background || '#f8f9fa'}">
+                            </div>
+                        </div>
+                        <div class="form-section" style="border-bottom:none;padding-bottom:0;margin-bottom:8px;">
+                            <h5>Logo</h5>
+                            <div class="form-check">
+                                <input type="checkbox" id="logoEnabled" ${logo.enabled !== false ? 'checked' : ''}>
+                                <label for="logoEnabled">Show Logo</label>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Logo Width (px)</label>
+                                    <input type="number" class="form-control" id="logoWidth" value="${logo.width || 120}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Logo Height (px)</label>
+                                    <input type="number" class="form-control" id="logoHeight" value="${logo.height || 50}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section" style="border-bottom:none;padding-bottom:0;margin-bottom:8px;">
+                            <h5>Document Title</h5>
+                            <div class="form-check">
+                                <input type="checkbox" id="docTitleEnabled" ${docTitle.enabled !== false ? 'checked' : ''}>
+                                <label for="docTitleEnabled">Show Document Title</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Title Text</label>
+                                <input type="text" class="form-control" id="docTitleText" value="${escapeHtml(docTitle.text || 'TAX INVOICE')}">
+                            </div>
+                            <div class="form-group">
+                                <label>Alignment</label>
+                                <select class="form-control" id="docTitleAlignment">
+                                    <option value="center" ${docTitle.alignment === 'center' ? 'selected' : ''}>Center</option>
+                                    <option value="left" ${docTitle.alignment === 'left' ? 'selected' : ''}>Left</option>
+                                    <option value="right" ${docTitle.alignment === 'right' ? 'selected' : ''}>Right</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-section" style="border-bottom:none;padding-bottom:0;margin-bottom:8px;">
+                            <h5>Document Number</h5>
+                            <div class="form-check">
+                                <input type="checkbox" id="numEnabled" ${numConfig.enabled !== false ? 'checked' : ''}>
+                                <label for="numEnabled">Show Document Number</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Label</label>
+                                <input type="text" class="form-control" id="numLabel" value="${escapeHtml(numConfig.label || 'Invoice No:')}">
+                            </div>
+                            <div class="form-group">
+                                <label>Alignment</label>
+                                <select class="form-control" id="numAlignment">
+                                    <option value="right" ${numConfig.alignment === 'right' ? 'selected' : ''}>Right</option>
+                                    <option value="left" ${numConfig.alignment === 'left' ? 'selected' : ''}>Left</option>
+                                    <option value="center" ${numConfig.alignment === 'center' ? 'selected' : ''}>Center</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-section" style="border-bottom:none;padding-bottom:0;">
+                            <h5>Date</h5>
+                            <div class="form-check">
+                                <input type="checkbox" id="dateEnabled" ${dateConfig.enabled !== false ? 'checked' : ''}>
+                                <label for="dateEnabled">Show Date</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Label</label>
+                                <input type="text" class="form-control" id="dateLabel" value="${escapeHtml(dateConfig.label || 'Date:')}">
+                            </div>
+                            <div class="form-group">
+                                <label>Alignment</label>
+                                <select class="form-control" id="dateAlignment">
+                                    <option value="right" ${dateConfig.alignment === 'right' ? 'selected' : ''}>Right</option>
+                                    <option value="left" ${dateConfig.alignment === 'left' ? 'selected' : ''}>Left</option>
+                                    <option value="center" ${dateConfig.alignment === 'center' ? 'selected' : ''}>Center</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>🏢 Company Information</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="companyEnabled" data-target="companyDetails" ${company.enabled !== false ? 'checked' : ''}>
+                        <label for="companyEnabled">Show Company Information</label>
+                    </div>
+                    <div id="companyDetails" style="${company.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-check-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowName" ${company.showName !== false ? 'checked' : ''}>
+                                <label for="companyShowName">Company Name</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowBrand" ${company.showBrandName !== false ? 'checked' : ''}>
+                                <label for="companyShowBrand">Brand Name</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowAddress" ${company.showAddress !== false ? 'checked' : ''}>
+                                <label for="companyShowAddress">Address</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowPhone" ${company.showPhone !== false ? 'checked' : ''}>
+                                <label for="companyShowPhone">Phone</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowWhatsApp" ${company.showWhatsApp ? 'checked' : ''}>
+                                <label for="companyShowWhatsApp">WhatsApp</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowEmail" ${company.showEmail !== false ? 'checked' : ''}>
+                                <label for="companyShowEmail">Email</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowWebsite" ${company.showWebsite ? 'checked' : ''}>
+                                <label for="companyShowWebsite">Website</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowGSTIN" ${company.showGSTIN !== false ? 'checked' : ''}>
+                                <label for="companyShowGSTIN">GSTIN</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="companyShowPAN" ${company.showPAN ? 'checked' : ''}>
+                                <label for="companyShowPAN">PAN</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>👤 Customer Information</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="customerEnabled" data-target="customerDetails" ${customer.enabled !== false ? 'checked' : ''}>
+                        <label for="customerEnabled">Show Customer Information</label>
+                    </div>
+                    <div id="customerDetails" style="${customer.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-check-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowName" ${customer.showName !== false ? 'checked' : ''}>
+                                <label for="customerShowName">Name</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowPhone" ${customer.showPhone !== false ? 'checked' : ''}>
+                                <label for="customerShowPhone">Phone</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowWhatsApp" ${customer.showWhatsApp ? 'checked' : ''}>
+                                <label for="customerShowWhatsApp">WhatsApp</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowEmail" ${customer.showEmail !== false ? 'checked' : ''}>
+                                <label for="customerShowEmail">Email</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowAddress" ${customer.showAddress !== false ? 'checked' : ''}>
+                                <label for="customerShowAddress">Address</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowGSTIN" ${customer.showGSTIN !== false ? 'checked' : ''}>
+                                <label for="customerShowGSTIN">GSTIN</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowPAN" ${customer.showPAN ? 'checked' : ''}>
+                                <label for="customerShowPAN">PAN</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="customerShowCode" ${customer.showCode ? 'checked' : ''}>
+                                <label for="customerShowCode">Code</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>📋 Document Information</h4>
+                    <div class="form-check-group">
+                        <div class="form-check">
+                            <input type="checkbox" id="docShowTitle" ${doc.showTitle !== false ? 'checked' : ''}>
+                            <label for="docShowTitle">Show Title</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="docShowNumber" ${doc.showNumber !== false ? 'checked' : ''}>
+                            <label for="docShowNumber">Show Number</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="docShowDate" ${doc.showDate !== false ? 'checked' : ''}>
+                            <label for="docShowDate">Show Date</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="docShowDueDate" ${doc.showDueDate !== false ? 'checked' : ''}>
+                            <label for="docShowDueDate">Show Due Date</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="docShowStatus" ${doc.showStatus ? 'checked' : ''}>
+                            <label for="docShowStatus">Show Status</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>📊 Item Table</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="itemsEnabled" data-target="itemsDetails" ${itemTable.enabled !== false ? 'checked' : ''}>
+                        <label for="itemsEnabled">Enable Item Table</label>
+                    </div>
+                    <div id="itemsDetails" style="${itemTable.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Row Height (px)</label>
+                                <input type="number" class="form-control" id="rowHeight" value="${itemTable.rowHeight || 30}">
+                            </div>
+                            <div class="form-group">
+                                <label>Rows per Page</label>
+                                <input type="number" class="form-control" id="rowsPerPage" value="${itemTable.rowsPerPage || 25}">
+                            </div>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="repeatHeader" ${itemTable.repeatHeader !== false ? 'checked' : ''}>
+                            <label for="repeatHeader">Repeat Header on Each Page</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="itemsBorders" ${itemTable.borders?.enabled !== false ? 'checked' : ''}>
+                            <label for="itemsBorders">Show Borders</label>
+                        </div>
+                        <div style="margin-top:12px;">
+                            <label style="font-weight:500;font-size:13px;display:block;margin-bottom:8px;">Columns</label>
+                            <div class="form-check-group" id="columnsContainer">
+                                ${columns.map(col => `
+                                    <div class="form-check" style="padding:4px 8px;background:#f8f9fa;border-radius:6px;margin:2px;">
+                                        <input type="checkbox" class="column-checkbox" data-col-id="${col.id}" ${col.visible !== false ? 'checked' : ''}>
+                                        <label>${escapeHtml(col.label)}</label>
+                                        <input type="number" class="form-control" style="width:60px;display:inline-block;padding:2px 4px;font-size:11px;" value="${col.width || 60}" data-col-width="${col.id}" placeholder="width">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>💰 Totals</h4>
+                    <div class="form-check-group">
+                        <div class="form-check">
+                            <input type="checkbox" id="totalSubtotal" ${totals.subtotal?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalSubtotal">Subtotal</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalDiscount" ${totals.discount?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalDiscount">Discount</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalTaxable" ${totals.taxableAmount?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalTaxable">Taxable Amount</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalCGST" ${totals.cgst?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalCGST">CGST</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalSGST" ${totals.sgst?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalSGST">SGST</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalIGST" ${totals.igst?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalIGST">IGST</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalGST" ${totals.gstAmount?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalGST">Total GST</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalRoundOff" ${totals.roundOff?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalRoundOff">Round Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="totalGrandTotal" ${totals.grandTotal?.enabled !== false ? 'checked' : ''}>
+                            <label for="totalGrandTotal">Grand Total</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>💳 Payment</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="paymentEnabled" data-target="paymentDetails" ${payment.enabled !== false ? 'checked' : ''}>
+                        <label for="paymentEnabled">Show Payment Section</label>
+                    </div>
+                    <div id="paymentDetails" style="${payment.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-check-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="paymentShowStatus" ${payment.showStatus !== false ? 'checked' : ''}>
+                                <label for="paymentShowStatus">Status</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="paymentShowPaid" ${payment.showPaidAmount !== false ? 'checked' : ''}>
+                                <label for="paymentShowPaid">Paid Amount</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="paymentShowOutstanding" ${payment.showOutstanding !== false ? 'checked' : ''}>
+                                <label for="paymentShowOutstanding">Outstanding</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="paymentShowTerms" ${payment.showPaymentTerms !== false ? 'checked' : ''}>
+                                <label for="paymentShowTerms">Payment Terms</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="paymentShowBank" ${payment.showBankDetails !== false ? 'checked' : ''}>
+                                <label for="paymentShowBank">Bank Details</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="paymentShowUPI" ${payment.showUPI !== false ? 'checked' : ''}>
+                                <label for="paymentShowUPI">UPI</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>📱 UPI</h4>
+                    <div class="form-check">
+                        <input type="checkbox" id="upiEnabled" ${upi.enabled !== false ? 'checked' : ''}>
+                        <label for="upiEnabled">Show UPI</label>
+                    </div>
+                    <div id="upiDetails" style="${upi.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-check">
+                            <input type="checkbox" id="upiShowQR" ${upi.showQRCode ? 'checked' : ''}>
+                            <label for="upiShowQR">Show QR Code</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="upiShowId" ${upi.showUPIId !== false ? 'checked' : ''}>
+                            <label for="upiShowId">Show UPI ID</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>QR Width (px)</label>
+                                <input type="number" class="form-control" id="upiWidth" value="${upi.width || 100}">
+                            </div>
+                            <div class="form-group">
+                                <label>QR Height (px)</label>
+                                <input type="number" class="form-control" id="upiHeight" value="${upi.height || 100}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>✍️ Signature</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="signatureEnabled" data-target="signatureDetails" ${signature.enabled !== false ? 'checked' : ''}>
+                        <label for="signatureEnabled">Show Signature</label>
+                    </div>
+                    <div id="signatureDetails" style="${signature.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-check">
+                            <input type="checkbox" id="signatureShowName" ${signature.showName !== false ? 'checked' : ''}>
+                            <label for="signatureShowName">Show Name</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="signatureShowDesignation" ${signature.showDesignation !== false ? 'checked' : ''}>
+                            <label for="signatureShowDesignation">Show Designation</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="signatureShowImage" ${signature.showSignature !== false ? 'checked' : ''}>
+                            <label for="signatureShowImage">Show Signature Image</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Signature Width (px)</label>
+                                <input type="number" class="form-control" id="signatureWidth" value="${signature.width || 120}">
+                            </div>
+                            <div class="form-group">
+                                <label>Signature Height (px)</label>
+                                <input type="number" class="form-control" id="signatureHeight" value="${signature.height || 50}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>📝 Terms</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="termsEnabled" data-target="termsDetails" ${terms.enabled !== false ? 'checked' : ''}>
+                        <label for="termsEnabled">Show Terms</label>
+                    </div>
+                    <div id="termsDetails" style="${terms.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-check">
+                            <input type="checkbox" id="termsInvoice" ${terms.invoiceTerms !== false ? 'checked' : ''}>
+                            <label for="termsInvoice">Invoice Terms</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="termsWarranty" ${terms.warrantyTerms !== false ? 'checked' : ''}>
+                            <label for="termsWarranty">Warranty Terms</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="termsPayment" ${terms.paymentTerms !== false ? 'checked' : ''}>
+                            <label for="termsPayment">Payment Terms</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>📌 Footer</h4>
+                    <div class="form-check">
+                        <input type="checkbox" class="visibility-checkbox" id="footerEnabled" data-target="footerDetails" ${footer.enabled !== false ? 'checked' : ''}>
+                        <label for="footerEnabled">Show Footer</label>
+                    </div>
+                    <div id="footerDetails" style="${footer.enabled !== false ? 'display:block;' : 'display:none;'}">
+                        <div class="form-check">
+                            <input type="checkbox" id="footerInvoice" ${footer.invoiceFooter !== false ? 'checked' : ''}>
+                            <label for="footerInvoice">Invoice Footer</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="footerPageNumber" ${footer.pageNumber !== false ? 'checked' : ''}>
+                            <label for="footerPageNumber">Page Number</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Custom Footer Text</label>
+                            <input type="text" class="form-control" id="footerCustomText" value="${escapeHtml(footer.customText || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label>Alignment</label>
+                            <select class="form-control" id="footerAlignment">
+                                <option value="center" ${footer.position === 'center' ? 'selected' : ''}>Center</option>
+                                <option value="left" ${footer.position === 'left' ? 'selected' : ''}>Left</option>
+                                <option value="right" ${footer.position === 'right' ? 'selected' : ''}>Right</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>🔤 Fonts</h4>
+                    <div class="form-group">
+                        <label>Font Family</label>
+                        <select class="form-control" id="fontFamily">
+                            <option value="Inter, sans-serif" ${fonts.family?.includes('Inter') ? 'selected' : ''}>Inter</option>
+                            <option value="Arial, sans-serif" ${fonts.family?.includes('Arial') ? 'selected' : ''}>Arial</option>
+                            <option value="Helvetica, sans-serif" ${fonts.family?.includes('Helvetica') ? 'selected' : ''}>Helvetica</option>
+                            <option value="Georgia, serif" ${fonts.family?.includes('Georgia') ? 'selected' : ''}>Georgia</option>
+                            <option value="Times New Roman, serif" ${fonts.family?.includes('Times') ? 'selected' : ''}>Times New Roman</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Font Size (px)</label>
+                            <input type="number" class="form-control" id="fontSize" value="${fonts.size || 11}">
+                        </div>
+                        <div class="form-group">
+                            <label>Font Color</label>
+                            <input type="color" class="form-control" id="fontColor" value="${fonts.color || '#1a1a2e'}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Font Weight</label>
+                            <select class="form-control" id="fontWeight">
+                                <option value="normal" ${fonts.weight === 'normal' ? 'selected' : ''}>Normal</option>
+                                <option value="bold" ${fonts.weight === 'bold' ? 'selected' : ''}>Bold</option>
+                                <option value="100" ${fonts.weight === '100' ? 'selected' : ''}>100</option>
+                                <option value="300" ${fonts.weight === '300' ? 'selected' : ''}>300</option>
+                                <option value="500" ${fonts.weight === '500' ? 'selected' : ''}>500</option>
+                                <option value="600" ${fonts.weight === '600' ? 'selected' : ''}>600</option>
+                                <option value="700" ${fonts.weight === '700' ? 'selected' : ''}>700</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Font Style</label>
+                            <select class="form-control" id="fontStyle">
+                                <option value="normal" ${fonts.style === 'normal' ? 'selected' : ''}>Normal</option>
+                                <option value="italic" ${fonts.style === 'italic' ? 'selected' : ''}>Italic</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>📏 Spacing</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Section Gap (px)</label>
+                            <input type="number" class="form-control" id="sectionGap" value="${spacing.sectionGap || 15}">
+                        </div>
+                        <div class="form-group">
+                            <label>Row Gap (px)</label>
+                            <input type="number" class="form-control" id="rowGap" value="${spacing.rowGap || 5}">
+                        </div>
+                        <div class="form-group">
+                            <label>Column Gap (px)</label>
+                            <input type="number" class="form-control" id="columnGap" value="${spacing.columnGap || 8}">
+                        </div>
+                        <div class="form-group">
+                            <label>Line Height</label>
+                            <input type="number" class="form-control" id="lineHeight" step="0.1" value="${spacing.lineHeight || 1.5}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+                    <h4>👁️ Visibility</h4>
+                    <div class="form-check-group">
+                        <div class="form-check">
+                            <input type="checkbox" id="visCompany" ${visibility.company !== false ? 'checked' : ''}>
+                            <label for="visCompany">Company</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="visCustomer" ${visibility.customer !== false ? 'checked' : ''}>
+                            <label for="visCustomer">Customer</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="visItems" ${visibility.items !== false ? 'checked' : ''}>
+                            <label for="visItems">Items</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="visTotals" ${visibility.totals !== false ? 'checked' : ''}>
+                            <label for="visTotals">Totals</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="visPayment" ${visibility.payment !== false ? 'checked' : ''}>
+                            <label for="visPayment">Payment</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="visTerms" ${visibility.terms !== false ? 'checked' : ''}>
+                            <label for="visTerms">Terms</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="visSignature" ${visibility.signature !== false ? 'checked' : ''}>
+                            <label for="visSignature">Signature</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="visFooter" ${visibility.footer !== false ? 'checked' : ''}>
+                            <label for="visFooter">Footer</label>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // SAVE TEMPLATE
+        // ============================================================
+
+        async function saveTemplate() {
+            const name = document.getElementById('templateName')?.value?.trim();
+            if (!name) {
+                showToast('Template name is required', 'error');
+                return;
+            }
+
+            const templateData = {
+                name: name,
+                type: TEMPLATE_TYPE,
+                description: document.getElementById('templateDescription')?.value?.trim() || '',
+                templateId: document.getElementById('templateId')?.value?.trim() || undefined,
+                active: document.getElementById('templateActive')?.checked !== false,
+                isDefault: document.getElementById('templateDefault')?.checked || false,
+                config: {
+                    page: {
+                        size: document.getElementById('pageSize')?.value || 'A4',
+                        orientation: document.getElementById('pageOrientation')?.value || 'portrait',
+                        margins: {
+                            top: parseInt(document.getElementById('marginTop')?.value) || 20,
+                            right: parseInt(document.getElementById('marginRight')?.value) || 15,
+                            bottom: parseInt(document.getElementById('marginBottom')?.value) || 20,
+                            left: parseInt(document.getElementById('marginLeft')?.value) || 15
+                        },
+                        background: document.getElementById('pageBackground')?.value || '#ffffff'
+                    },
+                    header: {
+                        enabled: document.getElementById('headerEnabled')?.checked !== false,
+                        height: parseInt(document.getElementById('headerHeight')?.value) || 80,
+                        background: document.getElementById('headerBackground')?.value || '#f8f9fa',
+                        logo: {
+                            enabled: document.getElementById('logoEnabled')?.checked !== false,
+                            width: parseInt(document.getElementById('logoWidth')?.value) || 120,
+                            height: parseInt(document.getElementById('logoHeight')?.value) || 50,
+                            fit: 'contain'
+                        },
+                        company: {
+                            enabled: document.getElementById('companyEnabled')?.checked !== false,
+                            showName: document.getElementById('companyShowName')?.checked !== false,
+                            showBrandName: document.getElementById('companyShowBrand')?.checked !== false,
+                            showAddress: document.getElementById('companyShowAddress')?.checked !== false,
+                            showPhone: document.getElementById('companyShowPhone')?.checked !== false,
+                            showWhatsApp: document.getElementById('companyShowWhatsApp')?.checked || false,
+                            showEmail: document.getElementById('companyShowEmail')?.checked !== false,
+                            showWebsite: document.getElementById('companyShowWebsite')?.checked || false,
+                            showGSTIN: document.getElementById('companyShowGSTIN')?.checked !== false,
+                            showPAN: document.getElementById('companyShowPAN')?.checked || false
+                        },
+                        documentTitle: {
+                            enabled: document.getElementById('docTitleEnabled')?.checked !== false,
+                            text: document.getElementById('docTitleText')?.value || 'TAX INVOICE',
+                            alignment: document.getElementById('docTitleAlignment')?.value || 'center'
+                        },
+                        invoiceNumber: {
+                            enabled: document.getElementById('numEnabled')?.checked !== false,
+                            label: document.getElementById('numLabel')?.value || 'Invoice No:',
+                            alignment: document.getElementById('numAlignment')?.value || 'right'
+                        },
+                        date: {
+                            enabled: document.getElementById('dateEnabled')?.checked !== false,
+                            label: document.getElementById('dateLabel')?.value || 'Date:',
+                            alignment: document.getElementById('dateAlignment')?.value || 'right'
+                        },
+                        customElements: []
+                    },
+                    customer: {
+                        enabled: document.getElementById('customerEnabled')?.checked !== false,
+                        showName: document.getElementById('customerShowName')?.checked !== false,
+                        showPhone: document.getElementById('customerShowPhone')?.checked !== false,
+                        showWhatsApp: document.getElementById('customerShowWhatsApp')?.checked || false,
+                        showEmail: document.getElementById('customerShowEmail')?.checked !== false,
+                        showAddress: document.getElementById('customerShowAddress')?.checked !== false,
+                        showGSTIN: document.getElementById('customerShowGSTIN')?.checked !== false,
+                        showPAN: document.getElementById('customerShowPAN')?.checked || false,
+                        showCode: document.getElementById('customerShowCode')?.checked || false
+                    },
+                    document: {
+                        showTitle: document.getElementById('docShowTitle')?.checked !== false,
+                        showNumber: document.getElementById('docShowNumber')?.checked !== false,
+                        showDate: document.getElementById('docShowDate')?.checked !== false,
+                        showDueDate: document.getElementById('docShowDueDate')?.checked !== false,
+                        showStatus: document.getElementById('docShowStatus')?.checked || false
+                    },
+                    itemTable: {
+                        enabled: document.getElementById('itemsEnabled')?.checked !== false,
+                        columns: Array.from(document.querySelectorAll('.column-checkbox')).map(cb => ({
+                            id: cb.dataset.colId,
+                            visible: cb.checked,
+                            width: parseInt(document.querySelector(`[data-col-width="${cb.dataset.colId}"]`)?.value) || 60,
+                            alignment: 'left'
+                        })),
+                        header: { enabled: true, background: '#e9ecef', color: '#1a1a2e', fontWeight: 'bold' },
+                        rows: { enabled: true, background: '#ffffff', color: '#1a1a2e' },
+                        borders: { enabled: document.getElementById('itemsBorders')?.checked !== false, color: '#dee2e6', width: 1 },
+                        rowHeight: parseInt(document.getElementById('rowHeight')?.value) || 30,
+                        rowsPerPage: parseInt(document.getElementById('rowsPerPage')?.value) || 25,
+                        repeatHeader: document.getElementById('repeatHeader')?.checked !== false,
+                        font: { size: 10, family: 'sans-serif' },
+                        alignment: 'left'
+                    },
+                    totals: {
+                        subtotal: { enabled: document.getElementById('totalSubtotal')?.checked !== false, label: 'Subtotal:', position: 'right', format: '₹{amount}' },
+                        discount: { enabled: document.getElementById('totalDiscount')?.checked !== false, label: 'Discount:', position: 'right', format: '₹{amount}' },
+                        taxableAmount: { enabled: document.getElementById('totalTaxable')?.checked !== false, label: 'Taxable Amount:', position: 'right', format: '₹{amount}' },
+                        cgst: { enabled: document.getElementById('totalCGST')?.checked !== false, label: 'CGST:', position: 'right', format: '₹{amount}' },
+                        sgst: { enabled: document.getElementById('totalSGST')?.checked !== false, label: 'SGST:', position: 'right', format: '₹{amount}' },
+                        igst: { enabled: document.getElementById('totalIGST')?.checked !== false, label: 'IGST:', position: 'right', format: '₹{amount}' },
+                        gstAmount: { enabled: document.getElementById('totalGST')?.checked !== false, label: 'Total GST:', position: 'right', format: '₹{amount}' },
+                        roundOff: { enabled: document.getElementById('totalRoundOff')?.checked !== false, label: 'Round Off:', position: 'right', format: '₹{amount}' },
+                        grandTotal: { enabled: document.getElementById('totalGrandTotal')?.checked !== false, label: 'Grand Total:', position: 'right', format: '₹{amount}', fontWeight: 'bold' }
+                    },
+                    payment: {
+                        enabled: document.getElementById('paymentEnabled')?.checked !== false,
+                        showStatus: document.getElementById('paymentShowStatus')?.checked !== false,
+                        showPaidAmount: document.getElementById('paymentShowPaid')?.checked !== false,
+                        showOutstanding: document.getElementById('paymentShowOutstanding')?.checked !== false,
+                        showPaymentTerms: document.getElementById('paymentShowTerms')?.checked !== false,
+                        showBankDetails: document.getElementById('paymentShowBank')?.checked !== false,
+                        showUPI: document.getElementById('paymentShowUPI')?.checked !== false
+                    },
+                    upi: {
+                        enabled: document.getElementById('upiEnabled')?.checked !== false,
+                        showUPIId: document.getElementById('upiShowId')?.checked !== false,
+                        showQRCode: document.getElementById('upiShowQR')?.checked || false,
+                        width: parseInt(document.getElementById('upiWidth')?.value) || 100,
+                        height: parseInt(document.getElementById('upiHeight')?.value) || 100,
+                        position: 'right'
+                    },
+                    signature: {
+                        enabled: document.getElementById('signatureEnabled')?.checked !== false,
+                        showName: document.getElementById('signatureShowName')?.checked !== false,
+                        showDesignation: document.getElementById('signatureShowDesignation')?.checked !== false,
+                        showSignature: document.getElementById('signatureShowImage')?.checked !== false,
+                        width: parseInt(document.getElementById('signatureWidth')?.value) || 120,
+                        height: parseInt(document.getElementById('signatureHeight')?.value) || 50,
+                        position: 'right'
+                    },
+                    terms: {
+                        enabled: document.getElementById('termsEnabled')?.checked !== false,
+                        invoiceTerms: document.getElementById('termsInvoice')?.checked !== false,
+                        warrantyTerms: document.getElementById('termsWarranty')?.checked !== false,
+                        paymentTerms: document.getElementById('termsPayment')?.checked !== false
+                    },
+                    footer: {
+                        enabled: document.getElementById('footerEnabled')?.checked !== false,
+                        invoiceFooter: document.getElementById('footerInvoice')?.checked !== false,
+                        quotationFooter: false,
+                        pageNumber: document.getElementById('footerPageNumber')?.checked !== false,
+                        totalPages: true,
+                        customText: document.getElementById('footerCustomText')?.value || '',
+                        position: document.getElementById('footerAlignment')?.value || 'center'
+                    },
+                    fonts: {
+                        family: document.getElementById('fontFamily')?.value || 'Inter, sans-serif',
+                        size: parseInt(document.getElementById('fontSize')?.value) || 11,
+                        weight: document.getElementById('fontWeight')?.value || 'normal',
+                        style: document.getElementById('fontStyle')?.value || 'normal',
+                        color: document.getElementById('fontColor')?.value || '#1a1a2e'
+                    },
+                    spacing: {
+                        sectionGap: parseInt(document.getElementById('sectionGap')?.value) || 15,
+                        rowGap: parseInt(document.getElementById('rowGap')?.value) || 5,
+                        columnGap: parseInt(document.getElementById('columnGap')?.value) || 8,
+                        paragraphGap: 10,
+                        lineHeight: parseFloat(document.getElementById('lineHeight')?.value) || 1.5
+                    },
+                    visibility: {
+                        company: document.getElementById('visCompany')?.checked !== false,
+                        customer: document.getElementById('visCustomer')?.checked !== false,
+                        items: document.getElementById('visItems')?.checked !== false,
+                        totals: document.getElementById('visTotals')?.checked !== false,
+                        payment: document.getElementById('visPayment')?.checked !== false,
+                        terms: document.getElementById('visTerms')?.checked !== false,
+                        signature: document.getElementById('visSignature')?.checked !== false,
+                        footer: document.getElementById('visFooter')?.checked !== false
+                    },
+                    elements: [],
+                    colors: {
+                        primary: '#6C3BC5',
+                        secondary: '#4A2A8A',
+                        accent: '#FFD700'
+                    }
+                }
+            };
+
+            showLoading(true);
+            try {
+                let result;
+                if (isEditMode && editingTemplate) {
+                    // Create new version
+                    result = await templateService.createTemplateVersion(editingTemplate.templateId, templateData);
+                    showToast(`Template "${result.name}" updated (v${result.version})`, 'success');
+                } else {
+                    result = await templateService.createTemplate(templateData);
+                    showToast(`Template "${result.name}" created`, 'success');
+                }
+                await loadTemplates();
+                closeEditor();
+            } catch (error) {
+                console.error('Failed to save template:', error);
+                showToast('Failed to save template: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================================
+        // DUPLICATE TEMPLATE
+        // ============================================================
+
+        async function duplicateTemplate(id) {
+            if (!confirm('Duplicate this template?')) return;
+
+            showLoading(true);
+            try {
+                const result = await templateService.duplicateTemplate(id);
+                showToast(`Template duplicated: "${result.name}"`, 'success');
+                await loadTemplates();
+            } catch (error) {
+                console.error('Failed to duplicate template:', error);
+                showToast('Failed to duplicate template: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================================
+        // SET DEFAULT TEMPLATE
+        // ============================================================
+
+        async function setDefaultTemplate(id) {
+            showLoading(true);
+            try {
+                const result = await templateService.setDefaultTemplate(id);
+                showToast(`"${result.name}" set as default`, 'success');
+                await loadTemplates();
+            } catch (error) {
+                console.error('Failed to set default template:', error);
+                showToast('Failed to set default template: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================================
+        // DELETE TEMPLATE
+        // ============================================================
+
+        async function deleteTemplate(id) {
+            const template = templates.find(t => t.id === id);
+            if (!template) return;
+
+            if (template.isDefault) {
+                showToast('Cannot delete default template. Set another template as default first.', 'error');
+                return;
+            }
+
+            if (!confirm(`Delete template "${template.name}"? This action cannot be undone.`)) return;
+
+            showLoading(true);
+            try {
+                await templateService.deleteTemplate(id, 'CONFIRM_DELETE');
+                showToast(`Template "${template.name}" deleted`, 'success');
+                await loadTemplates();
+            } catch (error) {
+                console.error('Failed to delete template:', error);
+                showToast('Failed to delete template: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================================
+        // TOGGLE ACTIVE
+        // ============================================================
+
+        async function toggleActive(id) {
+            const template = templates.find(t => t.id === id);
+            if (!template) return;
+
+            if (template.isDefault && template.active) {
+                showToast('Cannot deactivate default template. Set another template as default first.', 'error');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                if (template.active) {
+                    await templateService.deactivateTemplate(id);
+                    showToast(`Template "${template.name}" deactivated`, 'warning');
+                } else {
+                    await templateService.activateTemplate(id);
+                    showToast(`Template "${template.name}" activated`, 'success');
+                }
+                await loadTemplates();
+            } catch (error) {
+                console.error('Failed to toggle template active status:', error);
+                showToast('Failed to toggle template status: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+
+        newTemplateBtn.addEventListener('click', () => openEditor(null));
+        emptyNewBtn.addEventListener('click', () => openEditor(null));
+        refreshBtn.addEventListener('click', loadTemplates);
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        editorCancelBtn.addEventListener('click', closeEditor);
+        editorCloseBtn.addEventListener('click', closeEditor);
+        editorModal.addEventListener('click', (e) => {
+            if (e.target === editorModal) closeEditor();
+        });
+        editorSaveBtn.addEventListener('click', saveTemplate);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && editorModal.classList.contains('open')) {
+                closeEditor();
+            }
+            if (e.key === 'Enter' && editorModal.classList.contains('open') && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                saveTemplate();
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+
+        loadTemplates();
+
+        // Listen for template events
+        eventBus.on(EVENTS.TEMPLATE_CREATED, (data) => {
+            console.log('📄 Template created:', data.payload);
+        });
+
+        eventBus.on(EVENTS.TEMPLATE_UPDATED, (data) => {
+            console.log('📄 Template updated:', data.payload);
+        });
+
+        eventBus.on(EVENTS.TEMPLATE_DELETED, (data) => {
+            console.log('📄 Template deleted:', data.payload);
+        });
+
+        console.log('📄 Invoice Template Settings loaded');
+    </script>
+</body>
+</html>
