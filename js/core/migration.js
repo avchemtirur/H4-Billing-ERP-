@@ -22,13 +22,16 @@
  *     ↓
  * migrateDatabase(db, transaction, oldVersion, newVersion)
  *     ↓
- * ┌─────────────────────────────────────┐
- * │  migration.js                       │
- * │  ├── Create Stores (10 stores)      │
- * │  ├── Create Indexes (35 indexes)    │
- * │  ├── Migrate Old Data (if needed)   │
- * │  └── Seed Default Data              │
- * └─────────────────────────────────────┘
+ * ┌─────────────────────────────────────────────────┐
+ * │  migration.js                                  │
+ * │  ├── Create Stores (11 stores)                 │
+ * │  │   company, customers, products, invoices,   │
+ * │  │   quotations, payments, templates, images,  │
+ * │  │   fonts, settings, numbering                │
+ * │  ├── Create Indexes (35 indexes)               │
+ * │  ├── Migrate Old Data (if needed)              │
+ * │  └── Seed Default Data                         │
+ * └─────────────────────────────────────────────────┘
  *     ↓
  * transaction commit
  *     ↓
@@ -49,6 +52,7 @@
  * - Never clear existing data during migration
  * - Never overwrite existing user data
  * - Index creation checks for existence first
+ * - Field names must match service expectations
  * ============================================================
  */
 
@@ -61,7 +65,20 @@
  * - keyPath: 'id' - Every record has a unique 'id' field
  * - autoIncrement: false - IDs are generated using crypto.randomUUID()
  * 
- * EXACTLY 10 STORES - DO NOT ADD OR REMOVE
+ * EXACTLY 11 STORES - DO NOT ADD OR REMOVE WITHOUT UPDATING SERVICES
+ * 
+ * Stores:
+ * 1. company      - Company profile
+ * 2. customers    - Customer master
+ * 3. products     - Product master
+ * 4. invoices     - Invoice records
+ * 5. quotations   - Quotation records
+ * 6. payments     - Payment records
+ * 7. templates    - Document templates
+ * 8. images       - Image storage
+ * 9. fonts        - Font storage
+ * 10. settings    - Application settings
+ * 11. numbering   - Document numbering (invoice, quotation, payment)
  */
 const STORE_DEFINITIONS = {
     company: { keyPath: 'id', autoIncrement: false },
@@ -73,7 +90,8 @@ const STORE_DEFINITIONS = {
     templates: { keyPath: 'id', autoIncrement: false },
     images: { keyPath: 'id', autoIncrement: false },
     fonts: { keyPath: 'id', autoIncrement: false },
-    settings: { keyPath: 'id', autoIncrement: false }
+    settings: { keyPath: 'id', autoIncrement: false },
+    numbering: { keyPath: 'id', autoIncrement: false }
 };
 
 // ============================================================
@@ -95,6 +113,8 @@ const STORE_DEFINITIONS = {
  * images: 3
  * fonts: 3
  * TOTAL: 35
+ * 
+ * IMPORTANT: Index names must match service expectations
  */
 const INDEX_DEFINITIONS = {
     // ============================================================
@@ -121,21 +141,23 @@ const INDEX_DEFINITIONS = {
     
     // ============================================================
     // INVOICES INDEXES - 5 indexes
+    // MATCHES invoice-service.js field names
     // ============================================================
     invoices: [
-        { name: 'byNumber', keyPath: 'number' },
-        { name: 'byDate', keyPath: 'date' },
+        { name: 'byNumber', keyPath: 'invoiceNumber' },
+        { name: 'byDate', keyPath: 'invoiceDate' },
         { name: 'byCustomerId', keyPath: 'customerId' },
-        { name: 'byStatus', keyPath: 'status' },
+        { name: 'byStatus', keyPath: 'paymentStatus' },
         { name: 'byCreatedAt', keyPath: 'createdAt' }
     ],
     
     // ============================================================
     // QUOTATIONS INDEXES - 5 indexes
+    // MATCHES quotation-service.js field names
     // ============================================================
     quotations: [
-        { name: 'byNumber', keyPath: 'number' },
-        { name: 'byDate', keyPath: 'date' },
+        { name: 'byNumber', keyPath: 'quotationNumber' },
+        { name: 'byDate', keyPath: 'quotationDate' },
         { name: 'byCustomerId', keyPath: 'customerId' },
         { name: 'byStatus', keyPath: 'status' },
         { name: 'byCreatedAt', keyPath: 'createdAt' }
@@ -143,13 +165,14 @@ const INDEX_DEFINITIONS = {
     
     // ============================================================
     // PAYMENTS INDEXES - 6 indexes
+    // MATCHES payment-service.js field names
     // ============================================================
     payments: [
-        { name: 'byNumber', keyPath: 'number' },
-        { name: 'byDate', keyPath: 'date' },
+        { name: 'byNumber', keyPath: 'paymentNumber' },
+        { name: 'byDate', keyPath: 'paymentDate' },
         { name: 'byInvoiceId', keyPath: 'invoiceId' },
         { name: 'byCustomerId', keyPath: 'customerId' },
-        { name: 'byMethod', keyPath: 'method' },
+        { name: 'byMethod', keyPath: 'paymentMethod' },
         { name: 'byCreatedAt', keyPath: 'createdAt' }
     ],
     
@@ -193,8 +216,8 @@ const INDEX_DEFINITIONS = {
  * 
  * @param {IDBDatabase} db - Database instance
  * @param {IDBTransaction} transaction - Upgrade transaction
- * @param {number} oldVersion - Current version
- * @param {number} newVersion - New version
+ * @param {number} oldVersion - Current version (from database.js)
+ * @param {number} newVersion - New version (from database.js)
  */
 export function migrateDatabase(db, transaction, oldVersion, newVersion) {
     console.log(`📋 Migration: ${oldVersion} → ${newVersion}`);
@@ -300,12 +323,15 @@ function createIndexes(db, transaction) {
  * NEVER overwrites existing data
  * 
  * This preserves existing user data during migration
+ * 
+ * IMPORTANT: Field names must match service expectations
  */
 function seedDefaultData(db, transaction) {
     const now = new Date().toISOString();
 
     // ============================================================
     // COMPANY DEFAULT DATA
+    // MATCHES company-service.js data model
     // ============================================================
     if (db.objectStoreNames.contains('company')) {
         const store = transaction.objectStore('company');
@@ -314,32 +340,47 @@ function seedDefaultData(db, transaction) {
             if (!request.result) {
                 store.add({
                     id: 'company',
-                    legalName: '',
+                    companyName: '',
                     brandName: '',
                     address: '',
                     city: '',
                     district: '',
                     state: 'Kerala',
-                    pin: '',
+                    pincode: '',
                     phone: '',
                     whatsapp: '',
                     email: '',
                     website: '',
                     gstin: '',
                     pan: '',
-                    companyLogo: null,
-                    brandLogo: null,
-                    signature: null,
-                    bankEnabled: true,
-                    bankName: '',
-                    accountName: '',
-                    accountNumber: '',
-                    ifsc: '',
-                    branch: '',
-                    upiId: '',
-                    authorizedPerson: '',
-                    defaultTerms: '',
-                    defaultWarranty: '',
+                    companyLogoId: null,
+                    brandLogoId: null,
+                    signatureImageId: null,
+                    bankDetails: {
+                        enabled: false,
+                        bankName: '',
+                        accountName: '',
+                        accountNumber: '',
+                        ifsc: '',
+                        branch: ''
+                    },
+                    upiDetails: {
+                        enabled: false,
+                        upiId: '',
+                        qrImageId: null
+                    },
+                    authorizedSignatory: {
+                        enabled: false,
+                        name: '',
+                        designation: '',
+                        signatureImageId: null
+                    },
+                    invoiceTerms: '',
+                    quotationTerms: '',
+                    warrantyTerms: '',
+                    paymentTerms: '',
+                    invoiceFooter: '',
+                    quotationFooter: '',
                     createdAt: now,
                     updatedAt: now
                 });
@@ -368,21 +409,21 @@ function seedDefaultData(db, transaction) {
                     gstRates: [0, 5, 7, 9, 18, 28],
                     documentNumbering: {
                         invoice: {
-                            prefix: 'H4-INV-',
+                            prefix: 'INV-',
                             start: 1,
                             padding: 5,
                             yearlyReset: false,
                             financialYearReset: false
                         },
                         quotation: {
-                            prefix: 'H4-QUO-',
+                            prefix: 'QUO-',
                             start: 1,
                             padding: 5,
                             yearlyReset: false,
                             financialYearReset: false
                         },
                         payment: {
-                            prefix: 'H4-PAY-',
+                            prefix: 'PAY-',
                             start: 1,
                             padding: 5
                         }
@@ -393,8 +434,8 @@ function seedDefaultData(db, transaction) {
                         'Piece', 'Hour', 'Day', 'Trip', 'Job'
                     ],
                     rounding: {
-                        method: 'none',
-                        precision: 1
+                        method: 'nearest',
+                        precision: 0
                     },
                     dateFormat: 'DD/MM/YYYY',
                     theme: {
@@ -419,6 +460,40 @@ function seedDefaultData(db, transaction) {
         };
         request.onerror = () => {
             console.warn('⚠️ Could not check settings store during migration');
+        };
+    }
+
+    // ============================================================
+    // NUMBERING DEFAULT DATA
+    // ============================================================
+    if (db.objectStoreNames.contains('numbering')) {
+        const store = transaction.objectStore('numbering');
+        const request = store.get('numbering');
+        request.onsuccess = () => {
+            if (!request.result) {
+                store.add({
+                    id: 'numbering',
+                    invoice: { 
+                        current: 1, 
+                        year: new Date().getFullYear() 
+                    },
+                    quotation: { 
+                        current: 1, 
+                        year: new Date().getFullYear() 
+                    },
+                    payment: { 
+                        current: 1, 
+                        year: new Date().getFullYear() 
+                    },
+                    updatedAt: now
+                });
+                console.log('🔢 Default numbering created');
+            } else {
+                console.log('🔢 Numbering already exists - preserving data');
+            }
+        };
+        request.onerror = () => {
+            console.warn('⚠️ Could not check numbering store during migration');
         };
     }
 
@@ -629,15 +704,22 @@ export { STORE_DEFINITIONS, INDEX_DEFINITIONS };
 // ============================================================
 // SUMMARY
 // ============================================================
-// STORES: 10
+// STORES: 11
 // INDEXES: 35
-// VERSION: 1
+// VERSION: 1 (owned by database.js)
 // 
 // STORE LIST:
 // company, customers, products, invoices, quotations,
-// payments, templates, images, fonts, settings
+// payments, templates, images, fonts, settings, numbering
 // 
 // GST RATES: 0, 5, 7, 9, 18, 28
+// 
+// FIELD NAME SYNCHRONIZATION:
+// ✓ invoices: invoiceNumber, invoiceDate, paymentStatus
+// ✓ quotations: quotationNumber, quotationDate
+// ✓ payments: paymentNumber, paymentDate, paymentMethod
+// ✓ company: companyName, district, pincode, companyLogoId, etc.
+// ✓ numbering: id, invoice, quotation, payment, updatedAt
 // 
 // RESPONSIBILITY:
 // - Schema creation during upgrade
