@@ -4,11 +4,35 @@
  * Version: 1.0.0
  * 
  * ============================================================
- * RESPONSIBILITY
+ * ARCHITECTURE PRINCIPLES
  * ============================================================
  * 
- * payment-service.js provides a clean API for payment CRUD
- * operations using the central H4BillingERP database.
+ * 1. PAYMENTS = SOURCE OF TRUTH
+ *    - All payment records are authoritative
+ *    - Invoice payment status is DERIVED from payments
+ * 
+ * 2. PAYMENT FIRST
+ *    - Payment is always saved first
+ *    - Invoice status update is best effort
+ *    - If invoice update fails, payment remains saved
+ * 
+ * 3. DERIVED / CACHE FIELDS ON INVOICE
+ *    - paidAmount (cached from payments)
+ *    - outstandingAmount (cached from payments)
+ *    - paymentStatus (cached from payments)
+ *    - These are NOT authoritative - they are for performance only
+ * 
+ * ============================================================
+ * INCONSISTENCY HANDLING
+ * ============================================================
+ * 
+ * If invoice status update fails:
+ * - Payment is saved ✅ (source of truth preserved)
+ * - Error is logged with full context
+ * - Admin can manually reconcile via payment list
+ * - Future: Background sync job can retry
+ * 
+ * This is preferable to rolling back a valid payment.
  * 
  * ============================================================
  * DATABASE
@@ -43,24 +67,6 @@
  * payment-service.js does NOT create any store.
  * Stores are created by migration.js only.
  * numbering store MUST exist (created by migration.js).
- * 
- * ============================================================
- * FEATURES
- * ============================================================
- * 
- * - Payment ID (internal unique ID) - IMMUTABLE
- * - Payment Number (customer-facing) - IMMUTABLE
- * - Payment Numbering (from settings / numbering store)
- * - Invoice ID & Number - IMMUTABLE (invoiceId)
- * - Customer ID & Snapshot (preserve customer data)
- * - Amount (positive number only)
- * - Payment Method (Cash, UPI, Bank Transfer, Cheque, Card, Other)
- * - Reference Number (UPI, UTR, Cheque, etc.)
- * - Bank Details (optional)
- * - Notes (optional)
- * - Invoice Payment Status (unpaid, partially_paid, paid, overpaid)
- * - Safe Delete (payment only)
- * - Events + State Sync
  * 
  * ============================================================
  * WHAT IT DOES NOT DO
@@ -246,6 +252,13 @@ class PaymentService {
 
     /**
      * Create a new payment
+     * 
+     * ARCHITECTURE: PAYMENT FIRST
+     * - Payment is saved FIRST (source of truth)
+     * - Invoice status update is attempted AFTER
+     * - If invoice update fails, payment is still saved
+     * - Error is logged for admin reconciliation
+     * 
      * @param {Object} data - Payment data
      * @returns {Promise<Object>} - Created payment
      */
@@ -300,16 +313,35 @@ class PaymentService {
             updatedAt: now
         };
 
-        // Save to database
+        // ============================================================
+        // PAYMENT FIRST - Save payment (source of truth)
+        // ============================================================
         await database.add(this._storeName, payment);
 
-        // Update invoice payment status
+        // ============================================================
+        // INVOICE STATUS UPDATE - Best effort (derived/cache)
+        // ============================================================
         let statusUpdateError = null;
+        let statusUpdateResult = null;
         try {
-            await this._updateInvoicePaymentStatus(invoice.id);
+            statusUpdateResult = await this._updateInvoicePaymentStatus(invoice.id);
+            if (!statusUpdateResult.success) {
+                statusUpdateError = statusUpdateResult.error;
+            }
         } catch (error) {
             statusUpdateError = error;
-            console.error(`❌ Failed to update invoice payment status for ${invoice.invoiceNumber}:`, error.message);
+        }
+
+        // If invoice status update failed, log with full context
+        if (statusUpdateError) {
+            console.error(
+                `⚠️ INVOICE STATUS UPDATE FAILED BUT PAYMENT IS SAVED\n` +
+                `Payment: ${payment.paymentNumber}\n` +
+                `Invoice: ${invoice.invoiceNumber}\n` +
+                `Amount: ${payment.amount}\n` +
+                `Error: ${statusUpdateError.message}\n` +
+                `ACTION REQUIRED: Manually reconcile invoice payment status.`
+            );
         }
 
         // Update state
@@ -321,7 +353,7 @@ class PaymentService {
             console.warn('⚠️ Failed to update payment state:', error.message);
         }
 
-        // Emit event
+        // Emit event with status update error info
         await eventBus.emit(
             EVENTS.PAYMENT_CREATED,
             {
@@ -331,13 +363,17 @@ class PaymentService {
                 invoiceNumber: payment.invoiceNumber,
                 amount: payment.amount,
                 data: payment,
+                statusUpdateSuccess: statusUpdateResult?.success || false,
                 statusUpdateError: statusUpdateError ? statusUpdateError.message : null
             },
             'payment-service'
         );
 
         if (statusUpdateError) {
-            console.warn(`⚠️ Payment ${payment.paymentNumber} created but invoice status update failed: ${statusUpdateError.message}`);
+            console.warn(
+                `⚠️ Payment ${payment.paymentNumber} created successfully but invoice ${invoice.invoiceNumber} status update failed. ` +
+                `Please reconcile manually.`
+            );
         }
 
         console.log(`💰 Payment created: ${payment.paymentNumber} for ${payment.invoiceNumber}`);
@@ -453,11 +489,11 @@ class PaymentService {
     }
 
     // ============================================================
-    // INVOICE PAYMENT SUMMARY
+    // INVOICE PAYMENT SUMMARY - DERIVED FROM PAYMENTS
     // ============================================================
 
     /**
-     * Get invoice paid amount
+     * Get invoice paid amount (DERIVED from payments)
      * @param {string} invoiceId - Invoice ID
      * @returns {Promise<number>} - Total paid amount
      */
@@ -468,7 +504,7 @@ class PaymentService {
     }
 
     /**
-     * Get invoice outstanding amount
+     * Get invoice outstanding amount (DERIVED from payments)
      * @param {string} invoiceId - Invoice ID
      * @returns {Promise<number>} - Outstanding amount
      */
@@ -483,13 +519,11 @@ class PaymentService {
         const totalPaid = await this.getInvoicePaidAmount(invoiceId);
         const grandTotal = invoice.grandTotal || 0;
         
-        // Outstanding = max(0, Grand Total - Paid)
-        // If overpaid, outstanding = 0
         return Math.max(0, grandTotal - totalPaid);
     }
 
     /**
-     * Get invoice payment status
+     * Get invoice payment status (DERIVED from payments)
      * @param {string} invoiceId - Invoice ID
      * @returns {Promise<Object>} - Payment status
      */
@@ -505,7 +539,6 @@ class PaymentService {
         const grandTotal = invoice.grandTotal || 0;
         const outstanding = Math.max(0, grandTotal - totalPaid);
 
-        // Determine status
         let status = 'unpaid';
         if (totalPaid > 0) {
             if (totalPaid > grandTotal) {
@@ -539,7 +572,7 @@ class PaymentService {
     }
 
     /**
-     * Get full payment summary for an invoice
+     * Get full payment summary for an invoice (DERIVED from payments)
      * @param {string} invoiceId - Invoice ID
      * @returns {Promise<Object>} - Payment summary
      */
@@ -580,25 +613,34 @@ class PaymentService {
     }
 
     // ============================================================
-    // UPDATE INVOICE PAYMENT STATUS
+    // UPDATE INVOICE PAYMENT STATUS - CACHE ONLY
     // ============================================================
 
     /**
-     * Update invoice payment status in invoice record
+     * Update invoice payment status in invoice record (CACHE ONLY)
+     * 
+     * ARCHITECTURE: This updates the CACHED fields on invoice
+     * The authoritative source is the payments store.
+     * If this fails, the invoice cache is stale but payments are correct.
+     * 
      * @param {string} invoiceId - Invoice ID
      * @returns {Promise<Object>} - { success: boolean, error: Error|null }
      */
     async _updateInvoicePaymentStatus(invoiceId) {
         try {
+            // Derive status from payments (source of truth)
             const status = await this.getInvoicePaymentStatus(invoiceId);
+            
+            // Update invoice cache fields
             await invoiceService.updateInvoice(invoiceId, {
                 paymentStatus: status.status,
                 paidAmount: status.paidAmount,
                 outstandingAmount: status.outstandingAmount
             });
+            
             return { success: true, error: null };
         } catch (error) {
-            console.error(`❌ Invoice status update failed for ${invoiceId}:`, error.message);
+            console.error(`❌ Invoice cache update failed for ${invoiceId}:`, error.message);
             return { success: false, error: error };
         }
     }
@@ -664,13 +706,26 @@ class PaymentService {
         // Save to database
         await database.put(this._storeName, updatedPayment);
 
-        // Update invoice payment status for the (unchanged) invoice
+        // Update invoice cache (best effort)
         let statusUpdateError = null;
+        let statusUpdateResult = null;
         try {
-            await this._updateInvoicePaymentStatus(updatedPayment.invoiceId);
+            statusUpdateResult = await this._updateInvoicePaymentStatus(updatedPayment.invoiceId);
+            if (!statusUpdateResult.success) {
+                statusUpdateError = statusUpdateResult.error;
+            }
         } catch (error) {
             statusUpdateError = error;
-            console.error(`❌ Failed to update invoice payment status for ${updatedPayment.invoiceNumber}:`, error.message);
+        }
+
+        if (statusUpdateError) {
+            console.error(
+                `⚠️ INVOICE CACHE UPDATE FAILED BUT PAYMENT IS UPDATED\n` +
+                `Payment: ${updatedPayment.paymentNumber}\n` +
+                `Invoice: ${updatedPayment.invoiceNumber}\n` +
+                `Error: ${statusUpdateError.message}\n` +
+                `ACTION REQUIRED: Manually reconcile invoice cache.`
+            );
         }
 
         // Update state
@@ -692,13 +747,17 @@ class PaymentService {
                 invoiceNumber: updatedPayment.invoiceNumber,
                 amount: updatedPayment.amount,
                 data: updatedPayment,
+                statusUpdateSuccess: statusUpdateResult?.success || false,
                 statusUpdateError: statusUpdateError ? statusUpdateError.message : null
             },
             'payment-service'
         );
 
         if (statusUpdateError) {
-            console.warn(`⚠️ Payment ${updatedPayment.paymentNumber} updated but invoice status update failed: ${statusUpdateError.message}`);
+            console.warn(
+                `⚠️ Payment ${updatedPayment.paymentNumber} updated but invoice cache update failed. ` +
+                `Please reconcile manually.`
+            );
         }
 
         console.log(`💰 Payment updated: ${updatedPayment.paymentNumber}`);
@@ -733,13 +792,26 @@ class PaymentService {
         // Delete from database
         await database.delete(this._storeName, id);
 
-        // Update invoice payment status
+        // Update invoice cache (best effort)
         let statusUpdateError = null;
+        let statusUpdateResult = null;
         try {
-            await this._updateInvoicePaymentStatus(invoiceId);
+            statusUpdateResult = await this._updateInvoicePaymentStatus(invoiceId);
+            if (!statusUpdateResult.success) {
+                statusUpdateError = statusUpdateResult.error;
+            }
         } catch (error) {
             statusUpdateError = error;
-            console.error(`❌ Failed to update invoice payment status after deletion:`, error.message);
+        }
+
+        if (statusUpdateError) {
+            console.error(
+                `⚠️ INVOICE CACHE UPDATE FAILED AFTER PAYMENT DELETION\n` +
+                `Payment: ${payment.paymentNumber}\n` +
+                `Invoice: ${payment.invoiceNumber}\n` +
+                `Error: ${statusUpdateError.message}\n` +
+                `ACTION REQUIRED: Manually reconcile invoice cache.`
+            );
         }
 
         // Update state
@@ -763,13 +835,17 @@ class PaymentService {
                 invoiceNumber: payment.invoiceNumber,
                 amount: payment.amount,
                 data: payment,
+                statusUpdateSuccess: statusUpdateResult?.success || false,
                 statusUpdateError: statusUpdateError ? statusUpdateError.message : null
             },
             'payment-service'
         );
 
         if (statusUpdateError) {
-            console.warn(`⚠️ Payment ${payment.paymentNumber} deleted but invoice status update failed: ${statusUpdateError.message}`);
+            console.warn(
+                `⚠️ Payment ${payment.paymentNumber} deleted but invoice cache update failed. ` +
+                `Please reconcile manually.`
+            );
         }
 
         console.log(`💰 Payment deleted: ${payment.paymentNumber}`);
@@ -1038,6 +1114,37 @@ class PaymentService {
             averageAmount: total > 0 ? totalAmount / total : 0
         };
     }
+
+    /**
+     * Reconcile invoice payment cache
+     * Background job to fix stale invoice cache
+     * @param {string} invoiceId - Invoice ID to reconcile
+     * @returns {Promise<Object>} - Reconciliation result
+     */
+    async reconcileInvoiceCache(invoiceId) {
+        await this.initialize();
+
+        const invoice = await invoiceService.getInvoice(invoiceId);
+        if (!invoice) {
+            throw new Error(`Invoice not found: ${invoiceId}`);
+        }
+
+        const status = await this.getInvoicePaymentStatus(invoiceId);
+        
+        // Force update cache
+        await invoiceService.updateInvoice(invoiceId, {
+            paymentStatus: status.status,
+            paidAmount: status.paidAmount,
+            outstandingAmount: status.outstandingAmount
+        });
+
+        return {
+            invoiceId: invoiceId,
+            invoiceNumber: invoice.invoiceNumber,
+            reconciled: true,
+            status: status
+        };
+    }
 }
 
 // ============================================================
@@ -1060,38 +1167,27 @@ export default paymentService;
 // DATABASE: H4BillingERP → payments store
 // EVENTS: PAYMENT_CREATED, PAYMENT_UPDATED, PAYMENT_DELETED
 // 
-// NUMBERING STORE: MUST exist (created by migration.js)
+// ARCHITECTURE PRINCIPLES:
 // 
-// IMMUTABLE FIELDS:
-// - id: Cannot be changed
-// - paymentNumber: Cannot be changed
-// - invoiceId: Cannot be changed (must delete and recreate)
-// - invoiceNumber: Cannot be changed (derived from invoiceId)
-// - customerId: Cannot be changed (derived from invoiceId)
-// - customerSnapshot: Cannot be changed (from creation)
-// - createdAt: Cannot be changed
+// 1. PAYMENTS = SOURCE OF TRUTH
+//    - All payment records are authoritative
+//    - Invoice payment status is DERIVED from payments
 // 
-// MUTABLE FIELDS:
-// - paymentDate: Can be updated
-// - amount: Can be updated
-// - paymentMethod: Can be updated
-// - referenceNumber: Can be updated
-// - bankName: Can be updated
-// - accountName: Can be updated
-// - notes: Can be updated
+// 2. PAYMENT FIRST
+//    - Payment is always saved first
+//    - Invoice status update is best effort
+//    - If invoice update fails, payment remains saved
 // 
-// PAYMENT STATUSES:
-// - unpaid: Paid = 0
-// - partially_paid: 0 < Paid < Grand Total
-// - paid: Paid >= Grand Total
-// - overpaid: Paid > Grand Total
+// 3. DERIVED / CACHE FIELDS ON INVOICE
+//    - paidAmount (cached from payments)
+//    - outstandingAmount (cached from payments)
+//    - paymentStatus (cached from payments)
+//    - These are NOT authoritative - they are for performance only
 // 
-// OUTSTANDING:
-// - outstandingAmount = max(0, Grand Total - Paid)
-// - Overpaid → outstanding = 0
-// 
-// STORE CREATION:
-// - payment-service.js does NOT create stores
-// - migration.js creates all stores including numbering
+// 4. INCONSISTENCY HANDLING
+//    - Payment saved ✅ (source of truth preserved)
+//    - Error logged with full context
+//    - Admin can manually reconcile
+//    - Future: Background sync job can retry
 // 
 // ============================================================
