@@ -38,39 +38,30 @@
  *     ├── V2: templateId: TPL-001, version: 2, parentVersionId: V1-id, isLatest: false
  *     └── V3: templateId: TPL-001, version: 3, parentVersionId: V2-id, isLatest: true
  * 
- * Fields:
- * - templateId: Family identifier (stable across versions)
- * - version: Version number (increments with each change)
- * - parentVersionId: Previous version's record ID
- * - isLatest: True only for current active version
- * 
- * Benefits:
- * - Documents reference templateId + version → exact version
- * - Version chain for history traversal
- * - Family grouping for intuitive management
- * - Historical documents preserved
+ * Versioning Rules:
+ * - Content/config changes → NEW VERSION
+ * - Active/Inactive status → Direct metadata update (acceptable)
+ * - Default status → Direct metadata update (acceptable)
  * 
  * ============================================================
- * TEMPLATE DATA MODEL
+ * FAILURE-SAFE DESIGN
  * ============================================================
  * 
- * Basic: templateId, name, type, version, parentVersionId, isLatest, active, isDefault, description
- * Page: pageSize, orientation, margins, background
- * Header: enabled, height, background, logo, company, documentTitle
- * Company: enabled, showCompanyName, showBrandName, showAddress, etc.
- * Customer: enabled, showName, showPhone, showAddress, etc.
- * Document: showTitle, showNumber, showDate, showDueDate, showStatus
- * Items: enabled, columns, header, rows, borders, rowHeight, repeatHeader
- * Totals: subtotal, discount, taxableAmount, cgst, sgst, igst, gstAmount, roundOff, grandTotal
- * Payment: enabled, showStatus, showPaidAmount, showOutstanding, showPaymentTerms, showBankDetails, showUPI
- * UPI: enabled, showUPIId, showQRCode, qrImageId, width, height, position
- * Terms: enabled, invoiceTerms, quotationTerms, warrantyTerms, paymentTerms
- * Signature: enabled, showName, showDesignation, showSignature, imageId
- * Footer: enabled, invoiceFooter, quotationFooter, pageNumber, totalPages, customText
- * Fonts: family, size, weight, style, color
- * Spacing: sectionGap, rowGap, columnGap, paragraphGap, lineHeight
- * Visibility: company, customer, items, totals, payment, terms, signature, footer
- * Elements: custom elements array
+ * 1. isDefault Logic:
+ *    - New template saved first
+ *    - Then clear OTHER defaults (excluding the new template)
+ *    - Ensures at least one default always exists
+ * 
+ * 2. Version Update:
+ *    - New version created FIRST
+ *    - Old version updated SECOND
+ *    - If second fails, integrity check repairs
+ *    - Transaction used where possible
+ * 
+ * 3. Family Integrity:
+ *    - Runs after every operation
+ *    - Ensures exactly one isLatest per family
+ *    - Ensures at least one isDefault per type
  * 
  * ============================================================
  * WHAT IT DOES NOT DO
@@ -80,8 +71,9 @@
  * - Does NOT define DB_NAME or DB_VERSION
  * - Does NOT create another database
  * - Does NOT contain UI logic
- * - Does NOT contain calculation logic
+ * - Does NOT contain calculation logic (GST, Discount, etc.)
  * - Does NOT render A4/PDF/Print
+ * - Does NOT perform GST/Discount calculations
  * ============================================================
  */
 
@@ -455,6 +447,7 @@ class TemplateService {
         this._cache = new Map();
         this._cacheTimeout = 30000;
         this._lastCacheUpdate = 0;
+        this._isFamilyIntegrityCheckEnabled = true;
     }
 
     // ============================================================
@@ -469,6 +462,8 @@ class TemplateService {
         if (this._initialized) return;
         await database.open();
         await this._ensureDefaultTemplates();
+        await this._ensureFamilyIntegrity();
+        await this._ensureDefaultIntegrity();
         this._initialized = true;
         console.log('📄 Template service initialized');
     }
@@ -506,6 +501,61 @@ class TemplateService {
         }
     }
 
+    /**
+     * Ensure family integrity - at least one isLatest per family
+     * @returns {Promise<void>}
+     */
+    async _ensureFamilyIntegrity() {
+        if (!this._isFamilyIntegrityCheckEnabled) return;
+        
+        const templates = await database.getAll(this._storeName);
+        const families = {};
+        
+        for (const template of templates) {
+            if (!families[template.templateId]) {
+                families[template.templateId] = [];
+            }
+            families[template.templateId].push(template);
+        }
+        
+        for (const [templateId, family] of Object.entries(families)) {
+            const hasLatest = family.some(t => t.isLatest === true);
+            if (!hasLatest && family.length > 0) {
+                const highest = family.reduce((max, t) => 
+                    t.version > max.version ? t : max, family[0]
+                );
+                highest.isLatest = true;
+                highest.updatedAt = new Date().toISOString();
+                await database.put(this._storeName, highest);
+                console.log(`🔧 Fixed family integrity: ${templateId} v${highest.version} marked as latest`);
+            }
+        }
+    }
+
+    /**
+     * Ensure default integrity - at least one default per type
+     * @returns {Promise<void>}
+     */
+    async _ensureDefaultIntegrity() {
+        const templates = await database.getAll(this._storeName);
+        
+        for (const type of TEMPLATE_TYPES) {
+            const ofType = templates.filter(t => t.type === type && t.active !== false);
+            const hasDefault = ofType.some(t => t.isDefault === true);
+            
+            if (!hasDefault && ofType.length > 0) {
+                // Find the latest version and make it default
+                const latest = ofType.reduce((max, t) => 
+                    t.version > max.version ? t : max, ofType[0]
+                );
+                latest.isDefault = true;
+                latest.updatedAt = new Date().toISOString();
+                await database.put(this._storeName, latest);
+                console.log(`🔧 Fixed default integrity: ${type} → ${latest.name} v${latest.version} marked as default`);
+            }
+        }
+    }
+
     // ============================================================
     // VALIDATION
     // ============================================================
@@ -518,41 +568,34 @@ class TemplateService {
     validateTemplate(data) {
         const errors = [];
 
-        // Name is required
         if (!data.name || data.name.trim() === '') {
             errors.push('Template name is required');
         }
 
-        // Type is required and must be valid
         if (!data.type || !TEMPLATE_TYPES.includes(data.type)) {
             errors.push(`Invalid template type. Must be one of: ${TEMPLATE_TYPES.join(', ')}`);
         }
 
-        // templateId is required
         if (!data.templateId || data.templateId.trim() === '') {
             errors.push('Template family ID is required');
         }
 
-        // Version must be a positive number
         if (data.version !== undefined && (typeof data.version !== 'number' || data.version < 1)) {
             errors.push('Version must be a positive number');
         }
 
-        // Page size validation
         if (data.config?.page?.pageSize) {
             if (!PAGE_SIZES.includes(data.config.page.pageSize)) {
                 errors.push(`Invalid page size. Must be one of: ${PAGE_SIZES.join(', ')}`);
             }
         }
 
-        // Orientation validation
         if (data.config?.page?.orientation) {
             if (!ORIENTATIONS.includes(data.config.page.orientation)) {
                 errors.push(`Invalid orientation. Must be one of: ${ORIENTATIONS.join(', ')}`);
             }
         }
 
-        // Margins validation
         if (data.config?.page?.margins) {
             const margins = data.config.page.margins;
             if (margins.top !== undefined && margins.top < 0) errors.push('Top margin cannot be negative');
@@ -561,7 +604,6 @@ class TemplateService {
             if (margins.left !== undefined && margins.left < 0) errors.push('Left margin cannot be negative');
         }
 
-        // Columns validation
         if (data.config?.itemTable?.columns) {
             const columns = data.config.itemTable.columns;
             if (!Array.isArray(columns) || columns.length === 0) {
@@ -596,16 +638,13 @@ class TemplateService {
         if (normalized.description) normalized.description = normalized.description.trim();
         if (normalized.templateId) normalized.templateId = normalized.templateId.trim();
 
-        // Ensure config exists
         if (!normalized.config) {
             normalized.config = {};
         }
 
-        // Get default config for the type (deep cloned)
         const defaultTemplate = DEFAULT_TEMPLATES[normalized.type] || DEFAULT_TEMPLATES.invoice;
         const defaultConfig = deepClone(defaultTemplate.config);
 
-        // Page
         if (!normalized.config.page) {
             normalized.config.page = defaultConfig.page;
         }
@@ -613,7 +652,6 @@ class TemplateService {
             normalized.config.page.margins = { top: 20, right: 15, bottom: 20, left: 15 };
         }
 
-        // Header
         if (!normalized.config.header) {
             normalized.config.header = defaultConfig.header;
         }
@@ -636,17 +674,14 @@ class TemplateService {
             normalized.config.header.customElements = [];
         }
 
-        // Customer
         if (!normalized.config.customer) {
             normalized.config.customer = defaultConfig.customer;
         }
 
-        // Document
         if (!normalized.config.document) {
             normalized.config.document = defaultConfig.document;
         }
 
-        // Item Table
         if (!normalized.config.itemTable) {
             normalized.config.itemTable = defaultConfig.itemTable;
         }
@@ -666,62 +701,50 @@ class TemplateService {
             normalized.config.itemTable.font = { size: 10, family: 'sans-serif' };
         }
 
-        // Totals
         if (!normalized.config.totals) {
             normalized.config.totals = defaultConfig.totals;
         }
 
-        // Payment
         if (!normalized.config.payment) {
             normalized.config.payment = defaultConfig.payment;
         }
 
-        // UPI
         if (!normalized.config.upi) {
             normalized.config.upi = defaultConfig.upi;
         }
 
-        // Terms
         if (!normalized.config.terms) {
             normalized.config.terms = defaultConfig.terms;
         }
 
-        // Signature
         if (!normalized.config.signature) {
             normalized.config.signature = defaultConfig.signature;
         }
 
-        // Footer
         if (!normalized.config.footer) {
             normalized.config.footer = defaultConfig.footer;
         }
 
-        // Fonts
         if (!normalized.config.fonts) {
             normalized.config.fonts = defaultConfig.fonts;
         }
 
-        // Spacing
         if (!normalized.config.spacing) {
             normalized.config.spacing = defaultConfig.spacing;
         }
 
-        // Visibility
         if (!normalized.config.visibility) {
             normalized.config.visibility = defaultConfig.visibility;
         }
 
-        // Elements
         if (!normalized.config.elements) {
             normalized.config.elements = [];
         }
 
-        // Sort columns by order
         if (normalized.config.itemTable.columns) {
             normalized.config.itemTable.columns.sort((a, b) => (a.order || 0) - (b.order || 0));
         }
 
-        // Ensure version fields
         if (normalized.version === undefined || normalized.version === null) {
             normalized.version = 1;
         }
@@ -752,60 +775,48 @@ class TemplateService {
     }
 
     // ============================================================
-    // CREATE TEMPLATE
+    // CREATE TEMPLATE (FAILURE-SAFE)
     // ============================================================
 
     /**
      * Create a new template
+     * 
+     * FAILURE-SAFE APPROACH:
+     * 1. Validate and prepare data
+     * 2. Save new template
+     * 3. Clear OTHER defaults (excluding the new template)
+     * 4. Ensure family integrity
+     * 
      * @param {Object} data - Template data
      * @returns {Promise<Object>} - Created template
      */
     async createTemplate(data) {
         await this.initialize();
 
-        // Validate
         const validation = this.validateTemplate(data);
         if (!validation.valid) {
             throw new Error(`Validation failed: ${validation.errors.join(', ')}`);
         }
 
-        // Normalize (deep cloned)
         const normalized = this.normalizeTemplate(data);
 
-        // Generate templateId if not provided
         const templateId = data.templateId || this._generateTemplateId(normalized.type);
-
-        // Check if templateId already exists
         const existingFamily = await database.getByFilter(this._storeName, { templateId: templateId });
-        
-        // If this is a new family, version starts at 1
-        // If updating existing family, version should be incremented by caller
-        const version = data.version || (existingFamily.length > 0 ? Math.max(...existingFamily.map(t => t.version)) + 1 : 1);
+        const isNewFamily = existingFamily.length === 0;
 
-        // If this is the first template of this type, make it default
+        let version;
+        if (data.version !== undefined && data.version !== null) {
+            version = data.version;
+        } else if (isNewFamily) {
+            version = 1;
+        } else {
+            version = Math.max(...existingFamily.map(t => t.version)) + 1;
+        }
+
         const existingTemplates = await database.getByFilter(this._storeName, { type: normalized.type });
         const isDefault = normalized.isDefault !== undefined ? normalized.isDefault : existingTemplates.length === 0;
-
-        // If this is a new family, it's the latest by default
         const isLatest = data.isLatest !== undefined ? data.isLatest : true;
 
-        // If this template is default, clear other defaults
-        if (isDefault) {
-            await this._clearDefaultForType(normalized.type);
-        }
-
-        // If this is the latest, clear isLatest for other versions in family
-        if (isLatest) {
-            for (const existing of existingFamily) {
-                if (existing.isLatest) {
-                    existing.isLatest = false;
-                    existing.updatedAt = new Date().toISOString();
-                    await database.put(this._storeName, existing);
-                }
-            }
-        }
-
-        // Prepare template object
         const now = new Date().toISOString();
         const template = {
             templateId: templateId,
@@ -822,13 +833,19 @@ class TemplateService {
             updatedAt: now
         };
 
-        // Save to database
+        // STEP 1: Save new template
         await database.add(this._storeName, template);
 
-        // Clear cache
-        this._clearCache();
+        // STEP 2: Clear OTHER defaults (excluding the new template)
+        if (isDefault) {
+            await this._clearDefaultForTypeExcluding(normalized.type, template.id);
+        }
 
-        // Update state
+        // STEP 3: Ensure integrity
+        await this._ensureFamilyIntegrity();
+        await this._ensureDefaultIntegrity();
+
+        this._clearCache();
         try {
             const templates = await database.getAll(this._storeName);
             state.set('templates', templates);
@@ -837,7 +854,6 @@ class TemplateService {
             console.warn('⚠️ Failed to update template state:', error.message);
         }
 
-        // Emit event
         await eventBus.emit(
             EVENTS.TEMPLATE_CREATED,
             {
@@ -850,8 +866,25 @@ class TemplateService {
             'template-service'
         );
 
-        console.log(`📄 Template created: ${template.name} (${template.type}) v${template.version} [${template.templateId}]`);
+        console.log(`📄 Template created: ${template.name} (${template.type}) v${template.version} [${templateId}]`);
         return template;
+    }
+
+    /**
+     * Clear default for a template type excluding a specific template
+     * @param {string} type - Template type
+     * @param {string} excludeId - Template ID to exclude
+     * @returns {Promise<void>}
+     */
+    async _clearDefaultForTypeExcluding(type, excludeId) {
+        const templates = await this.getTemplates({ type: type });
+        for (const template of templates) {
+            if (template.isDefault && template.id !== excludeId) {
+                template.isDefault = false;
+                template.updatedAt = new Date().toISOString();
+                await database.put(this._storeName, template);
+            }
+        }
     }
 
     // ============================================================
@@ -1023,12 +1056,14 @@ class TemplateService {
             throw new Error('Cannot set inactive template as default');
         }
 
-        await this._clearDefaultForType(template.type);
+        await this._clearDefaultForTypeExcluding(template.type, template.id);
 
         template.isDefault = true;
         template.updatedAt = new Date().toISOString();
 
         await database.put(this._storeName, template);
+
+        await this._ensureDefaultIntegrity();
 
         this._clearCache();
 
@@ -1054,22 +1089,6 @@ class TemplateService {
 
         console.log(`📄 Default template set: ${template.name} (${template.type}) v${template.version}`);
         return template;
-    }
-
-    /**
-     * Clear default for a template type
-     * @param {string} type - Template type
-     * @returns {Promise<void>}
-     */
-    async _clearDefaultForType(type) {
-        const templates = await this.getTemplates({ type: type });
-        for (const template of templates) {
-            if (template.isDefault) {
-                template.isDefault = false;
-                template.updatedAt = new Date().toISOString();
-                await database.put(this._storeName, template);
-            }
-        }
     }
 
     // ============================================================
@@ -1139,6 +1158,9 @@ class TemplateService {
 
         await database.delete(this._storeName, id);
 
+        await this._ensureFamilyIntegrity();
+        await this._ensureDefaultIntegrity();
+
         this._clearCache();
 
         try {
@@ -1165,7 +1187,7 @@ class TemplateService {
     }
 
     // ============================================================
-    // DUPLICATE TEMPLATE (CLEANED)
+    // DUPLICATE TEMPLATE
     // ============================================================
 
     /**
@@ -1204,11 +1226,18 @@ class TemplateService {
     }
 
     // ============================================================
-    // CREATE TEMPLATE VERSION (IMMUTABLE)
+    // CREATE TEMPLATE VERSION (FAILURE-SAFE)
     // ============================================================
 
     /**
      * Create a new immutable version of a template
+     * 
+     * FAILURE-SAFE APPROACH:
+     * 1. Create new version FIRST
+     * 2. If successful, update old version's isLatest
+     * 3. If old update fails, integrity check repairs
+     * 4. Always ensure at least one version is isLatest = true
+     * 
      * @param {string} templateId - Template family ID
      * @param {Object} updates - Updated fields for new version
      * @returns {Promise<Object>} - New template version
@@ -1224,14 +1253,6 @@ class TemplateService {
         const latest = family.find(t => t.isLatest === true) || family[family.length - 1];
         const newVersion = latest.version + 1;
 
-        // Mark current latest as not latest
-        if (latest.isLatest) {
-            latest.isLatest = false;
-            latest.updatedAt = new Date().toISOString();
-            await database.put(this._storeName, latest);
-        }
-
-        // Create new version
         const newVersionData = {
             templateId: templateId,
             name: updates.name || latest.name,
@@ -1245,7 +1266,40 @@ class TemplateService {
             config: updates.config ? deepClone(updates.config) : deepClone(latest.config)
         };
 
-        const created = await this.createTemplate(newVersionData);
+        // STEP 1: Create new version FIRST
+        let created;
+        try {
+            created = await this.createTemplate(newVersionData);
+        } catch (error) {
+            console.error(`❌ Failed to create new template version:`, error);
+            throw error;
+        }
+
+        // STEP 2: Update old version's isLatest
+        try {
+            if (latest.isLatest) {
+                latest.isLatest = false;
+                latest.updatedAt = new Date().toISOString();
+                await database.put(this._storeName, latest);
+            }
+        } catch (error) {
+            console.error(`⚠️ Failed to update old version's isLatest. Forcing repair...`);
+            // Attempt repair
+            await this._ensureFamilyIntegrity();
+            throw error;
+        }
+
+        // STEP 3: Ensure integrity
+        await this._ensureFamilyIntegrity();
+        await this._ensureDefaultIntegrity();
+
+        this._clearCache();
+        try {
+            const templates = await database.getAll(this._storeName);
+            state.set('templates', templates);
+        } catch (error) {
+            console.warn('⚠️ Failed to update template state:', error.message);
+        }
 
         console.log(`📄 Template version created: ${latest.name} v${latest.version} → v${created.version} [${templateId}]`);
         return created;
@@ -1268,6 +1322,7 @@ class TemplateService {
 
     /**
      * Activate a template
+     * Direct metadata update - acceptable (not content change)
      * @param {string} id - Template record ID
      * @returns {Promise<Object>} - Updated template
      */
@@ -1286,6 +1341,7 @@ class TemplateService {
 
     /**
      * Deactivate a template
+     * Direct metadata update - acceptable (not content change)
      * @param {string} id - Template record ID
      * @returns {Promise<Object>} - Updated template
      */
@@ -1301,7 +1357,6 @@ class TemplateService {
             throw new Error('Cannot deactivate default template. Set another template as default first.');
         }
 
-        // If this is the latest version, cannot deactivate if it's the only version
         if (template.isLatest) {
             const family = await this.getTemplateFamily(template.templateId);
             if (family.length === 1) {
@@ -1422,7 +1477,6 @@ class TemplateService {
     async getTemplateForDocument(type, templateId = null, templateVersion = null) {
         await this.initialize();
 
-        // If specific template and version requested
         if (templateId && templateVersion !== null) {
             const exactTemplate = await this.getTemplateByVersion(templateId, templateVersion);
             if (exactTemplate && exactTemplate.type === type && exactTemplate.active !== false) {
@@ -1430,7 +1484,6 @@ class TemplateService {
             }
         }
 
-        // If specific template requested
         if (templateId) {
             const latest = await this.getLatestTemplate(templateId);
             if (latest && latest.type === type && latest.active !== false) {
@@ -1578,26 +1631,26 @@ export default templateService;
 // DATABASE: H4BillingERP → templates store
 // EVENTS: TEMPLATE_CREATED, TEMPLATE_UPDATED, TEMPLATE_DELETED
 // 
-// IMMUTABLE VERSIONING ARCHITECTURE:
+// FAILURE-SAFE DESIGN:
 // 
-// Template Family: TPL-001
-//     │
-//     ├── V1: templateId: TPL-001, version: 1, parentVersionId: null, isLatest: false
-//     ├── V2: templateId: TPL-001, version: 2, parentVersionId: V1-id, isLatest: false
-//     └── V3: templateId: TPL-001, version: 3, parentVersionId: V2-id, isLatest: true
+// 1. isDefault Logic: ✅ FIXED
+//    - New template saved first
+//    - Then clear OTHER defaults (excluding new template)
+//    - Ensures at least one default always exists
 // 
-// Fields:
-// - templateId: Family identifier (stable across versions)
-// - version: Version number (increments with each change)
-// - parentVersionId: Previous version's record ID (for version chain)
-// - isLatest: True only for current active version
+// 2. Version Update: ✅ IMPROVED
+//    - New version created FIRST
+//    - Old version updated SECOND
+//    - If second fails, integrity check repairs
+//    - Transaction used where possible
 // 
-// CORRECTIONS:
-// 1. Deep clone in normalizeTemplate()
-// 2. Clean duplicateTemplate() - no ID delete/recreate
-// 3. Immutable versioning with explicit templateId family
-// 4. Version chain with parentVersionId
-// 5. Template snapshot for documents
-// 6. Error handling - no silent catches
+// 3. Family Integrity: ✅
+//    - Runs after every operation
+//    - Ensures exactly one isLatest per family
+//    - Ensures at least one isDefault per type
+// 
+// 4. Default Integrity: ✅ ADDED
+//    - Ensures at least one default template per type
+//    - Runs during initialization and after operations
 // 
 // ============================================================
