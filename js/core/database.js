@@ -1028,7 +1028,10 @@ class H4Database {
 
 const H4DB = new H4Database();
 
-export { H4DB };
+// Central database alias
+const database = H4DB;
+
+export { H4DB, database };
 export default H4DB;
 
 // ============================================================
