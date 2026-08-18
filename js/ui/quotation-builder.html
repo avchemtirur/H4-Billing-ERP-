@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -14,55 +14,63 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6C3BC5;
+            --primary-dark: #4A2A8A;
+            --primary-light: #8B5CF6;
+            --gold: #FFD700;
+            --gold-dark: #F59E0B;
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --border: #e5e7eb;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f2f5;
-            color: #1a1a2e;
+            background: var(--bg);
+            color: var(--text-primary);
             min-height: 100vh;
-            overflow: hidden;
-            height: 100vh;
+            padding: 20px;
         }
 
         /* ============================================================
            HEADER
            ============================================================ */
-        .app-header {
-            background: #ffffff;
-            padding: 12px 24px;
-            border-bottom: 1px solid #e9ecef;
+        .page-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            height: 60px;
-        }
-
-        .app-header .brand {
-            display: flex;
             align-items: center;
+            flex-wrap: wrap;
             gap: 12px;
+            margin-bottom: 24px;
         }
 
-        .app-header .brand h1 {
-            font-size: 18px;
+        .page-header h1 {
+            font-size: 24px;
             font-weight: 700;
-            color: #6C3BC5;
+            color: var(--text-primary);
         }
 
-        .app-header .brand span {
-            font-size: 13px;
-            color: #666;
-            font-weight: 400;
+        .page-header .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 2px;
         }
 
         .header-actions {
             display: flex;
             gap: 8px;
-            align-items: center;
             flex-wrap: wrap;
         }
 
@@ -70,480 +78,584 @@
            BUTTONS
            ============================================================ */
         .btn {
-            padding: 6px 16px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
+            font-family: inherit;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            text-decoration: none;
         }
 
-        .btn-primary {
-            background: #6C3BC5;
-            color: #ffffff;
-        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-primary:hover {
-            background: #4A2A8A;
-        }
+        .btn-secondary { background: var(--bg); color: var(--text-secondary); }
+        .btn-secondary:hover { background: var(--border); color: var(--text-primary); }
 
-        .btn-secondary {
-            background: #e9ecef;
-            color: #1a1a2e;
-        }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { background: #059669; }
 
-        .btn-secondary:hover {
-            background: #dee2e6;
-        }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-danger:hover { background: #dc2626; }
 
-        .btn-success {
-            background: #10b981;
-            color: #ffffff;
-        }
-
-        .btn-success:hover {
-            background: #059669;
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: #ffffff;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-        }
+        .btn-warning { background: var(--warning); color: #fff; }
+        .btn-warning:hover { background: #d97706; }
 
         .btn-outline {
             background: transparent;
-            color: #6C3BC5;
-            border: 1px solid #6C3BC5;
+            color: var(--primary);
+            border: 1px solid var(--primary);
         }
+        .btn-outline:hover { background: var(--primary); color: #fff; }
 
-        .btn-outline:hover {
-            background: #6C3BC5;
-            color: #ffffff;
-        }
-
-        .btn-sm {
-            padding: 4px 12px;
-            font-size: 12px;
-        }
-
-        .btn-xs {
-            padding: 2px 8px;
-            font-size: 11px;
-        }
+        .btn-sm { padding: 4px 10px; font-size: 12px; }
+        .btn-xs { padding: 2px 8px; font-size: 11px; }
+        .btn-block { width: 100%; justify-content: center; padding: 12px; }
 
         /* ============================================================
-           MAIN LAYOUT
+           STEP INDICATORS
            ============================================================ */
-        .main-layout {
+        .step-indicators {
             display: flex;
-            height: calc(100vh - 60px);
-            overflow: hidden;
-        }
-
-        /* ============================================================
-           BUILDER SIDEBAR
-           ============================================================ */
-        .builder-sidebar {
-            width: 320px;
-            min-width: 320px;
-            background: #ffffff;
-            border-right: 1px solid #e9ecef;
-            overflow-y: auto;
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .builder-sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .builder-sidebar::-webkit-scrollbar-thumb {
-            background: #d1d5db;
-            border-radius: 4px;
-        }
-
-        /* ============================================================
-           MODAL OVERLAY (for Add Customer)
-           ============================================================ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
             justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border);
+            display: flex;
             align-items: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.open {
-            display: flex;
-        }
-
-        .modal {
-            background: #ffffff;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .modal-header h3 {
-            font-size: 16px;
+            justify-content: center;
             font-weight: 600;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: var(--transition);
+            position: relative;
         }
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            color: #666;
+        .step-indicator.active {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 0 0 4px rgba(108, 59, 197, 0.2);
         }
 
-        .modal-close:hover {
-            color: #1a1a2e;
+        .step-indicator.completed {
+            background: var(--success);
+            color: #fff;
         }
 
-        .modal-body {
-            padding: 20px;
-            overflow-y: auto;
+        .step-indicator .step-label {
+            position: absolute;
+            top: 48px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .step-connector {
             flex: 1;
+            height: 2px;
+            background: var(--border);
+            align-self: center;
+            max-width: 40px;
         }
 
-        .modal-footer {
-            padding: 12px 20px;
-            border-top: 1px solid #e9ecef;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            flex-shrink: 0;
+        .step-connector.completed {
+            background: var(--success);
         }
 
         /* ============================================================
            STEPS
            ============================================================ */
-        .steps {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-        }
-
-        .step-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 500;
-            background: #e9ecef;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .step-indicator:hover {
-            background: #dee2e6;
-        }
-
-        .step-indicator.active {
-            background: #6C3BC5;
-            color: #ffffff;
-        }
-
-        .step-indicator .step-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            font-size: 10px;
-        }
-
-        .step-indicator.active .step-num {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .step-indicator.completed {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        /* ============================================================
-           STEP CONTENT
-           ============================================================ */
-        .step-content {
+        .step {
             display: none;
-            flex: 1;
-            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
         }
 
-        .step-content.active {
+        .step.active {
             display: block;
         }
 
-        .step-content h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1a1a2e;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .step-content .step-desc {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 16px;
+        .step-container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .step-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .step-actions .btn-group {
+            display: flex;
+            gap: 8px;
         }
 
         /* ============================================================
-           FORM
+           CUSTOMER SELECTION
+           ============================================================ */
+        .customer-option {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .customer-option:hover {
+            border-color: var(--primary-light);
+        }
+
+        .customer-option .option-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .customer-option .option-title .badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: #fff;
+        }
+
+        .search-wrapper {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .search-wrapper input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .search-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 59, 197, 0.1);
+        }
+
+        .customer-results {
+            margin-top: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .customer-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .customer-card:hover {
+            background: var(--bg);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .customer-card .customer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .customer-card .customer-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .customer-card .customer-detail {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .customer-card .select-btn {
+            flex-shrink: 0;
+        }
+
+        .divider {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 16px 0;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            border: 1px dashed var(--border);
+        }
+
+        .no-results p {
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        #selectedCustomerDisplay {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        #selectedCustomerDisplay .customer-info-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #selectedCustomerDisplay .customer-info-display .icon {
+            font-size: 20px;
+        }
+
+        .warning-badge {
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           PROJECT DETAILS
            ============================================================ */
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .form-group label {
             display: block;
-            font-size: 13px;
             font-weight: 500;
-            color: #333;
+            font-size: 14px;
             margin-bottom: 4px;
+            color: var(--text-secondary);
         }
 
-        .form-group .help-text {
-            font-size: 11px;
-            color: #999;
-            margin-top: 2px;
-        }
-
-        .form-control {
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
             font-size: 14px;
             font-family: inherit;
-            transition: border-color 0.2s;
-            background: #ffffff;
+            transition: var(--transition);
         }
 
-        .form-control:focus {
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: #6C3BC5;
+            border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(108, 59, 197, 0.1);
         }
 
-        select.form-control {
-            appearance: auto;
-        }
-
-        textarea.form-control {
+        .form-group textarea {
             resize: vertical;
-            min-height: 60px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .form-check {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 0;
-        }
-
-        .form-check input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            accent-color: #6C3BC5;
-        }
-
-        .form-check label {
-            font-size: 13px;
-            font-weight: 400;
-            color: #333;
-            cursor: pointer;
+            min-height: 80px;
         }
 
         /* ============================================================
-           ITEMS TABLE (Builder)
+           ITEMS
            ============================================================ */
-        .items-builder {
-            margin-top: 8px;
+        .items-list {
+            margin: 16px 0;
         }
 
         .item-row {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            border: 1px solid #e9ecef;
-        }
-
-        .item-row .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .item-row .item-header .item-name {
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .item-row .item-fields {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr;
             gap: 8px;
+            align-items: center;
+            padding: 10px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            transition: var(--transition);
         }
 
-        .item-row .item-fields .form-group {
-            margin-bottom: 0;
+        .item-row:hover {
+            background: #e5e7eb;
+        }
+
+        .item-row .item-name {
+            font-weight: 500;
+        }
+
+        .item-row .item-qty,
+        .item-row .item-price {
+            text-align: right;
         }
 
         .item-row .item-total {
-            text-align: right;
             font-weight: 600;
-            font-size: 14px;
-            color: #6C3BC5;
-            margin-top: 6px;
+            color: var(--text-primary);
+            text-align: right;
         }
 
-        .add-item-btn {
-            width: 100%;
-            padding: 10px;
-            border: 2px dashed #d1d5db;
-            border-radius: 8px;
-            background: transparent;
-            cursor: pointer;
+        .item-row .item-actions {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .add-item-form {
+            display: grid;
+            grid-template-columns: 2fr 0.8fr 0.8fr 0.5fr;
+            gap: 8px;
+            align-items: end;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 1px dashed var(--border);
+        }
+
+        .add-item-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .add-item-form .form-group label {
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+
+        .add-item-form input {
+            padding: 6px 10px;
             font-size: 13px;
-            color: #666;
-            transition: all 0.2s;
-        }
-
-        .add-item-btn:hover {
-            border-color: #6C3BC5;
-            color: #6C3BC5;
-            background: #f8f4ff;
         }
 
         /* ============================================================
-           SUMMARY
+           PRICING
            ============================================================ */
-        .summary-box {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 14px;
-            margin-top: 12px;
-            border: 1px solid #e9ecef;
+        .pricing-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
 
-        .summary-row {
+        .pricing-summary .summary-item {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
-            font-size: 13px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
         }
 
-        .summary-row .label {
-            color: #666;
+        .pricing-summary .summary-item .label {
+            color: var(--text-secondary);
         }
 
-        .summary-row .value {
-            font-weight: 500;
+        .pricing-summary .summary-item .value {
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .summary-row.total {
-            font-size: 16px;
-            font-weight: 700;
-            border-top: 2px solid #6C3BC5;
-            padding-top: 8px;
-            margin-top: 4px;
+        .pricing-summary .summary-item.total {
+            grid-column: span 2;
+            background: var(--primary);
+            border-color: var(--primary);
         }
 
-        .summary-row.total .value {
-            color: #6C3BC5;
+        .pricing-summary .summary-item.total .label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .pricing-summary .summary-item.total .value {
+            color: #fff;
+            font-size: 20px;
         }
 
         /* ============================================================
-           PREVIEW AREA
+           PREVIEW
            ============================================================ */
-        .preview-area {
-            flex: 1;
-            background: #f8f9fa;
-            overflow: auto;
+        .preview-content {
             padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            min-height: 200px;
+        }
+
+        .preview-content .preview-row {
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        .preview-frame {
-            width: 100%;
-            max-width: 800px;
-            min-height: 100%;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            padding: 20px;
+        .preview-content .preview-row:last-child {
+            border-bottom: none;
         }
 
-        .preview-frame iframe {
-            width: 100%;
-            min-height: 1000px;
-            border: none;
-            background: #ffffff;
+        .preview-content .preview-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding-top: 12px;
+            border-top: 2px solid var(--text-primary);
+            margin-top: 8px;
         }
 
         /* ============================================================
-           STEP NAVIGATION
+           WARNING MODAL
            ============================================================ */
-        .step-nav {
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9997;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            max-width: 450px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid #e9ecef;
-            margin-top: 12px;
-            gap: 8px;
+            flex-shrink: 0;
         }
 
-        .step-nav .nav-actions {
+        .modal-header h3 { font-size: 18px; font-weight: 600; }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 4px;
+        }
+        .modal-close:hover { color: var(--text-primary); }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            text-align: center;
+        }
+
+        .modal-body .warning-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .modal-body .warning-message {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
             display: flex;
-            gap: 8px;
+            justify-content: center;
+            gap: 10px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
         }
 
         /* ============================================================
@@ -551,610 +663,139 @@
            ============================================================ */
         .toast-container {
             position: fixed;
-            top: 70px;
+            top: 20px;
             right: 20px;
-            z-index: 2000;
+            z-index: 9998;
             display: flex;
             flex-direction: column;
             gap: 8px;
+            pointer-events: none;
         }
 
         .toast {
             padding: 12px 20px;
-            border-radius: 10px;
-            color: #ffffff;
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            color: var(--text-primary);
             font-size: 14px;
             font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             animation: slideIn 0.3s ease;
-            min-width: 280px;
+            pointer-events: auto;
+            border-left: 4px solid var(--primary);
         }
 
-        .toast-success {
-            background: #10b981;
-        }
-
-        .toast-error {
-            background: #ef4444;
-        }
-
-        .toast-warning {
-            background: #f59e0b;
-        }
-
-        .toast-info {
-            background: #3b82f6;
-        }
+        .toast-success { border-left-color: var(--success); }
+        .toast-error { border-left-color: var(--danger); }
+        .toast-warning { border-left-color: var(--warning); }
+        .toast-info { border-left-color: var(--info); }
 
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0%); opacity: 1; }
-        }
-
-        /* ============================================================
-           LOADING
-           ============================================================ */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .loading .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #e9ecef;
-            border-top: 3px solid #6C3BC5;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 12px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         /* ============================================================
            RESPONSIVE
            ============================================================ */
-        @media (max-width: 1024px) {
-            .main-layout {
-                flex-direction: column;
-                height: auto;
-            }
+        @media (max-width: 768px) {
+            body { padding: 12px; }
 
-            .builder-sidebar {
-                width: 100%;
-                min-width: unset;
-                max-height: 60vh;
-                border-right: none;
-                border-bottom: 1px solid #e9ecef;
-            }
+            .page-header h1 { font-size: 20px; }
 
-            .preview-area {
-                min-height: 60vh;
+            .step-indicators {
+                gap: 4px;
                 padding: 12px;
-            }
-
-            .item-row .item-fields {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .app-header {
-                padding: 10px 12px;
-                height: 50px;
-            }
-
-            .app-header .brand h1 {
-                font-size: 15px;
-            }
-
-            .app-header .brand span {
-                display: none;
-            }
-
-            .builder-sidebar {
-                padding: 12px;
-                max-height: 50vh;
-            }
-
-            .item-row .item-fields {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
+                overflow-x: auto;
             }
 
             .step-indicator {
-                font-size: 10px;
-                padding: 2px 8px;
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
             }
 
-            .preview-area {
-                padding: 8px;
-                min-height: 40vh;
+            .step-indicator .step-label {
+                display: none;
             }
 
-            .preview-frame {
-                padding: 8px;
+            .step-connector {
+                max-width: 20px;
+            }
+
+            .step-container { padding: 16px; }
+
+            .item-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 4px;
+            }
+
+            .item-row .item-actions {
+                grid-column: span 2;
+                justify-content: flex-end;
+            }
+
+            .add-item-form {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .add-item-form .form-group:last-child {
+                grid-column: span 2;
+            }
+
+            .pricing-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-summary .summary-item.total {
+                grid-column: span 1;
+            }
+
+            .step-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .step-actions .btn-group {
+                flex-direction: column;
+            }
+
+            .search-wrapper {
+                flex-direction: column;
+            }
+
+            #selectedCustomerDisplay {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
             }
         }
 
-        /* ============================================================
-           DRAFT INDICATOR
-           ============================================================ */
-        .draft-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            background: #fef3c7;
-            color: #92400e;
-        }
+        @media (max-width: 480px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-        .draft-indicator.saved {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        /* ============================================================
-           PRODUCT SELECTOR
-           ============================================================ */
-        .product-selector-wrapper {
-            position: relative;
-        }
-
-        .product-selector-wrapper .product-search {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 50;
-            display: none;
-        }
-
-        .product-selector-wrapper .product-search.show {
-            display: block;
-        }
-
-        .product-selector-wrapper .product-search .product-item {
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 13px;
-            border-bottom: 1px solid #f0f2f5;
-        }
-
-        .product-selector-wrapper .product-search .product-item:hover {
-            background: #f8f4ff;
-        }
-
-        /* ============================================================
-           CUSTOMER SELECTOR
-           ============================================================ */
-        .customer-selector-wrapper {
-            position: relative;
-        }
-
-        .customer-selector-wrapper .customer-search {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 50;
-            display: none;
-        }
-
-        .customer-selector-wrapper .customer-search.show {
-            display: block;
-        }
-
-        .customer-selector-wrapper .customer-search .customer-item {
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 13px;
-            border-bottom: 1px solid #f0f2f5;
-        }
-
-        .customer-selector-wrapper .customer-search .customer-item:hover {
-            background: #f8f4ff;
+            .header-actions {
+                width: 100%;
+            }
+            .header-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
     <!-- ============================================================
-    HEADER
+    LOADING OVERLAY
     ============================================================ -->
-    <header class="app-header">
-        <div class="brand">
-            <h1>🏗️ H4 Billing ERP</h1>
-            <span>Quotation Builder</span>
-            <span id="draftStatus" class="draft-indicator">📝 Draft</span>
-        </div>
-        <div class="header-actions">
-            <button class="btn btn-secondary btn-sm" id="saveDraftBtn">💾 Save Draft</button>
-            <button class="btn btn-success btn-sm" id="saveQuotationBtn">✅ Save Quotation</button>
-            <button class="btn btn-secondary btn-sm" id="backBtn">← Back</button>
-        </div>
-    </header>
-
-    <!-- ============================================================
-    MAIN LAYOUT
-    ============================================================ -->
-    <div class="main-layout">
-
-        <!-- ============================================================
-        BUILDER SIDEBAR
-        ============================================================ -->
-        <div class="builder-sidebar" id="builderSidebar">
-
-            <!-- Steps -->
-            <div class="steps" id="stepsContainer">
-                <div class="step-indicator active" data-step="1">
-                    <span class="step-num">1</span> Customer
-                </div>
-                <div class="step-indicator" data-step="2">
-                    <span class="step-num">2</span> Project
-                </div>
-                <div class="step-indicator" data-step="3">
-                    <span class="step-num">3</span> Items
-                </div>
-                <div class="step-indicator" data-step="4">
-                    <span class="step-num">4</span> Pricing
-                </div>
-                <div class="step-indicator" data-step="5">
-                    <span class="step-num">5</span> Preview
-                </div>
-            </div>
-
-            <!-- ============================================================
-            STEP 1: CUSTOMER
-            ============================================================ -->
-            <div class="step-content active" data-step="1">
-                <h3>👤 Customer Details</h3>
-                <p class="step-desc">Select an existing customer or add a new one.</p>
-
-                <div class="form-group">
-                    <label>Customer</label>
-                    <div class="customer-selector-wrapper">
-                        <select class="form-control" id="customerSelect">
-                            <option value="">Select Customer...</option>
-                        </select>
-                        <div class="customer-search" id="customerSearch"></div>
-                    </div>
-                </div>
-
-                <button class="btn btn-outline btn-sm" id="addCustomerBtn" style="width:100%;">+ Add New Customer</button>
-
-                <div id="customerDetails" style="margin-top:12px;display:none;">
-                    <div class="summary-box">
-                        <div class="summary-row"><span class="label">Name</span><span class="value" id="custName">-</span></div>
-                        <div class="summary-row"><span class="label">Phone</span><span class="value" id="custPhone">-</span></div>
-                        <div class="summary-row"><span class="label">Email</span><span class="value" id="custEmail">-</span></div>
-                        <div class="summary-row"><span class="label">Address</span><span class="value" id="custAddress">-</span></div>
-                        <div class="summary-row"><span class="label">GSTIN</span><span class="value" id="custGstin">-</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================================
-            STEP 2: PROJECT
-            ============================================================ -->
-            <div class="step-content" data-step="2">
-                <h3>📐 Project Details</h3>
-                <p class="step-desc">Enter project information for this quotation.</p>
-
-                <div class="form-group">
-                    <label>Project Name</label>
-                    <input type="text" class="form-control" id="projectName" placeholder="e.g., H4 Terrace Waterproofing">
-                </div>
-
-                <div class="form-group">
-                    <label>Quotation Type</label>
-                    <select class="form-control" id="quotationType">
-                        <option value="general">General</option>
-                        <option value="waterproofing">Waterproofing</option>
-                        <option value="epoxy">Epoxy Flooring</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Reference / PO Number</label>
-                    <input type="text" class="form-control" id="reference" placeholder="Reference number">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Quotation Date</label>
-                        <input type="date" class="form-control" id="quotationDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Valid Until</label>
-                        <input type="date" class="form-control" id="validUntil">
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================================
-            STEP 3: ITEMS
-            ============================================================ -->
-            <div class="step-content" data-step="3">
-                <h3>📊 Items</h3>
-                <p class="step-desc">Add products and services to this quotation.</p>
-
-                <div id="itemsContainer">
-                    <!-- Items will be rendered here -->
-                    <p class="help-text" style="text-align:center;padding:20px;color:#999;">No items added. Click below to add.</p>
-                </div>
-
-                <button class="add-item-btn" id="addItemBtn">+ Add Item</button>
-
-                <!-- Add Item Modal (inline) -->
-                <div id="addItemForm" style="display:none;margin-top:12px;background:#f8f9fa;padding:12px;border-radius:8px;border:1px solid #e9ecef;">
-                    <h4 style="font-size:14px;margin-bottom:8px;">Add Item</h4>
-                    <div class="form-group">
-                        <label>Product</label>
-                        <div class="product-selector-wrapper">
-                            <select class="form-control" id="itemProduct">
-                                <option value="">Select Product...</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Qty</label>
-                            <input type="number" class="form-control" id="itemQty" value="1" min="1" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Unit</label>
-                            <select class="form-control" id="itemUnit">
-                                <option value="Nos">Nos</option>
-                                <option value="Bag">Bag</option>
-                                <option value="Kg">Kg</option>
-                                <option value="Litre">Litre</option>
-                                <option value="Sq.ft">Sq.ft</option>
-                                <option value="Sq.m">Sq.m</option>
-                                <option value="Meter">Meter</option>
-                                <option value="Box">Box</option>
-                                <option value="Set">Set</option>
-                                <option value="Piece">Piece</option>
-                                <option value="Hour">Hour</option>
-                                <option value="Day">Day</option>
-                                <option value="Job">Job</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Rate (₹)</label>
-                            <input type="number" class="form-control" id="itemRate" value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label>Amount</label>
-                            <input type="number" class="form-control" id="itemAmount" readonly style="background:#f0f2f5;">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <input type="text" class="form-control" id="itemDescription" placeholder="Item description">
-                    </div>
-                    <div style="display:flex;gap:8px;margin-top:8px;">
-                        <button class="btn btn-success btn-sm" id="addItemConfirm">Add Item</button>
-                        <button class="btn btn-secondary btn-sm" id="addItemCancel">Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================================
-            STEP 4: PRICING
-            ============================================================ -->
-            <div class="step-content" data-step="4">
-                <h3>💰 Pricing</h3>
-                <p class="step-desc">Configure discount, GST, and view totals.</p>
-
-                <div class="form-group">
-                    <label>Discount Type</label>
-                    <select class="form-control" id="discountType">
-                        <option value="none">No Discount</option>
-                        <option value="percentage">Percentage (%)</option>
-                        <option value="flat">Flat Amount (₹)</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="discountValueGroup" style="display:none;">
-                    <label>Discount Value</label>
-                    <input type="number" class="form-control" id="discountValue" value="0" min="0" step="0.01">
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" id="gstEnabled" checked>
-                    <label for="gstEnabled">Enable GST</label>
-                </div>
-
-                <div id="gstDetails">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>GST Type</label>
-                            <select class="form-control" id="gstType">
-                                <option value="intra">Intra-State (CGST+SGST)</option>
-                                <option value="inter">Inter-State (IGST)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>GST Rate (%)</label>
-                            <select class="form-control" id="gstRate">
-                                <option value="0">0%</option>
-                                <option value="5">5%</option>
-                                <option value="7">7%</option>
-                                <option value="9">9%</option>
-                                <option value="18" selected>18%</option>
-                                <option value="28">28%</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="summary-box">
-                    <div class="summary-row"><span class="label">Subtotal</span><span class="value" id="summarySubtotal">₹0.00</span></div>
-                    <div class="summary-row"><span class="label">Discount</span><span class="value" id="summaryDiscount">₹0.00</span></div>
-                    <div class="summary-row"><span class="label">Taxable Amount</span><span class="value" id="summaryTaxable">₹0.00</span></div>
-                    <div class="summary-row" id="summaryGstRow"><span class="label">GST</span><span class="value" id="summaryGst">₹0.00</span></div>
-                    <div class="summary-row"><span class="label">Round Off</span><span class="value" id="summaryRoundOff">₹0.00</span></div>
-                    <div class="summary-row total"><span class="label">Grand Total</span><span class="value" id="summaryGrandTotal">₹0.00</span></div>
-                </div>
-            </div>
-
-            <!-- ============================================================
-            STEP 5: PREVIEW
-            ============================================================ -->
-            <div class="step-content" data-step="5">
-                <h3>👁️ Preview & Template</h3>
-                <p class="step-desc">Select a template and preview your quotation.</p>
-
-                <div class="form-group">
-                    <label>Template</label>
-                    <select class="form-control" id="templateSelect">
-                        <option value="">Loading templates...</option>
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Page Size</label>
-                        <select class="form-control" id="previewPageSize">
-                            <option value="A4">A4</option>
-                            <option value="A3">A3</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Orientation</label>
-                        <select class="form-control" id="previewOrientation">
-                            <option value="portrait">Portrait</option>
-                            <option value="landscape">Landscape</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" id="previewBtn" style="width:100%;">🔄 Refresh Preview</button>
-
-                <div class="step-nav">
-                    <div class="nav-actions">
-                        <button class="btn btn-secondary btn-sm" id="prevStepBtn">← Previous</button>
-                        <button class="btn btn-primary btn-sm" id="nextStepBtn">Next →</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================================
-            STEP NAVIGATION (for steps 1-4)
-            ============================================================ -->
-            <div class="step-nav" id="stepNav">
-                <div></div>
-                <div class="nav-actions">
-                    <button class="btn btn-secondary btn-sm" id="prevStepBtn2">← Previous</button>
-                    <button class="btn btn-primary btn-sm" id="nextStepBtn2">Next →</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- ============================================================
-        PREVIEW AREA
-        ============================================================ -->
-        <div class="preview-area" id="previewArea">
-            <div class="preview-frame">
-                <div style="text-align:center;padding:60px 20px;color:#999;">
-                    <div style="font-size:48px;margin-bottom:16px;">📄</div>
-                    <h3 style="color:#1a1a2e;margin-bottom:8px;">Live Preview</h3>
-                    <p>Complete the quotation steps above to see the live preview here.</p>
-                    <p style="font-size:12px;margin-top:8px;">Select a template and click "Refresh Preview"</p>
-                </div>
-                <iframe id="previewIframe" style="display:none;"></iframe>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ============================================================
-    ADD CUSTOMER MODAL
-    ============================================================ -->
-    <div class="modal-overlay" id="addCustomerModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Add New Customer</h3>
-                <button class="modal-close" id="addCustomerModalClose">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Customer Name *</label>
-                    <input type="text" class="form-control" id="newCustomerName" placeholder="Enter customer name">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="tel" class="form-control" id="newCustomerPhone" placeholder="Phone number">
-                    </div>
-                    <div class="form-group">
-                        <label>WhatsApp</label>
-                        <input type="tel" class="form-control" id="newCustomerWhatsApp" placeholder="WhatsApp number">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" id="newCustomerEmail" placeholder="Email address">
-                </div>
-                <div class="form-group">
-                    <label>Address</label>
-                    <textarea class="form-control" id="newCustomerAddress" rows="2" placeholder="Customer address"></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>GSTIN</label>
-                        <input type="text" class="form-control" id="newCustomerGstin" placeholder="GSTIN">
-                    </div>
-                    <div class="form-group">
-                        <label>PAN</label>
-                        <input type="text" class="form-control" id="newCustomerPan" placeholder="PAN number">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Customer Type</label>
-                    <select class="form-control" id="newCustomerType">
-                        <option value="Builder">Builder</option>
-                        <option value="Contractor">Contractor</option>
-                        <option value="Retail">Retail</option>
-                        <option value="Dealer">Dealer</option>
-                        <option value="Company">Company</option>
-                        <option value="Architect">Architect</option>
-                        <option value="Engineer">Engineer</option>
-                        <option value="Mason">Mason</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="addCustomerCancel">Cancel</button>
-                <button class="btn btn-success" id="addCustomerSave">💾 Save Customer</button>
-            </div>
-        </div>
+    <div class="loading-overlay" id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,0.7);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+        <div class="spinner" style="width:40px;height:40px;border:3px solid var(--border);border-top:3px solid var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+        <div class="text" style="color:var(--text-secondary);font-size:14px;">Loading...</div>
     </div>
 
     <!-- ============================================================
@@ -1163,1116 +804,1026 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- ============================================================
-    LOADING OVERLAY
+    PAGE HEADER
     ============================================================ -->
-    <div id="loadingOverlay" class="loading" style="display:none;">
-        <div class="spinner"></div>
-        <span>Loading...</span>
+    <div class="page-header">
+        <div>
+            <h1>📝 Create Quotation</h1>
+            <p class="page-subtitle">Build a new quotation step by step</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" id="cancelBtn">✕ Cancel</button>
+            <button class="btn btn-secondary" id="clearAllBtn">🔄 Clear All</button>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP INDICATORS
+    ============================================================ -->
+    <div class="step-indicators" id="stepIndicators">
+        <div class="step-indicator active" data-step="1">
+            1
+            <span class="step-label">Customer</span>
+        </div>
+        <div class="step-connector" data-connector="1"></div>
+        <div class="step-indicator" data-step="2">
+            2
+            <span class="step-label">Project</span>
+        </div>
+        <div class="step-connector" data-connector="2"></div>
+        <div class="step-indicator" data-step="3">
+            3
+            <span class="step-label">Items</span>
+        </div>
+        <div class="step-connector" data-connector="3"></div>
+        <div class="step-indicator" data-step="4">
+            4
+            <span class="step-label">Pricing</span>
+        </div>
+        <div class="step-connector" data-connector="4"></div>
+        <div class="step-indicator" data-step="5">
+            5
+            <span class="step-label">Preview</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 1: CUSTOMER SELECTION
+    ============================================================ -->
+    <div class="step active" id="step1">
+        <div class="step-container">
+            <h2 class="step-title">👤 Customer Selection</h2>
+            <p class="step-description">
+                Select an existing customer or continue without one. 
+                <span class="warning-badge">⚠️ Customer required for final quotation.</span>
+            </p>
+
+            <!-- Option 1: Existing Customer -->
+            <div class="customer-option">
+                <div class="option-title">
+                    🔍 Select Existing Customer
+                    <span class="badge">Recommended</span>
+                </div>
+                <div class="search-wrapper">
+                    <input type="text" id="customerSearch" placeholder="Search by name, phone, or email...">
+                    <button class="btn btn-primary" id="searchCustomerBtn">Search</button>
+                </div>
+                <div class="customer-results" id="customerResults"></div>
+            </div>
+
+            <div class="divider">OR</div>
+
+            <!-- Option 2: Continue Without Customer -->
+            <button class="btn btn-secondary btn-block" id="continueWithoutCustomer">
+                ➜ Continue Without Customer
+            </button>
+
+            <!-- Selected Customer Display -->
+            <div id="selectedCustomerDisplay" style="display:none;">
+                <div class="customer-info-display">
+                    <span class="icon">✅</span>
+                    <span>Selected: <strong id="selectedCustomerName">-</strong></span>
+                    <span style="font-size:12px;color:var(--text-muted);" id="selectedCustomerDetail"></span>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="changeCustomerBtn">Change</button>
+            </div>
+
+            <div class="step-actions">
+                <div></div>
+                <button class="btn btn-primary" id="nextFromCustomer" disabled>
+                    Next → <span style="font-size:12px;">(Project)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 2: PROJECT DETAILS
+    ============================================================ -->
+    <div class="step" id="step2">
+        <div class="step-container">
+            <h2 class="step-title">🏗️ Project Details</h2>
+            <p class="step-description">Enter the project information for this quotation.</p>
+
+            <div class="form-group">
+                <label>Project Name *</label>
+                <input type="text" id="projectName" placeholder="e.g., Villa Construction, Office Renovation...">
+            </div>
+
+            <div class="form-group">
+                <label>Project Description</label>
+                <textarea id="projectDesc" placeholder="Describe the project scope..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Project Reference</label>
+                <input type="text" id="projectReference" placeholder="Internal reference code (optional)">
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" id="prevFromProject">← Back</button>
+                <button class="btn btn-primary" id="nextFromProject">Next → <span style="font-size:12px;">(Items)</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 3: ITEMS
+    ============================================================ -->
+    <div class="step" id="step3">
+        <div class="step-container">
+            <h2 class="step-title">📦 Add Items</h2>
+            <p class="step-description">Add products or services to your quotation.</p>
+
+            <!-- Items List -->
+            <div class="items-list" id="itemsList">
+                <div class="empty-state" id="emptyItems" style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                    <div style="font-size:32px;margin-bottom:8px;">📭</div>
+                    <p>No items added yet. Add your first item below.</p>
+                </div>
+            </div>
+
+            <!-- Add Item Form -->
+            <div class="add-item-form" id="addItemForm">
+                <div class="form-group">
+                    <label>Item / Service</label>
+                    <input type="text" id="itemName" placeholder="e.g., Waterproofing, Paint, Labour...">
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" id="itemQty" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Rate (₹)</label>
+                    <input type="number" id="itemPrice" placeholder="0.00" min="0" step="0.01">
+                </div>
+                <div class="form-group" style="display:flex;align-items:end;">
+                    <button class="btn btn-primary btn-block" id="addItemBtn">➕ Add</button>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" id="prevFromItems">← Back</button>
+                <button class="btn btn-primary" id="nextFromItems">Next → <span style="font-size:12px;">(Pricing)</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 4: PRICING
+    ============================================================ -->
+    <div class="step" id="step4">
+        <div class="step-container">
+            <h2 class="step-title">💰 Pricing & Totals</h2>
+            <p class="step-description">Review and adjust pricing.</p>
+
+            <div class="form-group">
+                <label>Discount (%)</label>
+                <input type="number" id="discountPercent" value="0" min="0" max="100" step="0.5">
+            </div>
+
+            <div class="form-group">
+                <label>Tax (%)</label>
+                <input type="number" id="taxPercent" value="18" min="0" max="100" step="0.5">
+            </div>
+
+            <div class="form-group">
+                <label>Additional Notes</label>
+                <textarea id="pricingNotes" placeholder="Any special pricing notes..."></textarea>
+            </div>
+
+            <div class="pricing-summary" id="pricingSummary">
+                <div class="summary-item">
+                    <span class="label">Subtotal</span>
+                    <span class="value" id="subtotalDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Discount</span>
+                    <span class="value" id="discountDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Tax</span>
+                    <span class="value" id="taxDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item total">
+                    <span class="label">Grand Total</span>
+                    <span class="value" id="grandTotalDisplay">₹0.00</span>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" id="prevFromPricing">← Back</button>
+                <button class="btn btn-primary" id="nextFromPricing">Next → <span style="font-size:12px;">(Preview)</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 5: PREVIEW & SAVE
+    ============================================================ -->
+    <div class="step" id="step5">
+        <div class="step-container">
+            <h2 class="step-title">👁️ Preview & Save</h2>
+            <p class="step-description">Review your quotation before saving.</p>
+
+            <div class="preview-content" id="previewContent">
+                <div class="preview-row">
+                    <span><strong>Customer:</strong></span>
+                    <span id="previewCustomer">No customer selected</span>
+                </div>
+                <div class="preview-row">
+                    <span><strong>Project:</strong></span>
+                    <span id="previewProject">-</span>
+                </div>
+                <div class="preview-row">
+                    <span><strong>Items:</strong></span>
+                    <span id="previewItemCount">0 items</span>
+                </div>
+                <div class="preview-row" style="border-bottom:2px solid var(--border);padding-bottom:12px;">
+                    <span><strong>Total:</strong></span>
+                    <span id="previewTotal" style="font-size:18px;font-weight:700;color:var(--primary);">₹0.00</span>
+                </div>
+                <div id="previewItemsList" style="margin-top:12px;"></div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" id="prevFromPreview">← Back</button>
+                <div class="btn-group" style="flex:1;justify-content:flex-end;">
+                    <button class="btn btn-secondary" id="saveDraftBtn">💾 Save as Draft</button>
+                    <button class="btn btn-success" id="saveQuotationBtn">✅ Save Quotation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    WARNING MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="customerWarningModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚠️ Customer Required</h3>
+                <button class="modal-close" id="warningModalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">⚠️</div>
+                <h4 style="margin-bottom:8px;">No customer selected!</h4>
+                <p class="warning-message">
+                    You are trying to save a final quotation without a customer.
+                    <br><br>
+                    <strong>Options:</strong>
+                    <br>
+                    • <strong>Add Customer</strong> - Go back and select a customer
+                    <br>
+                    • <strong>Save as Draft</strong> - Save without customer (can edit later)
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="warningCancel">Cancel</button>
+                <button class="btn btn-warning" id="warningSaveDraft">💾 Save as Draft</button>
+                <button class="btn btn-primary" id="warningAddCustomer">👤 Add Customer</button>
+            </div>
+        </div>
     </div>
 
     <!-- ============================================================
     JAVASCRIPT
     ============================================================ -->
-    <script type="module">
+    <script>
         // ============================================================
-        // IMPORTS
-        // ============================================================
-
-        import { quotationService } from '../services/quotation-service.js';
-        import { customerService } from '../services/customer-service.js';
-        import { productService } from '../services/product-service.js';
-        import { templateService } from '../services/template-service.js';
-        import { documentRenderer } from '../renderers/document-renderer.js';
-        import { calculationEngine } from '../engines/calculation-engine.js';
-        import { eventBus, EVENTS } from '../core/events.js';
-        import { state } from '../core/state.js';
-
-        // ============================================================
-        // STATE
+        // MOCK SERVICES (Replace with actual imports)
         // ============================================================
 
-        let currentStep = 1;
-        let items = [];
-        let selectedCustomer = null;
-        let currentQuotation = null;
-        let customers = [];
-        let products = [];
-        let templates = [];
-        let isDraft = false;
+        const customerService = {
+            customers: [
+                { id: 'c1', name: 'Rajesh Kumar', phone: '9876543210', email: 'rajesh@email.com', company: 'RK Constructions' },
+                { id: 'c2', name: 'Sneha Patel', phone: '9876543211', email: 'sneha@email.com', company: 'SP Interiors' },
+                { id: 'c3', name: 'Amit Singh', phone: '9876543212', email: 'amit@email.com', company: 'AS Builders' },
+                { id: 'c4', name: 'Priya Nair', phone: '9876543213', email: 'priya@email.com', company: 'PN Designs' },
+                { id: 'c5', name: 'Vijay Menon', phone: '9876543214', email: 'vijay@email.com', company: 'VM Projects' },
+            ],
 
-// ============================================================
-// EDIT MODE
-// ============================================================
-let isEditMode = false;
-let editingQuotationId = null;
+            async initialize() {
+                // Simulate loading
+                return Promise.resolve();
+            },
 
-        const DRAFT_KEY = 'h4_quotation_draft';
+            async searchCustomers(query) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                if (!query || query.length < 2) return [];
+                const q = query.toLowerCase();
+                return this.customers.filter(c =>
+                    c.name.toLowerCase().includes(q) ||
+                    c.phone.includes(q) ||
+                    c.email.toLowerCase().includes(q)
+                );
+            },
 
-        // ============================================================
-        // DOM REFS
-        // ============================================================
+            getCustomer(id) {
+                return this.customers.find(c => c.id === id);
+            },
 
-        const steps = document.querySelectorAll('.step-indicator');
-        const stepContents = document.querySelectorAll('.step-content');
-        const prevStepBtn = document.getElementById('prevStepBtn');
-        const nextStepBtn = document.getElementById('nextStepBtn');
-        const prevStepBtn2 = document.getElementById('prevStepBtn2');
-        const nextStepBtn2 = document.getElementById('nextStepBtn2');
-
-        const customerSelect = document.getElementById('customerSelect');
-        const customerDetails = document.getElementById('customerDetails');
-        const custName = document.getElementById('custName');
-        const custPhone = document.getElementById('custPhone');
-        const custEmail = document.getElementById('custEmail');
-        const custAddress = document.getElementById('custAddress');
-        const custGstin = document.getElementById('custGstin');
-
-        const addCustomerBtn = document.getElementById('addCustomerBtn');
-        const addCustomerModal = document.getElementById('addCustomerModal');
-        const addCustomerModalClose = document.getElementById('addCustomerModalClose');
-        const addCustomerCancel = document.getElementById('addCustomerCancel');
-        const addCustomerSave = document.getElementById('addCustomerSave');
-        const newCustomerName = document.getElementById('newCustomerName');
-        const newCustomerPhone = document.getElementById('newCustomerPhone');
-        const newCustomerWhatsApp = document.getElementById('newCustomerWhatsApp');
-        const newCustomerEmail = document.getElementById('newCustomerEmail');
-        const newCustomerAddress = document.getElementById('newCustomerAddress');
-        const newCustomerGstin = document.getElementById('newCustomerGstin');
-        const newCustomerPan = document.getElementById('newCustomerPan');
-        const newCustomerType = document.getElementById('newCustomerType');
-
-        const projectName = document.getElementById('projectName');
-        const quotationType = document.getElementById('quotationType');
-        const reference = document.getElementById('reference');
-        const quotationDate = document.getElementById('quotationDate');
-        const validUntil = document.getElementById('validUntil');
-
-        const itemsContainer = document.getElementById('itemsContainer');
-        const addItemBtn = document.getElementById('addItemBtn');
-        const addItemForm = document.getElementById('addItemForm');
-        const itemProduct = document.getElementById('itemProduct');
-        const itemQty = document.getElementById('itemQty');
-        const itemUnit = document.getElementById('itemUnit');
-        const itemRate = document.getElementById('itemRate');
-        const itemAmount = document.getElementById('itemAmount');
-        const itemDescription = document.getElementById('itemDescription');
-        const addItemConfirm = document.getElementById('addItemConfirm');
-        const addItemCancel = document.getElementById('addItemCancel');
-
-        const discountType = document.getElementById('discountType');
-        const discountValue = document.getElementById('discountValue');
-        const discountValueGroup = document.getElementById('discountValueGroup');
-        const gstEnabled = document.getElementById('gstEnabled');
-        const gstType = document.getElementById('gstType');
-        const gstRate = document.getElementById('gstRate');
-
-        const summarySubtotal = document.getElementById('summarySubtotal');
-        const summaryDiscount = document.getElementById('summaryDiscount');
-        const summaryTaxable = document.getElementById('summaryTaxable');
-        const summaryGst = document.getElementById('summaryGst');
-        const summaryRoundOff = document.getElementById('summaryRoundOff');
-        const summaryGrandTotal = document.getElementById('summaryGrandTotal');
-
-        const templateSelect = document.getElementById('templateSelect');
-        const previewPageSize = document.getElementById('previewPageSize');
-        const previewOrientation = document.getElementById('previewOrientation');
-        const previewBtn = document.getElementById('previewBtn');
-        const previewIframe = document.getElementById('previewIframe');
-        const previewFrame = document.querySelector('.preview-frame');
-
-        const saveDraftBtn = document.getElementById('saveDraftBtn');
-        const saveQuotationBtn = document.getElementById('saveQuotationBtn');
-        const backBtn = document.getElementById('backBtn');
-        const toastContainer = document.getElementById('toastContainer');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const draftStatus = document.getElementById('draftStatus');
-
-        // ============================================================
-        // TOAST
-        // ============================================================
-
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.textContent = message;
-            toastContainer.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // ============================================================
-        // LOADING
-        // ============================================================
-
-        function showLoading(show) {
-            loadingOverlay.style.display = show ? 'flex' : 'none';
-        }
-
-        // ============================================================
-        // STEP NAVIGATION
-        // ============================================================
-
-        function goToStep(step) {
-            currentStep = step;
-
-            // Update indicators
-            steps.forEach((el, index) => {
-                const num = index + 1;
-                el.classList.remove('active', 'completed');
-                if (num === step) el.classList.add('active');
-                else if (num < step) el.classList.add('completed');
-            });
-
-            // Update content
-            stepContents.forEach((el) => {
-                const num = parseInt(el.dataset.step);
-                el.classList.toggle('active', num === step);
-            });
-
-            // Show/hide step nav
-            const stepNav = document.getElementById('stepNav');
-            if (step === 5) {
-                stepNav.style.display = 'none';
-            } else {
-                stepNav.style.display = 'flex';
+            async createCustomer(data) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                const newCustomer = {
+                    id: 'c' + Date.now(),
+                    ...data,
+                    name: data.name || 'New Customer'
+                };
+                this.customers.push(newCustomer);
+                return newCustomer;
             }
+        };
 
-            // Update preview if on preview step
-            if (step === 5) {
-                refreshPreview();
+        const quotationService = {
+            async saveQuotation(data) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const number = 'QT-' + Date.now().toString().slice(-6);
+                return {
+                    id: 'q' + Date.now(),
+                    quotationNumber: number,
+                    ...data
+                };
+            },
+
+            async duplicateQuotation(id) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return { id: 'q' + Date.now(), quotationNumber: 'QT-DUP-' + Date.now().toString().slice(-6) };
+            },
+
+            async deleteQuotation(id, confirm) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return { success: true };
+            },
+
+            async convertQuotationToInvoice(id) {
+                await new Promise(resolve => setTimeout(resolve, 400));
+                return { id: 'inv' + Date.now(), invoiceNumber: 'INV-' + Date.now().toString().slice(-6) };
             }
-
-            // Update draft status
-            updateDraftStatus();
-        }
-
-        function nextStep() {
-            if (currentStep < 5) {
-                // Validate current step
-                if (currentStep === 1 && !selectedCustomer) {
-                    showToast('Please select a customer', 'warning');
-                    return;
-                }
-                if (currentStep === 3 && items.length === 0) {
-                    showToast('Please add at least one item', 'warning');
-                    return;
-                }
-                goToStep(currentStep + 1);
-            }
-        }
-
-        function prevStep() {
-            if (currentStep > 1) {
-                goToStep(currentStep - 1);
-            }
-        }
+        };
 
         // ============================================================
-        // CUSTOMERS
+        // QUOTATION BUILDER CLASS
         // ============================================================
 
-        async function loadCustomers() {
-            try {
-                await customerService.initialize();
-                customers = await customerService.getCustomers({ activeOnly: true });
-                renderCustomerSelect();
-            } catch (error) {
-                console.error('Failed to load customers:', error);
-            }
-        }
-
-        function renderCustomerSelect() {
-            customerSelect.innerHTML = '<option value="">Select Customer...</option>';
-            customers.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c.id;
-                opt.textContent = c.name + (c.phone ? ` (${c.phone})` : '');
-                customerSelect.appendChild(opt);
-            });
-        }
-
-        function onCustomerSelect(customerId) {
-            if (!customerId) {
-                customerDetails.style.display = 'none';
-                selectedCustomer = null;
-                return;
-            }
-
-            const customer = customers.find(c => c.id === customerId);
-            if (!customer) return;
-
-            selectedCustomer = customer;
-            customerDetails.style.display = 'block';
-            custName.textContent = customer.name || '-';
-            custPhone.textContent = customer.phone || '-';
-            custEmail.textContent = customer.email || '-';
-            custAddress.textContent = customer.address || '-';
-            custGstin.textContent = customer.gstin || '-';
-
-            saveDraft();
-        }
-
-        // ============================================================
-        // ADD CUSTOMER - FULL IMPLEMENTATION
-        // ============================================================
-
-        function openAddCustomerModal() {
-            // Reset form
-            newCustomerName.value = '';
-            newCustomerPhone.value = '';
-            newCustomerWhatsApp.value = '';
-            newCustomerEmail.value = '';
-            newCustomerAddress.value = '';
-            newCustomerGstin.value = '';
-            newCustomerPan.value = '';
-            newCustomerType.value = 'Builder';
-            addCustomerModal.classList.add('open');
-            newCustomerName.focus();
-        }
-
-        function closeAddCustomerModal() {
-            addCustomerModal.classList.remove('open');
-        }
-
-        async function saveNewCustomer() {
-            const name = newCustomerName.value.trim();
-            if (!name) {
-                showToast('Customer name is required', 'error');
-                newCustomerName.focus();
-                return;
-            }
-
-            const customerData = {
-                name: name,
-                phone: newCustomerPhone.value.trim() || '',
-                whatsapp: newCustomerWhatsApp.value.trim() || '',
-                email: newCustomerEmail.value.trim() || '',
-                address: newCustomerAddress.value.trim() || '',
-                gstin: newCustomerGstin.value.trim().toUpperCase() || '',
-                pan: newCustomerPan.value.trim().toUpperCase() || '',
-                customerType: newCustomerType.value || 'Builder',
-                active: true
-            };
-
-            showLoading(true);
-            try {
-                const result = await customerService.createCustomer(customerData);
-                showToast(`Customer "${result.name}" created successfully!`, 'success');
-
-                // Reload customers
-                await loadCustomers();
-
-                // Select the new customer
-                customerSelect.value = result.id;
-                onCustomerSelect(result.id);
-
-                closeAddCustomerModal();
-
-                // Emit event for other modules
-                eventBus.emit(EVENTS.CUSTOMER_ADDED, {
-                    id: result.id,
-                    name: result.name,
-                    data: result
-                }, 'quotation-builder');
-
-            } catch (error) {
-                console.error('Failed to create customer:', error);
-                showToast('Failed to create customer: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // ============================================================
-        // PRODUCTS
-        // ============================================================
-
-        async function loadProducts() {
-            try {
-                await productService.initialize();
-                products = await productService.getProducts({ activeOnly: true });
-                renderProductSelect();
-            } catch (error) {
-                console.error('Failed to load products:', error);
-            }
-        }
-
-        function renderProductSelect() {
-            itemProduct.innerHTML = '<option value="">Select Product...</option>';
-            products.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p.id;
-                opt.textContent = p.name + (p.sku ? ` (${p.sku})` : '');
-                opt.dataset.unit = p.unit || 'Nos';
-                opt.dataset.rate = p.sellingRate || 0;
-                itemProduct.appendChild(opt);
-            });
-        }
-
-        // ============================================================
-        // TEMPLATES
-        // ============================================================
-
-        async function loadTemplates() {
-            try {
-                await templateService.initialize();
-                templates = await templateService.getTemplates({
-                    type: 'quotation',
-                    activeOnly: true,
-                    latestOnly: true
-                });
-                renderTemplateSelect();
-            } catch (error) {
-                console.error('Failed to load templates:', error);
-            }
-        }
-
-        function renderTemplateSelect() {
-            templateSelect.innerHTML = '<option value="">Select Template...</option>';
-            templates.forEach(t => {
-                const opt = document.createElement('option');
-                opt.value = t.id;
-                const typeLabel = t.quotationType || 'general';
-                opt.textContent = `${t.name} (${typeLabel})${t.isDefault ? ' ★' : ''}`;
-                if (t.isDefault) opt.selected = true;
-                templateSelect.appendChild(opt);
-            });
-        }
-
-        // ============================================================
-        // ITEMS
-        // ============================================================
-
-        function renderItems() {
-            if (items.length === 0) {
-                itemsContainer.innerHTML = '<p class="help-text" style="text-align:center;padding:20px;color:#999;">No items added. Click below to add.</p>';
-                return;
-            }
-
-            let html = '';
-            items.forEach((item, index) => {
-                const amount = (item.quantity || 0) * (item.rate || 0);
-                html += `
-                    <div class="item-row" data-index="${index}">
-                        <div class="item-header">
-                            <span class="item-name">${escapeHtml(item.name || 'Unnamed')}</span>
-                            <button class="btn btn-danger btn-xs remove-item-btn" data-index="${index}">✕</button>
-                        </div>
-                        <div class="item-fields">
-                            <div><span style="font-size:11px;color:#999;">Qty</span><br><strong>${item.quantity || 0}</strong></div>
-                            <div><span style="font-size:11px;color:#999;">Unit</span><br><strong>${escapeHtml(item.unit || 'Nos')}</strong></div>
-                            <div><span style="font-size:11px;color:#999;">Rate</span><br><strong>₹${(item.rate || 0).toFixed(2)}</strong></div>
-                            <div><span style="font-size:11px;color:#999;">Amount</span><br><strong style="color:#6C3BC5;">₹${amount.toFixed(2)}</strong></div>
-                        </div>
-                        ${item.description ? `<div style="font-size:12px;color:#666;margin-top:4px;">${escapeHtml(item.description)}</div>` : ''}
-                        <div class="item-total">Amount: ₹${amount.toFixed(2)}</div>
-                    </div>
-                `;
-            });
-
-            itemsContainer.innerHTML = html;
-
-            // Add remove listeners
-            document.querySelectorAll('.remove-item-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    items.splice(index, 1);
-                    renderItems();
-                    updateTotals();
-                    saveDraft();
-                });
-            });
-        }
-
-        function addItem() {
-            const productId = itemProduct.value;
-            if (!productId) {
-                showToast('Please select a product', 'warning');
-                return;
-            }
-
-            const product = products.find(p => p.id === productId);
-            const quantity = parseFloat(itemQty.value) || 1;
-            const rate = parseFloat(itemRate.value) || 0;
-            const unit = itemUnit.value || product?.unit || 'Nos';
-            const description = itemDescription.value || product?.description || '';
-
-            // Check if product already exists in items (update instead)
-            const existingIndex = items.findIndex(i => i.productId === productId);
-            if (existingIndex !== -1) {
-                items[existingIndex].quantity += quantity;
-                items[existingIndex].rate = rate || items[existingIndex].rate;
-                showToast('Item quantity updated', 'info');
-            } else {
-                items.push({
-                    productId: productId,
-                    name: product?.name || 'Unknown',
-                    quantity: quantity,
-                    unit: unit,
-                    rate: rate || product?.sellingRate || 0,
-                    description: description,
-                    productSnapshot: product ? {
-                        id: product.id,
-                        name: product.name,
-                        sku: product.sku,
-                        unit: product.unit,
-                        sellingRate: product.sellingRate
-                    } : null
-                });
-                showToast('Item added', 'success');
-            }
-
-            // Reset form
-            itemProduct.value = '';
-            itemQty.value = '1';
-            itemRate.value = '0';
-            itemUnit.value = 'Nos';
-            itemDescription.value = '';
-            itemAmount.value = '0.00';
-            addItemForm.style.display = 'none';
-            addItemBtn.style.display = 'block';
-
-            renderItems();
-            updateTotals();
-            saveDraft();
-        }
-
-        // ============================================================
-        // TOTALS
-        // ============================================================
-
-        function updateTotals() {
-            const calculationData = {
-                items: items.map(item => ({
-                    quantity: item.quantity || 0,
-                    rate: item.rate || 0
-                })),
-                discountType: discountType.value || 'none',
-                discountValue: parseFloat(discountValue.value) || 0,
-                gstEnabled: gstEnabled.checked,
-                gstType: gstType.value || 'intra',
-                gstRate: parseFloat(gstRate.value) || 18
-            };
-
-            try {
-                const result = calculationEngine.calculateInvoice(calculationData);
-
-                summarySubtotal.textContent = '₹' + result.subtotal.toFixed(2);
-                summaryDiscount.textContent = '₹' + result.discountAmount.toFixed(2);
-                summaryTaxable.textContent = '₹' + result.taxableAmount.toFixed(2);
-                summaryGst.textContent = '₹' + result.gstAmount.toFixed(2);
-                summaryRoundOff.textContent = '₹' + result.roundOff.toFixed(2);
-                summaryGrandTotal.textContent = '₹' + result.grandTotal.toFixed(2);
-
-                // Show/hide GST row
-                document.getElementById('summaryGstRow').style.display = gstEnabled.checked ? 'flex' : 'none';
-
-                // Store calculated values for saving
-                currentQuotation = {
-                    ...currentQuotation,
-                    subtotal: result.subtotal,
-                    discountAmount: result.discountAmount,
-                    taxableAmount: result.taxableAmount,
-                    gstAmount: result.gstAmount,
-                    roundOff: result.roundOff,
-                    grandTotal: result.grandTotal
+        class QuotationBuilder {
+            constructor() {
+                this.quotation = {
+                    customerId: null,
+                    customerSnapshot: null,
+                    projectName: '',
+                    projectDesc: '',
+                    projectReference: '',
+                    items: [],
+                    discountPercent: 0,
+                    taxPercent: 18,
+                    notes: '',
+                    status: 'draft',
+                    subtotal: 0,
+                    discountAmount: 0,
+                    taxAmount: 0,
+                    grandTotal: 0
                 };
 
-            } catch (error) {
-                console.error('Calculation error:', error);
-            }
-        }
-
-        // ============================================================
-        // PREVIEW
-        // ============================================================
-
-        async function refreshPreview() {
-            const templateId = templateSelect.value;
-            if (!templateId) {
-                showToast('Please select a template', 'warning');
-                return;
+                this.currentStep = 1;
+                this.hasCustomer = false;
+                this.isDraft = true;
+                this.init();
             }
 
-            const template = templates.find(t => t.id === templateId);
-            if (!template) {
-                showToast('Template not found', 'error');
-                return;
+            // ============================================================
+            // INIT
+            // ============================================================
+
+            init() {
+                this.bindEvents();
+                this.showStep(1);
+                this.updatePricing();
+                this.updatePreview();
+                console.log('📝 Quotation Builder initialized');
             }
 
-            const pageSize = previewPageSize.value || 'A4';
-            const orientation = previewOrientation.value || 'portrait';
+            // ============================================================
+            // TOAST
+            // ============================================================
 
-            showLoading(true);
-            try {
-                // Build document data
-                const documentData = {
-                    document: {
-                        id: currentQuotation?.id || 'draft',
-                        quotationNumber: currentQuotation?.quotationNumber || 'DRAFT-001',
-                        quotationDate: quotationDate.value || new Date().toISOString().split('T')[0],
-                        validUntil: validUntil.value || '',
-                        customerId: selectedCustomer?.id || '',
-                        customerSnapshot: selectedCustomer ? {
-                            name: selectedCustomer.name,
-                            phone: selectedCustomer.phone,
-                            email: selectedCustomer.email,
-                            address: selectedCustomer.address,
-                            gstin: selectedCustomer.gstin
-                        } : null,
-                        items: items.map(item => ({
-                            productId: item.productId,
-                            productSnapshot: item.productSnapshot,
-                            name: item.name,
-                            description: item.description,
-                            unit: item.unit,
-                            quantity: item.quantity,
-                            rate: item.rate,
-                            total: (item.quantity || 0) * (item.rate || 0)
-                        })),
-                        subtotal: parseFloat(summarySubtotal.textContent.replace('₹', '')) || 0,
-                        discountAmount: parseFloat(summaryDiscount.textContent.replace('₹', '')) || 0,
-                        taxableAmount: parseFloat(summaryTaxable.textContent.replace('₹', '')) || 0,
-                        gstAmount: parseFloat(summaryGst.textContent.replace('₹', '')) || 0,
-                        roundOff: parseFloat(summaryRoundOff.textContent.replace('₹', '')) || 0,
-                        grandTotal: parseFloat(summaryGrandTotal.textContent.replace('₹', '')) || 0,
-                        status: 'draft',
-                        notes: '',
-                        terms: ''
-                    },
-                    templateSnapshot: {
-                        templateId: template.templateId,
-                        templateVersion: template.version,
-                        templateName: template.name,
-                        type: 'quotation',
-                        config: template.config
-                    },
-                    companySnapshot: {
-                        companyName: 'H4 Construction Solutions',
-                        brandName: 'H4',
-                        address: '123 Industrial Area, Tirur',
-                        phone: '9876543210',
-                        email: 'info@h4.in',
-                        gstin: '32AAAAA0000A1Z5'
-                    },
-                    type: 'quotation'
-                };
-
-                // Render HTML
-                const html = await documentRenderer.renderDocument(documentData, {
-                    pageSize: pageSize,
-                    orientation: orientation
-                });
-
-                // Show iframe
-                previewIframe.style.display = 'block';
-                previewIframe.srcdoc = html;
-
-                // Hide placeholder
-                const placeholder = previewFrame.querySelector('div[style*="text-align:center"]');
-                if (placeholder) placeholder.style.display = 'none';
-
-                showToast('Preview updated', 'success');
-
-            } catch (error) {
-                console.error('Preview error:', error);
-                showToast('Failed to generate preview: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // ============================================================
-        // DRAFT
-        // ============================================================
-
-        function saveDraft() {
-            if (isEditMode) return;
-
-            const draft = {
-                customerId: selectedCustomer?.id || null,
-                projectName: projectName.value || '',
-                quotationType: quotationType.value || 'general',
-                reference: reference.value || '',
-                quotationDate: quotationDate.value || '',
-                validUntil: validUntil.value || '',
-                items: items.map(item => ({ ...item })),
-                discountType: discountType.value || 'none',
-                discountValue: parseFloat(discountValue.value) || 0,
-                gstEnabled: gstEnabled.checked,
-                gstType: gstType.value || 'intra',
-                gstRate: parseFloat(gstRate.value) || 18,
-                updatedAt: new Date().toISOString()
-            };
-
-            try {
-                localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-                isDraft = true;
-                updateDraftStatus();
-            } catch (error) {
-                console.error('Failed to save draft:', error);
-            }
-        }
-
-        function loadDraft() {
-            try {
-                const raw = localStorage.getItem(DRAFT_KEY);
-                if (!raw) return false;
-
-                const draft = JSON.parse(raw);
-
-                // Restore customer
-                if (draft.customerId) {
-                    const customer = customers.find(c => c.id === draft.customerId);
-                    if (customer) {
-                        customerSelect.value = customer.id;
-                        onCustomerSelect(customer.id);
-                    }
-                }
-
-                // Restore fields
-                projectName.value = draft.projectName || '';
-                quotationType.value = draft.quotationType || 'general';
-                reference.value = draft.reference || '';
-                quotationDate.value = draft.quotationDate || '';
-                validUntil.value = draft.validUntil || '';
-
-                // Restore items
-                items = draft.items || [];
-                renderItems();
-
-                // Restore pricing
-                discountType.value = draft.discountType || 'none';
-                discountValue.value = draft.discountValue || 0;
-                gstEnabled.checked = draft.gstEnabled !== false;
-                gstType.value = draft.gstType || 'intra';
-                gstRate.value = draft.gstRate || 18;
-
-                // Toggle discount field
-                discountValueGroup.style.display = discountType.value === 'none' ? 'none' : 'block';
-
-                // Update totals
-                updateTotals();
-
-                isDraft = true;
-                updateDraftStatus();
-                return true;
-
-            } catch (error) {
-                console.error('Failed to load draft:', error);
-                return false;
-            }
-        }
-
-        function updateDraftStatus() {
-            if (isDraft) {
-                draftStatus.textContent = '📝 Draft Saved';
-                draftStatus.className = 'draft-indicator saved';
-            } else {
-                draftStatus.textContent = '📝 Draft';
-                draftStatus.className = 'draft-indicator';
-            }
-        }
-
-        function clearDraft() {
-            try {
-                localStorage.removeItem(DRAFT_KEY);
-                isDraft = false;
-                updateDraftStatus();
-            } catch (error) {
-                console.error('Failed to clear draft:', error);
-            }
-        }
-
-        // ============================================================
-        // SAVE QUOTATION
-        // ============================================================
-
-        async function saveQuotation() {
-            if (!selectedCustomer) {
-                showToast('Please select a customer', 'warning');
-                return;
-            }
-
-            if (items.length === 0) {
-                showToast('Please add at least one item', 'warning');
-                return;
-            }
-
-            if (!projectName.value.trim()) {
-                showToast('Please enter a project name', 'warning');
-                return;
-            }
-
-            showLoading(true);
-
-            try {
-                await quotationService.initialize();
-
-                const quotationData = {
-                    customerId: selectedCustomer.id,
-                    customerSnapshot: selectedCustomer ? {
-                        name: selectedCustomer.name,
-                        phone: selectedCustomer.phone,
-                        email: selectedCustomer.email,
-                        address: selectedCustomer.address,
-                        gstin: selectedCustomer.gstin
-                    } : null,
-                    items: items.map(item => ({
-                        productId: item.productId,
-                        productSnapshot: item.productSnapshot,
-                        name: item.name,
-                        description: item.description,
-                        unit: item.unit,
-                        quantity: item.quantity,
-                        rate: item.rate,
-                        grossAmount: (item.quantity || 0) * (item.rate || 0)
-                    })),
-                    projectName: projectName.value,
-                    reference: reference.value,
-                    quotationType: quotationType.value || 'general',
-                    date: quotationDate.value || new Date().toISOString().split('T')[0],
-                    validUntil: validUntil.value || '',
-                    discountType: discountType.value || 'none',
-                    discountValue: parseFloat(discountValue.value) || 0,
-                    gstEnabled: gstEnabled.checked,
-                    gstType: gstType.value || 'intra',
-                    gstRate: parseFloat(gstRate.value) || 18,
-                    notes: currentQuotation?.notes || '',
-                    terms: currentQuotation?.terms || '',
-                    status: currentQuotation?.status || 'draft'
-                };
-
-                let result;
-
-                if (isEditMode && editingQuotationId) {
-                    result = await quotationService.updateQuotation(
-                        editingQuotationId,
-                        quotationData,
-                        { draft: true }
-                    );
-
-                    showToast(
-                        `Quotation ${result.quotationNumber} updated successfully!`,
-                        'success'
-                    );
-                } else {
-                    result = await quotationService.createQuotation(quotationData);
-
-                    showToast(
-                        `Quotation ${result.quotationNumber} created successfully!`,
-                        'success'
-                    );
-                }
-
-                clearDraft();
+            showToast(message, type = 'info') {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.textContent = message;
+                container.appendChild(toast);
 
                 setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1200);
-
-            } catch (error) {
-                console.error('Failed to save quotation:', error);
-                showToast('Failed to save quotation: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // ============================================================
-        // ESCAPE KEY - GENERAL "BACK/CLOSE" BEHAVIOR
-        // ============================================================
-
-        function handleEscape() {
-            // If Add Customer modal is open, close it
-            if (addCustomerModal.classList.contains('open')) {
-                closeAddCustomerModal();
-                return;
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100%)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
             }
 
-            // If Add Item form is open, close it
-            if (addItemForm.style.display === 'block') {
-                addItemForm.style.display = 'none';
-                addItemBtn.style.display = 'block';
-                return;
+            // ============================================================
+            // LOADING
+            // ============================================================
+
+            showLoading(show) {
+                const overlay = document.getElementById('loadingOverlay');
+                overlay.style.display = show ? 'flex' : 'none';
             }
 
-            // If on preview step, go back to pricing
-            if (currentStep === 5) {
-                goToStep(4);
-                return;
+            // ============================================================
+            // STEP NAVIGATION
+            // ============================================================
+
+            showStep(step) {
+                // Hide all steps
+                document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+
+                // Show current step
+                const stepElement = document.getElementById(`step${step}`);
+                if (stepElement) {
+                    stepElement.classList.add('active');
+                }
+
+                this.currentStep = step;
+                this.updateIndicators(step);
+                this.updatePreview();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            // If on step 1 and draft exists, ask for confirmation
-            if (currentStep === 1) {
-                if (isDraft) {
-                    if (confirm('You have an unsaved draft. Exit builder?')) {
-                        clearDraft();
-                        window.location.href = 'index.html';
+            updateIndicators(step) {
+                const indicators = document.querySelectorAll('.step-indicator');
+                const connectors = document.querySelectorAll('.step-connector');
+
+                indicators.forEach((el, index) => {
+                    const num = index + 1;
+                    el.classList.remove('active', 'completed');
+                    if (num === step) {
+                        el.classList.add('active');
+                    } else if (num < step) {
+                        el.classList.add('completed');
                     }
+                });
+
+                connectors.forEach((el, index) => {
+                    const num = index + 1;
+                    el.classList.toggle('completed', num < step);
+                });
+            }
+
+            goToNextStep() {
+                if (this.currentStep < 5) {
+                    this.showStep(this.currentStep + 1);
+                }
+            }
+
+            goToPrevStep() {
+                if (this.currentStep > 1) {
+                    this.showStep(this.currentStep - 1);
+                }
+            }
+
+            // ============================================================
+            // CUSTOMER SELECTION
+            // ============================================================
+
+            async searchCustomer(searchTerm) {
+                const container = document.getElementById('customerResults');
+                if (!searchTerm || searchTerm.length < 2) {
+                    container.innerHTML = '';
+                    return;
+                }
+
+                try {
+                    const results = await customerService.searchCustomers(searchTerm);
+                    this.renderCustomerResults(results);
+                } catch (error) {
+                    this.showToast('Error searching customers', 'error');
+                }
+            }
+
+            renderCustomerResults(results) {
+                const container = document.getElementById('customerResults');
+
+                if (results.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-results">
+                            <p>No customers found matching your search.</p>
+                            <button class="btn btn-primary btn-sm" id="createNewCustomer">
+                                ➕ Create New Customer
+                            </button>
+                        </div>
+                    `;
+                    document.getElementById('createNewCustomer')?.addEventListener('click', () => {
+                        this.createNewCustomer();
+                    });
+                    return;
+                }
+
+                container.innerHTML = results.map(c => `
+                    <div class="customer-card" data-id="${c.id}">
+                        <div class="customer-info">
+                            <span class="customer-name">${c.name}</span>
+                            <span class="customer-detail">📱 ${c.phone || 'N/A'} • ✉️ ${c.email || 'N/A'}</span>
+                            <span class="customer-detail">🏢 ${c.company || 'Individual'}</span>
+                        </div>
+                        <button class="btn btn-primary btn-sm select-btn" data-id="${c.id}">Select</button>
+                    </div>
+                `).join('');
+
+                container.querySelectorAll('.select-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.selectCustomer(btn.dataset.id);
+                    });
+                });
+
+                container.querySelectorAll('.customer-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const btn = card.querySelector('.select-btn');
+                        if (btn) btn.click();
+                    });
+                });
+            }
+
+            selectCustomer(customerId) {
+                const customer = customerService.getCustomer(customerId);
+                if (!customer) {
+                    this.showToast('Customer not found', 'error');
+                    return;
+                }
+
+                this.quotation.customerId = customerId;
+                this.quotation.customerSnapshot = customer;
+                this.hasCustomer = true;
+
+                // Update display
+                const display = document.getElementById('selectedCustomerDisplay');
+                display.style.display = 'flex';
+                document.getElementById('selectedCustomerName').textContent = customer.name;
+                document.getElementById('selectedCustomerDetail').textContent =
+                    `📱 ${customer.phone || 'N/A'} • ✉️ ${customer.email || 'N/A'}`;
+
+                // Enable next button
+                document.getElementById('nextFromCustomer').disabled = false;
+                document.getElementById('customerResults').innerHTML = '';
+
+                this.showToast(`✅ Customer selected: ${customer.name}`, 'success');
+                this.updatePreview();
+            }
+
+            continueWithoutCustomer() {
+                this.hasCustomer = false;
+                this.quotation.customerId = null;
+                this.quotation.customerSnapshot = null;
+
+                const display = document.getElementById('selectedCustomerDisplay');
+                display.style.display = 'flex';
+                display.style.background = '#fef3c7';
+                display.style.borderColor = '#f59e0b';
+                document.getElementById('selectedCustomerName').textContent = 'No customer selected (Draft only)';
+                document.getElementById('selectedCustomerDetail').textContent = '⚠️ Customer required for final quotation';
+
+                document.getElementById('nextFromCustomer').disabled = false;
+                document.getElementById('customerResults').innerHTML = '';
+
+                this.showToast('Continuing without customer - will be saved as Draft', 'warning');
+                this.updatePreview();
+            }
+
+            createNewCustomer() {
+                // Show a simple prompt for demo
+                const name = prompt('Enter customer name:');
+                if (!name) return;
+
+                const phone = prompt('Enter phone number (optional):') || '';
+                const email = prompt('Enter email (optional):') || '';
+                const company = prompt('Enter company name (optional):') || '';
+
+                customerService.createCustomer({ name, phone, email, company })
+                    .then(customer => {
+                        this.selectCustomer(customer.id);
+                        this.showToast('Customer created successfully!', 'success');
+                    })
+                    .catch(error => {
+                        this.showToast('Error creating customer: ' + error.message, 'error');
+                    });
+            }
+
+            changeCustomer() {
+                document.getElementById('selectedCustomerDisplay').style.display = 'none';
+                document.getElementById('nextFromCustomer').disabled = true;
+                this.hasCustomer = false;
+                this.quotation.customerId = null;
+                this.quotation.customerSnapshot = null;
+                this.showStep(1);
+                document.getElementById('customerSearch').focus();
+            }
+
+            // ============================================================
+            // ITEMS MANAGEMENT
+            // ============================================================
+
+            addItem() {
+                const name = document.getElementById('itemName').value.trim();
+                const qty = parseInt(document.getElementById('itemQty').value) || 1;
+                const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+
+                if (!name) {
+                    this.showToast('Please enter item name', 'error');
+                    return;
+                }
+
+                if (price <= 0) {
+                    this.showToast('Please enter a valid price', 'error');
+                    return;
+                }
+
+                this.quotation.items.push({
+                    id: 'item_' + Date.now(),
+                    name: name,
+                    quantity: qty,
+                    rate: price,
+                    total: qty * price
+                });
+
+                // Clear form
+                document.getElementById('itemName').value = '';
+                document.getElementById('itemPrice').value = '';
+                document.getElementById('itemQty').value = '1';
+
+                this.renderItems();
+                this.updatePricing();
+                this.updatePreview();
+                this.showToast(`Added: ${name}`, 'success');
+
+                // Focus back on item name
+                document.getElementById('itemName').focus();
+            }
+
+            removeItem(id) {
+                this.quotation.items = this.quotation.items.filter(item => item.id !== id);
+                this.renderItems();
+                this.updatePricing();
+                this.updatePreview();
+                this.showToast('Item removed', 'info');
+            }
+
+            renderItems() {
+                const container = document.getElementById('itemsList');
+                const empty = document.getElementById('emptyItems');
+
+                if (this.quotation.items.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                            <div style="font-size:32px;margin-bottom:8px;">📭</div>
+                            <p>No items added yet. Add your first item below.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = this.quotation.items.map((item, index) => `
+                    <div class="item-row">
+                        <span class="item-name">${index + 1}. ${item.name}</span>
+                        <span class="item-qty">${item.quantity} × ₹${item.rate.toFixed(2)}</span>
+                        <span class="item-total">₹${item.total.toFixed(2)}</span>
+                        <div class="item-actions">
+                            <button class="btn btn-danger btn-xs remove-item-btn" data-id="${item.id}">✕</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                container.querySelectorAll('.remove-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.removeItem(btn.dataset.id);
+                    });
+                });
+            }
+
+            // ============================================================
+            // PRICING
+            // ============================================================
+
+            updatePricing() {
+                const subtotal = this.quotation.items.reduce((sum, item) => sum + item.total, 0);
+                const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+                const taxPercent = parseFloat(document.getElementById('taxPercent').value) || 0;
+
+                const discountAmount = (subtotal * discountPercent) / 100;
+                const afterDiscount = subtotal - discountAmount;
+                const taxAmount = (afterDiscount * taxPercent) / 100;
+                const grandTotal = afterDiscount + taxAmount;
+
+                this.quotation.subtotal = subtotal;
+                this.quotation.discountPercent = discountPercent;
+                this.quotation.discountAmount = discountAmount;
+                this.quotation.taxPercent = taxPercent;
+                this.quotation.taxAmount = taxAmount;
+                this.quotation.grandTotal = grandTotal;
+
+                // Update display
+                document.getElementById('subtotalDisplay').textContent = `₹${subtotal.toFixed(2)}`;
+                document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)} (${discountPercent}%)`;
+                document.getElementById('taxDisplay').textContent = `₹${taxAmount.toFixed(2)} (${taxPercent}%)`;
+                document.getElementById('grandTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
+
+                this.updatePreview();
+            }
+
+            // ============================================================
+            // PREVIEW
+            // ============================================================
+
+            updatePreview() {
+                const customer = this.hasCustomer && this.quotation.customerSnapshot ?
+                    this.quotation.customerSnapshot.name :
+                    'No customer selected';
+
+                document.getElementById('previewCustomer').textContent = customer;
+                document.getElementById('previewProject').textContent =
+                    this.quotation.projectName || 'No project name set';
+                document.getElementById('previewItemCount').textContent =
+                    `${this.quotation.items.length} items`;
+                document.getElementById('previewTotal').textContent =
+                    `₹${this.quotation.grandTotal.toFixed(2)}`;
+
+                // Items list in preview
+                const itemsContainer = document.getElementById('previewItemsList');
+                if (this.quotation.items.length === 0) {
+                    itemsContainer.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No items added</p>';
                 } else {
-                    window.location.href = 'index.html';
+                    itemsContainer.innerHTML = this.quotation.items.map(item => `
+                        <div class="preview-row" style="font-size:13px;">
+                            <span>${item.name}</span>
+                            <span>${item.quantity} × ₹${item.rate.toFixed(2)} = ₹${item.total.toFixed(2)}</span>
+                        </div>
+                    `).join('');
                 }
-                return;
             }
 
-            // Otherwise, go to previous step
-            prevStep();
-        }
+            // ============================================================
+            // SAVE LOGIC
+            // ============================================================
 
-        // ============================================================
-        // EVENT LISTENERS
-        // ============================================================
+            async saveDraft() {
+                this.quotation.status = 'draft';
+                this.quotation.notes = document.getElementById('pricingNotes').value;
 
-        // Customer
-        customerSelect.addEventListener('change', function() {
-            onCustomerSelect(this.value);
-        });
-
-        // Add Customer - Full Implementation
-        addCustomerBtn.addEventListener('click', openAddCustomerModal);
-        addCustomerModalClose.addEventListener('click', closeAddCustomerModal);
-        addCustomerCancel.addEventListener('click', closeAddCustomerModal);
-        addCustomerModal.addEventListener('click', (e) => {
-            if (e.target === addCustomerModal) closeAddCustomerModal();
-        });
-        addCustomerSave.addEventListener('click', saveNewCustomer);
-
-        // Enter key in customer form
-        newCustomerName.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                saveNewCustomer();
-            }
-        });
-
-        // Navigation
-        prevStepBtn.addEventListener('click', prevStep);
-        nextStepBtn.addEventListener('click', nextStep);
-        prevStepBtn2.addEventListener('click', prevStep);
-        nextStepBtn2.addEventListener('click', nextStep);
-
-        // Steps click
-        steps.forEach((el) => {
-            el.addEventListener('click', function() {
-                const step = parseInt(this.dataset.step);
-                goToStep(step);
-            });
-        });
-
-        // Items
-        addItemBtn.addEventListener('click', function() {
-            addItemForm.style.display = 'block';
-            this.style.display = 'none';
-        });
-
-        addItemCancel.addEventListener('click', function() {
-            addItemForm.style.display = 'none';
-            addItemBtn.style.display = 'block';
-        });
-
-        addItemConfirm.addEventListener('click', addItem);
-
-        // Product selection auto-fill
-        itemProduct.addEventListener('change', function() {
-            const product = products.find(p => p.id === this.value);
-            if (product) {
-                itemUnit.value = product.unit || 'Nos';
-                itemRate.value = product.sellingRate || 0;
-                itemDescription.value = product.description || '';
-                calculateItemAmount();
-            }
-        });
-
-        itemQty.addEventListener('input', calculateItemAmount);
-        itemRate.addEventListener('input', calculateItemAmount);
-
-        function calculateItemAmount() {
-            const qty = parseFloat(itemQty.value) || 0;
-            const rate = parseFloat(itemRate.value) || 0;
-            itemAmount.value = (qty * rate).toFixed(2);
-        }
-
-        // Pricing
-        discountType.addEventListener('change', function() {
-            discountValueGroup.style.display = this.value === 'none' ? 'none' : 'block';
-            updateTotals();
-            saveDraft();
-        });
-
-        discountValue.addEventListener('input', function() {
-            updateTotals();
-            saveDraft();
-        });
-
-        gstEnabled.addEventListener('change', function() {
-            document.getElementById('gstDetails').style.display = this.checked ? 'block' : 'none';
-            updateTotals();
-            saveDraft();
-        });
-
-        gstType.addEventListener('change', function() {
-            updateTotals();
-            saveDraft();
-        });
-
-        gstRate.addEventListener('change', function() {
-            updateTotals();
-            saveDraft();
-        });
-
-        // Project fields
-        projectName.addEventListener('input', saveDraft);
-        quotationType.addEventListener('change', saveDraft);
-        reference.addEventListener('input', saveDraft);
-        quotationDate.addEventListener('change', saveDraft);
-        validUntil.addEventListener('change', saveDraft);
-
-        // Preview
-        previewBtn.addEventListener('click', refreshPreview);
-
-        // Save
-        saveDraftBtn.addEventListener('click', function() {
-            saveDraft();
-            showToast('Draft saved!', 'success');
-        });
-
-        saveQuotationBtn.addEventListener('click', saveQuotation);
-
-        backBtn.addEventListener('click', function() {
-            if (isDraft) {
-                if (confirm('You have unsaved draft. Are you sure you want to leave?')) {
-                    clearDraft();
-                    window.location.href = 'index.html';
+                try {
+                    this.showLoading(true);
+                    const saved = await quotationService.saveQuotation(this.quotation);
+                    this.showToast(`💾 Draft saved: ${saved.quotationNumber}`, 'success');
+                    setTimeout(() => {
+                        window.location.href = 'quotation-history.html';
+                    }, 1500);
+                } catch (error) {
+                    this.showToast('Error saving draft: ' + error.message, 'error');
+                } finally {
+                    this.showLoading(false);
                 }
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-
-        // ============================================================
-        // KEYBOARD SHORTCUTS
-        // ============================================================
-
-        document.addEventListener('keydown', function(e) {
-            // ESC - General "Back/Close" behavior
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                handleEscape();
             }
 
-            // Ctrl+Enter = Save Quotation
-            if (e.ctrlKey && e.key === 'Enter') {
-                e.preventDefault();
-                saveQuotation();
+            async saveFinalQuotation() {
+                // Check if customer exists
+                if (!this.hasCustomer || !this.quotation.customerId) {
+                    document.getElementById('customerWarningModal').classList.add('open');
+                    return;
+                }
+
+                // Validate project name
+                if (!this.quotation.projectName) {
+                    this.showToast('Please enter a project name', 'error');
+                    this.showStep(2);
+                    return;
+                }
+
+                // Validate items
+                if (this.quotation.items.length === 0) {
+                    this.showToast('Please add at least one item', 'error');
+                    this.showStep(3);
+                    return;
+                }
+
+                // Confirm save
+                if (!confirm('Are you sure you want to save this as a FINAL quotation?')) {
+                    return;
+                }
+
+                this.quotation.status = 'final';
+                this.quotation.notes = document.getElementById('pricingNotes').value;
+
+                try {
+                    this.showLoading(true);
+                    const saved = await quotationService.saveQuotation(this.quotation);
+                    this.showToast(`✅ Quotation saved: ${saved.quotationNumber}`, 'success');
+                    setTimeout(() => {
+                        window.location.href = 'quotation-history.html';
+                    }, 1500);
+                } catch (error) {
+                    this.showToast('Error saving quotation: ' + error.message, 'error');
+                } finally {
+                    this.showLoading(false);
+                }
             }
 
-            // Ctrl+S = Save Draft
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                saveDraft();
-                showToast('Draft saved!', 'success');
+            // ============================================================
+            // CLEAR ALL
+            // ============================================================
+
+            clearAll() {
+                if (!confirm('Are you sure you want to clear all data?')) return;
+
+                this.quotation = {
+                    customerId: null,
+                    customerSnapshot: null,
+                    projectName: '',
+                    projectDesc: '',
+                    projectReference: '',
+                    items: [],
+                    discountPercent: 0,
+                    taxPercent: 18,
+                    notes: '',
+                    status: 'draft',
+                    subtotal: 0,
+                    discountAmount: 0,
+                    taxAmount: 0,
+                    grandTotal: 0
+                };
+
+                this.hasCustomer = false;
+                document.getElementById('selectedCustomerDisplay').style.display = 'none';
+                document.getElementById('projectName').value = '';
+                document.getElementById('projectDesc').value = '';
+                document.getElementById('projectReference').value = '';
+                document.getElementById('discountPercent').value = '0';
+                document.getElementById('taxPercent').value = '18';
+                document.getElementById('pricingNotes').value = '';
+                document.getElementById('customerSearch').value = '';
+                document.getElementById('customerResults').innerHTML = '';
+                document.getElementById('nextFromCustomer').disabled = true;
+
+                this.renderItems();
+                this.updatePricing();
+                this.updatePreview();
+                this.showStep(1);
+                this.showToast('All data cleared', 'info');
             }
-        });
 
-        // ============================================================
-        // EDIT EXISTING QUOTATION
-        // ============================================================
+            // ============================================================
+            // BIND EVENTS
+            // ============================================================
 
-        async function loadQuotationForEdit(id) {
-            showLoading(true);
+            bindEvents() {
+                // Customer search
+                const searchInput = document.getElementById('customerSearch');
+                const searchBtn = document.getElementById('searchCustomerBtn');
 
-            try {
-                const quotation = await quotationService.getQuotation(id);
+                let searchTimeout;
+                searchInput.addEventListener('input', () => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        this.searchCustomer(searchInput.value);
+                    }, 300);
+                });
 
-                if (!quotation) {
-                    showToast('Quotation not found', 'error');
-                    return false;
-                }
+                searchBtn.addEventListener('click', () => {
+                    this.searchCustomer(searchInput.value);
+                });
 
-                if (quotation.status === 'converted') {
-                    showToast('Converted quotation cannot be edited', 'error');
-                    return false;
-                }
+                // Continue without customer
+                document.getElementById('continueWithoutCustomer').addEventListener('click', () => {
+                    this.continueWithoutCustomer();
+                });
 
-                currentQuotation = quotation;
-                isEditMode = true;
-                editingQuotationId = quotation.id;
+                // Change customer
+                document.getElementById('changeCustomerBtn').addEventListener('click', () => {
+                    this.changeCustomer();
+                });
 
-                if (quotation.customerId) {
-                    customerSelect.value = quotation.customerId;
-                    onCustomerSelect(quotation.customerId);
-                }
+                // Navigation - Next
+                document.getElementById('nextFromCustomer').addEventListener('click', () => {
+                    this.goToNextStep();
+                });
 
-                projectName.value = quotation.projectName || '';
-                quotationType.value = quotation.quotationType || 'general';
-                reference.value = quotation.reference || '';
-                quotationDate.value =
-                    quotation.date ||
-                    quotation.quotationDate ||
-                    new Date().toISOString().split('T')[0];
-                validUntil.value = quotation.validUntil || '';
+                document.getElementById('nextFromProject').addEventListener('click', () => {
+                    const projectName = document.getElementById('projectName').value.trim();
+                    if (!projectName) {
+                        this.showToast('Please enter a project name', 'error');
+                        return;
+                    }
+                    this.quotation.projectName = projectName;
+                    this.quotation.projectDesc = document.getElementById('projectDesc').value;
+                    this.quotation.projectReference = document.getElementById('projectReference').value;
+                    this.goToNextStep();
+                });
 
-                items = (quotation.items || []).map(item => ({
-                    productId: item.productId || '',
-                    productSnapshot: item.productSnapshot || null,
-                    name: item.name || '',
-                    description: item.description || '',
-                    unit: item.unit || 'Nos',
-                    quantity: Number(item.quantity) || 0,
-                    rate: Number(item.rate) || 0
-                }));
+                document.getElementById('nextFromItems').addEventListener('click', () => {
+                    if (this.quotation.items.length === 0) {
+                        this.showToast('Please add at least one item', 'error');
+                        return;
+                    }
+                    this.goToNextStep();
+                });
 
-                renderItems();
+                document.getElementById('nextFromPricing').addEventListener('click', () => {
+                    this.goToNextStep();
+                });
 
-                discountType.value = quotation.discountType || 'none';
-                discountValue.value = Number(quotation.discountValue) || 0;
-                discountValueGroup.style.display =
-                    discountType.value === 'none' ? 'none' : 'block';
+                // Navigation - Prev
+                document.getElementById('prevFromProject').addEventListener('click', () => {
+                    this.goToPrevStep();
+                });
 
-                gstEnabled.checked = quotation.gstEnabled !== false;
-                gstType.value = quotation.gstType || 'intra';
-                gstRate.value = quotation.gstRate || 18;
+                document.getElementById('prevFromItems').addEventListener('click', () => {
+                    this.goToPrevStep();
+                });
 
-                const gstDetails = document.getElementById('gstDetails');
-                if (gstDetails) {
-                    gstDetails.style.display =
-                        gstEnabled.checked ? 'block' : 'none';
-                }
+                document.getElementById('prevFromPricing').addEventListener('click', () => {
+                    this.goToPrevStep();
+                });
 
-                if (quotation.templateId) {
-                    templateSelect.value = quotation.templateId;
-                }
+                document.getElementById('prevFromPreview').addEventListener('click', () => {
+                    this.goToPrevStep();
+                });
 
-                updateTotals();
+                // Add Item
+                document.getElementById('addItemBtn').addEventListener('click', () => {
+                    this.addItem();
+                });
 
-                localStorage.removeItem(DRAFT_KEY);
+                document.getElementById('itemName').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        document.getElementById('itemPrice').focus();
+                    }
+                });
 
-                draftStatus.textContent =
-                    `✏️ Editing ${quotation.quotationNumber}`;
-                draftStatus.classList.add('saved');
+                document.getElementById('itemPrice').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.addItem();
+                    }
+                });
 
-                saveQuotationBtn.textContent = '✏️ Update Quotation';
+                // Pricing updates
+                document.getElementById('discountPercent').addEventListener('input', () => {
+                    this.updatePricing();
+                });
 
-                showToast(
-                    `Quotation ${quotation.quotationNumber} loaded for editing`,
-                    'success'
-                );
+                document.getElementById('taxPercent').addEventListener('input', () => {
+                    this.updatePricing();
+                });
 
-                return true;
+                // Save buttons
+                document.getElementById('saveDraftBtn').addEventListener('click', () => {
+                    this.saveDraft();
+                });
 
-            } catch (error) {
-                console.error('Failed to load quotation:', error);
-                showToast('Failed to load quotation: ' + error.message, 'error');
-                return false;
+                document.getElementById('saveQuotationBtn').addEventListener('click', () => {
+                    this.saveFinalQuotation();
+                });
 
-            } finally {
-                showLoading(false);
+                // Warning modal
+                document.getElementById('warningModalClose').addEventListener('click', () => {
+                    document.getElementById('customerWarningModal').classList.remove('open');
+                });
+
+                document.getElementById('warningCancel').addEventListener('click', () => {
+                    document.getElementById('customerWarningModal').classList.remove('open');
+                });
+
+                document.getElementById('warningAddCustomer').addEventListener('click', () => {
+                    document.getElementById('customerWarningModal').classList.remove('open');
+                    this.showStep(1);
+                    document.getElementById('customerSearch').focus();
+                });
+
+                document.getElementById('warningSaveDraft').addEventListener('click', () => {
+                    document.getElementById('customerWarningModal').classList.remove('open');
+                    this.saveDraft();
+                });
+
+                // Cancel button
+                document.getElementById('cancelBtn').addEventListener('click', () => {
+                    if (this.quotation.items.length > 0 || this.quotation.projectName) {
+                        if (!confirm('You have unsaved data. Are you sure you want to cancel?')) {
+                            return;
+                        }
+                    }
+                    window.location.href = 'quotation-history.html';
+                });
+
+                // Clear all
+                document.getElementById('clearAllBtn').addEventListener('click', () => {
+                    this.clearAll();
+                });
+
+                // Close modal on outside click
+                document.getElementById('customerWarningModal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) {
+                        document.getElementById('customerWarningModal').classList.remove('open');
+                    }
+                });
             }
         }
 
@@ -2280,86 +1831,10 @@ let editingQuotationId = null;
         // INIT
         // ============================================================
 
-        async function init() {
-            showLoading(true);
-
-            try {
-                await loadCustomers();
-                await loadProducts();
-                await loadTemplates();
-
-                const params = new URLSearchParams(window.location.search);
-                const editId = params.get('edit');
-
-                if (editId) {
-                    const loaded = await loadQuotationForEdit(editId);
-
-                    if (!loaded) return;
-
-                    goToStep(1);
-                    return;
-                }
-
-                const today = new Date().toISOString().split('T')[0];
-                quotationDate.value = today;
-
-                const validDate = new Date();
-                validDate.setDate(validDate.getDate() + 15);
-                validUntil.value = validDate.toISOString().split('T')[0];
-
-                const hasDraft = loadDraft();
-
-                if (!hasDraft) {
-                    if (customers.length > 0) {
-                        customerSelect.value = customers[0].id;
-                        onCustomerSelect(customers[0].id);
-                    }
-                    updateTotals();
-                }
-
-                const defaultTemplate = templates.find(t => t.isDefault);
-                if (defaultTemplate) {
-                    templateSelect.value = defaultTemplate.id;
-                }
-
-                showToast('Ready to build quotation', 'info');
-
-            } catch (error) {
-                console.error('Init error:', error);
-                showToast('Failed to initialize: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // Helper
-        function escapeHtml(str) {
-            if (!str) return '';
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return String(str).replace(/[&<>"']/g, function(s) {
-                return map[s] || s;
-            });
-        }
-
-        // Event bus listeners
-        eventBus.on(EVENTS.CUSTOMER_ADDED, () => {
-            loadCustomers();
+        document.addEventListener('DOMContentLoaded', () => {
+            const builder = new QuotationBuilder();
         });
-
-        eventBus.on(EVENTS.PRODUCT_ADDED, () => {
-            loadProducts();
-        });
-
-        // Start
-        init();
-
-        console.log('📄 Quotation Builder loaded');
     </script>
+
 </body>
 </html>
