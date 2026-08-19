@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ml">
 <head>
@@ -6,7 +7,7 @@
     <title>H4 Billing ERP - Quotation Builder</title>
     <style>
         /* ============================================================
-           RESET & BASE
+           RESET & BASE - H4 GOLDEN THEME
            ============================================================ */
         * {
             margin: 0;
@@ -15,20 +16,24 @@
         }
 
         :root {
-            --primary: #6C3BC5;
-            --primary-dark: #4A2A8A;
-            --primary-light: #8B5CF6;
             --gold: #FFD700;
-            --gold-dark: #F59E0B;
-            --bg: #f0f2f5;
+            --gold-dark: #D4AF37;
+            --gold-light: #FFE44D;
+            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #F59E0B 100%);
+            
+            --primary: #1a1a2e;
+            --primary-dark: #0d0d1a;
+            --primary-light: #2d2d4a;
+            
+            --bg: #f8f6f0;
             --card-bg: #ffffff;
             --text-primary: #1a1a2e;
             --text-secondary: #4B5563;
             --text-muted: #9CA3AF;
-            --border: #e5e7eb;
-            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            --radius: 12px;
-            --radius-sm: 8px;
+            --border: #e5e0d5;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --success: #10b981;
             --warning: #f59e0b;
@@ -36,8 +41,7 @@
             --info: #3b82f6;
             --convert: #10b981;
             --convert-dark: #059669;
-            --convert-hover: #047857;
-            --header-height: 70px;
+            --header-height: 76px;
         }
 
         body {
@@ -45,23 +49,23 @@
             background: var(--bg);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
-            padding-top: calc(20px + var(--header-height));
+            padding: 16px;
+            padding-top: calc(16px + var(--header-height));
         }
 
         /* ============================================================
-           FIXED HEADER
+           FIXED HEADER - H4 GOLDEN
            ============================================================ */
         .app-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border);
+            background: var(--primary);
+            border-bottom: 3px solid var(--gold);
             z-index: 100;
             padding: 12px 20px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 20px rgba(26, 26, 46, 0.3);
         }
 
         .app-header .header-top {
@@ -71,9 +75,16 @@
         }
 
         .app-header .header-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .app-header .header-title .h4-icon {
+            font-size: 24px;
         }
 
         .app-header .top-actions {
@@ -82,76 +93,125 @@
             align-items: center;
         }
 
+        .app-header .top-actions .btn {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--gold);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .app-header .top-actions .btn:hover {
+            background: rgba(255, 215, 0, 0.25);
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
         .btn {
-            padding: 10px 20px;
+            padding: 14px 24px;
             border: none;
             border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             text-decoration: none;
             touch-action: manipulation;
-            min-height: 44px;
+            min-height: 56px;
+            letter-spacing: 0.3px;
         }
 
-        .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary {
+            background: var(--gold-gradient);
+            color: var(--primary);
+            box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-        .btn-secondary { background: var(--bg); color: var(--text-secondary); }
-        .btn-secondary:hover { background: var(--border); color: var(--text-primary); }
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
 
-        .btn-success { background: var(--success); color: #fff; }
-        .btn-success:hover { background: #059669; }
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+        }
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
 
-        .btn-danger { background: var(--danger); color: #fff; }
-        .btn-danger:hover { background: #dc2626; }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
 
-        .btn-warning { background: var(--warning); color: #fff; }
-        .btn-warning:hover { background: #d97706; }
+        .btn-warning {
+            background: var(--warning);
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
 
         .btn-convert {
             background: var(--convert);
             color: #fff;
-            font-weight: 600;
-            padding: 12px 24px;
-            font-size: 16px;
+            font-weight: 700;
+            padding: 16px 24px;
+            font-size: 18px;
             border: none;
             border-radius: var(--radius-sm);
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
             width: 100%;
             justify-content: center;
-            min-height: 52px;
+            min-height: 60px;
         }
         .btn-convert:hover {
             background: var(--convert-dark);
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(16, 185, 129, 0.4);
         }
         .btn-convert:active {
             transform: translateY(0);
-            background: var(--convert-hover);
         }
 
-        .btn-sm { padding: 6px 12px; font-size: 12px; min-height: 32px; }
-        .btn-xs { padding: 2px 8px; font-size: 11px; min-height: 24px; }
-        .btn-block { width: 100%; justify-content: center; padding: 14px; }
-        .btn-lg { padding: 14px 28px; font-size: 16px; min-height: 52px; }
+        .btn-sm { padding: 10px 16px; font-size: 14px; min-height: 44px; }
+        .btn-xs { padding: 6px 12px; font-size: 12px; min-height: 32px; }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn-lg { padding: 16px 32px; font-size: 18px; min-height: 60px; }
 
         /* ============================================================
-           STEP INDICATORS
+           STEP INDICATORS - GOLDEN THEME
            ============================================================ */
         .step-indicators {
             display: flex;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
             margin-bottom: 24px;
-            padding: 12px 16px;
+            padding: 16px 20px;
             background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -159,18 +219,20 @@
             position: sticky;
             top: var(--header-height);
             z-index: 50;
+            border: 1px solid var(--border);
         }
 
         .step-indicator {
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: var(--border);
+            background: var(--bg);
+            border: 2px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 12px;
+            font-weight: 700;
+            font-size: 14px;
             color: var(--text-muted);
             transition: var(--transition);
             position: relative;
@@ -178,37 +240,40 @@
         }
 
         .step-indicator.active {
-            background: var(--primary);
-            color: #fff;
+            background: var(--gold-gradient);
+            color: var(--primary);
+            border-color: var(--gold);
             transform: scale(1.1);
-            box-shadow: 0 0 0 4px rgba(108, 59, 197, 0.2);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
         }
 
         .step-indicator.completed {
             background: var(--success);
             color: #fff;
+            border-color: var(--success);
         }
 
         .step-indicator .step-label {
             position: absolute;
-            top: 40px;
-            font-size: 10px;
-            font-weight: 500;
+            top: 50px;
+            font-size: 11px;
+            font-weight: 600;
             color: var(--text-secondary);
             white-space: nowrap;
         }
 
         .step-connector {
             flex: 1;
-            height: 2px;
+            height: 3px;
             background: var(--border);
             align-self: center;
-            max-width: 30px;
-            min-width: 10px;
+            max-width: 40px;
+            min-width: 12px;
+            border-radius: 2px;
         }
 
         .step-connector.completed {
-            background: var(--success);
+            background: var(--gold);
         }
 
         /* ============================================================
@@ -216,7 +281,7 @@
            ============================================================ */
         .step {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.4s ease;
         }
 
         .step.active {
@@ -224,11 +289,11 @@
         }
 
         .step-section {
-            scroll-margin-top: calc(var(--header-height) + 80px);
+            scroll-margin-top: 80px;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -236,38 +301,112 @@
             background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 24px;
-            margin-bottom: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
         }
 
         .step-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             margin-bottom: 4px;
             color: var(--text-primary);
         }
 
         .step-description {
             color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 20px;
+            font-size: 15px;
+            margin-bottom: 24px;
         }
 
         .step-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
+            gap: 16px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
             flex-wrap: wrap;
         }
 
         .step-actions .btn-group {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           FORM ELEMENTS - LARGE
+           ============================================================ */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        .form-group label .required {
+            color: var(--danger);
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 17px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            -webkit-appearance: none;
+            min-height: 56px;
+        }
+
+        .form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+            padding: 16px 18px;
+            line-height: 1.6;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+        }
+
+        .form-group .input-error {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--danger);
+        }
+
+        .form-group.error .input-error {
+            display: block;
+        }
+
+        .form-group .helper-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
 
         /* ============================================================
@@ -275,59 +414,71 @@
            ============================================================ */
         .customer-section {
             background: var(--bg);
-            padding: 16px;
+            padding: 20px;
             border-radius: var(--radius);
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            border: 2px solid var(--border);
         }
 
         .customer-section .section-label {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--text-primary);
         }
 
         .customer-select-wrapper {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .customer-select-wrapper select {
             flex: 1;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
+            padding: 16px 18px;
+            border: 2px solid var(--border);
             border-radius: var(--radius-sm);
-            font-size: 16px;
+            font-size: 17px;
             font-family: inherit;
             background: var(--card-bg);
             color: var(--text-primary);
             min-width: 200px;
+            min-height: 56px;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
         }
 
         .customer-select-wrapper select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 59, 197, 0.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+        }
+
+        .customer-select-wrapper .btn {
+            flex-shrink: 0;
+            min-height: 56px;
         }
 
         .customer-details-display {
-            margin-top: 12px;
-            padding: 12px 16px;
+            margin-top: 16px;
+            padding: 16px 20px;
             background: var(--card-bg);
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
+            border: 2px solid var(--gold);
             display: none;
         }
 
         .customer-details-display .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
-            font-size: 14px;
+            padding: 6px 0;
+            font-size: 15px;
             border-bottom: 1px solid var(--border);
         }
 
@@ -337,25 +488,268 @@
 
         .customer-details-display .detail-row .label {
             color: var(--text-secondary);
+            font-weight: 500;
         }
 
         .customer-details-display .detail-row .value {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-primary);
         }
 
+        .warning-badge {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
         /* ============================================================
-           CONVERT MODAL
+           ITEMS
+           ============================================================ */
+        .items-list {
+            margin: 16px 0;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 0.8fr 1fr 0.6fr 0.4fr;
+            gap: 10px;
+            align-items: center;
+            padding: 14px 16px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .item-row .item-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .item-row .item-details {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .item-row .item-total {
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .item-row .item-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .add-item-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr;
+            gap: 12px;
+            align-items: end;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 2px dashed var(--border);
+        }
+
+        .add-item-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .add-item-form .form-group label {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .add-item-form input,
+        .add-item-form select {
+            padding: 14px 16px;
+            font-size: 16px;
+            min-height: 48px;
+        }
+
+        /* ============================================================
+           PRICING
+           ============================================================ */
+        .pricing-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .pricing-summary .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            align-items: center;
+        }
+
+        .pricing-summary .summary-item .label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .pricing-summary .summary-item .value {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .pricing-summary .summary-item.total {
+            grid-column: span 2;
+            background: var(--primary);
+            border-color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .pricing-summary .summary-item.total .label {
+            color: var(--gold);
+            font-size: 16px;
+        }
+
+        .pricing-summary .summary-item.total .value {
+            color: var(--gold);
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .discount-toggle {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .discount-toggle .toggle-label {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 56px;
+            height: 32px;
+            background: var(--border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--gold);
+        }
+
+        .toggle-switch .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 26px;
+            height: 26px;
+            background: #fff;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 27px;
+        }
+
+        .discount-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .gst-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            align-items: end;
+        }
+
+        /* ============================================================
+           AMOUNT IN WORDS
+           ============================================================ */
+        .amount-words {
+            padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--gold);
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .amount-words .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .amount-words .words {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 6px;
+        }
+
+        /* ============================================================
+           PREVIEW
+           ============================================================ */
+        .preview-content {
+            padding: 24px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            min-height: 200px;
+            border: 2px solid var(--border);
+        }
+
+        .preview-content .preview-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+        }
+
+        .preview-content .preview-row:last-child {
+            border-bottom: none;
+        }
+
+        .preview-content .preview-total {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding-top: 14px;
+            border-top: 2px solid var(--gold);
+            margin-top: 10px;
+        }
+
+        /* ============================================================
+           MODAL
            ============================================================ */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 9997;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            backdrop-filter: blur(4px);
         }
 
         .modal-overlay.open { display: flex; }
@@ -370,83 +764,98 @@
             display: flex;
             flex-direction: column;
             animation: modalIn 0.3s ease;
+            border: 2px solid var(--gold);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         @keyframes modalIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { transform: scale(0.95) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
         }
 
         .modal-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+            border-bottom: 2px solid var(--gold);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            background: var(--primary);
         }
 
         .modal-header h3 {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .modal-close {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            color: var(--text-muted);
+            color: var(--gold);
             padding: 4px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
         }
-        .modal-close:hover { color: var(--text-primary); }
+        .modal-close:hover {
+            background: rgba(255, 215, 0, 0.15);
+        }
 
         .modal-body {
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
             flex: 1;
         }
 
         .modal-footer {
-            padding: 12px 20px;
+            padding: 16px 24px;
             border-top: 1px solid var(--border);
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 12px;
             flex-shrink: 0;
             flex-wrap: wrap;
+            background: var(--bg);
         }
 
-        /* Search Input */
+        /* Search */
         .search-input-wrapper {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             margin-bottom: 16px;
         }
 
         .search-input-wrapper input {
             flex: 1;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
+            padding: 16px 18px;
+            border: 2px solid var(--border);
             border-radius: var(--radius-sm);
-            font-size: 16px;
+            font-size: 17px;
             font-family: inherit;
             transition: var(--transition);
+            min-height: 56px;
         }
 
         .search-input-wrapper input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 59, 197, 0.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
         }
 
         .search-hint {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-muted);
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -454,31 +863,33 @@
 
         .search-hint .hint-tag {
             background: var(--bg);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid var(--border);
         }
 
         /* Quotation Results */
         .quotation-result-item {
-            padding: 12px 16px;
-            border: 1px solid var(--border);
+            padding: 16px 20px;
+            border: 2px solid var(--border);
             border-radius: var(--radius-sm);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             cursor: pointer;
             transition: var(--transition);
             background: var(--card-bg);
         }
 
         .quotation-result-item:hover {
-            border-color: var(--primary);
+            border-color: var(--gold);
             background: var(--bg);
             transform: translateX(4px);
         }
 
         .quotation-result-item.selected {
-            border-color: var(--success);
-            background: #ecfdf5;
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.08);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
         }
 
         .quotation-result-item .result-header {
@@ -490,23 +901,24 @@
         }
 
         .quotation-result-item .result-header .qtn-no {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary);
+            font-size: 16px;
         }
 
         .quotation-result-item .result-header .qtn-status {
             font-size: 12px;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 500;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
         }
 
         .quotation-result-item .result-details {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 4px;
-            font-size: 13px;
+            gap: 16px;
+            margin-top: 6px;
+            font-size: 14px;
             color: var(--text-secondary);
         }
 
@@ -517,57 +929,17 @@
         }
 
         .quotation-result-item .result-total {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-primary);
-            font-size: 16px;
-        }
-
-        /* Quotation Detail Preview in Modal */
-        .quotation-detail-preview {
-            background: var(--bg);
-            border-radius: var(--radius-sm);
-            padding: 16px;
-            margin-top: 12px;
-            display: none;
-        }
-
-        .quotation-detail-preview .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            font-size: 14px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .quotation-detail-preview .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .quotation-detail-preview .detail-row .label {
-            color: var(--text-secondary);
-        }
-
-        .quotation-detail-preview .detail-row .value {
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .quotation-detail-preview .items-list {
-            margin: 8px 0;
-            padding-left: 16px;
-        }
-
-        .quotation-detail-preview .items-list li {
-            font-size: 13px;
-            color: var(--text-secondary);
-            padding: 2px 0;
+            font-size: 18px;
+            margin-top: 4px;
         }
 
         .type-badge {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 600;
         }
 
@@ -595,38 +967,72 @@
             color: #6b7280;
         }
 
+        .quotation-detail-preview {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 16px;
+            border: 2px solid var(--gold);
+            display: none;
+        }
+
+        .quotation-detail-preview .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .quotation-detail-preview .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .quotation-detail-preview .detail-row .label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .quotation-detail-preview .detail-row .value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
         /* ============================================================
            TOAST
            ============================================================ */
         .toast-container {
             position: fixed;
-            top: calc(var(--header-height) + 10px);
+            top: calc(var(--header-height) + 16px);
             right: 20px;
             z-index: 9998;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             pointer-events: none;
             max-width: 90%;
         }
 
         .toast {
-            padding: 12px 20px;
+            padding: 16px 24px;
             border-radius: var(--radius-sm);
             background: var(--card-bg);
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
             animation: slideIn 0.3s ease;
             pointer-events: auto;
-            border-left: 4px solid var(--primary);
+            border-left: 5px solid var(--primary);
+            min-height: 56px;
+            display: flex;
+            align-items: center;
         }
 
         .toast-success { border-left-color: var(--success); }
         .toast-error { border-left-color: var(--danger); }
         .toast-warning { border-left-color: var(--warning); }
-        .toast-info { border-left-color: var(--info); }
+        .toast-info { border-left-color: var(--gold); }
 
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
@@ -640,12 +1046,13 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             z-index: 9999;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
+            backdrop-filter: blur(4px);
         }
 
         .loading-overlay.show {
@@ -653,10 +1060,10 @@
         }
 
         .loading-overlay .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -667,7 +1074,8 @@
 
         .loading-overlay .text {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 500;
         }
 
         /* ============================================================
@@ -680,32 +1088,36 @@
             }
 
             .app-header {
-                padding: 10px 12px;
+                padding: 10px 14px;
             }
 
             .app-header .header-title {
                 font-size: 16px;
             }
+            .app-header .header-title .h4-icon {
+                font-size: 20px;
+            }
 
             .app-header .top-actions .btn {
                 font-size: 12px;
-                padding: 6px 12px;
-                min-height: 32px;
+                padding: 8px 14px;
+                min-height: 36px;
             }
 
             :root {
-                --header-height: 60px;
+                --header-height: 64px;
             }
 
             .step-indicators {
-                gap: 2px;
-                padding: 8px 12px;
+                gap: 4px;
+                padding: 10px 14px;
+                top: var(--header-height);
             }
 
             .step-indicator {
-                width: 32px;
-                height: 32px;
-                font-size: 11px;
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
             }
 
             .step-indicator .step-label {
@@ -713,20 +1125,149 @@
             }
 
             .step-connector {
-                max-width: 20px;
-                min-width: 6px;
+                max-width: 24px;
+                min-width: 8px;
             }
 
-            .step-container { padding: 16px; }
-            .step-title { font-size: 18px; }
+            .step-container {
+                padding: 18px;
+            }
+
+            .step-title {
+                font-size: 20px;
+            }
 
             .customer-select-wrapper {
                 flex-direction: column;
             }
 
+            .customer-select-wrapper select {
+                min-height: 52px;
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
+            .customer-select-wrapper .btn {
+                min-height: 52px;
+            }
+
+            .item-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+                padding: 12px;
+            }
+
+            .item-row .item-actions {
+                grid-column: span 2;
+                justify-content: flex-end;
+            }
+
+            .add-item-form {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                padding: 16px;
+            }
+
+            .add-item-form .form-group:last-child {
+                grid-column: span 2;
+            }
+
+            .add-item-form input,
+            .add-item-form select {
+                min-height: 44px;
+                font-size: 15px;
+                padding: 12px 14px;
+            }
+
+            .pricing-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-summary .summary-item.total {
+                grid-column: span 1;
+            }
+
+            .pricing-summary .summary-item.total .value {
+                font-size: 20px;
+            }
+
+            .step-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .step-actions .btn-group {
+                flex-direction: column;
+            }
+
+            .step-actions .btn {
+                justify-content: center;
+            }
+
+            .btn {
+                padding: 12px 18px;
+                font-size: 15px;
+                min-height: 50px;
+            }
+
+            .btn-lg {
+                padding: 14px 24px;
+                font-size: 16px;
+                min-height: 54px;
+            }
+
+            .btn-convert {
+                font-size: 16px;
+                min-height: 54px;
+                padding: 14px 18px;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 16px;
+                padding: 14px 16px;
+                min-height: 50px;
+            }
+
+            .form-group textarea {
+                min-height: 120px;
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
             .modal-content {
                 max-width: 100%;
                 margin: 12px;
+                max-height: 95vh;
+            }
+
+            .modal-header {
+                padding: 16px 18px;
+            }
+            .modal-header h3 {
+                font-size: 17px;
+            }
+
+            .modal-body {
+                padding: 16px;
+            }
+
+            .modal-footer {
+                padding: 12px 16px;
+            }
+
+            .search-input-wrapper {
+                flex-direction: column;
+            }
+
+            .search-input-wrapper input {
+                min-height: 50px;
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
+            .quotation-result-item {
+                padding: 14px 16px;
             }
 
             .quotation-result-item .result-header {
@@ -734,14 +1275,33 @@
                 align-items: flex-start;
             }
 
-            .search-input-wrapper {
-                flex-direction: column;
+            .quotation-detail-preview {
+                padding: 14px;
             }
 
-            .btn-convert {
+            .discount-input-group {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .gst-input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .amount-words .words {
+                font-size: 17px;
+            }
+
+            .toast-container {
+                top: calc(var(--header-height) + 12px);
+                right: 12px;
+                left: 12px;
+                max-width: 100%;
+            }
+
+            .toast {
                 font-size: 14px;
-                padding: 10px 16px;
-                min-height: 44px;
+                padding: 14px 18px;
+                min-height: 48px;
             }
         }
 
@@ -749,26 +1309,85 @@
             .app-header .header-title {
                 font-size: 14px;
             }
+            .app-header .header-title .h4-icon {
+                font-size: 18px;
+            }
+
+            .app-header .top-actions .btn {
+                font-size: 11px;
+                padding: 6px 10px;
+                min-height: 32px;
+            }
+
+            .step-container {
+                padding: 14px;
+            }
+
+            .step-title {
+                font-size: 18px;
+            }
 
             .btn {
-                padding: 8px 12px;
-                font-size: 12px;
-                min-height: 36px;
+                font-size: 14px;
+                padding: 10px 14px;
+                min-height: 44px;
+            }
+
+            .btn-lg {
+                font-size: 14px;
+                min-height: 48px;
+                padding: 12px 18px;
             }
 
             .btn-convert {
-                font-size: 14px;
-                min-height: 44px;
-                padding: 10px 14px;
+                font-size: 15px;
+                min-height: 48px;
+                padding: 12px 16px;
             }
 
+            .form-group input,
+            .form-group select {
+                font-size: 15px;
+                padding: 12px 14px;
+                min-height: 44px;
+            }
+
+            .form-group textarea {
+                min-height: 100px;
+                font-size: 15px;
+                padding: 12px 14px;
+            }
+
+            .pricing-summary .summary-item {
+                padding: 12px 14px;
+            }
+            .pricing-summary .summary-item .value {
+                font-size: 14px;
+            }
+            .pricing-summary .summary-item.total .value {
+                font-size: 18px;
+            }
+
+            .amount-words .words {
+                font-size: 15px;
+            }
+
+            .preview-content {
+                padding: 16px;
+            }
+            .preview-content .preview-row {
+                font-size: 14px;
+                padding: 8px 0;
+            }
+
+            .modal-header h3 {
+                font-size: 16px;
+            }
             .modal-body {
                 padding: 12px;
             }
-
-            .quotation-result-item .result-details {
-                flex-direction: column;
-                gap: 4px;
+            .modal-footer {
+                padding: 10px 12px;
             }
         }
     </style>
@@ -776,14 +1395,16 @@
 <body>
 
     <!-- ============================================================
-    FIXED HEADER
+    FIXED HEADER - H4 GOLDEN THEME
     ============================================================ -->
     <header class="app-header">
         <div class="header-top">
-            <span class="header-title">📝 Quotation Builder</span>
+            <span class="header-title">
+                <span class="h4-icon">⚜️</span> H4 Quotation
+            </span>
             <div class="top-actions">
-                <button class="btn btn-secondary btn-sm" id="clearAllBtn">↻ Clear</button>
-                <button class="btn btn-secondary btn-sm" id="cancelBtn">✕ Cancel</button>
+                <button class="btn btn-sm" id="clearAllBtn">↻ Clear</button>
+                <button class="btn btn-sm" id="cancelBtn">✕ Cancel</button>
             </div>
         </div>
     </header>
@@ -923,30 +1544,30 @@
             <p class="step-description">Select items from the database.</p>
 
             <div class="items-list" id="itemsList">
-                <div class="empty-state" style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
                     <div style="font-size:32px;margin-bottom:8px;">📭</div>
                     <p>No items added yet. Select your first item below.</p>
                 </div>
             </div>
 
-            <div class="add-item-form" style="display:grid;grid-template-columns:2fr 1fr 1fr 0.5fr;gap:8px;align-items:end;padding:16px;background:var(--bg);border-radius:var(--radius-sm);border:1px dashed var(--border);">
-                <div class="form-group" id="itemSelectGroup" style="margin-bottom:0;">
+            <div class="add-item-form" id="addItemForm">
+                <div class="form-group" id="itemSelectGroup">
                     <label>Item <span class="required">*</span></label>
                     <select id="itemSelect">
                         <option value="">-- Select Item --</option>
                     </select>
                     <div class="input-error">⚠️ Please select an item</div>
                 </div>
-                <div class="form-group" id="itemQtyGroup" style="margin-bottom:0;">
+                <div class="form-group" id="itemQtyGroup">
                     <label>Qty <span class="required">*</span></label>
                     <input type="number" id="itemQty" value="1" min="0.5" step="0.5">
                     <div class="input-error">⚠️ Quantity is required</div>
                 </div>
-                <div class="form-group" style="margin-bottom:0;">
+                <div class="form-group">
                     <label>Rate</label>
                     <input type="text" id="itemRate" readonly style="background:var(--bg);" value="Auto">
                 </div>
-                <div class="form-group" style="display:flex;align-items:end;margin-bottom:0;">
+                <div class="form-group" style="display:flex;align-items:end;">
                     <button class="btn btn-primary btn-block" id="addItemBtn">➕ Add</button>
                 </div>
             </div>
@@ -972,14 +1593,14 @@
 
             <div class="form-group">
                 <label>Discount</label>
-                <div class="discount-toggle" style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+                <div class="discount-toggle">
                     <span class="toggle-label">OFF</span>
-                    <div class="toggle-switch" id="discountToggle" style="position:relative;width:48px;height:28px;background:var(--border);border-radius:14px;cursor:pointer;transition:var(--transition);flex-shrink:0;">
-                        <div class="toggle-knob" style="position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:var(--transition);box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+                    <div class="toggle-switch" id="discountToggle">
+                        <div class="toggle-knob"></div>
                     </div>
                     <span class="toggle-label">ON</span>
                 </div>
-                <div class="discount-input-group" id="discountInputs" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+                <div class="discount-input-group" id="discountInputs" style="display:none;">
                     <div class="form-group" style="margin-bottom:0;">
                         <label>Type</label>
                         <select id="discountType">
@@ -996,7 +1617,7 @@
 
             <div class="form-group" id="gstGroup">
                 <label>GST Rate <span class="required">*</span></label>
-                <div class="gst-input-group" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end;">
+                <div class="gst-input-group">
                     <select id="gstSelect">
                         <option value="">-- Select GST --</option>
                         <option value="0">0%</option>
@@ -1015,32 +1636,32 @@
                 <textarea id="pricingNotes" placeholder="Any special pricing notes..."></textarea>
             </div>
 
-            <div class="pricing-summary" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                <div class="summary-item" style="display:flex;justify-content:space-between;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+            <div class="pricing-summary" id="pricingSummary">
+                <div class="summary-item">
                     <span class="label">Subtotal</span>
                     <span class="value" id="subtotalDisplay">₹0.00</span>
                 </div>
-                <div class="summary-item" style="display:flex;justify-content:space-between;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div class="summary-item">
                     <span class="label">Discount</span>
                     <span class="value" id="discountDisplay">₹0.00</span>
                 </div>
-                <div class="summary-item" style="display:flex;justify-content:space-between;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div class="summary-item">
                     <span class="label">Taxable Amount</span>
                     <span class="value" id="taxableDisplay">₹0.00</span>
                 </div>
-                <div class="summary-item" style="display:flex;justify-content:space-between;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div class="summary-item">
                     <span class="label">GST Amount</span>
                     <span class="value" id="gstAmountDisplay">₹0.00</span>
                 </div>
-                <div class="summary-item total" style="grid-column:span 2;display:flex;justify-content:space-between;padding:12px 16px;background:var(--primary);border-radius:var(--radius-sm);border:1px solid var(--primary);">
-                    <span class="label" style="color:rgba(255,255,255,0.8);">GRAND TOTAL</span>
-                    <span class="value" style="color:#fff;font-size:20px;" id="grandTotalDisplay">₹0.00</span>
+                <div class="summary-item total">
+                    <span class="label">GRAND TOTAL</span>
+                    <span class="value" id="grandTotalDisplay">₹0.00</span>
                 </div>
             </div>
 
-            <div class="amount-words" style="padding:16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:12px;text-align:center;">
-                <div class="label" style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Amount in Words</div>
-                <div class="words" style="font-size:18px;font-weight:600;color:var(--text-primary);margin-top:4px;" id="amountInWords">Zero</div>
+            <div class="amount-words">
+                <div class="label">Amount in Words</div>
+                <div class="words" id="amountInWords">Zero</div>
             </div>
 
             <div class="step-actions">
@@ -1058,27 +1679,27 @@
             <h2 class="step-title">👁️ Preview & Save</h2>
             <p class="step-description">Review your quotation before saving.</p>
 
-            <div class="preview-content" style="padding:20px;background:var(--bg);border-radius:var(--radius-sm);min-height:200px;">
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <div class="preview-content" id="previewContent">
+                <div class="preview-row">
                     <span><strong>Customer:</strong></span>
                     <span id="previewCustomer">No customer selected</span>
                 </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+                <div class="preview-row">
                     <span><strong>Project:</strong></span>
                     <span id="previewProject">-</span>
                 </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+                <div class="preview-row">
                     <span><strong>Items:</strong></span>
                     <span id="previewItemCount">0 items</span>
                 </div>
                 <div id="previewItemsList" style="margin-top:8px;"></div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:2px solid var(--border);padding-bottom:12px;margin-top:8px;">
+                <div class="preview-row" style="border-bottom:2px solid var(--gold);padding-bottom:14px;margin-top:10px;">
                     <span><strong>Grand Total:</strong></span>
-                    <span id="previewTotal" style="font-size:18px;font-weight:700;color:var(--primary);">₹0.00</span>
+                    <span id="previewTotal" style="font-size:20px;font-weight:700;color:var(--primary);">₹0.00</span>
                 </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:none;padding-top:8px;">
+                <div class="preview-row" style="border-bottom:none;padding-top:10px;">
                     <span><strong>Amount in Words:</strong></span>
-                    <span id="previewWords" style="font-weight:500;">Zero</span>
+                    <span id="previewWords" style="font-weight:600;">Zero</span>
                 </div>
             </div>
 
@@ -1102,7 +1723,6 @@
                 <button class="modal-close" id="convertModalClose">✕</button>
             </div>
             <div class="modal-body">
-                <!-- Search -->
                 <div class="search-input-wrapper">
                     <input type="text" id="convertSearchInput" placeholder="Search by Name, Location, QTN No, Mobile, Item...">
                     <button class="btn btn-primary" id="convertSearchBtn">🔍 Search</button>
@@ -1117,7 +1737,6 @@
                     <span class="hint-tag">Item</span>
                 </div>
 
-                <!-- Results -->
                 <div id="convertResults">
                     <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
                         <div style="font-size:32px;margin-bottom:8px;">🔍</div>
@@ -1125,7 +1744,6 @@
                     </div>
                 </div>
 
-                <!-- Detail Preview -->
                 <div class="quotation-detail-preview" id="quotationDetailPreview">
                     <div class="detail-row">
                         <span class="label">Quotation No:</span>
@@ -1151,16 +1769,16 @@
                         <span class="label">Items:</span>
                         <span class="value" id="previewQtnItems">-</span>
                     </div>
-                    <div class="detail-row" style="border-top:2px solid var(--border);padding-top:8px;margin-top:4px;">
-                        <span class="label" style="font-weight:600;">Grand Total:</span>
-                        <span class="value" style="font-weight:700;color:var(--primary);font-size:18px;" id="previewQtnTotal">-</span>
+                    <div class="detail-row" style="border-top:2px solid var(--gold);padding-top:10px;margin-top:6px;">
+                        <span class="label" style="font-weight:700;">Grand Total:</span>
+                        <span class="value" style="font-weight:700;color:var(--primary);font-size:20px;" id="previewQtnTotal">-</span>
                     </div>
-                    <div id="convertedStatus" style="display:none;padding:12px 16px;background:#fef3c7;border:1px solid #f59e0b;border-radius:var(--radius-sm);margin-top:12px;">
+                    <div id="convertedStatus" style="display:none;padding:14px 18px;background:#fef3c7;border:2px solid #f59e0b;border-radius:var(--radius-sm);margin-top:12px;">
                         <span style="font-weight:600;">⚠️ This quotation is already converted.</span>
                         <br>
                         <span id="convertedInvoiceInfo"></span>
                         <br>
-                        <button class="btn btn-primary btn-sm" id="viewConvertedInvoiceBtn" style="margin-top:8px;">
+                        <button class="btn btn-primary btn-sm" id="viewConvertedInvoiceBtn" style="margin-top:10px;">
                             👁️ View Invoice
                         </button>
                     </div>
@@ -1168,7 +1786,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="convertModalCancel">Cancel</button>
-                <button class="btn btn-convert" id="convertConfirmBtn" style="width:auto;min-height:44px;padding:10px 24px;font-size:16px;border-radius:10px;">
+                <button class="btn btn-convert" id="convertConfirmBtn" style="width:auto;min-height:52px;padding:14px 28px;font-size:17px;">
                     🧾 Convert to Invoice
                 </button>
             </div>
@@ -1215,7 +1833,7 @@
                 <button class="modal-close" id="warningModalClose">✕</button>
             </div>
             <div class="modal-body">
-                <div class="warning-icon" style="font-size:48px;margin-bottom:12px;">⚠️</div>
+                <div style="font-size:48px;margin-bottom:12px;">⚠️</div>
                 <h4 style="margin-bottom:8px;">No customer selected!</h4>
                 <p style="color:var(--text-secondary);line-height:1.6;">
                     You are trying to save a final quotation without a customer.
@@ -1303,7 +1921,6 @@
             }
         };
 
-        // Mock Saved Quotations
         let savedQuotations = [{
             id: 'q1',
             quotationNumber: 'QTN-0001',
@@ -1462,10 +2079,6 @@
             }
         };
 
-        // ============================================================
-        // NUMBER TO WORDS
-        // ============================================================
-
         function numberToWords(num) {
             if (num === 0) return 'Zero';
             const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
@@ -1552,7 +2165,7 @@
                 this.showStep(1);
                 this.updatePricing();
                 this.updatePreview();
-                console.log('📝 Quotation Builder initialized');
+                console.log('📝 H4 Quotation Builder initialized');
             }
 
             showToast(message, type = 'info') {
@@ -1874,12 +2487,12 @@
                     return;
                 }
                 container.innerHTML = this.quotation.items.map((item, index) => `
-                    <div class="item-row" style="display:grid;grid-template-columns:2fr 0.8fr 1fr 0.6fr 0.5fr;gap:8px;align-items:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:6px;">
+                    <div class="item-row">
                         <span class="item-name">${index + 1}. ${item.name}</span>
                         <span class="item-details">Qty: ${item.quantity}</span>
                         <span class="item-details">₹${item.rate.toFixed(2)}</span>
-                        <span class="item-total" style="font-weight:600;color:var(--text-primary);text-align:right;">₹${item.total.toFixed(2)}</span>
-                        <div class="item-actions" style="display:flex;gap:4px;justify-content:flex-end;">
+                        <span class="item-total">₹${item.total.toFixed(2)}</span>
+                        <div class="item-actions">
                             <button class="btn btn-danger btn-xs remove-item-btn" data-id="${item.id}">✕</button>
                         </div>
                     </div>
@@ -1928,7 +2541,7 @@
                 const toggle = document.getElementById('discountToggle');
                 const inputs = document.getElementById('discountInputs');
                 this.quotation.discountEnabled = toggle.classList.toggle('active');
-                toggle.querySelector('.toggle-knob').style.left = this.quotation.discountEnabled ? '23px' : '3px';
+                toggle.querySelector('.toggle-knob').style.left = this.quotation.discountEnabled ? '27px' : '3px';
                 inputs.style.display = this.quotation.discountEnabled ? 'grid' : 'none';
                 if (!this.quotation.discountEnabled) {
                     this.quotation.discountValue = 0;
@@ -1997,10 +2610,10 @@
 
                 const itemsContainer = document.getElementById('previewItemsList');
                 if (this.quotation.items.length === 0) {
-                    itemsContainer.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No items added</p>';
+                    itemsContainer.innerHTML = '<p style="color:var(--text-muted);font-size:14px;">No items added</p>';
                 } else {
                     itemsContainer.innerHTML = this.quotation.items.map(item => `
-                        <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+                        <div class="preview-row" style="font-size:14px;">
                             <span>${item.name}</span>
                             <span>${item.quantity} × ₹${item.rate.toFixed(2)} = ₹${item.total.toFixed(2)}</span>
                         </div>
@@ -2042,7 +2655,6 @@
                     return;
                 }
 
-                // Search in saved quotations (excluding drafts)
                 const results = savedQuotations.filter(q => {
                     if (q.status === 'draft') return false;
                     const searchable = [
@@ -2092,12 +2704,11 @@
                                 <span>📦 ${q.items.length} items</span>
                             </div>
                             <div class="result-total">₹${(q.grandTotal || 0).toFixed(2)}</div>
-                            ${isConverted ? `<div style="font-size:12px;color:var(--success);margin-top:4px;">✅ Converted to ${q.convertedToInvoice}</div>` : ''}
+                            ${isConverted ? `<div style="font-size:13px;color:var(--success);margin-top:4px;font-weight:600;">✅ Converted to ${q.convertedToInvoice}</div>` : ''}
                         </div>
                     `;
                 }).join('');
 
-                // Auto-select if only one result
                 if (results.length === 1 && results[0].status !== 'converted') {
                     this.selectConvertQuotation(results[0].id);
                 }
@@ -2109,12 +2720,10 @@
 
                 this.selectedConvertQuotation = quotation;
 
-                // Update results highlighting
                 document.querySelectorAll('.quotation-result-item').forEach(el => {
                     el.classList.toggle('selected', el.dataset.id === id);
                 });
 
-                // Show detail preview
                 const preview = document.getElementById('quotationDetailPreview');
                 preview.style.display = 'block';
 
@@ -2134,7 +2743,6 @@
                 document.getElementById('previewQtnItems').textContent = itemNames || 'No items';
                 document.getElementById('previewQtnTotal').textContent = `₹${(quotation.grandTotal || 0).toFixed(2)}`;
 
-                // Check if already converted
                 if (quotation.status === 'converted' && quotation.convertedToInvoice) {
                     document.getElementById('convertedStatus').style.display = 'block';
                     document.getElementById('convertedInvoiceInfo').innerHTML = 
@@ -2174,7 +2782,6 @@
                     this.showToast(`✅ ${this.selectedConvertQuotation.quotationNumber} converted to ${result.invoiceNumber}`, 'success');
                     document.getElementById('convertModal').classList.remove('open');
 
-                    // Navigate to invoice.html with data
                     setTimeout(() => {
                         if (confirm(`Invoice ${result.invoiceNumber} created! View it now?`)) {
                             window.location.href = `invoice.html?invoice=${result.invoiceNumber}`;
@@ -2326,7 +2933,6 @@
                 document.getElementById('customerSelect').addEventListener('change', () => this.onCustomerSelect());
                 document.getElementById('addCustomerBtn').addEventListener('click', () => this.openAddCustomer());
 
-                // Add Customer Modal
                 document.getElementById('addCustomerModalClose').addEventListener('click', () => {
                     document.getElementById('addCustomerModal').classList.remove('open');
                 });
@@ -2341,7 +2947,6 @@
                 // Convert to Invoice
                 document.getElementById('convertToInvoiceBtn').addEventListener('click', () => this.openConvertModal());
 
-                // Convert Modal
                 document.getElementById('convertModalClose').addEventListener('click', () => {
                     document.getElementById('convertModal').classList.remove('open');
                 });
@@ -2350,23 +2955,19 @@
                 });
                 document.getElementById('convertSearchBtn').addEventListener('click', () => this.searchQuotations());
                 document.getElementById('convertSearchInput').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        this.searchQuotations();
-                    }
+                    if (e.key === 'Enter') { e.preventDefault(); this.searchQuotations(); }
                 });
                 document.getElementById('convertConfirmBtn').addEventListener('click', () => this.performConvertToInvoice());
                 document.getElementById('convertModal').addEventListener('click', (e) => {
                     if (e.target === e.currentTarget) document.getElementById('convertModal').classList.remove('open');
                 });
 
-                // Navigation - Next
+                // Navigation
                 document.getElementById('nextFromCustomer').addEventListener('click', () => this.goToNextStep());
                 document.getElementById('nextFromProject').addEventListener('click', () => this.goToNextStep());
                 document.getElementById('nextFromItems').addEventListener('click', () => this.goToNextStep());
                 document.getElementById('nextFromPricing').addEventListener('click', () => this.goToNextStep());
 
-                // Navigation - Prev
                 document.getElementById('prevFromProject').addEventListener('click', () => this.goToPrevStep());
                 document.getElementById('prevFromItems').addEventListener('click', () => this.goToPrevStep());
                 document.getElementById('prevFromPricing').addEventListener('click', () => this.goToPrevStep());
@@ -2395,7 +2996,6 @@
                 document.getElementById('gstSelect').addEventListener('change', () => this.onGstChange());
                 document.getElementById('addGstBtn').addEventListener('click', () => this.addCustomGst());
 
-                // GST Modal
                 document.getElementById('gstModalClose').addEventListener('click', () => {
                     document.getElementById('gstModal').classList.remove('open');
                 });
@@ -2438,7 +3038,6 @@
                 document.getElementById('clearAllBtn').addEventListener('click', () => this.clearAll());
                 document.getElementById('cancelBtn').addEventListener('click', () => this.cancelQuotation());
 
-                // Keyboard shortcuts
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         document.querySelectorAll('.modal-overlay.open').forEach(modal => {
@@ -2457,7 +3056,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             builder = new QuotationBuilder();
             window.builder = builder;
-            console.log('📝 Quotation Builder with Convert to Invoice loaded successfully');
+            console.log('⚜️ H4 Quotation Builder with Golden Theme loaded successfully');
         });
     </script>
 
