@@ -34,6 +34,8 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
+            --convert: #f97316;
+            --convert-dark: #ea580c;
             --header-height: 70px;
         }
 
@@ -72,6 +74,7 @@
         .app-header .header-actions {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         /* ============================================================
@@ -116,6 +119,16 @@
             border: 1px solid var(--primary);
         }
         .btn-outline:hover { background: var(--primary); color: #fff; }
+
+        .btn-convert {
+            background: var(--convert);
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 24px;
+            font-size: 15px;
+            border: 2px solid var(--convert);
+        }
+        .btn-convert:hover { background: var(--convert-dark); border-color: var(--convert-dark); }
 
         .btn-sm { padding: 6px 12px; font-size: 12px; min-height: 32px; }
         .btn-xs { padding: 2px 8px; font-size: 11px; min-height: 24px; }
@@ -677,7 +690,7 @@
         }
 
         /* ============================================================
-           MODAL
+           CONVERT TO INVOICE MODAL
            ============================================================ */
         .modal-overlay {
             position: fixed;
@@ -695,13 +708,17 @@
         .modal-content {
             background: var(--card-bg);
             border-radius: var(--radius);
-            max-width: 450px;
+            max-width: 550px;
             width: 100%;
             max-height: 90vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             animation: modalIn 0.3s ease;
+        }
+
+        .modal-content.wide {
+            max-width: 650px;
         }
 
         @keyframes modalIn {
@@ -718,7 +735,14 @@
             flex-shrink: 0;
         }
 
-        .modal-header h3 { font-size: 18px; font-weight: 600; }
+        .modal-header h3 { 
+            font-size: 18px; 
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .modal-close {
             background: none;
             border: none;
@@ -733,7 +757,6 @@
             padding: 20px;
             overflow-y: auto;
             flex: 1;
-            text-align: center;
         }
 
         .modal-body .warning-icon {
@@ -745,10 +768,68 @@
             padding: 12px 20px;
             border-top: 1px solid var(--border);
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
             gap: 10px;
             flex-shrink: 0;
             flex-wrap: wrap;
+        }
+
+        /* Quotation Preview in Modal */
+        .quotation-preview {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .quotation-preview .preview-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .quotation-preview .preview-item:last-child {
+            border-bottom: none;
+        }
+
+        .quotation-preview .preview-item .label {
+            color: var(--text-secondary);
+        }
+
+        .quotation-preview .preview-item .value {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .quotation-preview .type-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .type-general { background: #e5e7eb; color: #4b5563; }
+        .type-waterproofing { background: #dbeafe; color: #1e40af; }
+        .type-epoxy { background: #e9d5ff; color: #6d28d9; }
+
+        .converted-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .converted-badge .invoice-link {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 4px;
         }
 
         /* ============================================================
@@ -920,6 +1001,25 @@
             .gst-input-group {
                 grid-template-columns: 1fr;
             }
+
+            .modal-content {
+                max-width: 100%;
+                margin: 12px;
+            }
+
+            .modal-content.wide {
+                max-width: 100%;
+            }
+
+            .btn-convert {
+                padding: 8px 16px;
+                font-size: 13px;
+                min-height: 40px;
+            }
+
+            .app-header .header-actions .btn-convert span {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -942,6 +1042,10 @@
                 font-size: 14px;
                 padding: 10px 12px;
             }
+
+            .modal-body {
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -953,6 +1057,10 @@
     <header class="app-header">
         <h1>📝 Quotation Builder</h1>
         <div class="header-actions">
+            <!-- Convert to Invoice Button - Prominent -->
+            <button class="btn btn-convert" id="convertToInvoiceBtn">
+                🧾 <span>Convert to Invoice</span>
+            </button>
             <button class="btn btn-secondary btn-sm" id="cancelBtn">✕ Cancel</button>
             <button class="btn btn-secondary btn-sm" id="clearAllBtn">↺ Clear</button>
         </div>
@@ -1166,7 +1274,7 @@
                         <option value="0">0%</option>
                         <option value="5">5%</option>
                         <option value="9">9%</option>
-                        <option value="18">18%</option>
+                        <option value="18" selected>18%</option>
                         <option value="28">28%</option>
                     </select>
                     <button class="btn btn-secondary btn-sm" id="addGstBtn">+ Add GST Rate</button>
@@ -1257,6 +1365,99 @@
     </div>
 
     <!-- ============================================================
+    CONVERT TO INVOICE MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="convertModal">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <h3>🧾 Convert Quotation to Invoice</h3>
+                <button class="modal-close" id="convertModalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Quotation Selection -->
+                <div class="form-group" id="quotationSelectGroup">
+                    <label>Select Quotation <span class="required">*</span></label>
+                    <select id="convertQuotationSelect">
+                        <option value="">-- Select Quotation --</option>
+                    </select>
+                    <div class="input-error">⚠️ Please select a quotation</div>
+                </div>
+
+                <!-- Quotation Details Preview -->
+                <div id="quotationPreviewDetails" style="display:none;">
+                    <div class="quotation-preview">
+                        <div class="preview-item">
+                            <span class="label">Quotation No:</span>
+                            <span class="value" id="previewQuotationNo">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Customer:</span>
+                            <span class="value" id="previewQuotationCustomer">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Mobile:</span>
+                            <span class="value" id="previewQuotationMobile">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Address:</span>
+                            <span class="value" id="previewQuotationAddress">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Site / Location:</span>
+                            <span class="value" id="previewQuotationSite">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Type:</span>
+                            <span class="value" id="previewQuotationType">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Items:</span>
+                            <span class="value" id="previewQuotationItems">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Quantity:</span>
+                            <span class="value" id="previewQuotationQty">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Rate:</span>
+                            <span class="value" id="previewQuotationRate">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">Discount:</span>
+                            <span class="value" id="previewQuotationDiscount">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="label">GST:</span>
+                            <span class="value" id="previewQuotationGst">-</span>
+                        </div>
+                        <div class="preview-item" style="border-top:2px solid var(--border);padding-top:8px;margin-top:4px;">
+                            <span class="label" style="font-weight:600;">Grand Total:</span>
+                            <span class="value" style="font-weight:700;color:var(--primary);font-size:18px;" id="previewQuotationTotal">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Converted/Already converted status -->
+                    <div id="convertedStatus" style="display:none;padding:12px 16px;background:#fef3c7;border:1px solid #f59e0b;border-radius:var(--radius-sm);margin-top:12px;">
+                        <span style="font-weight:600;">⚠️ This quotation is already converted.</span>
+                        <br>
+                        <span id="convertedInvoiceInfo"></span>
+                        <br>
+                        <button class="btn btn-primary btn-sm" id="viewConvertedInvoiceBtn" style="margin-top:8px;">
+                            👁️ View Invoice
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="convertModalCancel">Cancel</button>
+                <button class="btn btn-convert" id="convertConfirmBtn">
+                    🧾 Convert to Invoice
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
     WARNING MODAL
     ============================================================ -->
     <div class="modal-overlay" id="customerWarningModal">
@@ -1318,14 +1519,14 @@
 
         // Mock Product Database
         const productDatabase = [
-            { id: 'p1', name: 'H4 Tile Adhesive', rate: 450 },
-            { id: 'p2', name: 'H4 Waterproofing', rate: 850 },
-            { id: 'p3', name: 'H4 ShieldX Epoxy', rate: 1200 },
-            { id: 'p4', name: 'H4 Grout', rate: 350 },
-            { id: 'p5', name: 'H4 Primer', rate: 280 },
-            { id: 'p6', name: 'H4 Acrylic Coating', rate: 650 },
-            { id: 'p7', name: 'H4 Polyurethane', rate: 950 },
-            { id: 'p8', name: 'H4 Cement Adhesive', rate: 320 },
+            { id: 'p1', name: 'H4 Tile Adhesive', rate: 450, type: 'general' },
+            { id: 'p2', name: 'H4 Waterproofing', rate: 850, type: 'waterproofing' },
+            { id: 'p3', name: 'H4 ShieldX Epoxy', rate: 1200, type: 'epoxy' },
+            { id: 'p4', name: 'H4 Grout', rate: 350, type: 'general' },
+            { id: 'p5', name: 'H4 Primer', rate: 280, type: 'general' },
+            { id: 'p6', name: 'H4 Acrylic Coating', rate: 650, type: 'waterproofing' },
+            { id: 'p7', name: 'H4 Polyurethane', rate: 950, type: 'waterproofing' },
+            { id: 'p8', name: 'H4 Cement Adhesive', rate: 320, type: 'general' },
         ];
 
         const customerService = {
@@ -1368,14 +1569,181 @@
             }
         };
 
+        // Mock Saved Quotations (for conversion)
+        let savedQuotations = [{
+            id: 'q1',
+            quotationNumber: 'QTN-0001',
+            customerId: 'c1',
+            customerSnapshot: customerService.customers[0],
+            projectName: 'Villa Construction',
+            projectDesc: '3BHK Villa waterproofing',
+            projectReference: 'REF-001',
+            items: [
+                { id: 'item_1', productId: 'p2', name: 'H4 Waterproofing', quantity: 2, rate: 850, total: 1700 },
+                { id: 'item_2', productId: 'p1', name: 'H4 Tile Adhesive', quantity: 1, rate: 450, total: 450 }
+            ],
+            discountEnabled: false,
+            discountType: 'percentage',
+            discountValue: 0,
+            gstRate: 18,
+            notes: '',
+            subtotal: 2150,
+            discountAmount: 0,
+            taxableAmount: 2150,
+            gstAmount: 387,
+            grandTotal: 2537,
+            status: 'converted', // Already converted
+            convertedToInvoice: 'INV-0001',
+            quotationType: 'waterproofing',
+            createdAt: '2026-08-15'
+        }, {
+            id: 'q2',
+            quotationNumber: 'QTN-0002',
+            customerId: 'c2',
+            customerSnapshot: customerService.customers[1],
+            projectName: 'Office Interior',
+            projectDesc: 'Office flooring and coating',
+            projectReference: 'REF-002',
+            items: [
+                { id: 'item_3', productId: 'p3', name: 'H4 ShieldX Epoxy', quantity: 3, rate: 1200, total: 3600 },
+                { id: 'item_4', productId: 'p4', name: 'H4 Grout', quantity: 2, rate: 350, total: 700 }
+            ],
+            discountEnabled: true,
+            discountType: 'percentage',
+            discountValue: 10,
+            gstRate: 18,
+            notes: 'Urgent delivery',
+            subtotal: 4300,
+            discountAmount: 430,
+            taxableAmount: 3870,
+            gstAmount: 696.6,
+            grandTotal: 4566.6,
+            status: 'accepted',
+            convertedToInvoice: null,
+            quotationType: 'epoxy',
+            createdAt: '2026-08-16'
+        }, {
+            id: 'q3',
+            quotationNumber: 'QTN-0003',
+            customerId: 'c3',
+            customerSnapshot: customerService.customers[2],
+            projectName: 'Terrace Waterproofing',
+            projectDesc: 'Terrace waterproofing with H4 solution',
+            projectReference: 'REF-003',
+            items: [
+                { id: 'item_5', productId: 'p2', name: 'H4 Waterproofing', quantity: 5, rate: 850, total: 4250 },
+                { id: 'item_6', productId: 'p6', name: 'H4 Acrylic Coating', quantity: 2, rate: 650, total: 1300 }
+            ],
+            discountEnabled: false,
+            discountType: 'percentage',
+            discountValue: 0,
+            gstRate: 18,
+            notes: '',
+            subtotal: 5550,
+            discountAmount: 0,
+            taxableAmount: 5550,
+            gstAmount: 999,
+            grandTotal: 6549,
+            status: 'draft',
+            convertedToInvoice: null,
+            quotationType: 'waterproofing',
+            createdAt: '2026-08-17'
+        }, {
+            id: 'q4',
+            quotationNumber: 'QTN-0004',
+            customerId: 'c4',
+            customerSnapshot: customerService.customers[3],
+            projectName: 'Showroom Flooring',
+            projectDesc: 'Epoxy flooring for showroom',
+            projectReference: 'REF-004',
+            items: [
+                { id: 'item_7', productId: 'p3', name: 'H4 ShieldX Epoxy', quantity: 4, rate: 1200, total: 4800 },
+                { id: 'item_8', productId: 'p7', name: 'H4 Polyurethane', quantity: 1, rate: 950, total: 950 }
+            ],
+            discountEnabled: true,
+            discountType: 'fixed',
+            discountValue: 500,
+            gstRate: 18,
+            notes: 'Special discount applied',
+            subtotal: 5750,
+            discountAmount: 500,
+            taxableAmount: 5250,
+            gstAmount: 945,
+            grandTotal: 6195,
+            status: 'sent',
+            convertedToInvoice: null,
+            quotationType: 'epoxy',
+            createdAt: '2026-08-18'
+        }, {
+            id: 'q5',
+            quotationNumber: 'QTN-0005',
+            customerId: 'c5',
+            customerSnapshot: customerService.customers[4],
+            projectName: 'General Maintenance',
+            projectDesc: 'General maintenance work',
+            projectReference: 'REF-005',
+            items: [
+                { id: 'item_9', productId: 'p8', name: 'H4 Cement Adhesive', quantity: 3, rate: 320, total: 960 },
+                { id: 'item_10', productId: 'p5', name: 'H4 Primer', quantity: 2, rate: 280, total: 560 }
+            ],
+            discountEnabled: false,
+            discountType: 'percentage',
+            discountValue: 0,
+            gstRate: 18,
+            notes: '',
+            subtotal: 1520,
+            discountAmount: 0,
+            taxableAmount: 1520,
+            gstAmount: 273.6,
+            grandTotal: 1793.6,
+            status: 'accepted',
+            convertedToInvoice: null,
+            quotationType: 'general',
+            createdAt: '2026-08-18'
+        }];
+
         const quotationService = {
             async saveQuotation(data) {
                 await new Promise(resolve => setTimeout(resolve, 500));
-                const number = 'QT-' + Date.now().toString().slice(-6);
-                return {
+                const number = 'QTN-' + String(Date.now()).slice(-4).padStart(4, '0');
+                const newQuotation = {
                     id: 'q' + Date.now(),
                     quotationNumber: number,
-                    ...data
+                    ...data,
+                    createdAt: new Date().toISOString().split('T')[0],
+                    status: data.status || 'draft',
+                    convertedToInvoice: null
+                };
+                savedQuotations.push(newQuotation);
+                return newQuotation;
+            },
+
+            async getQuotations() {
+                return savedQuotations;
+            },
+
+            async getQuotation(id) {
+                return savedQuotations.find(q => q.id === id);
+            },
+
+            async convertToInvoice(quotationId) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const quotation = savedQuotations.find(q => q.id === quotationId);
+                if (!quotation) throw new Error('Quotation not found');
+
+                if (quotation.status === 'converted') {
+                    throw new Error('Already converted');
+                }
+
+                const invoiceNumber = 'INV-' + String(Date.now()).slice(-4).padStart(4, '0');
+
+                // Update quotation status
+                quotation.status = 'converted';
+                quotation.convertedToInvoice = invoiceNumber;
+
+                return {
+                    invoiceNumber: invoiceNumber,
+                    quotationData: quotation
                 };
             }
         };
@@ -1391,55 +1759,45 @@
                 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
             ];
             const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-            const thousands = ['', 'Thousand', 'Lakh', 'Crore'];
 
             let words = '';
             let remainder = Math.floor(num);
-            let parts = [];
 
-            // Convert to Indian numbering system
             if (remainder >= 10000000) {
-                parts.push(Math.floor(remainder / 10000000) + ' Crore');
+                words += ones[Math.floor(remainder / 10000000)] + ' Crore ';
                 remainder %= 10000000;
             }
             if (remainder >= 100000) {
-                parts.push(Math.floor(remainder / 100000) + ' Lakh');
+                words += ones[Math.floor(remainder / 100000)] + ' Lakh ';
                 remainder %= 100000;
             }
             if (remainder >= 1000) {
-                parts.push(Math.floor(remainder / 1000) + ' Thousand');
+                words += ones[Math.floor(remainder / 1000)] + ' Thousand ';
                 remainder %= 1000;
             }
+            if (remainder >= 100) {
+                words += ones[Math.floor(remainder / 100)] + ' Hundred ';
+                remainder %= 100;
+            }
             if (remainder > 0) {
-                parts.push(remainder + '');
+                if (remainder < 20) {
+                    words += ones[remainder] + ' ';
+                } else {
+                    words += tens[Math.floor(remainder / 10)] + ' ';
+                    if (remainder % 10 > 0) {
+                        words += ones[remainder % 10] + ' ';
+                    }
+                }
             }
 
-            // Convert each part to words
-            const result = parts.map(part => {
-                const val = parseInt(part);
-                if (val === 0) return '';
-                if (val < 20) return ones[val];
-                if (val < 100) {
-                    const ten = Math.floor(val / 10);
-                    const one = val % 10;
-                    return tens[ten] + (one > 0 ? ' ' + ones[one] : '');
-                }
-                if (val < 1000) {
-                    const hundred = Math.floor(val / 100);
-                    const rest = val % 100;
-                    return ones[hundred] + ' Hundred' + (rest > 0 ? ' ' + numberToWords(rest) : '');
-                }
-                return part;
-            }).join(' ');
-
-            // Handle decimal (paise)
             const paise = Math.round((num - Math.floor(num)) * 100);
-            let finalWords = result;
+            let finalWords = 'Rupees ' + words.trim();
             if (paise > 0) {
                 finalWords += ' and ' + numberToWords(paise) + ' Paise';
             }
+            finalWords += ' Only';
 
-            return 'Rupees ' + finalWords + ' Only';
+            return finalWords;
         }
 
         // ============================================================
@@ -1465,12 +1823,14 @@
                     taxableAmount: 0,
                     gstAmount: 0,
                     grandTotal: 0,
-                    status: 'draft'
+                    status: 'draft',
+                    quotationType: 'general'
                 };
 
                 this.currentStep = 1;
                 this.hasCustomer = false;
                 this.customGstRates = [];
+                this.savedQuotations = [];
                 this.init();
             }
 
@@ -1481,6 +1841,7 @@
             init() {
                 this.bindEvents();
                 this.loadItemsDropdown();
+                this.loadSavedQuotations();
                 this.showStep(1);
                 this.updatePricing();
                 this.updatePreview();
@@ -1528,7 +1889,6 @@
                     return;
                 }
 
-                // Blur any active input to dismiss keyboard
                 if (document.activeElement) {
                     document.activeElement.blur();
                 }
@@ -1546,10 +1906,8 @@
             // ============================================================
 
             showStep(step) {
-                // Hide all steps
                 document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
 
-                // Show current step
                 const stepElement = document.getElementById(`step${step}`);
                 if (stepElement) {
                     stepElement.classList.add('active');
@@ -1561,12 +1919,10 @@
             }
 
             goToNextStep() {
-                // Validate current step before proceeding
                 if (!this.validateStep(this.currentStep)) {
                     return;
                 }
 
-                // Blur any active input
                 if (document.activeElement) {
                     document.activeElement.blur();
                 }
@@ -1574,15 +1930,12 @@
                 if (this.currentStep < 5) {
                     const nextStep = this.currentStep + 1;
                     this.showStep(nextStep);
-
-                    // Scroll to the next step section
                     const nextElement = document.getElementById(`step${nextStep}Section`);
                     this.scrollToStep(nextElement);
                 }
             }
 
             goToPrevStep() {
-                // Blur any active input
                 if (document.activeElement) {
                     document.activeElement.blur();
                 }
@@ -1590,8 +1943,6 @@
                 if (this.currentStep > 1) {
                     const prevStep = this.currentStep - 1;
                     this.showStep(prevStep);
-
-                    // Scroll to the previous step section
                     const prevElement = document.getElementById(`step${prevStep}Section`);
                     this.scrollToStep(prevElement);
                 }
@@ -1623,21 +1974,11 @@
 
             validateStep(step) {
                 switch (step) {
-                    case 1:
-                        // Customer step - always valid (can continue without customer)
-                        return true;
-
-                    case 2:
-                        return this.validateProject();
-
-                    case 3:
-                        return this.validateItems();
-
-                    case 4:
-                        return this.validatePricing();
-
-                    default:
-                        return true;
+                    case 1: return true;
+                    case 2: return this.validateProject();
+                    case 3: return this.validateItems();
+                    case 4: return this.validatePricing();
+                    default: return true;
                 }
             }
 
@@ -1664,7 +2005,6 @@
                     return false;
                 }
 
-                // Check if any item has rate 0 (rate not available)
                 for (const item of this.quotation.items) {
                     if (item.rate === 0) {
                         this.showToast(`⚠️ Rate not available for "${item.name}"`, 'error');
@@ -1828,7 +2168,7 @@
             }
 
             // ============================================================
-            // ITEMS - Dropdown from Database
+            // ITEMS
             // ============================================================
 
             loadItemsDropdown() {
@@ -1840,6 +2180,7 @@
                     option.value = product.id;
                     option.textContent = product.name;
                     option.dataset.rate = product.rate;
+                    option.dataset.type = product.type;
                     select.appendChild(option);
                 });
             }
@@ -1872,7 +2213,6 @@
                 const qty = parseFloat(qtyInput.value);
                 const selectedOption = select.options[select.selectedIndex];
 
-                // Validate
                 if (!selectedOption || !selectedOption.value) {
                     document.getElementById('itemSelectGroup').classList.add('error');
                     this.showToast('⚠️ Please select an item', 'error');
@@ -1898,17 +2238,21 @@
                     return;
                 }
 
-                // Add item
+                // Auto-detect quotation type from items
+                if (product.type === 'waterproofing' || product.type === 'epoxy') {
+                    this.quotation.quotationType = product.type;
+                }
+
                 this.quotation.items.push({
                     id: 'item_' + Date.now(),
                     productId: product.id,
                     name: product.name,
                     quantity: qty,
                     rate: rate,
-                    total: qty * rate
+                    total: qty * rate,
+                    type: product.type
                 });
 
-                // Reset form
                 select.value = '';
                 document.getElementById('itemRate').value = 'Auto';
                 qtyInput.value = '1';
@@ -1922,7 +2266,6 @@
             }
 
             addAnotherItem() {
-                // Scroll to add item form
                 const form = document.getElementById('addItemForm');
                 form.scrollIntoView({
                     behavior: 'smooth',
@@ -1933,6 +2276,17 @@
 
             removeItem(id) {
                 this.quotation.items = this.quotation.items.filter(item => item.id !== id);
+
+                // Recalculate quotation type
+                const types = this.quotation.items.map(item => item.type);
+                if (types.includes('epoxy')) {
+                    this.quotation.quotationType = 'epoxy';
+                } else if (types.includes('waterproofing')) {
+                    this.quotation.quotationType = 'waterproofing';
+                } else {
+                    this.quotation.quotationType = 'general';
+                }
+
                 this.renderItems();
                 this.updatePricing();
                 this.updatePreview();
@@ -1978,7 +2332,6 @@
             updatePricing() {
                 const subtotal = this.quotation.items.reduce((sum, item) => sum + item.total, 0);
 
-                // Discount
                 let discountAmount = 0;
                 if (this.quotation.discountEnabled) {
                     const discountValue = this.quotation.discountValue || 0;
@@ -1990,27 +2343,22 @@
                 }
 
                 const taxableAmount = subtotal - discountAmount;
-
-                // GST
                 const gstRate = parseFloat(this.quotation.gstRate) || 0;
                 const gstAmount = (taxableAmount * gstRate) / 100;
                 const grandTotal = taxableAmount + gstAmount;
 
-                // Update state
                 this.quotation.subtotal = subtotal;
                 this.quotation.discountAmount = discountAmount;
                 this.quotation.taxableAmount = taxableAmount;
                 this.quotation.gstAmount = gstAmount;
                 this.quotation.grandTotal = grandTotal;
 
-                // Update display
                 document.getElementById('subtotalDisplay').textContent = `₹${subtotal.toFixed(2)}`;
                 document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)}`;
                 document.getElementById('taxableDisplay').textContent = `₹${taxableAmount.toFixed(2)}`;
                 document.getElementById('gstAmountDisplay').textContent = `₹${gstAmount.toFixed(2)}`;
                 document.getElementById('grandTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
 
-                // Update amount in words
                 document.getElementById('amountInWords').textContent = numberToWords(grandTotal);
 
                 this.updatePreview();
@@ -2065,14 +2413,12 @@
                     return;
                 }
 
-                // Add to dropdown
                 const select = document.getElementById('gstSelect');
                 const option = document.createElement('option');
                 option.value = value;
                 option.textContent = value + '%';
                 select.appendChild(option);
 
-                // Select it
                 select.value = value;
                 this.quotation.gstRate = value;
                 document.getElementById('gstGroup').classList.remove('error');
@@ -2115,11 +2461,200 @@
             }
 
             // ============================================================
+            // CONVERT TO INVOICE
+            // ============================================================
+
+            loadSavedQuotations() {
+                const select = document.getElementById('convertQuotationSelect');
+                select.innerHTML = '<option value="">-- Select Quotation --</option>';
+
+                // Only show saved quotations (not drafts, and only those with customer)
+                const saved = savedQuotations.filter(q => 
+                    q.status !== 'draft' && q.customerId
+                );
+
+                if (saved.length === 0) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No saved quotations available';
+                    select.appendChild(option);
+                    select.disabled = true;
+                    this.showToast('No saved quotations to convert', 'warning');
+                    return;
+                }
+
+                select.disabled = false;
+                saved.forEach(q => {
+                    const option = document.createElement('option');
+                    option.value = q.id;
+                    const typeLabel = q.quotationType ? 
+                        q.quotationType.charAt(0).toUpperCase() + q.quotationType.slice(1) : 
+                        'General';
+                    option.textContent = `${q.quotationNumber} - ${q.customerSnapshot?.name || 'Unknown'} (${typeLabel})`;
+                    select.appendChild(option);
+                });
+            }
+
+            onConvertQuotationSelect() {
+                const select = document.getElementById('convertQuotationSelect');
+                const quotationId = select.value;
+
+                if (!quotationId) {
+                    document.getElementById('quotationPreviewDetails').style.display = 'none';
+                    document.getElementById('convertedStatus').style.display = 'none';
+                    document.getElementById('convertConfirmBtn').disabled = true;
+                    document.getElementById('quotationSelectGroup').classList.remove('error');
+                    return;
+                }
+
+                const quotation = savedQuotations.find(q => q.id === quotationId);
+                if (!quotation) {
+                    this.showToast('Quotation not found', 'error');
+                    return;
+                }
+
+                document.getElementById('quotationSelectGroup').classList.remove('error');
+
+                // Check if already converted
+                if (quotation.status === 'converted' && quotation.convertedToInvoice) {
+                    document.getElementById('convertedStatus').style.display = 'block';
+                    document.getElementById('convertedInvoiceInfo').innerHTML = 
+                        `Invoice: <strong>${quotation.convertedToInvoice}</strong>`;
+                    document.getElementById('viewConvertedInvoiceBtn').onclick = () => {
+                        this.showToast(`Viewing Invoice: ${quotation.convertedToInvoice}`, 'info');
+                        // Navigate to invoice.html with invoice ID
+                        window.location.href = `invoice.html?invoice=${quotation.convertedToInvoice}`;
+                    };
+                    document.getElementById('convertConfirmBtn').disabled = true;
+                    document.getElementById('convertConfirmBtn').textContent = '⚠️ Already Converted';
+                } else {
+                    document.getElementById('convertedStatus').style.display = 'none';
+                    document.getElementById('convertConfirmBtn').disabled = false;
+                    document.getElementById('convertConfirmBtn').textContent = '🧾 Convert to Invoice';
+                }
+
+                // Fill preview
+                document.getElementById('previewQuotationNo').textContent = quotation.quotationNumber;
+                document.getElementById('previewQuotationCustomer').textContent = 
+                    quotation.customerSnapshot?.name || 'N/A';
+                document.getElementById('previewQuotationMobile').textContent = 
+                    quotation.customerSnapshot?.phone || 'N/A';
+                document.getElementById('previewQuotationAddress').textContent = 
+                    quotation.customerSnapshot?.address || 'N/A';
+                document.getElementById('previewQuotationSite').textContent = 
+                    quotation.projectName || 'N/A';
+
+                // Quotation Type with badge
+                const typeMap = {
+                    'general': 'General',
+                    'waterproofing': 'Waterproofing',
+                    'epoxy': 'Epoxy'
+                };
+                const typeLabel = typeMap[quotation.quotationType] || 'General';
+                const typeClass = quotation.quotationType === 'epoxy' ? 'type-epoxy' :
+                                 quotation.quotationType === 'waterproofing' ? 'type-waterproofing' : 'type-general';
+                document.getElementById('previewQuotationType').innerHTML = 
+                    `<span class="type-badge ${typeClass}">${typeLabel}</span>`;
+
+                // Items
+                const itemNames = quotation.items.map(item => item.name).join(', ');
+                document.getElementById('previewQuotationItems').textContent = itemNames || 'No items';
+
+                // Quantity
+                const totalQty = quotation.items.reduce((sum, item) => sum + item.quantity, 0);
+                document.getElementById('previewQuotationQty').textContent = totalQty;
+
+                // Rate (average)
+                const avgRate = quotation.items.length > 0 ? 
+                    quotation.items.reduce((sum, item) => sum + item.rate, 0) / quotation.items.length : 0;
+                document.getElementById('previewQuotationRate').textContent = `₹${avgRate.toFixed(2)} (avg)`;
+
+                // Discount
+                let discountDisplay = 'No discount';
+                if (quotation.discountEnabled && quotation.discountValue > 0) {
+                    const typeSymbol = quotation.discountType === 'percentage' ? '%' : '₹';
+                    discountDisplay = `${quotation.discountValue}${typeSymbol}`;
+                }
+                document.getElementById('previewQuotationDiscount').textContent = discountDisplay;
+
+                // GST
+                document.getElementById('previewQuotationGst').textContent = `${quotation.gstRate}%`;
+
+                // Grand Total
+                document.getElementById('previewQuotationTotal').textContent = 
+                    `₹${(quotation.grandTotal || 0).toFixed(2)}`;
+
+                document.getElementById('quotationPreviewDetails').style.display = 'block';
+            }
+
+            async performConvertToInvoice() {
+                const select = document.getElementById('convertQuotationSelect');
+                const quotationId = select.value;
+
+                if (!quotationId) {
+                    document.getElementById('quotationSelectGroup').classList.add('error');
+                    this.showToast('⚠️ Please select a quotation', 'error');
+                    return;
+                }
+
+                const quotation = savedQuotations.find(q => q.id === quotationId);
+                if (!quotation) {
+                    this.showToast('Quotation not found', 'error');
+                    return;
+                }
+
+                if (quotation.status === 'converted') {
+                    this.showToast('⚠️ This quotation is already converted', 'warning');
+                    return;
+                }
+
+                // Confirm
+                if (!confirm(`Convert "${quotation.quotationNumber}" to Invoice?`)) {
+                    return;
+                }
+
+                try {
+                    this.showLoading(true);
+                    const result = await quotationService.convertToInvoice(quotationId);
+
+                    this.showToast(`✅ ${quotation.quotationNumber} converted to ${result.invoiceNumber}`, 'success');
+
+                    // Close modal
+                    document.getElementById('convertModal').classList.remove('open');
+
+                    // Update the dropdown and preview
+                    this.loadSavedQuotations();
+
+                    // Show success with option to view invoice
+                    setTimeout(() => {
+                        if (confirm(`Invoice ${result.invoiceNumber} created! View it now?`)) {
+                            window.location.href = `invoice.html?invoice=${result.invoiceNumber}`;
+                        }
+                    }, 500);
+
+                } catch (error) {
+                    this.showToast('Error converting: ' + error.message, 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            openConvertModal() {
+                this.loadSavedQuotations();
+                document.getElementById('convertModal').classList.add('open');
+                document.getElementById('quotationPreviewDetails').style.display = 'none';
+                document.getElementById('convertedStatus').style.display = 'none';
+                document.getElementById('convertConfirmBtn').disabled = true;
+                document.getElementById('convertConfirmBtn').textContent = '🧾 Convert to Invoice';
+                document.getElementById('convertQuotationSelect').value = '';
+                document.getElementById('quotationSelectGroup').classList.remove('error');
+            }
+
+            // ============================================================
             // SAVE
             // ============================================================
 
             async saveDraft() {
-                // Save project data
                 this.quotation.projectName = document.getElementById('projectName').value.trim();
                 this.quotation.projectDesc = document.getElementById('projectDesc').value;
                 this.quotation.projectReference = document.getElementById('projectReference').value;
@@ -2141,13 +2676,11 @@
             }
 
             async saveFinalQuotation() {
-                // Check if customer exists
                 if (!this.hasCustomer || !this.quotation.customerId) {
                     document.getElementById('customerWarningModal').classList.add('open');
                     return;
                 }
 
-                // Validate project name
                 const projectName = document.getElementById('projectName').value.trim();
                 if (!projectName) {
                     this.showToast('⚠️ Project name is required', 'error');
@@ -2155,14 +2688,12 @@
                     return;
                 }
 
-                // Validate items
                 if (this.quotation.items.length === 0) {
                     this.showToast('⚠️ Please add at least one item', 'error');
                     this.goToPrevStep();
                     return;
                 }
 
-                // Validate GST
                 const gstSelect = document.getElementById('gstSelect');
                 if (!gstSelect.value) {
                     this.showToast('⚠️ Please select GST rate', 'error');
@@ -2170,17 +2701,15 @@
                     return;
                 }
 
-                // Confirm save
                 if (!confirm('Are you sure you want to save this as a FINAL quotation?')) {
                     return;
                 }
 
-                // Save all data
                 this.quotation.projectName = projectName;
                 this.quotation.projectDesc = document.getElementById('projectDesc').value;
                 this.quotation.projectReference = document.getElementById('projectReference').value;
                 this.quotation.notes = document.getElementById('pricingNotes').value;
-                this.quotation.status = 'final';
+                this.quotation.status = 'accepted'; // Final status
 
                 try {
                     this.showLoading(true);
@@ -2220,7 +2749,8 @@
                     taxableAmount: 0,
                     gstAmount: 0,
                     grandTotal: 0,
-                    status: 'draft'
+                    status: 'draft',
+                    quotationType: 'general'
                 };
 
                 this.hasCustomer = false;
@@ -2254,6 +2784,34 @@
             // ============================================================
 
             bindEvents() {
+                // === Header Convert Button ===
+                document.getElementById('convertToInvoiceBtn').addEventListener('click', () => {
+                    this.openConvertModal();
+                });
+
+                // === Convert Modal ===
+                document.getElementById('convertModalClose').addEventListener('click', () => {
+                    document.getElementById('convertModal').classList.remove('open');
+                });
+
+                document.getElementById('convertModalCancel').addEventListener('click', () => {
+                    document.getElementById('convertModal').classList.remove('open');
+                });
+
+                document.getElementById('convertQuotationSelect').addEventListener('change', () => {
+                    this.onConvertQuotationSelect();
+                });
+
+                document.getElementById('convertConfirmBtn').addEventListener('click', () => {
+                    this.performConvertToInvoice();
+                });
+
+                document.getElementById('convertModal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) {
+                        document.getElementById('convertModal').classList.remove('open');
+                    }
+                });
+
                 // === Customer ===
                 const searchInput = document.getElementById('customerSearch');
                 let searchTimeout;
@@ -2310,7 +2868,6 @@
                     this.addAnotherItem();
                 });
 
-                // Enter key on item qty
                 document.getElementById('itemQty').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
@@ -2356,10 +2913,6 @@
                 });
 
                 // === Preview ===
-                document.getElementById('nextFromPreview')?.addEventListener('click', () => {
-                    this.goToNextStep();
-                });
-
                 document.getElementById('prevFromPreview').addEventListener('click', () => {
                     this.goToPrevStep();
                 });
@@ -2452,11 +3005,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const builder = new QuotationBuilder();
-
-            // Make builder available globally for debugging
             window.builder = builder;
-
-            console.log('📝 Quotation Builder loaded successfully');
+            console.log('📝 Quotation Builder with Convert to Invoice loaded successfully');
         });
     </script>
 
