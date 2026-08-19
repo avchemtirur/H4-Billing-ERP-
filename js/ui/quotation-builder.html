@@ -34,6 +34,7 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
+            --header-height: 70px;
         }
 
         body {
@@ -42,46 +43,45 @@
             color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
+            padding-top: calc(20px + var(--header-height));
         }
 
-        /* ============================================================
-           HEADER
-           ============================================================ */
-        .page-header {
+        /* Fixed Header */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 24px;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: var(--shadow);
         }
 
-        .page-header h1 {
-            font-size: 24px;
+        .app-header h1 {
+            font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
         }
 
-        .page-header .page-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .header-actions {
+        .app-header .header-actions {
             display: flex;
             gap: 8px;
-            flex-wrap: wrap;
         }
 
         /* ============================================================
            BUTTONS
            ============================================================ */
         .btn {
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
             border-radius: var(--radius-sm);
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
@@ -90,6 +90,8 @@
             align-items: center;
             gap: 6px;
             text-decoration: none;
+            touch-action: manipulation;
+            min-height: 44px;
         }
 
         .btn-primary { background: var(--primary); color: #fff; }
@@ -115,9 +117,10 @@
         }
         .btn-outline:hover { background: var(--primary); color: #fff; }
 
-        .btn-sm { padding: 4px 10px; font-size: 12px; }
-        .btn-xs { padding: 2px 8px; font-size: 11px; }
-        .btn-block { width: 100%; justify-content: center; padding: 12px; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; min-height: 32px; }
+        .btn-xs { padding: 2px 8px; font-size: 11px; min-height: 24px; }
+        .btn-block { width: 100%; justify-content: center; padding: 14px; }
+        .btn-lg { padding: 14px 28px; font-size: 16px; min-height: 52px; }
 
         /* ============================================================
            STEP INDICATORS
@@ -125,27 +128,32 @@
         .step-indicators {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 4px;
             margin-bottom: 24px;
-            padding: 16px;
+            padding: 12px 16px;
             background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
+            overflow-x: auto;
+            position: sticky;
+            top: var(--header-height);
+            z-index: 50;
         }
 
         .step-indicator {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-muted);
             transition: var(--transition);
             position: relative;
+            flex-shrink: 0;
         }
 
         .step-indicator.active {
@@ -162,8 +170,8 @@
 
         .step-indicator .step-label {
             position: absolute;
-            top: 48px;
-            font-size: 11px;
+            top: 40px;
+            font-size: 10px;
             font-weight: 500;
             color: var(--text-secondary);
             white-space: nowrap;
@@ -174,7 +182,8 @@
             height: 2px;
             background: var(--border);
             align-self: center;
-            max-width: 40px;
+            max-width: 30px;
+            min-width: 10px;
         }
 
         .step-connector.completed {
@@ -182,7 +191,7 @@
         }
 
         /* ============================================================
-           STEPS
+           STEPS - with scroll-margin-top for fixed header
            ============================================================ */
         .step {
             display: none;
@@ -191,6 +200,10 @@
 
         .step.active {
             display: block;
+        }
+
+        .step-section {
+            scroll-margin-top: calc(var(--header-height) + 80px);
         }
 
         @keyframes fadeIn {
@@ -203,12 +216,13 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             padding: 24px;
+            margin-bottom: 16px;
         }
 
         .step-title {
             font-size: 20px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: var(--text-primary);
         }
 
@@ -226,27 +240,95 @@
             margin-top: 24px;
             padding-top: 16px;
             border-top: 1px solid var(--border);
+            flex-wrap: wrap;
         }
 
         .step-actions .btn-group {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         /* ============================================================
-           CUSTOMER SELECTION
+           FORM ELEMENTS
+           ============================================================ */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+
+        .form-group label .required {
+            color: var(--danger);
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            -webkit-appearance: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 59, 197, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group .input-error {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--danger);
+        }
+
+        .form-group.error .input-error {
+            display: block;
+        }
+
+        .form-group .helper-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ============================================================
+           CUSTOMER SECTION
            ============================================================ */
         .customer-option {
             background: var(--bg);
-            padding: 20px;
+            padding: 16px;
             border-radius: var(--radius);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             border: 1px solid var(--border);
             transition: var(--transition);
-        }
-
-        .customer-option:hover {
-            border-color: var(--primary-light);
         }
 
         .customer-option .option-title {
@@ -258,14 +340,6 @@
             gap: 8px;
         }
 
-        .customer-option .option-title .badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: var(--primary-light);
-            color: #fff;
-        }
-
         .search-wrapper {
             display: flex;
             gap: 8px;
@@ -274,10 +348,10 @@
 
         .search-wrapper input {
             flex: 1;
-            padding: 10px 14px;
+            padding: 12px 14px;
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
-            font-size: 14px;
+            font-size: 16px;
             font-family: inherit;
             transition: var(--transition);
         }
@@ -310,7 +384,6 @@
         .customer-card:hover {
             background: var(--bg);
             border-color: var(--primary);
-            transform: translateX(4px);
         }
 
         .customer-card .customer-info {
@@ -330,14 +403,10 @@
             color: var(--text-muted);
         }
 
-        .customer-card .select-btn {
-            flex-shrink: 0;
-        }
-
         .divider {
             text-align: center;
             color: var(--text-muted);
-            padding: 16px 0;
+            padding: 12px 0;
             font-size: 13px;
             position: relative;
         }
@@ -355,26 +424,13 @@
         .divider::before { left: 0; }
         .divider::after { right: 0; }
 
-        .no-results {
-            text-align: center;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: var(--radius-sm);
-            border: 1px dashed var(--border);
-        }
-
-        .no-results p {
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
         #selectedCustomerDisplay {
             margin-top: 12px;
             padding: 12px 16px;
             background: #ecfdf5;
             border: 1px solid #a7f3d0;
             border-radius: var(--radius-sm);
-            display: flex;
+            display: none;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
@@ -385,10 +441,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        #selectedCustomerDisplay .customer-info-display .icon {
-            font-size: 20px;
+            flex-wrap: wrap;
         }
 
         .warning-badge {
@@ -397,47 +450,7 @@
         }
 
         /* ============================================================
-           PROJECT DETAILS
-           ============================================================ */
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            font-size: 14px;
-            margin-bottom: 4px;
-            color: var(--text-secondary);
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-family: inherit;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 59, 197, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* ============================================================
-           ITEMS
+           ITEMS SECTION - Dropdown based
            ============================================================ */
         .items-list {
             margin: 16px 0;
@@ -445,10 +458,10 @@
 
         .item-row {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 0.5fr;
+            grid-template-columns: 2fr 0.8fr 1fr 0.6fr 0.5fr;
             gap: 8px;
             align-items: center;
-            padding: 10px;
+            padding: 12px;
             background: var(--bg);
             border-radius: var(--radius-sm);
             margin-bottom: 6px;
@@ -463,9 +476,9 @@
             font-weight: 500;
         }
 
-        .item-row .item-qty,
-        .item-row .item-price {
-            text-align: right;
+        .item-row .item-details {
+            font-size: 13px;
+            color: var(--text-secondary);
         }
 
         .item-row .item-total {
@@ -482,10 +495,10 @@
 
         .add-item-form {
             display: grid;
-            grid-template-columns: 2fr 0.8fr 0.8fr 0.5fr;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr;
             gap: 8px;
             align-items: end;
-            padding: 12px;
+            padding: 16px;
             background: var(--bg);
             border-radius: var(--radius-sm);
             border: 1px dashed var(--border);
@@ -500,9 +513,10 @@
             margin-bottom: 2px;
         }
 
-        .add-item-form input {
-            padding: 6px 10px;
-            font-size: 13px;
+        .add-item-form input,
+        .add-item-form select {
+            padding: 10px 12px;
+            font-size: 14px;
         }
 
         /* ============================================================
@@ -511,13 +525,13 @@
         .pricing-summary {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 12px;
         }
 
         .pricing-summary .summary-item {
             display: flex;
             justify-content: space-between;
-            padding: 12px;
+            padding: 12px 16px;
             background: var(--bg);
             border-radius: var(--radius-sm);
             border: 1px solid var(--border);
@@ -545,6 +559,91 @@
         .pricing-summary .summary-item.total .value {
             color: #fff;
             font-size: 20px;
+        }
+
+        .discount-toggle {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .discount-toggle .toggle-label {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            background: var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-switch .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 23px;
+        }
+
+        .discount-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* GST Section */
+        .gst-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            align-items: end;
+        }
+
+        /* ============================================================
+           AMOUNT IN WORDS
+           ============================================================ */
+        .amount-words {
+            padding: 16px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .amount-words .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .amount-words .words {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 4px;
         }
 
         /* ============================================================
@@ -578,7 +677,7 @@
         }
 
         /* ============================================================
-           WARNING MODAL
+           MODAL
            ============================================================ */
         .modal-overlay {
             position: fixed;
@@ -642,12 +741,6 @@
             margin-bottom: 12px;
         }
 
-        .modal-body .warning-message {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
-
         .modal-footer {
             padding: 12px 20px;
             border-top: 1px solid var(--border);
@@ -663,13 +756,14 @@
            ============================================================ */
         .toast-container {
             position: fixed;
-            top: 20px;
+            top: calc(var(--header-height) + 10px);
             right: 20px;
             z-index: 9998;
             display: flex;
             flex-direction: column;
             gap: 8px;
             pointer-events: none;
+            max-width: 90%;
         }
 
         .toast {
@@ -696,23 +790,70 @@
         }
 
         /* ============================================================
+           LOADING
+           ============================================================ */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-overlay .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-overlay .text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ============================================================
            RESPONSIVE
            ============================================================ */
         @media (max-width: 768px) {
-            body { padding: 12px; }
+            body {
+                padding: 12px;
+                padding-top: calc(12px + var(--header-height));
+            }
 
-            .page-header h1 { font-size: 20px; }
+            .app-header {
+                padding: 0 12px;
+                height: 60px;
+            }
+            .app-header h1 { font-size: 16px; }
+
+            :root {
+                --header-height: 60px;
+            }
 
             .step-indicators {
-                gap: 4px;
-                padding: 12px;
-                overflow-x: auto;
+                gap: 2px;
+                padding: 8px 12px;
             }
 
             .step-indicator {
                 width: 32px;
                 height: 32px;
-                font-size: 12px;
+                font-size: 11px;
             }
 
             .step-indicator .step-label {
@@ -721,13 +862,16 @@
 
             .step-connector {
                 max-width: 20px;
+                min-width: 6px;
             }
 
             .step-container { padding: 16px; }
+            .step-title { font-size: 18px; }
 
             .item-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 4px;
+                padding: 10px;
             }
 
             .item-row .item-actions {
@@ -761,29 +905,42 @@
                 flex-direction: column;
             }
 
+            .step-actions .btn {
+                justify-content: center;
+            }
+
             .search-wrapper {
                 flex-direction: column;
             }
 
-            #selectedCustomerDisplay {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
+            .discount-input-group {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .gst-input-group {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 480px) {
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
+            .app-header h1 { font-size: 14px; }
+
+            .btn {
+                padding: 10px 14px;
+                font-size: 13px;
+                min-height: 40px;
             }
 
-            .header-actions {
-                width: 100%;
+            .btn-lg {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-height: 48px;
             }
-            .header-actions .btn {
-                flex: 1;
-                justify-content: center;
+
+            .form-group input,
+            .form-group select {
+                font-size: 14px;
+                padding: 10px 12px;
             }
         }
     </style>
@@ -791,31 +948,28 @@
 <body>
 
     <!-- ============================================================
+    FIXED HEADER
+    ============================================================ -->
+    <header class="app-header">
+        <h1>📝 Quotation Builder</h1>
+        <div class="header-actions">
+            <button class="btn btn-secondary btn-sm" id="cancelBtn">✕ Cancel</button>
+            <button class="btn btn-secondary btn-sm" id="clearAllBtn">↺ Clear</button>
+        </div>
+    </header>
+
+    <!-- ============================================================
     LOADING OVERLAY
     ============================================================ -->
-    <div class="loading-overlay" id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,0.7);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
-        <div class="spinner" style="width:40px;height:40px;border:3px solid var(--border);border-top:3px solid var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-        <div class="text" style="color:var(--text-secondary);font-size:14px;">Loading...</div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="text">Loading...</div>
     </div>
 
     <!-- ============================================================
     TOAST CONTAINER
     ============================================================ -->
     <div class="toast-container" id="toastContainer"></div>
-
-    <!-- ============================================================
-    PAGE HEADER
-    ============================================================ -->
-    <div class="page-header">
-        <div>
-            <h1>📝 Create Quotation</h1>
-            <p class="page-subtitle">Build a new quotation step by step</p>
-        </div>
-        <div class="header-actions">
-            <button class="btn btn-secondary" id="cancelBtn">✕ Cancel</button>
-            <button class="btn btn-secondary" id="clearAllBtn">🔄 Clear All</button>
-        </div>
-    </div>
 
     <!-- ============================================================
     STEP INDICATORS
@@ -848,22 +1002,18 @@
     </div>
 
     <!-- ============================================================
-    STEP 1: CUSTOMER SELECTION
+    STEP 1: CUSTOMER
     ============================================================ -->
     <div class="step active" id="step1">
-        <div class="step-container">
-            <h2 class="step-title">👤 Customer Selection</h2>
+        <div class="step-container step-section" id="step1Section">
+            <h2 class="step-title">👤 Customer</h2>
             <p class="step-description">
-                Select an existing customer or continue without one. 
+                Select an existing customer or continue without one.
                 <span class="warning-badge">⚠️ Customer required for final quotation.</span>
             </p>
 
-            <!-- Option 1: Existing Customer -->
             <div class="customer-option">
-                <div class="option-title">
-                    🔍 Select Existing Customer
-                    <span class="badge">Recommended</span>
-                </div>
+                <div class="option-title">🔍 Select Existing Customer</div>
                 <div class="search-wrapper">
                     <input type="text" id="customerSearch" placeholder="Search by name, phone, or email...">
                     <button class="btn btn-primary" id="searchCustomerBtn">Search</button>
@@ -873,15 +1023,13 @@
 
             <div class="divider">OR</div>
 
-            <!-- Option 2: Continue Without Customer -->
             <button class="btn btn-secondary btn-block" id="continueWithoutCustomer">
                 ➜ Continue Without Customer
             </button>
 
-            <!-- Selected Customer Display -->
-            <div id="selectedCustomerDisplay" style="display:none;">
+            <div id="selectedCustomerDisplay">
                 <div class="customer-info-display">
-                    <span class="icon">✅</span>
+                    <span>✅</span>
                     <span>Selected: <strong id="selectedCustomerName">-</strong></span>
                     <span style="font-size:12px;color:var(--text-muted);" id="selectedCustomerDetail"></span>
                 </div>
@@ -890,24 +1038,25 @@
 
             <div class="step-actions">
                 <div></div>
-                <button class="btn btn-primary" id="nextFromCustomer" disabled>
-                    Next → <span style="font-size:12px;">(Project)</span>
+                <button class="btn btn-primary btn-lg" id="nextFromCustomer" disabled>
+                    Next →
                 </button>
             </div>
         </div>
     </div>
 
     <!-- ============================================================
-    STEP 2: PROJECT DETAILS
+    STEP 2: PROJECT
     ============================================================ -->
     <div class="step" id="step2">
-        <div class="step-container">
-            <h2 class="step-title">🏗️ Project Details</h2>
-            <p class="step-description">Enter the project information for this quotation.</p>
+        <div class="step-container step-section" id="step2Section">
+            <h2 class="step-title">🏗️ Project</h2>
+            <p class="step-description">Enter the project details for this quotation.</p>
 
-            <div class="form-group">
-                <label>Project Name *</label>
+            <div class="form-group" id="projectNameGroup">
+                <label>Project / Site Name <span class="required">*</span></label>
                 <input type="text" id="projectName" placeholder="e.g., Villa Construction, Office Renovation...">
+                <div class="input-error">⚠️ Project name is required</div>
             </div>
 
             <div class="form-group">
@@ -921,8 +1070,8 @@
             </div>
 
             <div class="step-actions">
-                <button class="btn btn-secondary" id="prevFromProject">← Back</button>
-                <button class="btn btn-primary" id="nextFromProject">Next → <span style="font-size:12px;">(Items)</span></button>
+                <button class="btn btn-secondary btn-lg" id="prevFromProject">← Back</button>
+                <button class="btn btn-primary btn-lg" id="nextFromProject">Next →</button>
             </div>
         </div>
     </div>
@@ -931,40 +1080,46 @@
     STEP 3: ITEMS
     ============================================================ -->
     <div class="step" id="step3">
-        <div class="step-container">
-            <h2 class="step-title">📦 Add Items</h2>
-            <p class="step-description">Add products or services to your quotation.</p>
+        <div class="step-container step-section" id="step3Section">
+            <h2 class="step-title">📦 Items</h2>
+            <p class="step-description">Select items from the database.</p>
 
-            <!-- Items List -->
             <div class="items-list" id="itemsList">
                 <div class="empty-state" id="emptyItems" style="text-align:center;padding:40px 20px;color:var(--text-muted);">
                     <div style="font-size:32px;margin-bottom:8px;">📭</div>
-                    <p>No items added yet. Add your first item below.</p>
+                    <p>No items added yet. Select your first item below.</p>
                 </div>
             </div>
 
-            <!-- Add Item Form -->
             <div class="add-item-form" id="addItemForm">
-                <div class="form-group">
-                    <label>Item / Service</label>
-                    <input type="text" id="itemName" placeholder="e.g., Waterproofing, Paint, Labour...">
+                <div class="form-group" id="itemSelectGroup">
+                    <label>Item <span class="required">*</span></label>
+                    <select id="itemSelect">
+                        <option value="">-- Select Item --</option>
+                    </select>
+                    <div class="input-error">⚠️ Please select an item</div>
+                </div>
+                <div class="form-group" id="itemQtyGroup">
+                    <label>Qty <span class="required">*</span></label>
+                    <input type="number" id="itemQty" value="1" min="0.5" step="0.5">
+                    <div class="input-error">⚠️ Quantity is required</div>
                 </div>
                 <div class="form-group">
-                    <label>Quantity</label>
-                    <input type="number" id="itemQty" value="1" min="1">
-                </div>
-                <div class="form-group">
-                    <label>Rate (₹)</label>
-                    <input type="number" id="itemPrice" placeholder="0.00" min="0" step="0.01">
+                    <label>Rate</label>
+                    <input type="text" id="itemRate" readonly style="background:var(--bg);" value="Auto">
                 </div>
                 <div class="form-group" style="display:flex;align-items:end;">
                     <button class="btn btn-primary btn-block" id="addItemBtn">➕ Add</button>
                 </div>
             </div>
 
+            <div style="margin-top:12px;">
+                <button class="btn btn-secondary btn-block" id="addAnotherItemBtn">➕ Add Another Item</button>
+            </div>
+
             <div class="step-actions">
-                <button class="btn btn-secondary" id="prevFromItems">← Back</button>
-                <button class="btn btn-primary" id="nextFromItems">Next → <span style="font-size:12px;">(Pricing)</span></button>
+                <button class="btn btn-secondary btn-lg" id="prevFromItems">← Back</button>
+                <button class="btn btn-primary btn-lg" id="nextFromItems">Next →</button>
             </div>
         </div>
     </div>
@@ -973,18 +1128,50 @@
     STEP 4: PRICING
     ============================================================ -->
     <div class="step" id="step4">
-        <div class="step-container">
-            <h2 class="step-title">💰 Pricing & Totals</h2>
-            <p class="step-description">Review and adjust pricing.</p>
+        <div class="step-container step-section" id="step4Section">
+            <h2 class="step-title">💰 Pricing</h2>
+            <p class="step-description">Configure discount and tax.</p>
 
+            <!-- Discount -->
             <div class="form-group">
-                <label>Discount (%)</label>
-                <input type="number" id="discountPercent" value="0" min="0" max="100" step="0.5">
+                <label>Discount</label>
+                <div class="discount-toggle">
+                    <span class="toggle-label">OFF</span>
+                    <div class="toggle-switch" id="discountToggle">
+                        <div class="toggle-knob"></div>
+                    </div>
+                    <span class="toggle-label">ON</span>
+                </div>
+                <div class="discount-input-group" id="discountInputs" style="display:none;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Type</label>
+                        <select id="discountType">
+                            <option value="percentage">%</option>
+                            <option value="fixed">₹</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Value</label>
+                        <input type="number" id="discountValue" value="0" min="0" step="0.5">
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Tax (%)</label>
-                <input type="number" id="taxPercent" value="18" min="0" max="100" step="0.5">
+            <!-- GST -->
+            <div class="form-group" id="gstGroup">
+                <label>GST Rate <span class="required">*</span></label>
+                <div class="gst-input-group">
+                    <select id="gstSelect">
+                        <option value="">-- Select GST --</option>
+                        <option value="0">0%</option>
+                        <option value="5">5%</option>
+                        <option value="9">9%</option>
+                        <option value="18">18%</option>
+                        <option value="28">28%</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" id="addGstBtn">+ Add GST Rate</button>
+                </div>
+                <div class="input-error">⚠️ Please select GST rate</div>
             </div>
 
             <div class="form-group">
@@ -1002,18 +1189,27 @@
                     <span class="value" id="discountDisplay">₹0.00</span>
                 </div>
                 <div class="summary-item">
-                    <span class="label">Tax</span>
-                    <span class="value" id="taxDisplay">₹0.00</span>
+                    <span class="label">Taxable Amount</span>
+                    <span class="value" id="taxableDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">GST Amount</span>
+                    <span class="value" id="gstAmountDisplay">₹0.00</span>
                 </div>
                 <div class="summary-item total">
-                    <span class="label">Grand Total</span>
+                    <span class="label">GRAND TOTAL</span>
                     <span class="value" id="grandTotalDisplay">₹0.00</span>
                 </div>
             </div>
 
+            <div class="amount-words">
+                <div class="label">Amount in Words</div>
+                <div class="words" id="amountInWords">Zero</div>
+            </div>
+
             <div class="step-actions">
-                <button class="btn btn-secondary" id="prevFromPricing">← Back</button>
-                <button class="btn btn-primary" id="nextFromPricing">Next → <span style="font-size:12px;">(Preview)</span></button>
+                <button class="btn btn-secondary btn-lg" id="prevFromPricing">← Back</button>
+                <button class="btn btn-primary btn-lg" id="nextFromPricing">Next →</button>
             </div>
         </div>
     </div>
@@ -1022,7 +1218,7 @@
     STEP 5: PREVIEW & SAVE
     ============================================================ -->
     <div class="step" id="step5">
-        <div class="step-container">
+        <div class="step-container step-section" id="step5Section">
             <h2 class="step-title">👁️ Preview & Save</h2>
             <p class="step-description">Review your quotation before saving.</p>
 
@@ -1039,18 +1235,22 @@
                     <span><strong>Items:</strong></span>
                     <span id="previewItemCount">0 items</span>
                 </div>
-                <div class="preview-row" style="border-bottom:2px solid var(--border);padding-bottom:12px;">
-                    <span><strong>Total:</strong></span>
+                <div id="previewItemsList" style="margin-top:8px;"></div>
+                <div class="preview-row" style="border-bottom:2px solid var(--border);padding-bottom:12px;margin-top:8px;">
+                    <span><strong>Grand Total:</strong></span>
                     <span id="previewTotal" style="font-size:18px;font-weight:700;color:var(--primary);">₹0.00</span>
                 </div>
-                <div id="previewItemsList" style="margin-top:12px;"></div>
+                <div class="preview-row" style="border-bottom:none;padding-top:8px;">
+                    <span><strong>Amount in Words:</strong></span>
+                    <span id="previewWords" style="font-weight:500;">Zero</span>
+                </div>
             </div>
 
             <div class="step-actions">
-                <button class="btn btn-secondary" id="prevFromPreview">← Back</button>
-                <div class="btn-group" style="flex:1;justify-content:flex-end;">
-                    <button class="btn btn-secondary" id="saveDraftBtn">💾 Save as Draft</button>
-                    <button class="btn btn-success" id="saveQuotationBtn">✅ Save Quotation</button>
+                <button class="btn btn-secondary btn-lg" id="prevFromPreview">← Back</button>
+                <div class="btn-group">
+                    <button class="btn btn-warning btn-lg" id="saveDraftBtn">💾 Save as Draft</button>
+                    <button class="btn btn-success btn-lg" id="saveQuotationBtn">✅ Save Quotation</button>
                 </div>
             </div>
         </div>
@@ -1068,7 +1268,7 @@
             <div class="modal-body">
                 <div class="warning-icon">⚠️</div>
                 <h4 style="margin-bottom:8px;">No customer selected!</h4>
-                <p class="warning-message">
+                <p style="color:var(--text-secondary);line-height:1.6;">
                     You are trying to save a final quotation without a customer.
                     <br><br>
                     <strong>Options:</strong>
@@ -1087,26 +1287,55 @@
     </div>
 
     <!-- ============================================================
+    CUSTOM GST MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="gstModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Add GST Rate</h3>
+                <button class="modal-close" id="gstModalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Enter GST Rate (%)</label>
+                    <input type="number" id="customGstInput" placeholder="e.g., 12" min="0" max="100" step="0.5">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="gstModalCancel">Cancel</button>
+                <button class="btn btn-primary" id="gstModalAdd">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
     JAVASCRIPT
     ============================================================ -->
     <script>
         // ============================================================
-        // MOCK SERVICES (Replace with actual imports)
+        // MOCK DATA & SERVICES
         // ============================================================
+
+        // Mock Product Database
+        const productDatabase = [
+            { id: 'p1', name: 'H4 Tile Adhesive', rate: 450 },
+            { id: 'p2', name: 'H4 Waterproofing', rate: 850 },
+            { id: 'p3', name: 'H4 ShieldX Epoxy', rate: 1200 },
+            { id: 'p4', name: 'H4 Grout', rate: 350 },
+            { id: 'p5', name: 'H4 Primer', rate: 280 },
+            { id: 'p6', name: 'H4 Acrylic Coating', rate: 650 },
+            { id: 'p7', name: 'H4 Polyurethane', rate: 950 },
+            { id: 'p8', name: 'H4 Cement Adhesive', rate: 320 },
+        ];
 
         const customerService = {
             customers: [
-                { id: 'c1', name: 'Rajesh Kumar', phone: '9876543210', email: 'rajesh@email.com', company: 'RK Constructions' },
-                { id: 'c2', name: 'Sneha Patel', phone: '9876543211', email: 'sneha@email.com', company: 'SP Interiors' },
-                { id: 'c3', name: 'Amit Singh', phone: '9876543212', email: 'amit@email.com', company: 'AS Builders' },
-                { id: 'c4', name: 'Priya Nair', phone: '9876543213', email: 'priya@email.com', company: 'PN Designs' },
-                { id: 'c5', name: 'Vijay Menon', phone: '9876543214', email: 'vijay@email.com', company: 'VM Projects' },
+                { id: 'c1', name: 'Rajesh Kumar', phone: '9876543210', email: 'rajesh@email.com', address: '123, Main Road, Kochi' },
+                { id: 'c2', name: 'Sneha Patel', phone: '9876543211', email: 'sneha@email.com', address: '456, Park Street, Trivandrum' },
+                { id: 'c3', name: 'Amit Singh', phone: '9876543212', email: 'amit@email.com', address: '789, MG Road, Calicut' },
+                { id: 'c4', name: 'Priya Nair', phone: '9876543213', email: 'priya@email.com', address: '321, Lake View, Alleppey' },
+                { id: 'c5', name: 'Vijay Menon', phone: '9876543214', email: 'vijay@email.com', address: '654, Hill Top, Wayanad' },
             ],
-
-            async initialize() {
-                // Simulate loading
-                return Promise.resolve();
-            },
 
             async searchCustomers(query) {
                 await new Promise(resolve => setTimeout(resolve, 300));
@@ -1132,6 +1361,10 @@
                 };
                 this.customers.push(newCustomer);
                 return newCustomer;
+            },
+
+            async getCustomers() {
+                return this.customers;
             }
         };
 
@@ -1144,23 +1377,70 @@
                     quotationNumber: number,
                     ...data
                 };
-            },
-
-            async duplicateQuotation(id) {
-                await new Promise(resolve => setTimeout(resolve, 300));
-                return { id: 'q' + Date.now(), quotationNumber: 'QT-DUP-' + Date.now().toString().slice(-6) };
-            },
-
-            async deleteQuotation(id, confirm) {
-                await new Promise(resolve => setTimeout(resolve, 300));
-                return { success: true };
-            },
-
-            async convertQuotationToInvoice(id) {
-                await new Promise(resolve => setTimeout(resolve, 400));
-                return { id: 'inv' + Date.now(), invoiceNumber: 'INV-' + Date.now().toString().slice(-6) };
             }
         };
+
+        // ============================================================
+        // NUMBER TO WORDS
+        // ============================================================
+
+        function numberToWords(num) {
+            if (num === 0) return 'Zero';
+
+            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+                'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+            ];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            const thousands = ['', 'Thousand', 'Lakh', 'Crore'];
+
+            let words = '';
+            let remainder = Math.floor(num);
+            let parts = [];
+
+            // Convert to Indian numbering system
+            if (remainder >= 10000000) {
+                parts.push(Math.floor(remainder / 10000000) + ' Crore');
+                remainder %= 10000000;
+            }
+            if (remainder >= 100000) {
+                parts.push(Math.floor(remainder / 100000) + ' Lakh');
+                remainder %= 100000;
+            }
+            if (remainder >= 1000) {
+                parts.push(Math.floor(remainder / 1000) + ' Thousand');
+                remainder %= 1000;
+            }
+            if (remainder > 0) {
+                parts.push(remainder + '');
+            }
+
+            // Convert each part to words
+            const result = parts.map(part => {
+                const val = parseInt(part);
+                if (val === 0) return '';
+                if (val < 20) return ones[val];
+                if (val < 100) {
+                    const ten = Math.floor(val / 10);
+                    const one = val % 10;
+                    return tens[ten] + (one > 0 ? ' ' + ones[one] : '');
+                }
+                if (val < 1000) {
+                    const hundred = Math.floor(val / 100);
+                    const rest = val % 100;
+                    return ones[hundred] + ' Hundred' + (rest > 0 ? ' ' + numberToWords(rest) : '');
+                }
+                return part;
+            }).join(' ');
+
+            // Handle decimal (paise)
+            const paise = Math.round((num - Math.floor(num)) * 100);
+            let finalWords = result;
+            if (paise > 0) {
+                finalWords += ' and ' + numberToWords(paise) + ' Paise';
+            }
+
+            return 'Rupees ' + finalWords + ' Only';
+        }
 
         // ============================================================
         // QUOTATION BUILDER CLASS
@@ -1175,19 +1455,22 @@
                     projectDesc: '',
                     projectReference: '',
                     items: [],
-                    discountPercent: 0,
-                    taxPercent: 18,
+                    discountEnabled: false,
+                    discountType: 'percentage',
+                    discountValue: 0,
+                    gstRate: 18,
                     notes: '',
-                    status: 'draft',
                     subtotal: 0,
                     discountAmount: 0,
-                    taxAmount: 0,
-                    grandTotal: 0
+                    taxableAmount: 0,
+                    gstAmount: 0,
+                    grandTotal: 0,
+                    status: 'draft'
                 };
 
                 this.currentStep = 1;
                 this.hasCustomer = false;
-                this.isDraft = true;
+                this.customGstRates = [];
                 this.init();
             }
 
@@ -1197,6 +1480,7 @@
 
             init() {
                 this.bindEvents();
+                this.loadItemsDropdown();
                 this.showStep(1);
                 this.updatePricing();
                 this.updatePreview();
@@ -1228,7 +1512,33 @@
 
             showLoading(show) {
                 const overlay = document.getElementById('loadingOverlay');
-                overlay.style.display = show ? 'flex' : 'none';
+                overlay.classList.toggle('show', show);
+            }
+
+            // ============================================================
+            // SCROLL TO STEP
+            // ============================================================
+
+            scrollToStep(element) {
+                if (!element) {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+                    return;
+                }
+
+                // Blur any active input to dismiss keyboard
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+
+                setTimeout(() => {
+                    element.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }, 50);
             }
 
             // ============================================================
@@ -1248,7 +1558,43 @@
                 this.currentStep = step;
                 this.updateIndicators(step);
                 this.updatePreview();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            goToNextStep() {
+                // Validate current step before proceeding
+                if (!this.validateStep(this.currentStep)) {
+                    return;
+                }
+
+                // Blur any active input
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+
+                if (this.currentStep < 5) {
+                    const nextStep = this.currentStep + 1;
+                    this.showStep(nextStep);
+
+                    // Scroll to the next step section
+                    const nextElement = document.getElementById(`step${nextStep}Section`);
+                    this.scrollToStep(nextElement);
+                }
+            }
+
+            goToPrevStep() {
+                // Blur any active input
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+
+                if (this.currentStep > 1) {
+                    const prevStep = this.currentStep - 1;
+                    this.showStep(prevStep);
+
+                    // Scroll to the previous step section
+                    const prevElement = document.getElementById(`step${prevStep}Section`);
+                    this.scrollToStep(prevElement);
+                }
             }
 
             updateIndicators(step) {
@@ -1271,20 +1617,80 @@
                 });
             }
 
-            goToNextStep() {
-                if (this.currentStep < 5) {
-                    this.showStep(this.currentStep + 1);
+            // ============================================================
+            // VALIDATION
+            // ============================================================
+
+            validateStep(step) {
+                switch (step) {
+                    case 1:
+                        // Customer step - always valid (can continue without customer)
+                        return true;
+
+                    case 2:
+                        return this.validateProject();
+
+                    case 3:
+                        return this.validateItems();
+
+                    case 4:
+                        return this.validatePricing();
+
+                    default:
+                        return true;
                 }
             }
 
-            goToPrevStep() {
-                if (this.currentStep > 1) {
-                    this.showStep(this.currentStep - 1);
+            validateProject() {
+                const projectName = document.getElementById('projectName').value.trim();
+                const group = document.getElementById('projectNameGroup');
+
+                if (!projectName) {
+                    group.classList.add('error');
+                    this.showToast('⚠️ Project name is required', 'error');
+                    return false;
                 }
+
+                group.classList.remove('error');
+                this.quotation.projectName = projectName;
+                this.quotation.projectDesc = document.getElementById('projectDesc').value;
+                this.quotation.projectReference = document.getElementById('projectReference').value;
+                return true;
+            }
+
+            validateItems() {
+                if (this.quotation.items.length === 0) {
+                    this.showToast('⚠️ Please add at least one item', 'error');
+                    return false;
+                }
+
+                // Check if any item has rate 0 (rate not available)
+                for (const item of this.quotation.items) {
+                    if (item.rate === 0) {
+                        this.showToast(`⚠️ Rate not available for "${item.name}"`, 'error');
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            validatePricing() {
+                const gstSelect = document.getElementById('gstSelect');
+                const gstGroup = document.getElementById('gstGroup');
+
+                if (!gstSelect.value) {
+                    gstGroup.classList.add('error');
+                    this.showToast('⚠️ Please select GST rate', 'error');
+                    return false;
+                }
+
+                gstGroup.classList.remove('error');
+                return true;
             }
 
             // ============================================================
-            // CUSTOMER SELECTION
+            // CUSTOMER
             // ============================================================
 
             async searchCustomer(searchTerm) {
@@ -1307,11 +1713,9 @@
 
                 if (results.length === 0) {
                     container.innerHTML = `
-                        <div class="no-results">
-                            <p>No customers found matching your search.</p>
-                            <button class="btn btn-primary btn-sm" id="createNewCustomer">
-                                ➕ Create New Customer
-                            </button>
+                        <div class="no-results" style="text-align:center;padding:20px;background:var(--card-bg);border-radius:var(--radius-sm);border:1px dashed var(--border);">
+                            <p style="color:var(--text-muted);margin-bottom:12px;">No customers found.</p>
+                            <button class="btn btn-primary btn-sm" id="createNewCustomer">➕ Create New Customer</button>
                         </div>
                     `;
                     document.getElementById('createNewCustomer')?.addEventListener('click', () => {
@@ -1325,14 +1729,15 @@
                         <div class="customer-info">
                             <span class="customer-name">${c.name}</span>
                             <span class="customer-detail">📱 ${c.phone || 'N/A'} • ✉️ ${c.email || 'N/A'}</span>
-                            <span class="customer-detail">🏢 ${c.company || 'Individual'}</span>
+                            <span class="customer-detail">📍 ${c.address || 'No address'}</span>
                         </div>
                         <button class="btn btn-primary btn-sm select-btn" data-id="${c.id}">Select</button>
                     </div>
                 `).join('');
 
                 container.querySelectorAll('.select-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         this.selectCustomer(btn.dataset.id);
                     });
                 });
@@ -1356,16 +1761,17 @@
                 this.quotation.customerSnapshot = customer;
                 this.hasCustomer = true;
 
-                // Update display
                 const display = document.getElementById('selectedCustomerDisplay');
                 display.style.display = 'flex';
+                display.style.background = '#ecfdf5';
+                display.style.borderColor = '#a7f3d0';
                 document.getElementById('selectedCustomerName').textContent = customer.name;
                 document.getElementById('selectedCustomerDetail').textContent =
-                    `📱 ${customer.phone || 'N/A'} • ✉️ ${customer.email || 'N/A'}`;
+                    `📱 ${customer.phone || 'N/A'} • ✉️ ${customer.email || 'N/A'} • 📍 ${customer.address || 'N/A'}`;
 
-                // Enable next button
                 document.getElementById('nextFromCustomer').disabled = false;
                 document.getElementById('customerResults').innerHTML = '';
+                document.getElementById('customerSearch').value = '';
 
                 this.showToast(`✅ Customer selected: ${customer.name}`, 'success');
                 this.updatePreview();
@@ -1385,21 +1791,21 @@
 
                 document.getElementById('nextFromCustomer').disabled = false;
                 document.getElementById('customerResults').innerHTML = '';
+                document.getElementById('customerSearch').value = '';
 
                 this.showToast('Continuing without customer - will be saved as Draft', 'warning');
                 this.updatePreview();
             }
 
             createNewCustomer() {
-                // Show a simple prompt for demo
                 const name = prompt('Enter customer name:');
                 if (!name) return;
 
                 const phone = prompt('Enter phone number (optional):') || '';
                 const email = prompt('Enter email (optional):') || '';
-                const company = prompt('Enter company name (optional):') || '';
+                const address = prompt('Enter address (optional):') || '';
 
-                customerService.createCustomer({ name, phone, email, company })
+                customerService.createCustomer({ name, phone, email, address })
                     .then(customer => {
                         this.selectCustomer(customer.id);
                         this.showToast('Customer created successfully!', 'success');
@@ -1415,49 +1821,114 @@
                 this.hasCustomer = false;
                 this.quotation.customerId = null;
                 this.quotation.customerSnapshot = null;
+                document.getElementById('customerSearch').value = '';
+                document.getElementById('customerResults').innerHTML = '';
                 this.showStep(1);
                 document.getElementById('customerSearch').focus();
             }
 
             // ============================================================
-            // ITEMS MANAGEMENT
+            // ITEMS - Dropdown from Database
             // ============================================================
 
+            loadItemsDropdown() {
+                const select = document.getElementById('itemSelect');
+                select.innerHTML = '<option value="">-- Select Item --</option>';
+
+                productDatabase.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = product.name;
+                    option.dataset.rate = product.rate;
+                    select.appendChild(option);
+                });
+            }
+
+            onItemSelect() {
+                const select = document.getElementById('itemSelect');
+                const rateInput = document.getElementById('itemRate');
+                const selectedOption = select.options[select.selectedIndex];
+
+                if (selectedOption && selectedOption.value) {
+                    const rate = parseFloat(selectedOption.dataset.rate) || 0;
+                    if (rate > 0) {
+                        rateInput.value = `₹${rate.toFixed(2)}`;
+                        rateInput.style.color = 'var(--text-primary)';
+                    } else {
+                        rateInput.value = '⚠️ Rate not available';
+                        rateInput.style.color = 'var(--danger)';
+                    }
+                } else {
+                    rateInput.value = 'Auto';
+                    rateInput.style.color = 'var(--text-muted)';
+                }
+
+                document.getElementById('itemSelectGroup').classList.remove('error');
+            }
+
             addItem() {
-                const name = document.getElementById('itemName').value.trim();
-                const qty = parseInt(document.getElementById('itemQty').value) || 1;
-                const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+                const select = document.getElementById('itemSelect');
+                const qtyInput = document.getElementById('itemQty');
+                const qty = parseFloat(qtyInput.value);
+                const selectedOption = select.options[select.selectedIndex];
 
-                if (!name) {
-                    this.showToast('Please enter item name', 'error');
+                // Validate
+                if (!selectedOption || !selectedOption.value) {
+                    document.getElementById('itemSelectGroup').classList.add('error');
+                    this.showToast('⚠️ Please select an item', 'error');
                     return;
                 }
 
-                if (price <= 0) {
-                    this.showToast('Please enter a valid price', 'error');
+                if (!qty || qty <= 0) {
+                    document.getElementById('itemQtyGroup').classList.add('error');
+                    this.showToast('⚠️ Quantity is required', 'error');
                     return;
                 }
 
+                const productId = selectedOption.value;
+                const product = productDatabase.find(p => p.id === productId);
+                if (!product) {
+                    this.showToast('Product not found', 'error');
+                    return;
+                }
+
+                const rate = product.rate || 0;
+                if (rate === 0) {
+                    this.showToast(`⚠️ Rate not available for "${product.name}"`, 'error');
+                    return;
+                }
+
+                // Add item
                 this.quotation.items.push({
                     id: 'item_' + Date.now(),
-                    name: name,
+                    productId: product.id,
+                    name: product.name,
                     quantity: qty,
-                    rate: price,
-                    total: qty * price
+                    rate: rate,
+                    total: qty * rate
                 });
 
-                // Clear form
-                document.getElementById('itemName').value = '';
-                document.getElementById('itemPrice').value = '';
-                document.getElementById('itemQty').value = '1';
+                // Reset form
+                select.value = '';
+                document.getElementById('itemRate').value = 'Auto';
+                qtyInput.value = '1';
+                document.getElementById('itemSelectGroup').classList.remove('error');
+                document.getElementById('itemQtyGroup').classList.remove('error');
 
                 this.renderItems();
                 this.updatePricing();
                 this.updatePreview();
-                this.showToast(`Added: ${name}`, 'success');
+                this.showToast(`✅ Added: ${product.name}`, 'success');
+            }
 
-                // Focus back on item name
-                document.getElementById('itemName').focus();
+            addAnotherItem() {
+                // Scroll to add item form
+                const form = document.getElementById('addItemForm');
+                form.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                document.getElementById('itemSelect').focus();
             }
 
             removeItem(id) {
@@ -1470,13 +1941,12 @@
 
             renderItems() {
                 const container = document.getElementById('itemsList');
-                const empty = document.getElementById('emptyItems');
 
                 if (this.quotation.items.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state" style="text-align:center;padding:40px 20px;color:var(--text-muted);">
                             <div style="font-size:32px;margin-bottom:8px;">📭</div>
-                            <p>No items added yet. Add your first item below.</p>
+                            <p>No items added yet. Select your first item below.</p>
                         </div>
                     `;
                     return;
@@ -1485,7 +1955,8 @@
                 container.innerHTML = this.quotation.items.map((item, index) => `
                     <div class="item-row">
                         <span class="item-name">${index + 1}. ${item.name}</span>
-                        <span class="item-qty">${item.quantity} × ₹${item.rate.toFixed(2)}</span>
+                        <span class="item-details">Qty: ${item.quantity}</span>
+                        <span class="item-details">₹${item.rate.toFixed(2)}</span>
                         <span class="item-total">₹${item.total.toFixed(2)}</span>
                         <div class="item-actions">
                             <button class="btn btn-danger btn-xs remove-item-btn" data-id="${item.id}">✕</button>
@@ -1506,28 +1977,109 @@
 
             updatePricing() {
                 const subtotal = this.quotation.items.reduce((sum, item) => sum + item.total, 0);
-                const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
-                const taxPercent = parseFloat(document.getElementById('taxPercent').value) || 0;
 
-                const discountAmount = (subtotal * discountPercent) / 100;
-                const afterDiscount = subtotal - discountAmount;
-                const taxAmount = (afterDiscount * taxPercent) / 100;
-                const grandTotal = afterDiscount + taxAmount;
+                // Discount
+                let discountAmount = 0;
+                if (this.quotation.discountEnabled) {
+                    const discountValue = this.quotation.discountValue || 0;
+                    if (this.quotation.discountType === 'percentage') {
+                        discountAmount = (subtotal * discountValue) / 100;
+                    } else {
+                        discountAmount = Math.min(discountValue, subtotal);
+                    }
+                }
 
+                const taxableAmount = subtotal - discountAmount;
+
+                // GST
+                const gstRate = parseFloat(this.quotation.gstRate) || 0;
+                const gstAmount = (taxableAmount * gstRate) / 100;
+                const grandTotal = taxableAmount + gstAmount;
+
+                // Update state
                 this.quotation.subtotal = subtotal;
-                this.quotation.discountPercent = discountPercent;
                 this.quotation.discountAmount = discountAmount;
-                this.quotation.taxPercent = taxPercent;
-                this.quotation.taxAmount = taxAmount;
+                this.quotation.taxableAmount = taxableAmount;
+                this.quotation.gstAmount = gstAmount;
                 this.quotation.grandTotal = grandTotal;
 
                 // Update display
                 document.getElementById('subtotalDisplay').textContent = `₹${subtotal.toFixed(2)}`;
-                document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)} (${discountPercent}%)`;
-                document.getElementById('taxDisplay').textContent = `₹${taxAmount.toFixed(2)} (${taxPercent}%)`;
+                document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)}`;
+                document.getElementById('taxableDisplay').textContent = `₹${taxableAmount.toFixed(2)}`;
+                document.getElementById('gstAmountDisplay').textContent = `₹${gstAmount.toFixed(2)}`;
                 document.getElementById('grandTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
 
+                // Update amount in words
+                document.getElementById('amountInWords').textContent = numberToWords(grandTotal);
+
                 this.updatePreview();
+            }
+
+            toggleDiscount() {
+                const toggle = document.getElementById('discountToggle');
+                const inputs = document.getElementById('discountInputs');
+
+                this.quotation.discountEnabled = toggle.classList.toggle('active');
+                inputs.style.display = this.quotation.discountEnabled ? 'grid' : 'none';
+
+                if (!this.quotation.discountEnabled) {
+                    this.quotation.discountValue = 0;
+                    document.getElementById('discountValue').value = 0;
+                }
+
+                this.updatePricing();
+            }
+
+            onDiscountChange() {
+                const type = document.getElementById('discountType').value;
+                const value = parseFloat(document.getElementById('discountValue').value) || 0;
+
+                this.quotation.discountType = type;
+                this.quotation.discountValue = value;
+
+                this.updatePricing();
+            }
+
+            onGstChange() {
+                const select = document.getElementById('gstSelect');
+                if (select.value) {
+                    this.quotation.gstRate = parseFloat(select.value);
+                    document.getElementById('gstGroup').classList.remove('error');
+                    this.updatePricing();
+                }
+            }
+
+            addCustomGst() {
+                document.getElementById('gstModal').classList.add('open');
+                document.getElementById('customGstInput').value = '';
+                document.getElementById('customGstInput').focus();
+            }
+
+            saveCustomGst() {
+                const input = document.getElementById('customGstInput');
+                const value = parseFloat(input.value);
+
+                if (!value || value <= 0) {
+                    this.showToast('Please enter a valid GST rate', 'error');
+                    return;
+                }
+
+                // Add to dropdown
+                const select = document.getElementById('gstSelect');
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value + '%';
+                select.appendChild(option);
+
+                // Select it
+                select.value = value;
+                this.quotation.gstRate = value;
+                document.getElementById('gstGroup').classList.remove('error');
+
+                document.getElementById('gstModal').classList.remove('open');
+                this.showToast(`✅ GST ${value}% added`, 'success');
+                this.updatePricing();
             }
 
             // ============================================================
@@ -1546,8 +2098,9 @@
                     `${this.quotation.items.length} items`;
                 document.getElementById('previewTotal').textContent =
                     `₹${this.quotation.grandTotal.toFixed(2)}`;
+                document.getElementById('previewWords').textContent =
+                    numberToWords(this.quotation.grandTotal);
 
-                // Items list in preview
                 const itemsContainer = document.getElementById('previewItemsList');
                 if (this.quotation.items.length === 0) {
                     itemsContainer.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No items added</p>';
@@ -1562,12 +2115,16 @@
             }
 
             // ============================================================
-            // SAVE LOGIC
+            // SAVE
             // ============================================================
 
             async saveDraft() {
-                this.quotation.status = 'draft';
+                // Save project data
+                this.quotation.projectName = document.getElementById('projectName').value.trim();
+                this.quotation.projectDesc = document.getElementById('projectDesc').value;
+                this.quotation.projectReference = document.getElementById('projectReference').value;
                 this.quotation.notes = document.getElementById('pricingNotes').value;
+                this.quotation.status = 'draft';
 
                 try {
                     this.showLoading(true);
@@ -1591,16 +2148,25 @@
                 }
 
                 // Validate project name
-                if (!this.quotation.projectName) {
-                    this.showToast('Please enter a project name', 'error');
-                    this.showStep(2);
+                const projectName = document.getElementById('projectName').value.trim();
+                if (!projectName) {
+                    this.showToast('⚠️ Project name is required', 'error');
+                    this.goToPrevStep();
                     return;
                 }
 
                 // Validate items
                 if (this.quotation.items.length === 0) {
-                    this.showToast('Please add at least one item', 'error');
-                    this.showStep(3);
+                    this.showToast('⚠️ Please add at least one item', 'error');
+                    this.goToPrevStep();
+                    return;
+                }
+
+                // Validate GST
+                const gstSelect = document.getElementById('gstSelect');
+                if (!gstSelect.value) {
+                    this.showToast('⚠️ Please select GST rate', 'error');
+                    this.goToPrevStep();
                     return;
                 }
 
@@ -1609,8 +2175,12 @@
                     return;
                 }
 
-                this.quotation.status = 'final';
+                // Save all data
+                this.quotation.projectName = projectName;
+                this.quotation.projectDesc = document.getElementById('projectDesc').value;
+                this.quotation.projectReference = document.getElementById('projectReference').value;
                 this.quotation.notes = document.getElementById('pricingNotes').value;
+                this.quotation.status = 'final';
 
                 try {
                     this.showLoading(true);
@@ -1640,14 +2210,17 @@
                     projectDesc: '',
                     projectReference: '',
                     items: [],
-                    discountPercent: 0,
-                    taxPercent: 18,
+                    discountEnabled: false,
+                    discountType: 'percentage',
+                    discountValue: 0,
+                    gstRate: 18,
                     notes: '',
-                    status: 'draft',
                     subtotal: 0,
                     discountAmount: 0,
-                    taxAmount: 0,
-                    grandTotal: 0
+                    taxableAmount: 0,
+                    gstAmount: 0,
+                    grandTotal: 0,
+                    status: 'draft'
                 };
 
                 this.hasCustomer = false;
@@ -1655,12 +2228,19 @@
                 document.getElementById('projectName').value = '';
                 document.getElementById('projectDesc').value = '';
                 document.getElementById('projectReference').value = '';
-                document.getElementById('discountPercent').value = '0';
-                document.getElementById('taxPercent').value = '18';
                 document.getElementById('pricingNotes').value = '';
                 document.getElementById('customerSearch').value = '';
                 document.getElementById('customerResults').innerHTML = '';
                 document.getElementById('nextFromCustomer').disabled = true;
+                document.getElementById('discountToggle').classList.remove('active');
+                document.getElementById('discountInputs').style.display = 'none';
+                document.getElementById('discountValue').value = '0';
+                document.getElementById('gstSelect').value = '18';
+                document.getElementById('itemSelect').value = '';
+                document.getElementById('itemRate').value = 'Auto';
+                document.getElementById('itemQty').value = '1';
+                document.getElementById('projectNameGroup').classList.remove('error');
+                document.getElementById('gstGroup').classList.remove('error');
 
                 this.renderItems();
                 this.updatePricing();
@@ -1674,10 +2254,8 @@
             // ============================================================
 
             bindEvents() {
-                // Customer search
+                // === Customer ===
                 const searchInput = document.getElementById('customerSearch');
-                const searchBtn = document.getElementById('searchCustomerBtn');
-
                 let searchTimeout;
                 searchInput.addEventListener('input', () => {
                     clearTimeout(searchTimeout);
@@ -1686,95 +2264,106 @@
                     }, 300);
                 });
 
-                searchBtn.addEventListener('click', () => {
+                document.getElementById('searchCustomerBtn').addEventListener('click', () => {
                     this.searchCustomer(searchInput.value);
                 });
 
-                // Continue without customer
                 document.getElementById('continueWithoutCustomer').addEventListener('click', () => {
                     this.continueWithoutCustomer();
                 });
 
-                // Change customer
                 document.getElementById('changeCustomerBtn').addEventListener('click', () => {
                     this.changeCustomer();
                 });
 
-                // Navigation - Next
                 document.getElementById('nextFromCustomer').addEventListener('click', () => {
                     this.goToNextStep();
                 });
 
+                // === Project ===
+                document.getElementById('projectName').addEventListener('input', () => {
+                    document.getElementById('projectNameGroup').classList.remove('error');
+                });
+
                 document.getElementById('nextFromProject').addEventListener('click', () => {
-                    const projectName = document.getElementById('projectName').value.trim();
-                    if (!projectName) {
-                        this.showToast('Please enter a project name', 'error');
-                        return;
-                    }
-                    this.quotation.projectName = projectName;
-                    this.quotation.projectDesc = document.getElementById('projectDesc').value;
-                    this.quotation.projectReference = document.getElementById('projectReference').value;
                     this.goToNextStep();
                 });
 
-                document.getElementById('nextFromItems').addEventListener('click', () => {
-                    if (this.quotation.items.length === 0) {
-                        this.showToast('Please add at least one item', 'error');
-                        return;
-                    }
-                    this.goToNextStep();
-                });
-
-                document.getElementById('nextFromPricing').addEventListener('click', () => {
-                    this.goToNextStep();
-                });
-
-                // Navigation - Prev
                 document.getElementById('prevFromProject').addEventListener('click', () => {
                     this.goToPrevStep();
                 });
 
-                document.getElementById('prevFromItems').addEventListener('click', () => {
-                    this.goToPrevStep();
+                // === Items ===
+                document.getElementById('itemSelect').addEventListener('change', () => {
+                    this.onItemSelect();
                 });
 
-                document.getElementById('prevFromPricing').addEventListener('click', () => {
-                    this.goToPrevStep();
+                document.getElementById('itemQty').addEventListener('input', () => {
+                    document.getElementById('itemQtyGroup').classList.remove('error');
                 });
 
-                document.getElementById('prevFromPreview').addEventListener('click', () => {
-                    this.goToPrevStep();
-                });
-
-                // Add Item
                 document.getElementById('addItemBtn').addEventListener('click', () => {
                     this.addItem();
                 });
 
-                document.getElementById('itemName').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        document.getElementById('itemPrice').focus();
-                    }
+                document.getElementById('addAnotherItemBtn').addEventListener('click', () => {
+                    this.addAnotherItem();
                 });
 
-                document.getElementById('itemPrice').addEventListener('keypress', (e) => {
+                // Enter key on item qty
+                document.getElementById('itemQty').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         this.addItem();
                     }
                 });
 
-                // Pricing updates
-                document.getElementById('discountPercent').addEventListener('input', () => {
-                    this.updatePricing();
+                document.getElementById('nextFromItems').addEventListener('click', () => {
+                    this.goToNextStep();
                 });
 
-                document.getElementById('taxPercent').addEventListener('input', () => {
-                    this.updatePricing();
+                document.getElementById('prevFromItems').addEventListener('click', () => {
+                    this.goToPrevStep();
                 });
 
-                // Save buttons
+                // === Pricing ===
+                document.getElementById('discountToggle').addEventListener('click', () => {
+                    this.toggleDiscount();
+                });
+
+                document.getElementById('discountType').addEventListener('change', () => {
+                    this.onDiscountChange();
+                });
+
+                document.getElementById('discountValue').addEventListener('input', () => {
+                    this.onDiscountChange();
+                });
+
+                document.getElementById('gstSelect').addEventListener('change', () => {
+                    this.onGstChange();
+                });
+
+                document.getElementById('addGstBtn').addEventListener('click', () => {
+                    this.addCustomGst();
+                });
+
+                document.getElementById('nextFromPricing').addEventListener('click', () => {
+                    this.goToNextStep();
+                });
+
+                document.getElementById('prevFromPricing').addEventListener('click', () => {
+                    this.goToPrevStep();
+                });
+
+                // === Preview ===
+                document.getElementById('nextFromPreview')?.addEventListener('click', () => {
+                    this.goToNextStep();
+                });
+
+                document.getElementById('prevFromPreview').addEventListener('click', () => {
+                    this.goToPrevStep();
+                });
+
                 document.getElementById('saveDraftBtn').addEventListener('click', () => {
                     this.saveDraft();
                 });
@@ -1783,7 +2372,27 @@
                     this.saveFinalQuotation();
                 });
 
-                // Warning modal
+                // === GST Modal ===
+                document.getElementById('gstModalClose').addEventListener('click', () => {
+                    document.getElementById('gstModal').classList.remove('open');
+                });
+
+                document.getElementById('gstModalCancel').addEventListener('click', () => {
+                    document.getElementById('gstModal').classList.remove('open');
+                });
+
+                document.getElementById('gstModalAdd').addEventListener('click', () => {
+                    this.saveCustomGst();
+                });
+
+                document.getElementById('customGstInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.saveCustomGst();
+                    }
+                });
+
+                // === Warning Modal ===
                 document.getElementById('warningModalClose').addEventListener('click', () => {
                     document.getElementById('customerWarningModal').classList.remove('open');
                 });
@@ -1803,7 +2412,7 @@
                     this.saveDraft();
                 });
 
-                // Cancel button
+                // === Cancel ===
                 document.getElementById('cancelBtn').addEventListener('click', () => {
                     if (this.quotation.items.length > 0 || this.quotation.projectName) {
                         if (!confirm('You have unsaved data. Are you sure you want to cancel?')) {
@@ -1813,15 +2422,25 @@
                     window.location.href = 'quotation-history.html';
                 });
 
-                // Clear all
                 document.getElementById('clearAllBtn').addEventListener('click', () => {
                     this.clearAll();
                 });
 
-                // Close modal on outside click
-                document.getElementById('customerWarningModal').addEventListener('click', (e) => {
-                    if (e.target === e.currentTarget) {
-                        document.getElementById('customerWarningModal').classList.remove('open');
+                // Close modals on outside click
+                document.querySelectorAll('.modal-overlay').forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === e.currentTarget) {
+                            modal.classList.remove('open');
+                        }
+                    });
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.modal-overlay.open').forEach(modal => {
+                            modal.classList.remove('open');
+                        });
                     }
                 });
             }
@@ -1833,6 +2452,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const builder = new QuotationBuilder();
+
+            // Make builder available globally for debugging
+            window.builder = builder;
+
+            console.log('📝 Quotation Builder loaded successfully');
         });
     </script>
 
