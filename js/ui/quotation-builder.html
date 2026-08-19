@@ -49,34 +49,41 @@
             padding-top: calc(20px + var(--header-height));
         }
 
-        /* Fixed Header */
+        /* ============================================================
+           FIXED HEADER - NEW LAYOUT
+           ============================================================ */
         .app-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: var(--header-height);
             background: var(--card-bg);
             border-bottom: 1px solid var(--border);
             z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
+            padding: 12px 20px;
             box-shadow: var(--shadow);
         }
 
-        .app-header h1 {
+        .app-header .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-header .header-title {
             font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
         }
 
-        .app-header .header-actions {
+        .app-header .top-actions {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 10px;
             align-items: center;
+        }
+
+        .app-header .header-bottom {
+            margin-top: 10px;
         }
 
         /* ============================================================
@@ -122,23 +129,34 @@
         }
         .btn-outline:hover { background: var(--primary); color: #fff; }
 
-        /* 🟩 Convert to Invoice - Green Button */
-        .btn-convert {
+        /* 🟩 Convert to Invoice - Full Width Green Button */
+        .btn-convert-invoice {
+            width: 100%;
+            min-height: 56px;
             background: var(--convert);
             color: #fff;
-            font-weight: 600;
-            padding: 10px 24px;
-            font-size: 15px;
-            border: 2px solid var(--convert);
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            touch-action: manipulation;
             box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
         }
-        .btn-convert:hover { 
-            background: var(--convert-dark); 
-            border-color: var(--convert-dark);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+
+        .btn-convert-invoice:hover {
+            background: var(--convert-dark);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
             transform: translateY(-1px);
         }
-        .btn-convert:active {
+
+        .btn-convert-invoice:active {
             transform: translateY(0);
             background: var(--convert-hover);
         }
@@ -217,7 +235,7 @@
         }
 
         /* ============================================================
-           STEPS - with scroll-margin-top for fixed header
+           STEPS
            ============================================================ */
         .step {
             display: none;
@@ -476,7 +494,7 @@
         }
 
         /* ============================================================
-           ITEMS SECTION - Dropdown based
+           ITEMS SECTION
            ============================================================ */
         .items-list {
             margin: 16px 0;
@@ -638,7 +656,6 @@
             margin-top: 8px;
         }
 
-        /* GST Section */
         .gst-input-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -703,7 +720,7 @@
         }
 
         /* ============================================================
-           CONVERT TO INVOICE MODAL
+           MODAL
            ============================================================ */
         .modal-overlay {
             position: fixed;
@@ -838,13 +855,6 @@
             color: #065f46;
         }
 
-        .converted-badge .invoice-link {
-            color: var(--primary);
-            cursor: pointer;
-            text-decoration: underline;
-            margin-left: 4px;
-        }
-
         /* ============================================================
            TOAST
            ============================================================ */
@@ -930,10 +940,25 @@
             }
 
             .app-header {
-                padding: 0 12px;
-                height: 60px;
+                padding: 10px 12px;
             }
-            .app-header h1 { font-size: 16px; }
+
+            .app-header .header-title {
+                font-size: 16px;
+            }
+
+            .app-header .top-actions .btn {
+                font-size: 12px;
+                padding: 6px 12px;
+                min-height: 32px;
+            }
+
+            .btn-convert-invoice {
+                font-size: 16px;
+                min-height: 48px;
+                padding: 12px 16px;
+                border-radius: 12px;
+            }
 
             :root {
                 --header-height: 60px;
@@ -1023,30 +1048,24 @@
             .modal-content.wide {
                 max-width: 100%;
             }
-
-            .btn-convert {
-                padding: 8px 14px;
-                font-size: 13px;
-                min-height: 38px;
-            }
-
-            .app-header .header-actions .btn-convert span {
-                display: none;
-            }
-
-            .app-header .header-actions .btn-convert::after {
-                content: '🧾';
-                font-size: 18px;
-            }
         }
 
         @media (max-width: 480px) {
-            .app-header h1 { font-size: 14px; }
+            .app-header .header-title {
+                font-size: 14px;
+            }
 
             .btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-height: 36px;
+            }
+
+            .btn-convert-invoice {
+                font-size: 14px;
+                min-height: 44px;
                 padding: 10px 14px;
-                font-size: 13px;
-                min-height: 40px;
+                border-radius: 10px;
             }
 
             .btn-lg {
@@ -1070,17 +1089,20 @@
 <body>
 
     <!-- ============================================================
-    FIXED HEADER
+    FIXED HEADER - NEW LAYOUT
     ============================================================ -->
     <header class="app-header">
-        <h1>📝 Quotation Builder</h1>
-        <div class="header-actions">
-            <!-- 🟩 Convert to Invoice Button - Green -->
-            <button class="btn btn-convert" id="convertToInvoiceBtn">
-                🧾 <span>Convert to Invoice</span>
+        <div class="header-top">
+            <span class="header-title">📝 Quotation Builder</span>
+            <div class="top-actions">
+                <button class="btn btn-secondary btn-sm" id="clearAllBtn">↻ Clear</button>
+                <button class="btn btn-secondary btn-sm" id="cancelBtn">✕ Cancel</button>
+            </div>
+        </div>
+        <div class="header-bottom">
+            <button class="btn-convert-invoice" id="convertToInvoiceBtn">
+                🧾 Convert to Invoice
             </button>
-            <button class="btn btn-secondary btn-sm" id="cancelBtn">✕ Cancel</button>
-            <button class="btn btn-secondary btn-sm" id="clearAllBtn">↺ Clear</button>
         </div>
     </header>
 
@@ -1258,7 +1280,6 @@
             <h2 class="step-title">💰 Pricing</h2>
             <p class="step-description">Configure discount and tax.</p>
 
-            <!-- Discount -->
             <div class="form-group">
                 <label>Discount</label>
                 <div class="discount-toggle">
@@ -1283,7 +1304,6 @@
                 </div>
             </div>
 
-            <!-- GST -->
             <div class="form-group" id="gstGroup">
                 <label>GST Rate <span class="required">*</span></label>
                 <div class="gst-input-group">
@@ -1392,7 +1412,6 @@
                 <button class="modal-close" id="convertModalClose">✕</button>
             </div>
             <div class="modal-body">
-                <!-- Quotation Selection -->
                 <div class="form-group" id="quotationSelectGroup">
                     <label>Select Quotation <span class="required">*</span></label>
                     <select id="convertQuotationSelect">
@@ -1401,7 +1420,6 @@
                     <div class="input-error">⚠️ Please select a quotation</div>
                 </div>
 
-                <!-- Quotation Details Preview -->
                 <div id="quotationPreviewDetails" style="display:none;">
                     <div class="quotation-preview">
                         <div class="preview-item">
@@ -1454,7 +1472,6 @@
                         </div>
                     </div>
 
-                    <!-- Converted/Already converted status -->
                     <div id="convertedStatus" style="display:none;padding:12px 16px;background:#fef3c7;border:1px solid #f59e0b;border-radius:var(--radius-sm);margin-top:12px;">
                         <span style="font-weight:600;">⚠️ This quotation is already converted.</span>
                         <br>
@@ -1468,7 +1485,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="convertModalCancel">Cancel</button>
-                <button class="btn btn-convert" id="convertConfirmBtn">
+                <button class="btn btn-convert-invoice" id="convertConfirmBtn" style="width:auto;min-height:44px;padding:10px 24px;font-size:16px;border-radius:10px;">
                     🧾 Convert to Invoice
                 </button>
             </div>
@@ -1535,7 +1552,6 @@
         // MOCK DATA & SERVICES
         // ============================================================
 
-        // Mock Product Database
         const productDatabase = [
             { id: 'p1', name: 'H4 Tile Adhesive', rate: 450, type: 'general' },
             { id: 'p2', name: 'H4 Waterproofing', rate: 850, type: 'waterproofing' },
@@ -1587,7 +1603,6 @@
             }
         };
 
-        // Mock Saved Quotations (for conversion)
         let savedQuotations = [{
             id: 'q1',
             quotationNumber: 'QTN-0001',
@@ -1851,10 +1866,6 @@
                 this.init();
             }
 
-            // ============================================================
-            // INIT
-            // ============================================================
-
             init() {
                 this.bindEvents();
                 this.loadItemsDropdown();
@@ -1864,10 +1875,6 @@
                 this.updatePreview();
                 console.log('📝 Quotation Builder initialized');
             }
-
-            // ============================================================
-            // TOAST
-            // ============================================================
 
             showToast(message, type = 'info') {
                 const container = document.getElementById('toastContainer');
@@ -1884,66 +1891,38 @@
                 }, 3000);
             }
 
-            // ============================================================
-            // LOADING
-            // ============================================================
-
             showLoading(show) {
                 const overlay = document.getElementById('loadingOverlay');
                 overlay.classList.toggle('show', show);
             }
 
-            // ============================================================
-            // SCROLL TO STEP
-            // ============================================================
-
             scrollToStep(element) {
                 if (!element) {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: "smooth"
-                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                     return;
                 }
-
                 if (document.activeElement) {
                     document.activeElement.blur();
                 }
-
                 setTimeout(() => {
-                    element.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
+                    element.scrollIntoView({ behavior: "smooth", block: "start" });
                 }, 50);
             }
 
-            // ============================================================
-            // STEP NAVIGATION
-            // ============================================================
-
             showStep(step) {
                 document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-
                 const stepElement = document.getElementById(`step${step}`);
                 if (stepElement) {
                     stepElement.classList.add('active');
                 }
-
                 this.currentStep = step;
                 this.updateIndicators(step);
                 this.updatePreview();
             }
 
             goToNextStep() {
-                if (!this.validateStep(this.currentStep)) {
-                    return;
-                }
-
-                if (document.activeElement) {
-                    document.activeElement.blur();
-                }
-
+                if (!this.validateStep(this.currentStep)) return;
+                if (document.activeElement) document.activeElement.blur();
                 if (this.currentStep < 5) {
                     const nextStep = this.currentStep + 1;
                     this.showStep(nextStep);
@@ -1953,10 +1932,7 @@
             }
 
             goToPrevStep() {
-                if (document.activeElement) {
-                    document.activeElement.blur();
-                }
-
+                if (document.activeElement) document.activeElement.blur();
                 if (this.currentStep > 1) {
                     const prevStep = this.currentStep - 1;
                     this.showStep(prevStep);
@@ -1968,26 +1944,17 @@
             updateIndicators(step) {
                 const indicators = document.querySelectorAll('.step-indicator');
                 const connectors = document.querySelectorAll('.step-connector');
-
                 indicators.forEach((el, index) => {
                     const num = index + 1;
                     el.classList.remove('active', 'completed');
-                    if (num === step) {
-                        el.classList.add('active');
-                    } else if (num < step) {
-                        el.classList.add('completed');
-                    }
+                    if (num === step) el.classList.add('active');
+                    else if (num < step) el.classList.add('completed');
                 });
-
                 connectors.forEach((el, index) => {
                     const num = index + 1;
                     el.classList.toggle('completed', num < step);
                 });
             }
-
-            // ============================================================
-            // VALIDATION
-            // ============================================================
 
             validateStep(step) {
                 switch (step) {
@@ -2002,13 +1969,11 @@
             validateProject() {
                 const projectName = document.getElementById('projectName').value.trim();
                 const group = document.getElementById('projectNameGroup');
-
                 if (!projectName) {
                     group.classList.add('error');
                     this.showToast('⚠️ Project name is required', 'error');
                     return false;
                 }
-
                 group.classList.remove('error');
                 this.quotation.projectName = projectName;
                 this.quotation.projectDesc = document.getElementById('projectDesc').value;
@@ -2021,27 +1986,23 @@
                     this.showToast('⚠️ Please add at least one item', 'error');
                     return false;
                 }
-
                 for (const item of this.quotation.items) {
                     if (item.rate === 0) {
                         this.showToast(`⚠️ Rate not available for "${item.name}"`, 'error');
                         return false;
                     }
                 }
-
                 return true;
             }
 
             validatePricing() {
                 const gstSelect = document.getElementById('gstSelect');
                 const gstGroup = document.getElementById('gstGroup');
-
                 if (!gstSelect.value) {
                     gstGroup.classList.add('error');
                     this.showToast('⚠️ Please select GST rate', 'error');
                     return false;
                 }
-
                 gstGroup.classList.remove('error');
                 return true;
             }
@@ -2056,7 +2017,6 @@
                     container.innerHTML = '';
                     return;
                 }
-
                 try {
                     const results = await customerService.searchCustomers(searchTerm);
                     this.renderCustomerResults(results);
@@ -2067,7 +2027,6 @@
 
             renderCustomerResults(results) {
                 const container = document.getElementById('customerResults');
-
                 if (results.length === 0) {
                     container.innerHTML = `
                         <div class="no-results" style="text-align:center;padding:20px;background:var(--card-bg);border-radius:var(--radius-sm);border:1px dashed var(--border);">
@@ -2080,7 +2039,6 @@
                     });
                     return;
                 }
-
                 container.innerHTML = results.map(c => `
                     <div class="customer-card" data-id="${c.id}">
                         <div class="customer-info">
@@ -2091,14 +2049,12 @@
                         <button class="btn btn-primary btn-sm select-btn" data-id="${c.id}">Select</button>
                     </div>
                 `).join('');
-
                 container.querySelectorAll('.select-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         this.selectCustomer(btn.dataset.id);
                     });
                 });
-
                 container.querySelectorAll('.customer-card').forEach(card => {
                     card.addEventListener('click', () => {
                         const btn = card.querySelector('.select-btn');
@@ -2113,11 +2069,9 @@
                     this.showToast('Customer not found', 'error');
                     return;
                 }
-
                 this.quotation.customerId = customerId;
                 this.quotation.customerSnapshot = customer;
                 this.hasCustomer = true;
-
                 const display = document.getElementById('selectedCustomerDisplay');
                 display.style.display = 'flex';
                 display.style.background = '#ecfdf5';
@@ -2125,11 +2079,9 @@
                 document.getElementById('selectedCustomerName').textContent = customer.name;
                 document.getElementById('selectedCustomerDetail').textContent =
                     `📱 ${customer.phone || 'N/A'} • ✉️ ${customer.email || 'N/A'} • 📍 ${customer.address || 'N/A'}`;
-
                 document.getElementById('nextFromCustomer').disabled = false;
                 document.getElementById('customerResults').innerHTML = '';
                 document.getElementById('customerSearch').value = '';
-
                 this.showToast(`✅ Customer selected: ${customer.name}`, 'success');
                 this.updatePreview();
             }
@@ -2138,18 +2090,15 @@
                 this.hasCustomer = false;
                 this.quotation.customerId = null;
                 this.quotation.customerSnapshot = null;
-
                 const display = document.getElementById('selectedCustomerDisplay');
                 display.style.display = 'flex';
                 display.style.background = '#fef3c7';
                 display.style.borderColor = '#f59e0b';
                 document.getElementById('selectedCustomerName').textContent = 'No customer selected (Draft only)';
                 document.getElementById('selectedCustomerDetail').textContent = '⚠️ Customer required for final quotation';
-
                 document.getElementById('nextFromCustomer').disabled = false;
                 document.getElementById('customerResults').innerHTML = '';
                 document.getElementById('customerSearch').value = '';
-
                 this.showToast('Continuing without customer - will be saved as Draft', 'warning');
                 this.updatePreview();
             }
@@ -2157,11 +2106,9 @@
             createNewCustomer() {
                 const name = prompt('Enter customer name:');
                 if (!name) return;
-
                 const phone = prompt('Enter phone number (optional):') || '';
                 const email = prompt('Enter email (optional):') || '';
                 const address = prompt('Enter address (optional):') || '';
-
                 customerService.createCustomer({ name, phone, email, address })
                     .then(customer => {
                         this.selectCustomer(customer.id);
@@ -2191,7 +2138,6 @@
             loadItemsDropdown() {
                 const select = document.getElementById('itemSelect');
                 select.innerHTML = '<option value="">-- Select Item --</option>';
-
                 productDatabase.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id;
@@ -2206,7 +2152,6 @@
                 const select = document.getElementById('itemSelect');
                 const rateInput = document.getElementById('itemRate');
                 const selectedOption = select.options[select.selectedIndex];
-
                 if (selectedOption && selectedOption.value) {
                     const rate = parseFloat(selectedOption.dataset.rate) || 0;
                     if (rate > 0) {
@@ -2220,7 +2165,6 @@
                     rateInput.value = 'Auto';
                     rateInput.style.color = 'var(--text-muted)';
                 }
-
                 document.getElementById('itemSelectGroup').classList.remove('error');
             }
 
@@ -2229,36 +2173,30 @@
                 const qtyInput = document.getElementById('itemQty');
                 const qty = parseFloat(qtyInput.value);
                 const selectedOption = select.options[select.selectedIndex];
-
                 if (!selectedOption || !selectedOption.value) {
                     document.getElementById('itemSelectGroup').classList.add('error');
                     this.showToast('⚠️ Please select an item', 'error');
                     return;
                 }
-
                 if (!qty || qty <= 0) {
                     document.getElementById('itemQtyGroup').classList.add('error');
                     this.showToast('⚠️ Quantity is required', 'error');
                     return;
                 }
-
                 const productId = selectedOption.value;
                 const product = productDatabase.find(p => p.id === productId);
                 if (!product) {
                     this.showToast('Product not found', 'error');
                     return;
                 }
-
                 const rate = product.rate || 0;
                 if (rate === 0) {
                     this.showToast(`⚠️ Rate not available for "${product.name}"`, 'error');
                     return;
                 }
-
                 if (product.type === 'waterproofing' || product.type === 'epoxy') {
                     this.quotation.quotationType = product.type;
                 }
-
                 this.quotation.items.push({
                     id: 'item_' + Date.now(),
                     productId: product.id,
@@ -2268,13 +2206,11 @@
                     total: qty * rate,
                     type: product.type
                 });
-
                 select.value = '';
                 document.getElementById('itemRate').value = 'Auto';
                 qtyInput.value = '1';
                 document.getElementById('itemSelectGroup').classList.remove('error');
                 document.getElementById('itemQtyGroup').classList.remove('error');
-
                 this.renderItems();
                 this.updatePricing();
                 this.updatePreview();
@@ -2283,16 +2219,12 @@
 
             addAnotherItem() {
                 const form = document.getElementById('addItemForm');
-                form.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
+                form.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 document.getElementById('itemSelect').focus();
             }
 
             removeItem(id) {
                 this.quotation.items = this.quotation.items.filter(item => item.id !== id);
-
                 const types = this.quotation.items.map(item => item.type);
                 if (types.includes('epoxy')) {
                     this.quotation.quotationType = 'epoxy';
@@ -2301,7 +2233,6 @@
                 } else {
                     this.quotation.quotationType = 'general';
                 }
-
                 this.renderItems();
                 this.updatePricing();
                 this.updatePreview();
@@ -2310,7 +2241,6 @@
 
             renderItems() {
                 const container = document.getElementById('itemsList');
-
                 if (this.quotation.items.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state" style="text-align:center;padding:40px 20px;color:var(--text-muted);">
@@ -2320,7 +2250,6 @@
                     `;
                     return;
                 }
-
                 container.innerHTML = this.quotation.items.map((item, index) => `
                     <div class="item-row">
                         <span class="item-name">${index + 1}. ${item.name}</span>
@@ -2332,7 +2261,6 @@
                         </div>
                     </div>
                 `).join('');
-
                 container.querySelectorAll('.remove-item-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         this.removeItem(btn.dataset.id);
@@ -2346,7 +2274,6 @@
 
             updatePricing() {
                 const subtotal = this.quotation.items.reduce((sum, item) => sum + item.total, 0);
-
                 let discountAmount = 0;
                 if (this.quotation.discountEnabled) {
                     const discountValue = this.quotation.discountValue || 0;
@@ -2356,51 +2283,41 @@
                         discountAmount = Math.min(discountValue, subtotal);
                     }
                 }
-
                 const taxableAmount = subtotal - discountAmount;
                 const gstRate = parseFloat(this.quotation.gstRate) || 0;
                 const gstAmount = (taxableAmount * gstRate) / 100;
                 const grandTotal = taxableAmount + gstAmount;
-
                 this.quotation.subtotal = subtotal;
                 this.quotation.discountAmount = discountAmount;
                 this.quotation.taxableAmount = taxableAmount;
                 this.quotation.gstAmount = gstAmount;
                 this.quotation.grandTotal = grandTotal;
-
                 document.getElementById('subtotalDisplay').textContent = `₹${subtotal.toFixed(2)}`;
                 document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)}`;
                 document.getElementById('taxableDisplay').textContent = `₹${taxableAmount.toFixed(2)}`;
                 document.getElementById('gstAmountDisplay').textContent = `₹${gstAmount.toFixed(2)}`;
                 document.getElementById('grandTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
-
                 document.getElementById('amountInWords').textContent = numberToWords(grandTotal);
-
                 this.updatePreview();
             }
 
             toggleDiscount() {
                 const toggle = document.getElementById('discountToggle');
                 const inputs = document.getElementById('discountInputs');
-
                 this.quotation.discountEnabled = toggle.classList.toggle('active');
                 inputs.style.display = this.quotation.discountEnabled ? 'grid' : 'none';
-
                 if (!this.quotation.discountEnabled) {
                     this.quotation.discountValue = 0;
                     document.getElementById('discountValue').value = 0;
                 }
-
                 this.updatePricing();
             }
 
             onDiscountChange() {
                 const type = document.getElementById('discountType').value;
                 const value = parseFloat(document.getElementById('discountValue').value) || 0;
-
                 this.quotation.discountType = type;
                 this.quotation.discountValue = value;
-
                 this.updatePricing();
             }
 
@@ -2422,22 +2339,18 @@
             saveCustomGst() {
                 const input = document.getElementById('customGstInput');
                 const value = parseFloat(input.value);
-
                 if (!value || value <= 0) {
                     this.showToast('Please enter a valid GST rate', 'error');
                     return;
                 }
-
                 const select = document.getElementById('gstSelect');
                 const option = document.createElement('option');
                 option.value = value;
                 option.textContent = value + '%';
                 select.appendChild(option);
-
                 select.value = value;
                 this.quotation.gstRate = value;
                 document.getElementById('gstGroup').classList.remove('error');
-
                 document.getElementById('gstModal').classList.remove('open');
                 this.showToast(`✅ GST ${value}% added`, 'success');
                 this.updatePricing();
@@ -2451,7 +2364,6 @@
                 const customer = this.hasCustomer && this.quotation.customerSnapshot ?
                     this.quotation.customerSnapshot.name :
                     'No customer selected';
-
                 document.getElementById('previewCustomer').textContent = customer;
                 document.getElementById('previewProject').textContent =
                     this.quotation.projectName || 'No project name set';
@@ -2461,7 +2373,6 @@
                     `₹${this.quotation.grandTotal.toFixed(2)}`;
                 document.getElementById('previewWords').textContent =
                     numberToWords(this.quotation.grandTotal);
-
                 const itemsContainer = document.getElementById('previewItemsList');
                 if (this.quotation.items.length === 0) {
                     itemsContainer.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No items added</p>';
@@ -2482,11 +2393,9 @@
             loadSavedQuotations() {
                 const select = document.getElementById('convertQuotationSelect');
                 select.innerHTML = '<option value="">-- Select Quotation --</option>';
-
                 const saved = savedQuotations.filter(q => 
                     q.status !== 'draft' && q.customerId
                 );
-
                 if (saved.length === 0) {
                     const option = document.createElement('option');
                     option.value = '';
@@ -2496,7 +2405,6 @@
                     this.showToast('No saved quotations to convert', 'warning');
                     return;
                 }
-
                 select.disabled = false;
                 saved.forEach(q => {
                     const option = document.createElement('option');
@@ -2512,7 +2420,6 @@
             onConvertQuotationSelect() {
                 const select = document.getElementById('convertQuotationSelect');
                 const quotationId = select.value;
-
                 if (!quotationId) {
                     document.getElementById('quotationPreviewDetails').style.display = 'none';
                     document.getElementById('convertedStatus').style.display = 'none';
@@ -2521,15 +2428,12 @@
                     document.getElementById('quotationSelectGroup').classList.remove('error');
                     return;
                 }
-
                 const quotation = savedQuotations.find(q => q.id === quotationId);
                 if (!quotation) {
                     this.showToast('Quotation not found', 'error');
                     return;
                 }
-
                 document.getElementById('quotationSelectGroup').classList.remove('error');
-
                 if (quotation.status === 'converted' && quotation.convertedToInvoice) {
                     document.getElementById('convertedStatus').style.display = 'block';
                     document.getElementById('convertedInvoiceInfo').innerHTML = 
@@ -2545,7 +2449,6 @@
                     document.getElementById('convertConfirmBtn').disabled = false;
                     document.getElementById('convertConfirmBtn').textContent = '🧾 Convert to Invoice';
                 }
-
                 document.getElementById('previewQuotationNo').textContent = quotation.quotationNumber;
                 document.getElementById('previewQuotationCustomer').textContent = 
                     quotation.customerSnapshot?.name || 'N/A';
@@ -2555,7 +2458,6 @@
                     quotation.customerSnapshot?.address || 'N/A';
                 document.getElementById('previewQuotationSite').textContent = 
                     quotation.projectName || 'N/A';
-
                 const typeMap = {
                     'general': 'General',
                     'waterproofing': 'Waterproofing',
@@ -2566,73 +2468,56 @@
                                  quotation.quotationType === 'waterproofing' ? 'type-waterproofing' : 'type-general';
                 document.getElementById('previewQuotationType').innerHTML = 
                     `<span class="type-badge ${typeClass}">${typeLabel}</span>`;
-
                 const itemNames = quotation.items.map(item => item.name).join(', ');
                 document.getElementById('previewQuotationItems').textContent = itemNames || 'No items';
-
                 const totalQty = quotation.items.reduce((sum, item) => sum + item.quantity, 0);
                 document.getElementById('previewQuotationQty').textContent = totalQty;
-
                 const avgRate = quotation.items.length > 0 ? 
                     quotation.items.reduce((sum, item) => sum + item.rate, 0) / quotation.items.length : 0;
                 document.getElementById('previewQuotationRate').textContent = `₹${avgRate.toFixed(2)} (avg)`;
-
                 let discountDisplay = 'No discount';
                 if (quotation.discountEnabled && quotation.discountValue > 0) {
                     const typeSymbol = quotation.discountType === 'percentage' ? '%' : '₹';
                     discountDisplay = `${quotation.discountValue}${typeSymbol}`;
                 }
                 document.getElementById('previewQuotationDiscount').textContent = discountDisplay;
-
                 document.getElementById('previewQuotationGst').textContent = `${quotation.gstRate}%`;
-
                 document.getElementById('previewQuotationTotal').textContent = 
                     `₹${(quotation.grandTotal || 0).toFixed(2)}`;
-
                 document.getElementById('quotationPreviewDetails').style.display = 'block';
             }
 
             async performConvertToInvoice() {
                 const select = document.getElementById('convertQuotationSelect');
                 const quotationId = select.value;
-
                 if (!quotationId) {
                     document.getElementById('quotationSelectGroup').classList.add('error');
                     this.showToast('⚠️ Please select a quotation', 'error');
                     return;
                 }
-
                 const quotation = savedQuotations.find(q => q.id === quotationId);
                 if (!quotation) {
                     this.showToast('Quotation not found', 'error');
                     return;
                 }
-
                 if (quotation.status === 'converted') {
                     this.showToast('⚠️ This quotation is already converted', 'warning');
                     return;
                 }
-
                 if (!confirm(`Convert "${quotation.quotationNumber}" to Invoice?`)) {
                     return;
                 }
-
                 try {
                     this.showLoading(true);
                     const result = await quotationService.convertToInvoice(quotationId);
-
                     this.showToast(`✅ ${quotation.quotationNumber} converted to ${result.invoiceNumber}`, 'success');
-
                     document.getElementById('convertModal').classList.remove('open');
-
                     this.loadSavedQuotations();
-
                     setTimeout(() => {
                         if (confirm(`Invoice ${result.invoiceNumber} created! View it now?`)) {
                             window.location.href = `invoice.html?invoice=${result.invoiceNumber}`;
                         }
                     }, 500);
-
                 } catch (error) {
                     this.showToast('Error converting: ' + error.message, 'error');
                 } finally {
@@ -2661,7 +2546,6 @@
                 this.quotation.projectReference = document.getElementById('projectReference').value;
                 this.quotation.notes = document.getElementById('pricingNotes').value;
                 this.quotation.status = 'draft';
-
                 try {
                     this.showLoading(true);
                     const saved = await quotationService.saveQuotation(this.quotation);
@@ -2681,37 +2565,31 @@
                     document.getElementById('customerWarningModal').classList.add('open');
                     return;
                 }
-
                 const projectName = document.getElementById('projectName').value.trim();
                 if (!projectName) {
                     this.showToast('⚠️ Project name is required', 'error');
                     this.goToPrevStep();
                     return;
                 }
-
                 if (this.quotation.items.length === 0) {
                     this.showToast('⚠️ Please add at least one item', 'error');
                     this.goToPrevStep();
                     return;
                 }
-
                 const gstSelect = document.getElementById('gstSelect');
                 if (!gstSelect.value) {
                     this.showToast('⚠️ Please select GST rate', 'error');
                     this.goToPrevStep();
                     return;
                 }
-
                 if (!confirm('Are you sure you want to save this as a FINAL quotation?')) {
                     return;
                 }
-
                 this.quotation.projectName = projectName;
                 this.quotation.projectDesc = document.getElementById('projectDesc').value;
                 this.quotation.projectReference = document.getElementById('projectReference').value;
                 this.quotation.notes = document.getElementById('pricingNotes').value;
                 this.quotation.status = 'accepted';
-
                 try {
                     this.showLoading(true);
                     const saved = await quotationService.saveQuotation(this.quotation);
@@ -2727,12 +2605,11 @@
             }
 
             // ============================================================
-            // CLEAR ALL
+            // CLEAR & CANCEL
             // ============================================================
 
             clearAll() {
                 if (!confirm('Are you sure you want to clear all data?')) return;
-
                 this.quotation = {
                     customerId: null,
                     customerSnapshot: null,
@@ -2753,7 +2630,6 @@
                     status: 'draft',
                     quotationType: 'general'
                 };
-
                 this.hasCustomer = false;
                 document.getElementById('selectedCustomerDisplay').style.display = 'none';
                 document.getElementById('projectName').value = '';
@@ -2772,7 +2648,6 @@
                 document.getElementById('itemQty').value = '1';
                 document.getElementById('projectNameGroup').classList.remove('error');
                 document.getElementById('gstGroup').classList.remove('error');
-
                 this.renderItems();
                 this.updatePricing();
                 this.updatePreview();
@@ -2780,40 +2655,45 @@
                 this.showToast('All data cleared', 'info');
             }
 
+            cancelQuotation() {
+                if (this.quotation.items.length > 0 || this.quotation.projectName) {
+                    if (!confirm('You have unsaved data. Are you sure you want to cancel?')) {
+                        return;
+                    }
+                }
+                window.location.href = 'quotation-history.html';
+            }
+
             // ============================================================
             // BIND EVENTS
             // ============================================================
 
             bindEvents() {
-                // === Header Convert Button ===
+                // Header Convert Button
                 document.getElementById('convertToInvoiceBtn').addEventListener('click', () => {
                     this.openConvertModal();
                 });
 
-                // === Convert Modal ===
+                // Convert Modal
                 document.getElementById('convertModalClose').addEventListener('click', () => {
                     document.getElementById('convertModal').classList.remove('open');
                 });
-
                 document.getElementById('convertModalCancel').addEventListener('click', () => {
                     document.getElementById('convertModal').classList.remove('open');
                 });
-
                 document.getElementById('convertQuotationSelect').addEventListener('change', () => {
                     this.onConvertQuotationSelect();
                 });
-
                 document.getElementById('convertConfirmBtn').addEventListener('click', () => {
                     this.performConvertToInvoice();
                 });
-
                 document.getElementById('convertModal').addEventListener('click', (e) => {
                     if (e.target === e.currentTarget) {
                         document.getElementById('convertModal').classList.remove('open');
                     }
                 });
 
-                // === Customer ===
+                // Customer
                 const searchInput = document.getElementById('customerSearch');
                 let searchTimeout;
                 searchInput.addEventListener('input', () => {
@@ -2822,123 +2702,100 @@
                         this.searchCustomer(searchInput.value);
                     }, 300);
                 });
-
                 document.getElementById('searchCustomerBtn').addEventListener('click', () => {
                     this.searchCustomer(searchInput.value);
                 });
-
                 document.getElementById('continueWithoutCustomer').addEventListener('click', () => {
                     this.continueWithoutCustomer();
                 });
-
                 document.getElementById('changeCustomerBtn').addEventListener('click', () => {
                     this.changeCustomer();
                 });
-
                 document.getElementById('nextFromCustomer').addEventListener('click', () => {
                     this.goToNextStep();
                 });
 
-                // === Project ===
+                // Project
                 document.getElementById('projectName').addEventListener('input', () => {
                     document.getElementById('projectNameGroup').classList.remove('error');
                 });
-
                 document.getElementById('nextFromProject').addEventListener('click', () => {
                     this.goToNextStep();
                 });
-
                 document.getElementById('prevFromProject').addEventListener('click', () => {
                     this.goToPrevStep();
                 });
 
-                // === Items ===
+                // Items
                 document.getElementById('itemSelect').addEventListener('change', () => {
                     this.onItemSelect();
                 });
-
                 document.getElementById('itemQty').addEventListener('input', () => {
                     document.getElementById('itemQtyGroup').classList.remove('error');
                 });
-
                 document.getElementById('addItemBtn').addEventListener('click', () => {
                     this.addItem();
                 });
-
                 document.getElementById('addAnotherItemBtn').addEventListener('click', () => {
                     this.addAnotherItem();
                 });
-
                 document.getElementById('itemQty').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         this.addItem();
                     }
                 });
-
                 document.getElementById('nextFromItems').addEventListener('click', () => {
                     this.goToNextStep();
                 });
-
                 document.getElementById('prevFromItems').addEventListener('click', () => {
                     this.goToPrevStep();
                 });
 
-                // === Pricing ===
+                // Pricing
                 document.getElementById('discountToggle').addEventListener('click', () => {
                     this.toggleDiscount();
                 });
-
                 document.getElementById('discountType').addEventListener('change', () => {
                     this.onDiscountChange();
                 });
-
                 document.getElementById('discountValue').addEventListener('input', () => {
                     this.onDiscountChange();
                 });
-
                 document.getElementById('gstSelect').addEventListener('change', () => {
                     this.onGstChange();
                 });
-
                 document.getElementById('addGstBtn').addEventListener('click', () => {
                     this.addCustomGst();
                 });
-
                 document.getElementById('nextFromPricing').addEventListener('click', () => {
                     this.goToNextStep();
                 });
-
                 document.getElementById('prevFromPricing').addEventListener('click', () => {
                     this.goToPrevStep();
                 });
 
-                // === Preview ===
+                // Preview
                 document.getElementById('prevFromPreview').addEventListener('click', () => {
                     this.goToPrevStep();
                 });
-
                 document.getElementById('saveDraftBtn').addEventListener('click', () => {
                     this.saveDraft();
                 });
-
                 document.getElementById('saveQuotationBtn').addEventListener('click', () => {
                     this.saveFinalQuotation();
                 });
 
-                // === GST Modal ===
+                // GST Modal
                 document.getElementById('gstModalClose').addEventListener('click', () => {
                     document.getElementById('gstModal').classList.remove('open');
                 });
-
                 document.getElementById('gstModalCancel').addEventListener('click', () => {
                     document.getElementById('gstModal').classList.remove('open');
                 });
-
                 document.getElementById('gstModalAdd').addEventListener('click', () => {
                     this.saveCustomGst();
                 });
-
                 document.getElementById('customGstInput').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
@@ -2946,40 +2803,32 @@
                     }
                 });
 
-                // === Warning Modal ===
+                // Warning Modal
                 document.getElementById('warningModalClose').addEventListener('click', () => {
                     document.getElementById('customerWarningModal').classList.remove('open');
                 });
-
                 document.getElementById('warningCancel').addEventListener('click', () => {
                     document.getElementById('customerWarningModal').classList.remove('open');
                 });
-
                 document.getElementById('warningAddCustomer').addEventListener('click', () => {
                     document.getElementById('customerWarningModal').classList.remove('open');
                     this.showStep(1);
                     document.getElementById('customerSearch').focus();
                 });
-
                 document.getElementById('warningSaveDraft').addEventListener('click', () => {
                     document.getElementById('customerWarningModal').classList.remove('open');
                     this.saveDraft();
                 });
 
-                // === Cancel ===
-                document.getElementById('cancelBtn').addEventListener('click', () => {
-                    if (this.quotation.items.length > 0 || this.quotation.projectName) {
-                        if (!confirm('You have unsaved data. Are you sure you want to cancel?')) {
-                            return;
-                        }
-                    }
-                    window.location.href = 'quotation-history.html';
-                });
-
+                // Clear & Cancel
                 document.getElementById('clearAllBtn').addEventListener('click', () => {
                     this.clearAll();
                 });
+                document.getElementById('cancelBtn').addEventListener('click', () => {
+                    this.cancelQuotation();
+                });
 
+                // Close modals on outside click
                 document.querySelectorAll('.modal-overlay').forEach(modal => {
                     modal.addEventListener('click', (e) => {
                         if (e.target === e.currentTarget) {
@@ -2988,6 +2837,7 @@
                     });
                 });
 
+                // Keyboard shortcuts
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         document.querySelectorAll('.modal-overlay.open').forEach(modal => {
@@ -3005,7 +2855,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const builder = new QuotationBuilder();
             window.builder = builder;
-            console.log('📝 Quotation Builder with 🟩 Green Convert to Invoice loaded successfully');
+            console.log('📝 Quotation Builder with new header layout loaded successfully');
         });
     </script>
 
