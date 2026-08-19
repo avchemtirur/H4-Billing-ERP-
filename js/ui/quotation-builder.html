@@ -34,8 +34,9 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
-            --convert: #f97316;
-            --convert-dark: #ea580c;
+            --convert: #10b981;
+            --convert-dark: #059669;
+            --convert-hover: #047857;
             --header-height: 70px;
         }
 
@@ -75,6 +76,7 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         /* ============================================================
@@ -120,6 +122,7 @@
         }
         .btn-outline:hover { background: var(--primary); color: #fff; }
 
+        /* 🟩 Convert to Invoice - Green Button */
         .btn-convert {
             background: var(--convert);
             color: #fff;
@@ -127,8 +130,18 @@
             padding: 10px 24px;
             font-size: 15px;
             border: 2px solid var(--convert);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
         }
-        .btn-convert:hover { background: var(--convert-dark); border-color: var(--convert-dark); }
+        .btn-convert:hover { 
+            background: var(--convert-dark); 
+            border-color: var(--convert-dark);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+        .btn-convert:active {
+            transform: translateY(0);
+            background: var(--convert-hover);
+        }
 
         .btn-sm { padding: 6px 12px; font-size: 12px; min-height: 32px; }
         .btn-xs { padding: 2px 8px; font-size: 11px; min-height: 24px; }
@@ -1012,13 +1025,18 @@
             }
 
             .btn-convert {
-                padding: 8px 16px;
+                padding: 8px 14px;
                 font-size: 13px;
-                min-height: 40px;
+                min-height: 38px;
             }
 
             .app-header .header-actions .btn-convert span {
                 display: none;
+            }
+
+            .app-header .header-actions .btn-convert::after {
+                content: '🧾';
+                font-size: 18px;
             }
         }
 
@@ -1057,7 +1075,7 @@
     <header class="app-header">
         <h1>📝 Quotation Builder</h1>
         <div class="header-actions">
-            <!-- Convert to Invoice Button - Prominent -->
+            <!-- 🟩 Convert to Invoice Button - Green -->
             <button class="btn btn-convert" id="convertToInvoiceBtn">
                 🧾 <span>Convert to Invoice</span>
             </button>
@@ -1132,7 +1150,7 @@
             <div class="divider">OR</div>
 
             <button class="btn btn-secondary btn-block" id="continueWithoutCustomer">
-                ➜ Continue Without Customer
+                ➡ Continue Without Customer
             </button>
 
             <div id="selectedCustomerDisplay">
@@ -1592,7 +1610,7 @@
             taxableAmount: 2150,
             gstAmount: 387,
             grandTotal: 2537,
-            status: 'converted', // Already converted
+            status: 'converted',
             convertedToInvoice: 'INV-0001',
             quotationType: 'waterproofing',
             createdAt: '2026-08-15'
@@ -1737,7 +1755,6 @@
 
                 const invoiceNumber = 'INV-' + String(Date.now()).slice(-4).padStart(4, '0');
 
-                // Update quotation status
                 quotation.status = 'converted';
                 quotation.convertedToInvoice = invoiceNumber;
 
@@ -2238,7 +2255,6 @@
                     return;
                 }
 
-                // Auto-detect quotation type from items
                 if (product.type === 'waterproofing' || product.type === 'epoxy') {
                     this.quotation.quotationType = product.type;
                 }
@@ -2277,7 +2293,6 @@
             removeItem(id) {
                 this.quotation.items = this.quotation.items.filter(item => item.id !== id);
 
-                // Recalculate quotation type
                 const types = this.quotation.items.map(item => item.type);
                 if (types.includes('epoxy')) {
                     this.quotation.quotationType = 'epoxy';
@@ -2468,7 +2483,6 @@
                 const select = document.getElementById('convertQuotationSelect');
                 select.innerHTML = '<option value="">-- Select Quotation --</option>';
 
-                // Only show saved quotations (not drafts, and only those with customer)
                 const saved = savedQuotations.filter(q => 
                     q.status !== 'draft' && q.customerId
                 );
@@ -2503,6 +2517,7 @@
                     document.getElementById('quotationPreviewDetails').style.display = 'none';
                     document.getElementById('convertedStatus').style.display = 'none';
                     document.getElementById('convertConfirmBtn').disabled = true;
+                    document.getElementById('convertConfirmBtn').textContent = '🧾 Convert to Invoice';
                     document.getElementById('quotationSelectGroup').classList.remove('error');
                     return;
                 }
@@ -2515,14 +2530,12 @@
 
                 document.getElementById('quotationSelectGroup').classList.remove('error');
 
-                // Check if already converted
                 if (quotation.status === 'converted' && quotation.convertedToInvoice) {
                     document.getElementById('convertedStatus').style.display = 'block';
                     document.getElementById('convertedInvoiceInfo').innerHTML = 
                         `Invoice: <strong>${quotation.convertedToInvoice}</strong>`;
                     document.getElementById('viewConvertedInvoiceBtn').onclick = () => {
                         this.showToast(`Viewing Invoice: ${quotation.convertedToInvoice}`, 'info');
-                        // Navigate to invoice.html with invoice ID
                         window.location.href = `invoice.html?invoice=${quotation.convertedToInvoice}`;
                     };
                     document.getElementById('convertConfirmBtn').disabled = true;
@@ -2533,7 +2546,6 @@
                     document.getElementById('convertConfirmBtn').textContent = '🧾 Convert to Invoice';
                 }
 
-                // Fill preview
                 document.getElementById('previewQuotationNo').textContent = quotation.quotationNumber;
                 document.getElementById('previewQuotationCustomer').textContent = 
                     quotation.customerSnapshot?.name || 'N/A';
@@ -2544,7 +2556,6 @@
                 document.getElementById('previewQuotationSite').textContent = 
                     quotation.projectName || 'N/A';
 
-                // Quotation Type with badge
                 const typeMap = {
                     'general': 'General',
                     'waterproofing': 'Waterproofing',
@@ -2556,20 +2567,16 @@
                 document.getElementById('previewQuotationType').innerHTML = 
                     `<span class="type-badge ${typeClass}">${typeLabel}</span>`;
 
-                // Items
                 const itemNames = quotation.items.map(item => item.name).join(', ');
                 document.getElementById('previewQuotationItems').textContent = itemNames || 'No items';
 
-                // Quantity
                 const totalQty = quotation.items.reduce((sum, item) => sum + item.quantity, 0);
                 document.getElementById('previewQuotationQty').textContent = totalQty;
 
-                // Rate (average)
                 const avgRate = quotation.items.length > 0 ? 
                     quotation.items.reduce((sum, item) => sum + item.rate, 0) / quotation.items.length : 0;
                 document.getElementById('previewQuotationRate').textContent = `₹${avgRate.toFixed(2)} (avg)`;
 
-                // Discount
                 let discountDisplay = 'No discount';
                 if (quotation.discountEnabled && quotation.discountValue > 0) {
                     const typeSymbol = quotation.discountType === 'percentage' ? '%' : '₹';
@@ -2577,10 +2584,8 @@
                 }
                 document.getElementById('previewQuotationDiscount').textContent = discountDisplay;
 
-                // GST
                 document.getElementById('previewQuotationGst').textContent = `${quotation.gstRate}%`;
 
-                // Grand Total
                 document.getElementById('previewQuotationTotal').textContent = 
                     `₹${(quotation.grandTotal || 0).toFixed(2)}`;
 
@@ -2608,7 +2613,6 @@
                     return;
                 }
 
-                // Confirm
                 if (!confirm(`Convert "${quotation.quotationNumber}" to Invoice?`)) {
                     return;
                 }
@@ -2619,13 +2623,10 @@
 
                     this.showToast(`✅ ${quotation.quotationNumber} converted to ${result.invoiceNumber}`, 'success');
 
-                    // Close modal
                     document.getElementById('convertModal').classList.remove('open');
 
-                    // Update the dropdown and preview
                     this.loadSavedQuotations();
 
-                    // Show success with option to view invoice
                     setTimeout(() => {
                         if (confirm(`Invoice ${result.invoiceNumber} created! View it now?`)) {
                             window.location.href = `invoice.html?invoice=${result.invoiceNumber}`;
@@ -2709,7 +2710,7 @@
                 this.quotation.projectDesc = document.getElementById('projectDesc').value;
                 this.quotation.projectReference = document.getElementById('projectReference').value;
                 this.quotation.notes = document.getElementById('pricingNotes').value;
-                this.quotation.status = 'accepted'; // Final status
+                this.quotation.status = 'accepted';
 
                 try {
                     this.showLoading(true);
@@ -2979,7 +2980,6 @@
                     this.clearAll();
                 });
 
-                // Close modals on outside click
                 document.querySelectorAll('.modal-overlay').forEach(modal => {
                     modal.addEventListener('click', (e) => {
                         if (e.target === e.currentTarget) {
@@ -2988,7 +2988,6 @@
                     });
                 });
 
-                // Keyboard shortcuts
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         document.querySelectorAll('.modal-overlay.open').forEach(modal => {
@@ -3006,7 +3005,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const builder = new QuotationBuilder();
             window.builder = builder;
-            console.log('📝 Quotation Builder with Convert to Invoice loaded successfully');
+            console.log('📝 Quotation Builder with 🟩 Green Convert to Invoice loaded successfully');
         });
     </script>
 
