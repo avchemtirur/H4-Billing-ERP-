@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ml">
 <head>
@@ -72,10 +71,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .app-header .header-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--gold);
             display: flex;
@@ -84,23 +85,37 @@
         }
 
         .app-header .header-title .h4-icon {
-            font-size: 24px;
+            font-size: 22px;
         }
 
         .app-header .top-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .app-header .top-actions .btn {
             background: rgba(255, 215, 0, 0.15);
             color: var(--gold);
             border: 1px solid rgba(255, 215, 0, 0.3);
+            min-height: 40px;
+            padding: 8px 14px;
+            font-size: 13px;
         }
 
         .app-header .top-actions .btn:hover {
             background: rgba(255, 215, 0, 0.25);
+        }
+
+        .app-header .top-actions .btn-history {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+
+        .app-header .top-actions .btn-history:hover {
+            background: rgba(255, 215, 0, 0.35);
         }
 
         /* ============================================================
@@ -134,9 +149,10 @@
             box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
         }
         .btn-primary:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .btn-secondary {
@@ -999,7 +1015,7 @@
         }
 
         /* ============================================================
-           TOAST
+           TOAST / SUCCESS MESSAGE
            ============================================================ */
         .toast-container {
             position: fixed;
@@ -1027,12 +1043,27 @@
             min-height: 56px;
             display: flex;
             align-items: center;
+            gap: 12px;
         }
 
         .toast-success { border-left-color: var(--success); }
         .toast-error { border-left-color: var(--danger); }
         .toast-warning { border-left-color: var(--warning); }
         .toast-info { border-left-color: var(--gold); }
+
+        .toast .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0 4px;
+        }
 
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
@@ -1092,16 +1123,16 @@
             }
 
             .app-header .header-title {
-                font-size: 16px;
+                font-size: 15px;
             }
             .app-header .header-title .h4-icon {
-                font-size: 20px;
+                font-size: 18px;
             }
 
             .app-header .top-actions .btn {
-                font-size: 12px;
-                padding: 8px 14px;
-                min-height: 36px;
+                font-size: 11px;
+                padding: 6px 10px;
+                min-height: 32px;
             }
 
             :root {
@@ -1307,16 +1338,16 @@
 
         @media (max-width: 480px) {
             .app-header .header-title {
-                font-size: 14px;
+                font-size: 13px;
             }
             .app-header .header-title .h4-icon {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .app-header .top-actions .btn {
-                font-size: 11px;
-                padding: 6px 10px;
-                min-height: 32px;
+                font-size: 10px;
+                padding: 4px 8px;
+                min-height: 28px;
             }
 
             .step-container {
@@ -1403,6 +1434,7 @@
                 <span class="h4-icon">⚜️</span> H4 Quotation
             </span>
             <div class="top-actions">
+                <button class="btn btn-history btn-sm" id="historyBtn">📋 History</button>
                 <button class="btn btn-sm" id="clearAllBtn">↻ Clear</button>
                 <button class="btn btn-sm" id="cancelBtn">✕ Cancel</button>
             </div>
@@ -1473,7 +1505,7 @@
                     <button class="btn btn-primary" id="addCustomerBtn">+ Add Customer</button>
                 </div>
 
-                <!-- Customer Details Display -->
+                <!-- Customer Details Display - Auto fills when customer selected -->
                 <div class="customer-details-display" id="customerDetailsDisplay">
                     <div class="detail-row">
                         <span class="label">Name</span>
@@ -1495,6 +1527,7 @@
                 🧾 Convert to Invoice
             </button>
 
+            <!-- NEXT button - large, mobile-friendly, enabled only when customer selected -->
             <div class="step-actions">
                 <div></div>
                 <button class="btn btn-primary btn-lg" id="nextFromCustomer" disabled>
@@ -1880,6 +1913,11 @@
     ============================================================ -->
     <script>
         // ============================================================
+        // LOCAL STORAGE KEY
+        // ============================================================
+        const STORAGE_KEY = 'h4_quotations_v1';
+
+        // ============================================================
         // MOCK DATA
         // ============================================================
 
@@ -1921,163 +1959,9 @@
             }
         };
 
-        let savedQuotations = [{
-            id: 'q1',
-            quotationNumber: 'QTN-0001',
-            customerId: 'c1',
-            customerSnapshot: { name: 'ABC Builders', phone: '9876543210', address: 'Tirur, Malappuram' },
-            projectName: 'Tirur House Project',
-            items: [
-                { name: 'H4 ShieldX Epoxy', quantity: 500, rate: 1200, total: 600000 },
-                { name: 'H4 Waterproofing', quantity: 200, rate: 850, total: 170000 }
-            ],
-            discountEnabled: false,
-            discountType: 'percentage',
-            discountValue: 0,
-            gstRate: 18,
-            subtotal: 770000,
-            discountAmount: 0,
-            taxableAmount: 770000,
-            gstAmount: 138600,
-            grandTotal: 908600,
-            status: 'accepted',
-            convertedToInvoice: null,
-            quotationType: 'epoxy',
-            createdAt: '2026-08-18'
-        }, {
-            id: 'q2',
-            quotationNumber: 'QTN-0002',
-            customerId: 'c2',
-            customerSnapshot: { name: 'XYZ Construction', phone: '9876543211', address: 'Malappuram, Kerala' },
-            projectName: 'Malappuram Commercial Complex',
-            items: [
-                { name: 'H4 Tile Adhesive', quantity: 300, rate: 450, total: 135000 },
-                { name: 'H4 Waterproofing', quantity: 150, rate: 850, total: 127500 }
-            ],
-            discountEnabled: true,
-            discountType: 'percentage',
-            discountValue: 10,
-            gstRate: 18,
-            subtotal: 262500,
-            discountAmount: 26250,
-            taxableAmount: 236250,
-            gstAmount: 42525,
-            grandTotal: 278775,
-            status: 'converted',
-            convertedToInvoice: 'INV-0001',
-            quotationType: 'waterproofing',
-            createdAt: '2026-08-17'
-        }, {
-            id: 'q3',
-            quotationNumber: 'QTN-0003',
-            customerId: 'c3',
-            customerSnapshot: { name: 'Anwar', phone: '9876543212', address: 'Calicut, Kerala' },
-            projectName: 'Calicut Villa',
-            items: [
-                { name: 'H4 ShieldX Epoxy', quantity: 200, rate: 1200, total: 240000 },
-                { name: 'H4 Grout', quantity: 100, rate: 350, total: 35000 }
-            ],
-            discountEnabled: false,
-            discountType: 'percentage',
-            discountValue: 0,
-            gstRate: 18,
-            subtotal: 275000,
-            discountAmount: 0,
-            taxableAmount: 275000,
-            gstAmount: 49500,
-            grandTotal: 324500,
-            status: 'sent',
-            convertedToInvoice: null,
-            quotationType: 'epoxy',
-            createdAt: '2026-08-16'
-        }, {
-            id: 'q4',
-            quotationNumber: 'QTN-0004',
-            customerId: 'c4',
-            customerSnapshot: { name: 'Rahman Constructions', phone: '9876543213', address: 'Kochi, Kerala' },
-            projectName: 'Kochi Showroom',
-            items: [
-                { name: 'H4 Polyurethane', quantity: 100, rate: 950, total: 95000 },
-                { name: 'H4 Acrylic Coating', quantity: 80, rate: 650, total: 52000 }
-            ],
-            discountEnabled: true,
-            discountType: 'fixed',
-            discountValue: 5000,
-            gstRate: 18,
-            subtotal: 147000,
-            discountAmount: 5000,
-            taxableAmount: 142000,
-            gstAmount: 25560,
-            grandTotal: 167560,
-            status: 'accepted',
-            convertedToInvoice: null,
-            quotationType: 'waterproofing',
-            createdAt: '2026-08-15'
-        }, {
-            id: 'q5',
-            quotationNumber: 'QTN-0005',
-            customerId: 'c5',
-            customerSnapshot: { name: 'Sneha Interiors', phone: '9876543214', address: 'Trivandrum, Kerala' },
-            projectName: 'Trivandrum Office',
-            items: [
-                { name: 'H4 Tile Adhesive', quantity: 250, rate: 450, total: 112500 },
-                { name: 'H4 Primer', quantity: 50, rate: 280, total: 14000 }
-            ],
-            discountEnabled: false,
-            discountType: 'percentage',
-            discountValue: 0,
-            gstRate: 18,
-            subtotal: 126500,
-            discountAmount: 0,
-            taxableAmount: 126500,
-            gstAmount: 22770,
-            grandTotal: 149270,
-            status: 'draft',
-            convertedToInvoice: null,
-            quotationType: 'general',
-            createdAt: '2026-08-14'
-        }];
-
-        const quotationService = {
-            async saveQuotation(data) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                const number = 'QTN-' + String(Date.now()).slice(-4).padStart(4, '0');
-                const newQuotation = {
-                    id: 'q' + Date.now(),
-                    quotationNumber: number,
-                    ...data,
-                    createdAt: new Date().toISOString().split('T')[0],
-                    status: data.status || 'draft',
-                    convertedToInvoice: null
-                };
-                savedQuotations.push(newQuotation);
-                return newQuotation;
-            },
-
-            async getQuotations() {
-                return savedQuotations;
-            },
-
-            async getQuotation(id) {
-                return savedQuotations.find(q => q.id === id);
-            },
-
-            async convertToInvoice(quotationId) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                const quotation = savedQuotations.find(q => q.id === quotationId);
-                if (!quotation) throw new Error('Quotation not found');
-                if (quotation.status === 'converted') throw new Error('Already converted');
-
-                const invoiceNumber = 'INV-' + String(Date.now()).slice(-4).padStart(4, '0');
-                quotation.status = 'converted';
-                quotation.convertedToInvoice = invoiceNumber;
-
-                return {
-                    invoiceNumber: invoiceNumber,
-                    quotationData: quotation
-                };
-            }
-        };
+        // ============================================================
+        // NUMBER TO WORDS
+        // ============================================================
 
         function numberToWords(num) {
             if (num === 0) return 'Zero';
@@ -2126,6 +2010,34 @@
         }
 
         // ============================================================
+        // QUOTATION STORAGE
+        // ============================================================
+
+        function loadQuotationsFromStorage() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error('Error loading quotations:', e);
+                return [];
+            }
+        }
+
+        function saveQuotationsToStorage(quotations) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(quotations));
+            } catch (e) {
+                console.error('Error saving quotations:', e);
+            }
+        }
+
+        function generateQuotationNumber() {
+            const existing = loadQuotationsFromStorage();
+            const count = existing.length + 1;
+            return 'QTN-' + String(count).padStart(4, '0');
+        }
+
+        // ============================================================
         // QUOTATION BUILDER CLASS
         // ============================================================
 
@@ -2149,7 +2061,8 @@
                     gstAmount: 0,
                     grandTotal: 0,
                     status: 'draft',
-                    quotationType: 'general'
+                    quotationType: 'general',
+                    createdAt: new Date().toISOString().split('T')[0]
                 };
 
                 this.currentStep = 1;
@@ -2168,18 +2081,34 @@
                 console.log('📝 H4 Quotation Builder initialized');
             }
 
-            showToast(message, type = 'info') {
+            showToast(message, type = 'info', duration = 3500) {
                 const container = document.getElementById('toastContainer');
                 const toast = document.createElement('div');
+                const iconMap = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
                 toast.className = `toast toast-${type}`;
-                toast.textContent = message;
+                toast.innerHTML = `
+                    <span class="toast-icon">${iconMap[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <button class="toast-close">✕</button>
+                `;
                 container.appendChild(toast);
+
+                const closeBtn = toast.querySelector('.toast-close');
+                closeBtn.addEventListener('click', () => {
+                    toast.remove();
+                });
+
                 setTimeout(() => {
                     toast.style.opacity = '0';
                     toast.style.transform = 'translateX(100%)';
                     toast.style.transition = 'all 0.3s ease';
                     setTimeout(() => toast.remove(), 300);
-                }, 3000);
+                }, duration);
             }
 
             showLoading(show) {
@@ -2241,11 +2170,21 @@
 
             validateStep(step) {
                 switch (step) {
-                    case 1: return true;
-                    case 2: return this.validateProject();
-                    case 3: return this.validateItems();
-                    case 4: return this.validatePricing();
-                    default: return true;
+                    case 1:
+                        // Step 1 validation: Customer must be selected
+                        if (!this.hasCustomer || !this.quotation.customerId) {
+                            this.showToast('⚠️ Please select a customer first', 'warning');
+                            return false;
+                        }
+                        return true;
+                    case 2:
+                        return this.validateProject();
+                    case 3:
+                        return this.validateItems();
+                    case 4:
+                        return this.validatePricing();
+                    default:
+                        return true;
                 }
             }
 
@@ -2327,10 +2266,13 @@
                 this.quotation.customerId = customerId;
                 this.quotation.customerSnapshot = customer;
 
+                // Auto-fill customer details
                 document.getElementById('customerDetailsDisplay').style.display = 'block';
                 document.getElementById('detailName').textContent = customer.name;
                 document.getElementById('detailMobile').textContent = customer.phone || 'N/A';
                 document.getElementById('detailAddress').textContent = customer.address || 'N/A';
+
+                // Enable the Next button
                 document.getElementById('nextFromCustomer').disabled = false;
 
                 this.updatePreview();
@@ -2622,6 +2564,88 @@
             }
 
             // ============================================================
+            // SAVE FUNCTIONS - Using localStorage
+            // ============================================================
+
+            saveQuotationToStorage(status) {
+                // Gather all data
+                this.quotation.projectName = document.getElementById('projectName').value.trim();
+                this.quotation.projectDesc = document.getElementById('projectDesc').value;
+                this.quotation.projectReference = document.getElementById('projectReference').value;
+                this.quotation.notes = document.getElementById('pricingNotes').value;
+                this.quotation.status = status;
+                this.quotation.createdAt = new Date().toISOString().split('T')[0];
+
+                // Validate based on status
+                if (status === 'accepted') {
+                    if (!this.hasCustomer || !this.quotation.customerId) {
+                        document.getElementById('customerWarningModal').classList.add('open');
+                        return false;
+                    }
+                    if (!this.quotation.projectName) {
+                        this.showToast('⚠️ Project name is required', 'error');
+                        document.getElementById('projectName').focus();
+                        return false;
+                    }
+                    if (this.quotation.items.length === 0) {
+                        this.showToast('⚠️ Please add at least one item', 'error');
+                        return false;
+                    }
+                    const gstSelect = document.getElementById('gstSelect');
+                    if (!gstSelect.value) {
+                        this.showToast('⚠️ Please select GST rate', 'error');
+                        return false;
+                    }
+                }
+
+                // Generate quotation number
+                const qtnNumber = generateQuotationNumber();
+
+                // Create quotation object
+                const quotationData = {
+                    id: 'q_' + Date.now(),
+                    quotationNumber: qtnNumber,
+                    ...this.quotation,
+                    items: JSON.parse(JSON.stringify(this.quotation.items)),
+                    convertedToInvoice: null
+                };
+
+                // Load existing quotations
+                const existing = loadQuotationsFromStorage();
+
+                // Add new quotation
+                existing.push(quotationData);
+
+                // Save to localStorage
+                saveQuotationsToStorage(existing);
+
+                // Show success message
+                const statusLabel = status === 'draft' ? 'Draft' : 'Quotation';
+                this.showToast(`✅ ${statusLabel} saved successfully!`, 'success');
+
+                // Show the quotation number
+                this.showToast(`📋 ${qtnNumber} saved to history`, 'info', 2000);
+
+                // Don't redirect - stay on page
+                // Just reset the form after a delay
+                setTimeout(() => {
+                    if (confirm('Quotation saved successfully! View history?')) {
+                        window.location.href = 'quotation-history.html';
+                    }
+                }, 1000);
+
+                return true;
+            }
+
+            saveDraft() {
+                this.saveQuotationToStorage('draft');
+            }
+
+            saveFinalQuotation() {
+                this.saveQuotationToStorage('accepted');
+            }
+
+            // ============================================================
             // CONVERT TO INVOICE
             // ============================================================
 
@@ -2655,10 +2679,14 @@
                     return;
                 }
 
-                const results = savedQuotations.filter(q => {
+                // Load from localStorage
+                const allQuotations = loadQuotationsFromStorage();
+
+                // Filter out drafts
+                const results = allQuotations.filter(q => {
                     if (q.status === 'draft') return false;
                     const searchable = [
-                        q.quotationNumber,
+                        q.quotationNumber || '',
                         q.customerSnapshot?.name || '',
                         q.customerSnapshot?.phone || '',
                         q.customerSnapshot?.address || '',
@@ -2692,7 +2720,7 @@
                         <div class="quotation-result-item ${this.selectedConvertQuotation?.id === q.id ? 'selected' : ''}" 
                              data-id="${q.id}" onclick="builder.selectConvertQuotation('${q.id}')">
                             <div class="result-header">
-                                <span class="qtn-no">${q.quotationNumber}</span>
+                                <span class="qtn-no">${q.quotationNumber || 'N/A'}</span>
                                 <span>
                                     <span class="type-badge ${typeClass}">${typeLabel}</span>
                                     <span class="qtn-status ${statusClass}">${isConverted ? 'CONVERTED' : q.status.toUpperCase()}</span>
@@ -2701,7 +2729,7 @@
                             <div class="result-details">
                                 <span>👤 ${q.customerSnapshot?.name || 'Unknown'}</span>
                                 <span>📍 ${q.projectName || 'No site'}</span>
-                                <span>📦 ${q.items.length} items</span>
+                                <span>📦 ${q.items ? q.items.length : 0} items</span>
                             </div>
                             <div class="result-total">₹${(q.grandTotal || 0).toFixed(2)}</div>
                             ${isConverted ? `<div style="font-size:13px;color:var(--success);margin-top:4px;font-weight:600;">✅ Converted to ${q.convertedToInvoice}</div>` : ''}
@@ -2715,7 +2743,8 @@
             }
 
             selectConvertQuotation(id) {
-                const quotation = savedQuotations.find(q => q.id === id);
+                const allQuotations = loadQuotationsFromStorage();
+                const quotation = allQuotations.find(q => q.id === id);
                 if (!quotation) return;
 
                 this.selectedConvertQuotation = quotation;
@@ -2727,7 +2756,7 @@
                 const preview = document.getElementById('quotationDetailPreview');
                 preview.style.display = 'block';
 
-                document.getElementById('previewQtnNo').textContent = quotation.quotationNumber;
+                document.getElementById('previewQtnNo').textContent = quotation.quotationNumber || 'N/A';
                 document.getElementById('previewQtnCustomer').textContent = quotation.customerSnapshot?.name || 'N/A';
                 document.getElementById('previewQtnMobile').textContent = quotation.customerSnapshot?.phone || 'N/A';
                 document.getElementById('previewQtnSite').textContent = quotation.projectName || 'N/A';
@@ -2739,7 +2768,7 @@
                 document.getElementById('previewQtnType').innerHTML = 
                     `<span class="type-badge ${typeClass}">${typeLabel}</span>`;
 
-                const itemNames = quotation.items.map(item => item.name).join(', ');
+                const itemNames = (quotation.items || []).map(item => item.name).join(', ');
                 document.getElementById('previewQtnItems').textContent = itemNames || 'No items';
                 document.getElementById('previewQtnTotal').textContent = `₹${(quotation.grandTotal || 0).toFixed(2)}`;
 
@@ -2777,90 +2806,32 @@
 
                 try {
                     this.showLoading(true);
-                    const result = await quotationService.convertToInvoice(this.selectedConvertQuotation.id);
 
-                    this.showToast(`✅ ${this.selectedConvertQuotation.quotationNumber} converted to ${result.invoiceNumber}`, 'success');
+                    // Update quotation status
+                    const allQuotations = loadQuotationsFromStorage();
+                    const quoteIndex = allQuotations.findIndex(q => q.id === this.selectedConvertQuotation.id);
+                    
+                    if (quoteIndex === -1) {
+                        this.showToast('Quotation not found in storage', 'error');
+                        return;
+                    }
+
+                    const invoiceNumber = 'INV-' + String(Date.now()).slice(-4).padStart(4, '0');
+                    allQuotations[quoteIndex].status = 'converted';
+                    allQuotations[quoteIndex].convertedToInvoice = invoiceNumber;
+                    saveQuotationsToStorage(allQuotations);
+
+                    this.showToast(`✅ ${this.selectedConvertQuotation.quotationNumber} converted to ${invoiceNumber}`, 'success');
                     document.getElementById('convertModal').classList.remove('open');
 
                     setTimeout(() => {
-                        if (confirm(`Invoice ${result.invoiceNumber} created! View it now?`)) {
-                            window.location.href = `invoice.html?invoice=${result.invoiceNumber}`;
+                        if (confirm(`Invoice ${invoiceNumber} created! View it now?`)) {
+                            window.location.href = `invoice.html?invoice=${invoiceNumber}`;
                         }
                     }, 500);
 
                 } catch (error) {
                     this.showToast('Error converting: ' + error.message, 'error');
-                } finally {
-                    this.showLoading(false);
-                }
-            }
-
-            // ============================================================
-            // SAVE
-            // ============================================================
-
-            async saveDraft() {
-                this.quotation.projectName = document.getElementById('projectName').value.trim();
-                this.quotation.projectDesc = document.getElementById('projectDesc').value;
-                this.quotation.projectReference = document.getElementById('projectReference').value;
-                this.quotation.notes = document.getElementById('pricingNotes').value;
-                this.quotation.status = 'draft';
-
-                try {
-                    this.showLoading(true);
-                    const saved = await quotationService.saveQuotation(this.quotation);
-                    this.showToast(`💾 Draft saved: ${saved.quotationNumber}`, 'success');
-                    setTimeout(() => window.location.href = 'quotation-history.html', 1500);
-                } catch (error) {
-                    this.showToast('Error saving draft: ' + error.message, 'error');
-                } finally {
-                    this.showLoading(false);
-                }
-            }
-
-            async saveFinalQuotation() {
-                if (!this.hasCustomer || !this.quotation.customerId) {
-                    document.getElementById('customerWarningModal').classList.add('open');
-                    return;
-                }
-
-                const projectName = document.getElementById('projectName').value.trim();
-                if (!projectName) {
-                    this.showToast('⚠️ Project name is required', 'error');
-                    this.goToPrevStep();
-                    return;
-                }
-
-                if (this.quotation.items.length === 0) {
-                    this.showToast('⚠️ Please add at least one item', 'error');
-                    this.goToPrevStep();
-                    return;
-                }
-
-                const gstSelect = document.getElementById('gstSelect');
-                if (!gstSelect.value) {
-                    this.showToast('⚠️ Please select GST rate', 'error');
-                    this.goToPrevStep();
-                    return;
-                }
-
-                if (!confirm('Are you sure you want to save this as a FINAL quotation?')) {
-                    return;
-                }
-
-                this.quotation.projectName = projectName;
-                this.quotation.projectDesc = document.getElementById('projectDesc').value;
-                this.quotation.projectReference = document.getElementById('projectReference').value;
-                this.quotation.notes = document.getElementById('pricingNotes').value;
-                this.quotation.status = 'accepted';
-
-                try {
-                    this.showLoading(true);
-                    const saved = await quotationService.saveQuotation(this.quotation);
-                    this.showToast(`✅ Quotation saved: ${saved.quotationNumber}`, 'success');
-                    setTimeout(() => window.location.href = 'quotation-history.html', 1500);
-                } catch (error) {
-                    this.showToast('Error saving quotation: ' + error.message, 'error');
                 } finally {
                     this.showLoading(false);
                 }
@@ -2890,7 +2861,8 @@
                     gstAmount: 0,
                     grandTotal: 0,
                     status: 'draft',
-                    quotationType: 'general'
+                    quotationType: 'general',
+                    createdAt: new Date().toISOString().split('T')[0]
                 };
                 this.hasCustomer = false;
                 document.getElementById('customerSelect').value = '';
@@ -2924,11 +2896,18 @@
                 window.location.href = 'quotation-history.html';
             }
 
+            goToHistory() {
+                window.location.href = 'quotation-history.html';
+            }
+
             // ============================================================
             // BIND EVENTS
             // ============================================================
 
             bindEvents() {
+                // History button
+                document.getElementById('historyBtn').addEventListener('click', () => this.goToHistory());
+
                 // Customer
                 document.getElementById('customerSelect').addEventListener('change', () => this.onCustomerSelect());
                 document.getElementById('addCustomerBtn').addEventListener('click', () => this.openAddCustomer());
@@ -3010,7 +2989,7 @@
                     if (e.target === e.currentTarget) document.getElementById('gstModal').classList.remove('open');
                 });
 
-                // Preview
+                // Preview - Save buttons
                 document.getElementById('saveDraftBtn').addEventListener('click', () => this.saveDraft());
                 document.getElementById('saveQuotationBtn').addEventListener('click', () => this.saveFinalQuotation());
 
