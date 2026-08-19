@@ -2081,7 +2081,7 @@
                 console.log('📝 H4 Quotation Builder initialized');
             }
 
-            showToast(message, type = 'info', duration = 3500) {
+            showToast(message, type = 'info', duration = 4000) {
                 const container = document.getElementById('toastContainer');
                 const toast = document.createElement('div');
                 const iconMap = {
@@ -2171,7 +2171,6 @@
             validateStep(step) {
                 switch (step) {
                     case 1:
-                        // Step 1 validation: Customer must be selected
                         if (!this.hasCustomer || !this.quotation.customerId) {
                             this.showToast('⚠️ Please select a customer first', 'warning');
                             return false;
@@ -2266,17 +2265,15 @@
                 this.quotation.customerId = customerId;
                 this.quotation.customerSnapshot = customer;
 
-                // Auto-fill customer details
                 document.getElementById('customerDetailsDisplay').style.display = 'block';
                 document.getElementById('detailName').textContent = customer.name;
                 document.getElementById('detailMobile').textContent = customer.phone || 'N/A';
                 document.getElementById('detailAddress').textContent = customer.address || 'N/A';
 
-                // Enable the Next button
                 document.getElementById('nextFromCustomer').disabled = false;
 
                 this.updatePreview();
-                this.showToast(`✅ Customer selected: ${customer.name}`, 'success');
+                this.showToast(`✅ Customer selected: ${customer.name}`, 'success', 2000);
             }
 
             openAddCustomer() {
@@ -2397,7 +2394,7 @@
                 this.renderItems();
                 this.updatePricing();
                 this.updatePreview();
-                this.showToast(`✅ Added: ${product.name}`, 'success');
+                this.showToast(`✅ Added: ${product.name}`, 'success', 2000);
             }
 
             addAnotherItem() {
@@ -2414,7 +2411,7 @@
                 this.renderItems();
                 this.updatePricing();
                 this.updatePreview();
-                this.showToast('Item removed', 'info');
+                this.showToast('Item removed', 'info', 1500);
             }
 
             renderItems() {
@@ -2564,7 +2561,7 @@
             }
 
             // ============================================================
-            // SAVE FUNCTIONS - Using localStorage
+            // SAVE FUNCTIONS - Using localStorage, NO REDIRECT
             // ============================================================
 
             saveQuotationToStorage(status) {
@@ -2619,20 +2616,13 @@
                 // Save to localStorage
                 saveQuotationsToStorage(existing);
 
-                // Show success message
+                // Show success message - NO REDIRECT
                 const statusLabel = status === 'draft' ? 'Draft' : 'Quotation';
-                this.showToast(`✅ ${statusLabel} saved successfully!`, 'success');
+                this.showToast(`✅ ${statusLabel} saved successfully!`, 'success', 4000);
+                this.showToast(`📋 ${qtnNumber} saved`, 'info', 3000);
 
-                // Show the quotation number
-                this.showToast(`📋 ${qtnNumber} saved to history`, 'info', 2000);
-
-                // Don't redirect - stay on page
-                // Just reset the form after a delay
-                setTimeout(() => {
-                    if (confirm('Quotation saved successfully! View history?')) {
-                        window.location.href = 'quotation-history.html';
-                    }
-                }, 1000);
+                // Clear form after save (optional)
+                // User can continue working or click History button
 
                 return true;
             }
@@ -2679,10 +2669,8 @@
                     return;
                 }
 
-                // Load from localStorage
                 const allQuotations = loadQuotationsFromStorage();
 
-                // Filter out drafts
                 const results = allQuotations.filter(q => {
                     if (q.status === 'draft') return false;
                     const searchable = [
@@ -2807,7 +2795,6 @@
                 try {
                     this.showLoading(true);
 
-                    // Update quotation status
                     const allQuotations = loadQuotationsFromStorage();
                     const quoteIndex = allQuotations.findIndex(q => q.id === this.selectedConvertQuotation.id);
                     
@@ -2824,10 +2811,9 @@
                     this.showToast(`✅ ${this.selectedConvertQuotation.quotationNumber} converted to ${invoiceNumber}`, 'success');
                     document.getElementById('convertModal').classList.remove('open');
 
+                    // Navigate to invoice.html with the invoice number
                     setTimeout(() => {
-                        if (confirm(`Invoice ${invoiceNumber} created! View it now?`)) {
-                            window.location.href = `invoice.html?invoice=${invoiceNumber}`;
-                        }
+                        window.location.href = `invoice.html?invoice=${invoiceNumber}`;
                     }, 500);
 
                 } catch (error) {
@@ -2886,7 +2872,7 @@
                 this.updatePricing();
                 this.updatePreview();
                 this.showStep(1);
-                this.showToast('All data cleared', 'info');
+                this.showToast('All data cleared', 'info', 2000);
             }
 
             cancelQuotation() {
