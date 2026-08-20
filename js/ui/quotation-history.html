@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>H4 Billing ERP - Invoice</title>
+    <style>
+        /* ============================================================
+           RESET & BASE - H4 GOLDEN THEME
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #FFD700;
+            --gold-dark: #D4AF37;
+            --gold-light: #FFE44D;
+            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #F59E0B 100%);
+            
+            --primary: #1a1a2e;
+            --primary-dark: #0d0d1a;
+            --primary-light: #2d2d4a;
+            
+            --bg: #f8f6f0;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --border: #e5e0d5;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --convert: #10b981;
+            --convert-dark: #059669;
+            --header-height: 76px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 16px;
+            padding-top: calc(16px + var(--header-height));
+        }
+
+        /* ============================================================
+           FIXED HEADER - H4 GOLDEN
+           ============================================================ */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary);
+            border-bottom: 3px solid var(--gold);
+            z-index: 100;
+            padding: 12px 20px;
+            box-shadow: 0 4px 20px rgba(26, 26, 46, 0.3);
+        }
+
+        .app-header .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .app-header .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .app-header .header-title .h4-icon {
+            font-size: 22px;
+        }
+
+        .app-header .top-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .app-header .top-actions .btn {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--gold);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            min-height: 40px;
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+
+        .app-header .top-actions .btn:hover {
+            background: rgba(255, 215, 0, 0.25);
+        }
+
+        .app-header .top-actions .btn-history {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+
+        .app-header .top-actions .btn-history:hover {
+            background: rgba(255, 215, 0, 0.35);
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            touch-action: manipulation;
+            min-height: 56px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: var(--gold-gradient);
+            color: var(--primary);
+            box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+        }
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+        }
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-convert {
+            background: var(--convert);
+            color: #fff;
+            font-weight: 700;
+            padding: 16px 24px;
+            font-size: 18px;
+            border: none;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+            justify-content: center;
+            min-height: 60px;
+        }
+        .btn-convert:hover {
+            background: var(--convert-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-sm { padding: 10px 16px; font-size: 14px; min-height: 44px; }
+        .btn-xs { padding: 6px 12px; font-size: 12px; min-height: 32px; }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn-lg { padding: 16px 32px; font-size: 18px; min-height: 60px; }
+
+        /* ============================================================
+           FORM ELEMENTS - LARGE
+           ============================================================ */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        .form-group label .required {
+            color: var(--danger);
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 17px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            -webkit-appearance: none;
+            min-height: 56px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+            padding: 16px 18px;
+            line-height: 1.6;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+        }
+
+        .form-group .input-error {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--danger);
+        }
+
+        .form-group.error .input-error {
+            display: block;
+        }
+
+        .form-group .helper-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ============================================================
+           INVOICE STEPS
+           ============================================================ */
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .step-section {
+            scroll-margin-top: 80px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .step-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .step-actions .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           STEP INDICATORS
+           ============================================================ */
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            position: sticky;
+            top: var(--header-height);
+            z-index: 50;
+            border: 1px solid var(--border);
+        }
+
+        .step-indicator {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: var(--transition);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .step-indicator.active {
+            background: var(--gold-gradient);
+            color: var(--primary);
+            border-color: var(--gold);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
+        }
+
+        .step-indicator.completed {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+
+        .step-indicator .step-label {
+            position: absolute;
+            top: 50px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .step-connector {
+            flex: 1;
+            height: 3px;
+            background: var(--border);
+            align-self: center;
+            max-width: 40px;
+            min-width: 12px;
+            border-radius: 2px;
+        }
+
+        .step-connector.completed {
+            background: var(--gold);
+        }
+
+        /* ============================================================
+           PRICING SUMMARY
+           ============================================================ */
+        .pricing-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .pricing-summary .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            align-items: center;
+        }
+
+        .pricing-summary .summary-item .label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .pricing-summary .summary-item .value {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .pricing-summary .summary-item.total {
+            grid-column: span 2;
+            background: var(--primary);
+            border-color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .pricing-summary .summary-item.total .label {
+            color: var(--gold);
+            font-size: 16px;
+        }
+
+        .pricing-summary .summary-item.total .value {
+            color: var(--gold);
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .discount-toggle {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .discount-toggle .toggle-label {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 56px;
+            height: 32px;
+            background: var(--border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--gold);
+        }
+
+        .toggle-switch .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 26px;
+            height: 26px;
+            background: #fff;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 27px;
+        }
+
+        .discount-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .gst-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            align-items: end;
+        }
+
+        /* ============================================================
+           AMOUNT IN WORDS
+           ============================================================ */
+        .amount-words {
+            padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--gold);
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .amount-words .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .amount-words .words {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 6px;
+        }
+
+        /* ============================================================
+           ITEMS
+           ============================================================ */
+        .items-list {
+            margin: 16px 0;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 0.8fr 1fr 0.6fr 0.4fr;
+            gap: 10px;
+            align-items: center;
+            padding: 14px 16px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .item-row .item-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .item-row .item-details {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .item-row .item-total {
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .item-row .item-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .add-item-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr;
+            gap: 12px;
+            align-items: end;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 2px dashed var(--border);
+        }
+
+        .add-item-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .add-item-form .form-group label {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .add-item-form input,
+        .add-item-form select {
+            padding: 14px 16px;
+            font-size: 16px;
+            min-height: 48px;
+        }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        .toast-container {
+            position: fixed;
+            top: calc(var(--header-height) + 16px);
+            right: 20px;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            max-width: 90%;
+        }
+
+        .toast {
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease;
+            pointer-events: auto;
+            border-left: 5px solid var(--primary);
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast-success { border-left-color: var(--success); }
+        .toast-error { border-left-color: var(--danger); }
+        .toast-warning { border-left-color: var(--warning); }
+        .toast-info { border-left-color: var(--gold); }
+
+        .toast .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0 4px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ============================================================
+           LOADING
+           ============================================================ */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-overlay .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-overlay .text {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+                padding-top: calc(12px + var(--header-height));
+            }
+
+            .app-header {
+                padding: 10px 14px;
+            }
+
+            .app-header .header-title {
+                font-size: 15px;
+            }
+            .app-header .header-title .h4-icon {
+                font-size: 18px;
+            }
+
+            .app-header .top-actions .btn {
+                font-size: 11px;
+                padding: 6px 10px;
+                min-height: 32px;
+            }
+
+            :root {
+                --header-height: 64px;
+            }
+
+            .step-indicators {
+                gap: 4px;
+                padding: 10px 14px;
+                top: var(--header-height);
+            }
+
+            .step-indicator {
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
+            }
+
+            .step-indicator .step-label {
+                display: none;
+            }
+
+            .step-connector {
+                max-width: 24px;
+                min-width: 8px;
+            }
+
+            .step-container {
+                padding: 18px;
+            }
+
+            .step-title {
+                font-size: 20px;
+            }
+
+            .item-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+                padding: 12px;
+            }
+
+            .item-row .item-actions {
+                grid-column: span 2;
+                justify-content: flex-end;
+            }
+
+            .add-item-form {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                padding: 16px;
+            }
+
+            .add-item-form .form-group:last-child {
+                grid-column: span 2;
+            }
+
+            .add-item-form input,
+            .add-item-form select {
+                min-height: 44px;
+                font-size: 15px;
+                padding: 12px 14px;
+            }
+
+            .pricing-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-summary .summary-item.total {
+                grid-column: span 1;
+            }
+
+            .pricing-summary .summary-item.total .value {
+                font-size: 20px;
+            }
+
+            .step-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .step-actions .btn-group {
+                flex-direction: column;
+            }
+
+            .step-actions .btn {
+                justify-content: center;
+            }
+
+            .btn {
+                padding: 12px 18px;
+                font-size: 15px;
+                min-height: 50px;
+            }
+
+            .btn-lg {
+                padding: 14px 24px;
+                font-size: 16px;
+                min-height: 54px;
+            }
+
+            .btn-convert {
+                font-size: 16px;
+                min-height: 54px;
+                padding: 14px 18px;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 16px;
+                padding: 14px 16px;
+                min-height: 50px;
+            }
+
+            .form-group textarea {
+                min-height: 100px;
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
+            .discount-input-group {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .gst-input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .amount-words .words {
+                font-size: 17px;
+            }
+
+            .toast-container {
+                top: calc(var(--header-height) + 12px);
+                right: 12px;
+                left: 12px;
+                max-width: 100%;
+            }
+
+            .toast {
+                font-size: 14px;
+                padding: 14px 18px;
+                min-height: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-header .header-title {
+                font-size: 13px;
+            }
+            .app-header .header-title .h4-icon {
+                font-size: 16px;
+            }
+
+            .app-header .top-actions .btn {
+                font-size: 10px;
+                padding: 4px 8px;
+                min-height: 28px;
+            }
+
+            .step-container {
+                padding: 14px;
+            }
+
+            .step-title {
+                font-size: 18px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 10px 14px;
+                min-height: 44px;
+            }
+
+            .btn-lg {
+                font-size: 14px;
+                min-height: 48px;
+                padding: 12px 18px;
+            }
+
+            .btn-convert {
+                font-size: 15px;
+                min-height: 48px;
+                padding: 12px 16px;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 15px;
+                padding: 12px 14px;
+                min-height: 44px;
+            }
+
+            .form-group textarea {
+                min-height: 80px;
+                font-size: 15px;
+                padding: 12px 14px;
+            }
+
+            .pricing-summary .summary-item {
+                padding: 12px 14px;
+            }
+            .pricing-summary .summary-item .value {
+                font-size: 14px;
+            }
+            .pricing-summary .summary-item.total .value {
+                font-size: 18px;
+            }
+
+            .amount-words .words {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    FIXED HEADER - H4 GOLDEN
+    ============================================================ -->
+    <header class="app-header">
+        <div class="header-top">
+            <span class="header-title">
+                <span class="h4-icon">⚜️</span> Invoice
+            </span>
+            <div class="top-actions">
+                <button class="btn btn-history btn-sm" id="historyBtn">📋 History</button>
+                <button class="btn btn-sm" id="cancelBtn">✕ Cancel</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    LOADING OVERLAY
+    ============================================================ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="text">Loading invoice...</div>
+    </div>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    STEP INDICATORS
+    ============================================================ -->
+    <div class="step-indicators" id="stepIndicators">
+        <div class="step-indicator active" data-step="1">
+            1
+            <span class="step-label">Customer</span>
+        </div>
+        <div class="step-connector" data-connector="1"></div>
+        <div class="step-indicator" data-step="2">
+            2
+            <span class="step-label">Site</span>
+        </div>
+        <div class="step-connector" data-connector="2"></div>
+        <div class="step-indicator" data-step="3">
+            3
+            <span class="step-label">Items</span>
+        </div>
+        <div class="step-connector" data-connector="3"></div>
+        <div class="step-indicator" data-step="4">
+            4
+            <span class="step-label">Pricing</span>
+        </div>
+        <div class="step-connector" data-connector="4"></div>
+        <div class="step-indicator" data-step="5">
+            5
+            <span class="step-label">Actions</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 1: CUSTOMER
+    ============================================================ -->
+    <div class="step active" id="step1">
+        <div class="step-container step-section" id="step1Section">
+            <h2 class="step-title">👤 Customer</h2>
+            <p class="step-description">Customer details from quotation.</p>
+
+            <div class="form-group" id="customerNameGroup">
+                <label>Customer Name <span class="required">*</span></label>
+                <input type="text" id="customerName" readonly style="background:var(--bg);">
+                <div class="input-error">⚠️ Customer name is required</div>
+            </div>
+
+            <div class="form-group">
+                <label>Mobile</label>
+                <input type="text" id="customerMobile" readonly style="background:var(--bg);">
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                <textarea id="customerAddress" readonly style="background:var(--bg);"></textarea>
+            </div>
+
+            <div class="step-actions">
+                <div></div>
+                <button class="btn btn-primary btn-lg" id="nextFromCustomer">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 2: SITE
+    ============================================================ -->
+    <div class="step" id="step2">
+        <div class="step-container step-section" id="step2Section">
+            <h2 class="step-title">📍 Site / Project</h2>
+            <p class="step-description">Project location details.</p>
+
+            <div class="form-group" id="siteNameGroup">
+                <label>Site / Project Name <span class="required">*</span></label>
+                <input type="text" id="siteName" placeholder="Enter site/project name">
+                <div class="input-error">⚠️ Site name is required</div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary btn-lg" id="prevFromSite">← Back</button>
+                <button class="btn btn-primary btn-lg" id="nextFromSite">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 3: ITEMS
+    ============================================================ -->
+    <div class="step" id="step3">
+        <div class="step-container step-section" id="step3Section">
+            <h2 class="step-title">📦 Items</h2>
+            <p class="step-description">Items from quotation.</p>
+
+            <div class="items-list" id="itemsList">
+                <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                    <div style="font-size:32px;margin-bottom:8px;">📭</div>
+                    <p>No items loaded from quotation.</p>
+                </div>
+            </div>
+
+            <div class="add-item-form" id="addItemForm">
+                <div class="form-group" id="itemSelectGroup">
+                    <label>Item <span class="required">*</span></label>
+                    <select id="itemSelect">
+                        <option value="">-- Select Item --</option>
+                    </select>
+                    <div class="input-error">⚠️ Please select an item</div>
+                </div>
+                <div class="form-group" id="itemQtyGroup">
+                    <label>Qty <span class="required">*</span></label>
+                    <input type="number" id="itemQty" value="1" min="0.5" step="0.5">
+                    <div class="input-error">⚠️ Quantity must be greater than 0</div>
+                </div>
+                <div class="form-group">
+                    <label>Rate</label>
+                    <input type="text" id="itemRate" readonly style="background:var(--bg);" value="Auto">
+                </div>
+                <div class="form-group" style="display:flex;align-items:end;">
+                    <button class="btn btn-primary btn-block" id="addItemBtn">➕ Add</button>
+                </div>
+            </div>
+
+            <div style="margin-top:12px;">
+                <button class="btn btn-secondary btn-block" id="addAnotherItemBtn">➕ Add Another Item</button>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary btn-lg" id="prevFromItems">← Back</button>
+                <button class="btn btn-primary btn-lg" id="nextFromItems">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 4: PRICING
+    ============================================================ -->
+    <div class="step" id="step4">
+        <div class="step-container step-section" id="step4Section">
+            <h2 class="step-title">💰 Pricing</h2>
+            <p class="step-description">Configure discount and tax.</p>
+
+            <div class="form-group">
+                <label>Discount</label>
+                <div class="discount-toggle">
+                    <span class="toggle-label">OFF</span>
+                    <div class="toggle-switch" id="discountToggle">
+                        <div class="toggle-knob"></div>
+                    </div>
+                    <span class="toggle-label">ON</span>
+                </div>
+                <div class="discount-input-group" id="discountInputs" style="display:none;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Type</label>
+                        <select id="discountType">
+                            <option value="percentage">%</option>
+                            <option value="fixed">₹</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Value</label>
+                        <input type="number" id="discountValue" value="0" min="0" step="0.5">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="gstGroup">
+                <label>GST Rate <span class="required">*</span></label>
+                <div class="gst-input-group">
+                    <select id="gstSelect">
+                        <option value="">-- Select GST --</option>
+                        <option value="0">0%</option>
+                        <option value="5">5%</option>
+                        <option value="9">9%</option>
+                        <option value="18" selected>18%</option>
+                        <option value="28">28%</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" id="addGstBtn">+ Add GST Rate</button>
+                </div>
+                <div class="input-error">⚠️ Please select GST rate</div>
+            </div>
+
+            <div class="pricing-summary" id="pricingSummary">
+                <div class="summary-item">
+                    <span class="label">Subtotal</span>
+                    <span class="value" id="subtotalDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Discount</span>
+                    <span class="value" id="discountDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Taxable Amount</span>
+                    <span class="value" id="taxableDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">GST Amount</span>
+                    <span class="value" id="gstAmountDisplay">₹0.00</span>
+                </div>
+                <div class="summary-item total">
+                    <span class="label">GRAND TOTAL</span>
+                    <span class="value" id="grandTotalDisplay">₹0.00</span>
+                </div>
+            </div>
+
+            <div class="amount-words">
+                <div class="label">Amount in Words</div>
+                <div class="words" id="amountInWords">Zero</div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary btn-lg" id="prevFromPricing">← Back</button>
+                <button class="btn btn-primary btn-lg" id="nextFromPricing">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STEP 5: ACTIONS
+    ============================================================ -->
+    <div class="step" id="step5">
+        <div class="step-container step-section" id="step5Section">
+            <h2 class="step-title">📄 Invoice Actions</h2>
+            <p class="step-description">Review and save your invoice.</p>
+
+            <div class="preview-content" style="padding:20px;background:var(--bg);border-radius:var(--radius-sm);min-height:100px;border:2px solid var(--border);margin-bottom:16px;">
+                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+                    <span><strong>Invoice No:</strong></span>
+                    <span id="previewInvoiceNo">-</span>
+                </div>
+                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+                    <span><strong>Quotation Ref:</strong></span>
+                    <span id="previewQuotationRef">-</span>
+                </div>
+                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+                    <span><strong>Customer:</strong></span>
+                    <span id="previewCustomer">-</span>
+                </div>
+                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+                    <span><strong>Site:</strong></span>
+                    <span id="previewSite">-</span>
+                </div>
+                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+                    <span><strong>Items:</strong></span>
+                    <span id="previewItemCount">0 items</span>
+                </div>
+                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:2px solid var(--gold);padding-bottom:10px;margin-top:4px;">
+                    <span><strong>Grand Total:</strong></span>
+                    <span id="previewTotal" style="font-size:18px;font-weight:700;color:var(--primary);">₹0.00</span>
+                </div>
+                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:none;padding-top:6px;">
+                    <span><strong>Amount in Words:</strong></span>
+                    <span id="previewWords" style="font-weight:500;">Zero</span>
+                </div>
+            </div>
+
+            <div class="step-actions" style="flex-direction:column;align-items:stretch;gap:12px;">
+                <div class="btn-group" style="display:flex;gap:12px;flex-wrap:wrap;width:100%;">
+                    <button class="btn btn-success btn-lg" id="saveInvoiceBtn" style="flex:1;min-width:150px;">💾 Save Invoice</button>
+                    <button class="btn btn-secondary btn-lg" id="printBtn" style="flex:1;min-width:150px;">🖨️ Print</button>
+                    <button class="btn btn-convert btn-lg" id="whatsappBtn" style="flex:1;min-width:150px;">📱 WhatsApp</button>
+                    <button class="btn btn-primary btn-lg" id="pdfBtn" style="flex:1;min-width:150px;">📄 PDF</button>
+                </div>
+                <button class="btn btn-secondary btn-lg" id="prevFromActions">← Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    CUSTOM GST MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="gstModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Add GST Rate</h3>
+                <button class="modal-close" id="gstModalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Enter GST Rate (%)</label>
+                    <input type="number" id="customGstInput" placeholder="e.g., 12" min="0" max="100" step="0.5">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="gstModalCancel">Cancel</button>
+                <button class="btn btn-primary" id="gstModalAdd">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // LOCAL STORAGE KEYS
+        // ============================================================
+        const STORAGE_KEY = 'h4_quotations_v1';
+        const INVOICE_STORAGE_KEY = 'h4_invoices_v1';
+
+        // ============================================================
+        // MOCK PRODUCTS (for manual add only)
+        // ============================================================
+        const productDatabase = [
+            { id: 'p1', name: 'H4 Tile Adhesive', rate: 450, type: 'general' },
+            { id: 'p2', name: 'H4 Waterproofing', rate: 850, type: 'waterproofing' },
+            { id: 'p3', name: 'H4 ShieldX Epoxy', rate: 1200, type: 'epoxy' },
+            { id: 'p4', name: 'H4 Grout', rate: 350, type: 'general' },
+            { id: 'p5', name: 'H4 Primer', rate: 280, type: 'general' },
+            { id: 'p6', name: 'H4 Acrylic Coating', rate: 650, type: 'waterproofing' },
+            { id: 'p7', name: 'H4 Polyurethane', rate: 950, type: 'waterproofing' },
+            { id: 'p8', name: 'H4 Cement Adhesive', rate: 320, type: 'general' },
+        ];
+
+        // ============================================================
+        // STATE
+        // ============================================================
+
+        let invoiceData = {
+            invoiceNumber: '',
+            quotationNumber: '',
+            quotationId: '',
+            customer: { name: '', phone: '', address: '' },
+            site: '',
+            items: [],
+            discountEnabled: false,
+            discountType: 'percentage',
+            discountValue: 0,
+            discountAmount: 0,
+            gstRate: 18,
+            gstAmount: 0,
+            subtotal: 0,
+            taxableAmount: 0,
+            grandTotal: 0,
+            quotationType: 'general',
+            createdAt: ''
+        };
+
+        let currentStep = 1;
+        let isFromQuotation = false;
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+
+        const toastContainer = document.getElementById('toastContainer');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+
+        function showToast(message, type = 'info', duration = 3500) {
+            const toast = document.createElement('div');
+            const iconMap = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${iconMap[type] || 'ℹ️'}</span>
+                <span>${message}</span>
+                <button class="toast-close">✕</button>
+            `;
+            toastContainer.appendChild(toast);
+
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', () => {
+                toast.remove();
+            });
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        function showLoading(show) {
+            loadingOverlay.classList.toggle('show', show);
+        }
+
+        // ============================================================
+        // NUMBER TO WORDS
+        // ============================================================
+
+        function numberToWords(num) {
+            if (num === 0) return 'Zero';
+            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+                'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+            ];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+            let words = '';
+            let remainder = Math.floor(num);
+
+            if (remainder >= 10000000) {
+                words += ones[Math.floor(remainder / 10000000)] + ' Crore ';
+                remainder %= 10000000;
+            }
+            if (remainder >= 100000) {
+                words += ones[Math.floor(remainder / 100000)] + ' Lakh ';
+                remainder %= 100000;
+            }
+            if (remainder >= 1000) {
+                words += ones[Math.floor(remainder / 1000)] + ' Thousand ';
+                remainder %= 1000;
+            }
+            if (remainder >= 100) {
+                words += ones[Math.floor(remainder / 100)] + ' Hundred ';
+                remainder %= 100;
+            }
+            if (remainder > 0) {
+                if (remainder < 20) {
+                    words += ones[remainder] + ' ';
+                } else {
+                    words += tens[Math.floor(remainder / 10)] + ' ';
+                    if (remainder % 10 > 0) {
+                        words += ones[remainder % 10] + ' ';
+                    }
+                }
+            }
+
+            const paise = Math.round((num - Math.floor(num)) * 100);
+            let finalWords = 'Rupees ' + words.trim();
+            if (paise > 0) {
+                finalWords += ' and ' + numberToWords(paise) + ' Paise';
+            }
+            finalWords += ' Only';
+            return finalWords;
+        }
+
+        // ============================================================
+        // STORAGE FUNCTIONS
+        // ============================================================
+
+        function loadQuotationsFromStorage() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveQuotationsToStorage(data) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (e) {
+                console.error('Error saving quotations:', e);
+            }
+        }
+
+        function loadInvoicesFromStorage() {
+            try {
+                const data = localStorage.getItem(INVOICE_STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveInvoicesToStorage(invoices) {
+            try {
+                localStorage.setItem(INVOICE_STORAGE_KEY, JSON.stringify(invoices));
+            } catch (e) {
+                console.error('Error saving invoices:', e);
+            }
+        }
+
+        // ============================================================
+        // LOAD DATA FROM URL
+        // ============================================================
+
+        function loadDataFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const dataParam = params.get('data');
+
+            if (dataParam) {
+                try {
+                    const decoded = decodeURIComponent(dataParam);
+                    const parsed = JSON.parse(decoded);
+                    
+                    // Preserve rates from quotation - DO NOT override with product database
+                    invoiceData = { ...invoiceData, ...parsed };
+                    isFromQuotation = true;
+                    
+                    // Generate invoice number
+                    const existing = loadInvoicesFromStorage();
+                    const count = existing.length + 1;
+                    invoiceData.invoiceNumber = 'INV-' + String(count).padStart(4, '0');
+                    
+                    showToast('✅ Invoice data loaded from quotation', 'success', 2000);
+                    return true;
+                } catch (e) {
+                    console.error('Error parsing invoice data:', e);
+                    showToast('❌ Error loading invoice data', 'error');
+                    return false;
+                }
+            }
+
+            // Check for invoice param (for viewing existing invoice)
+            const invoiceParam = params.get('invoice');
+            if (invoiceParam) {
+                const invoices = loadInvoicesFromStorage();
+                const found = invoices.find(inv => inv.invoiceNumber === invoiceParam);
+                if (found) {
+                    invoiceData = found;
+                    isFromQuotation = false;
+                    showToast(`📄 Invoice ${invoiceParam} loaded`, 'info', 2000);
+                    return true;
+                }
+                showToast('❌ Invoice not found', 'error');
+                return false;
+            }
+
+            // No data - show empty invoice
+            return false;
+        }
+
+        // ============================================================
+        // STEP NAVIGATION - PRESERVED
+        // ============================================================
+
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            const stepElement = document.getElementById(`step${step}`);
+            if (stepElement) stepElement.classList.add('active');
+            currentStep = step;
+            updateIndicators(step);
+            scrollToStep(document.getElementById(`step${step}Section`));
+        }
+
+        function updateIndicators(step) {
+            const indicators = document.querySelectorAll('.step-indicator');
+            const connectors = document.querySelectorAll('.step-connector');
+            indicators.forEach((el, index) => {
+                const num = index + 1;
+                el.classList.remove('active', 'completed');
+                if (num === step) el.classList.add('active');
+                else if (num < step) el.classList.add('completed');
+            });
+            connectors.forEach((el, index) => {
+                el.classList.toggle('completed', index + 1 < step);
+            });
+        }
+
+        function scrollToStep(element) {
+            if (!element) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return;
+            }
+            if (document.activeElement) document.activeElement.blur();
+            setTimeout(() => {
+                element.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 50);
+        }
+
+        function goToNextStep() {
+            if (!validateStep(currentStep)) return;
+            if (document.activeElement) document.activeElement.blur();
+            if (currentStep < 5) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        function goToPrevStep() {
+            if (document.activeElement) document.activeElement.blur();
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        // ============================================================
+        // VALIDATION - FIXED
+        // ============================================================
+
+        function validateStep(step) {
+            switch (step) {
+                case 1:
+                    return validateCustomer();
+                case 2:
+                    return validateSite();
+                case 3:
+                    return validateItems();
+                case 4:
+                    return validatePricing();
+                default:
+                    return true;
+            }
+        }
+
+        function validateCustomer() {
+            const name = document.getElementById('customerName').value.trim();
+            const group = document.getElementById('customerNameGroup');
+            if (!name) {
+                group.classList.add('error');
+                showToast('⚠️ Customer name is required', 'error');
+                return false;
+            }
+            group.classList.remove('error');
+            return true;
+        }
+
+        function validateSite() {
+            const site = document.getElementById('siteName').value.trim();
+            const group = document.getElementById('siteNameGroup');
+            if (!site) {
+                group.classList.add('error');
+                showToast('⚠️ Site name is required', 'error');
+                return false;
+            }
+            group.classList.remove('error');
+            invoiceData.site = site;
+            return true;
+        }
+
+        function validateItems() {
+            if (invoiceData.items.length === 0) {
+                showToast('⚠️ Please add at least one item', 'error');
+                return false;
+            }
+            for (const item of invoiceData.items) {
+                if (item.rate === 0) {
+                    showToast(`⚠️ Rate not available for "${item.name}"`, 'error');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function validatePricing() {
+            const gstSelect = document.getElementById('gstSelect');
+            const gstGroup = document.getElementById('gstGroup');
+            if (!gstSelect.value) {
+                gstGroup.classList.add('error');
+                showToast('⚠️ Please select GST rate', 'error');
+                return false;
+            }
+            gstGroup.classList.remove('error');
+            return true;
+        }
+
+        // ============================================================
+        // FILL DATA FROM URL
+        // ============================================================
+
+        function fillInvoiceData() {
+            // Customer
+            document.getElementById('customerName').value = invoiceData.customer?.name || '';
+            document.getElementById('customerMobile').value = invoiceData.customer?.phone || '';
+            document.getElementById('customerAddress').value = invoiceData.customer?.address || '';
+
+            // Site
+            document.getElementById('siteName').value = invoiceData.site || '';
+
+            // Items - preserve rates from quotation
+            invoiceData.items.forEach(item => {
+                addItemToList(item);
+            });
+            renderItems();
+
+            // Discount
+            if (invoiceData.discountEnabled) {
+                document.getElementById('discountToggle').classList.add('active');
+                document.getElementById('discountToggle').querySelector('.toggle-knob').style.left = '27px';
+                document.getElementById('discountInputs').style.display = 'grid';
+                document.getElementById('discountType').value = invoiceData.discountType || 'percentage';
+                document.getElementById('discountValue').value = invoiceData.discountValue || 0;
+            }
+
+            // GST
+            if (invoiceData.gstRate) {
+                const gstSelect = document.getElementById('gstSelect');
+                let found = false;
+                for (let i = 0; i < gstSelect.options.length; i++) {
+                    if (parseFloat(gstSelect.options[i].value) === invoiceData.gstRate) {
+                        gstSelect.value = invoiceData.gstRate;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    const option = document.createElement('option');
+                    option.value = invoiceData.gstRate;
+                    option.textContent = invoiceData.gstRate + '%';
+                    gstSelect.appendChild(option);
+                    gstSelect.value = invoiceData.gstRate;
+                }
+            }
+
+            // Update preview
+            updatePreview();
+
+            // Update pricing
+            updatePricing();
+
+            // Enable next button if data loaded
+            if (invoiceData.customer?.name) {
+                document.getElementById('nextFromCustomer').disabled = false;
+            }
+
+            showToast('✅ Invoice data filled successfully', 'success', 2000);
+        }
+
+        // ============================================================
+        // ITEMS - Preserve quotation rates
+        // ============================================================
+
+        function loadItemsDropdown() {
+            const select = document.getElementById('itemSelect');
+            select.innerHTML = '<option value="">-- Select Item --</option>';
+            productDatabase.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = product.name;
+                option.dataset.rate = product.rate;
+                option.dataset.type = product.type;
+                select.appendChild(option);
+            });
+        }
+
+        function onItemSelect() {
+            const select = document.getElementById('itemSelect');
+            const rateInput = document.getElementById('itemRate');
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                const rate = parseFloat(selectedOption.dataset.rate) || 0;
+                if (rate > 0) {
+                    rateInput.value = `₹${rate.toFixed(2)}`;
+                    rateInput.style.color = 'var(--text-primary)';
+                } else {
+                    rateInput.value = '⚠️ Rate not available';
+                    rateInput.style.color = 'var(--danger)';
+                }
+            } else {
+                rateInput.value = 'Auto';
+                rateInput.style.color = 'var(--text-muted)';
+            }
+            document.getElementById('itemSelectGroup').classList.remove('error');
+        }
+
+        function addItem() {
+            const select = document.getElementById('itemSelect');
+            const qtyInput = document.getElementById('itemQty');
+            const qty = parseFloat(qtyInput.value);
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (!selectedOption || !selectedOption.value) {
+                document.getElementById('itemSelectGroup').classList.add('error');
+                showToast('⚠️ Please select an item', 'error');
+                return;
+            }
+            if (!qty || qty <= 0) {
+                document.getElementById('itemQtyGroup').classList.add('error');
+                showToast('⚠️ Quantity must be greater than 0', 'error');
+                return;
+            }
+
+            const product = productDatabase.find(p => p.id === selectedOption.value);
+            if (!product) {
+                showToast('Product not found', 'error');
+                return;
+            }
+
+            const rate = product.rate || 0;
+            if (rate === 0) {
+                showToast(`⚠️ Rate not available for "${product.name}"`, 'error');
+                return;
+            }
+
+            const newItem = {
+                id: 'item_' + Date.now(),
+                name: product.name,
+                quantity: qty,
+                rate: rate,
+                total: qty * rate
+            };
+
+            invoiceData.items.push(newItem);
+
+            select.value = '';
+            document.getElementById('itemRate').value = 'Auto';
+            qtyInput.value = '1';
+            document.getElementById('itemSelectGroup').classList.remove('error');
+            document.getElementById('itemQtyGroup').classList.remove('error');
+
+            renderItems();
+            updatePricing();
+            updatePreview();
+            showToast(`✅ Added: ${product.name}`, 'success', 1500);
+        }
+
+        function addItemToList(item) {
+            // IMPORTANT: Preserve the rate from quotation
+            invoiceData.items.push({
+                id: 'item_' + Date.now(),
+                name: item.name,
+                quantity: item.quantity || 1,
+                rate: item.rate || 0,
+                total: (item.quantity || 1) * (item.rate || 0)
+            });
+        }
+
+        function addAnotherItem() {
+            document.getElementById('addItemForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById('itemSelect').focus();
+        }
+
+        function removeItem(id) {
+            invoiceData.items = invoiceData.items.filter(item => item.id !== id);
+            renderItems();
+            updatePricing();
+            updatePreview();
+            showToast('Item removed', 'info', 1500);
+        }
+
+        function renderItems() {
+            const container = document.getElementById('itemsList');
+            if (invoiceData.items.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                        <div style="font-size:32px;margin-bottom:8px;">📭</div>
+                        <p>No items added yet. Select your first item below.</p>
+                    </div>
+                `;
+                return;
+            }
+            container.innerHTML = invoiceData.items.map((item, index) => `
+                <div class="item-row">
+                    <span class="item-name">${index + 1}. ${item.name}</span>
+                    <span class="item-details">Qty: ${item.quantity}</span>
+                    <span class="item-details">₹${item.rate.toFixed(2)}</span>
+                    <span class="item-total">₹${item.total.toFixed(2)}</span>
+                    <div class="item-actions">
+                        <button class="btn btn-danger btn-xs remove-item-btn" data-id="${item.id}">✕</button>
+                    </div>
+                </div>
+            `).join('');
+            container.querySelectorAll('.remove-item-btn').forEach(btn => {
+                btn.addEventListener('click', () => removeItem(btn.dataset.id));
+            });
+        }
+
+        // ============================================================
+        // PRICING - Live Calculation
+        // ============================================================
+
+        function updatePricing() {
+            const subtotal = invoiceData.items.reduce((sum, item) => sum + (item.total || 0), 0);
+
+            let discountAmount = 0;
+            if (invoiceData.discountEnabled) {
+                const discountValue = invoiceData.discountValue || 0;
+                if (invoiceData.discountType === 'percentage') {
+                    discountAmount = (subtotal * discountValue) / 100;
+                } else {
+                    discountAmount = Math.min(discountValue, subtotal);
+                }
+            }
+
+            const taxableAmount = subtotal - discountAmount;
+            const gstRate = parseFloat(invoiceData.gstRate) || 0;
+            const gstAmount = (taxableAmount * gstRate) / 100;
+            const grandTotal = taxableAmount + gstAmount;
+
+            invoiceData.subtotal = subtotal;
+            invoiceData.discountAmount = discountAmount;
+            invoiceData.taxableAmount = taxableAmount;
+            invoiceData.gstAmount = gstAmount;
+            invoiceData.grandTotal = grandTotal;
+
+            document.getElementById('subtotalDisplay').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)}`;
+            document.getElementById('taxableDisplay').textContent = `₹${taxableAmount.toFixed(2)}`;
+            document.getElementById('gstAmountDisplay').textContent = `₹${gstAmount.toFixed(2)}`;
+            document.getElementById('grandTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
+            document.getElementById('amountInWords').textContent = numberToWords(grandTotal);
+
+            updatePreview();
+        }
+
+        function toggleDiscount() {
+            const toggle = document.getElementById('discountToggle');
+            const inputs = document.getElementById('discountInputs');
+            invoiceData.discountEnabled = toggle.classList.toggle('active');
+            toggle.querySelector('.toggle-knob').style.left = invoiceData.discountEnabled ? '27px' : '3px';
+            inputs.style.display = invoiceData.discountEnabled ? 'grid' : 'none';
+            if (!invoiceData.discountEnabled) {
+                invoiceData.discountValue = 0;
+                document.getElementById('discountValue').value = 0;
+            }
+            updatePricing();
+        }
+
+        function onDiscountChange() {
+            invoiceData.discountType = document.getElementById('discountType').value;
+            invoiceData.discountValue = parseFloat(document.getElementById('discountValue').value) || 0;
+            updatePricing();
+        }
+
+        function onGstChange() {
+            const select = document.getElementById('gstSelect');
+            if (select.value) {
+                invoiceData.gstRate = parseFloat(select.value);
+                document.getElementById('gstGroup').classList.remove('error');
+                updatePricing();
+            }
+        }
+
+        function addCustomGst() {
+            document.getElementById('gstModal').classList.add('open');
+            document.getElementById('customGstInput').value = '';
+            document.getElementById('customGstInput').focus();
+        }
+
+        function saveCustomGst() {
+            const input = document.getElementById('customGstInput');
+            const value = parseFloat(input.value);
+            if (!value || value <= 0) {
+                showToast('Please enter a valid GST rate', 'error');
+                return;
+            }
+            const select = document.getElementById('gstSelect');
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value + '%';
+            select.appendChild(option);
+            select.value = value;
+            invoiceData.gstRate = value;
+            document.getElementById('gstGroup').classList.remove('error');
+            document.getElementById('gstModal').classList.remove('open');
+            showToast(`✅ GST ${value}% added`, 'success');
+            updatePricing();
+        }
+
+        // ============================================================
+        // UPDATE PREVIEW
+        // ============================================================
+
+        function updatePreview() {
+            const invoiceNo = invoiceData.invoiceNumber || 'INV-XXXX';
+            const qtnRef = invoiceData.quotationNumber || '-';
+            const customer = invoiceData.customer?.name || 'No customer';
+            const site = invoiceData.site || 'No site';
+
+            document.getElementById('previewInvoiceNo').textContent = invoiceNo;
+            document.getElementById('previewQuotationRef').textContent = qtnRef;
+            document.getElementById('previewCustomer').textContent = customer;
+            document.getElementById('previewSite').textContent = site;
+            document.getElementById('previewItemCount').textContent = `${invoiceData.items.length} items`;
+            document.getElementById('previewTotal').textContent = `₹${invoiceData.grandTotal.toFixed(2)}`;
+            document.getElementById('previewWords').textContent = numberToWords(invoiceData.grandTotal);
+        }
+
+        // ============================================================
+        // SAVE INVOICE - Update Quotation Status
+        // ============================================================
+
+        function saveInvoice() {
+            // Validate
+            if (!validateCustomer()) return;
+            if (!validateSite()) return;
+            if (!validateItems()) return;
+            if (!validatePricing()) return;
+
+            // Generate invoice number if not set
+            if (!invoiceData.invoiceNumber) {
+                const existing = loadInvoicesFromStorage();
+                const count = existing.length + 1;
+                invoiceData.invoiceNumber = 'INV-' + String(count).padStart(4, '0');
+            }
+
+            // Save site
+            invoiceData.site = document.getElementById('siteName').value.trim();
+
+            // Save to storage
+            const existing = loadInvoicesFromStorage();
+            const index = existing.findIndex(inv => inv.invoiceNumber === invoiceData.invoiceNumber);
+            if (index !== -1) {
+                existing[index] = invoiceData;
+            } else {
+                existing.push(invoiceData);
+            }
+            saveInvoicesToStorage(existing);
+
+            // ✅ IMPORTANT: Update Quotation Status
+            if (invoiceData.quotationId) {
+                const quotations = loadQuotationsFromStorage();
+                const qIndex = quotations.findIndex(q => q.id === invoiceData.quotationId);
+                if (qIndex !== -1) {
+                    quotations[qIndex].status = 'converted';
+                    quotations[qIndex].convertedToInvoice = invoiceData.invoiceNumber;
+                    saveQuotationsToStorage(quotations);
+                    showToast(`✅ Quotation ${quotations[qIndex].quotationNumber} marked as CONVERTED`, 'success', 3000);
+                }
+            }
+
+            showToast(`✅ Invoice ${invoiceData.invoiceNumber} saved successfully!`, 'success');
+
+            // Update preview
+            updatePreview();
+        }
+
+        // ============================================================
+        // PRINT / WHATSAPP / PDF
+        // ============================================================
+
+        function printInvoice() {
+            showToast('🖨️ Printing invoice...', 'info', 2000);
+            window.print();
+        }
+
+        function whatsappInvoice() {
+            const customerName = invoiceData.customer?.name || 'Customer';
+            const total = invoiceData.grandTotal || 0;
+            const invoiceNo = invoiceData.invoiceNumber || 'INV-XXXX';
+            
+            const msg = `🏢 *H4 Billing ERP*
+📄 *Invoice: ${invoiceNo}*
+👤 *Customer:* ${customerName}
+💰 *Amount:* ₹${total.toFixed(2)}
+
+Thank you for your business! 🙏`;
+            
+            const encoded = encodeURIComponent(msg);
+            window.open(`https://wa.me/?text=${encoded}`, '_blank');
+            showToast('📱 Opening WhatsApp...', 'info', 2000);
+        }
+
+        function pdfInvoice() {
+            showToast('📄 Generating PDF...', 'info', 2000);
+            window.print();
+        }
+
+        // ============================================================
+        // BIND EVENTS
+        // ============================================================
+
+        function bindEvents() {
+            // Navigation
+            document.getElementById('nextFromCustomer').addEventListener('click', goToNextStep);
+            document.getElementById('nextFromSite').addEventListener('click', goToNextStep);
+            document.getElementById('nextFromItems').addEventListener('click', goToNextStep);
+            document.getElementById('nextFromPricing').addEventListener('click', goToNextStep);
+
+            document.getElementById('prevFromSite').addEventListener('click', goToPrevStep);
+            document.getElementById('prevFromItems').addEventListener('click', goToPrevStep);
+            document.getElementById('prevFromPricing').addEventListener('click', goToPrevStep);
+            document.getElementById('prevFromActions').addEventListener('click', goToPrevStep);
+
+            // Site
+            document.getElementById('siteName').addEventListener('input', () => {
+                document.getElementById('siteNameGroup').classList.remove('error');
+            });
+
+            // Items
+            document.getElementById('itemSelect').addEventListener('change', onItemSelect);
+            document.getElementById('itemQty').addEventListener('input', () => {
+                document.getElementById('itemQtyGroup').classList.remove('error');
+            });
+            document.getElementById('addItemBtn').addEventListener('click', addItem);
+            document.getElementById('addAnotherItemBtn').addEventListener('click', addAnotherItem);
+            document.getElementById('itemQty').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); addItem(); }
+            });
+
+            // Pricing
+            document.getElementById('discountToggle').addEventListener('click', toggleDiscount);
+            document.getElementById('discountType').addEventListener('change', onDiscountChange);
+            document.getElementById('discountValue').addEventListener('input', onDiscountChange);
+            document.getElementById('gstSelect').addEventListener('change', onGstChange);
+            document.getElementById('addGstBtn').addEventListener('click', addCustomGst);
+
+            // GST Modal
+            document.getElementById('gstModalClose').addEventListener('click', () => {
+                document.getElementById('gstModal').classList.remove('open');
+            });
+            document.getElementById('gstModalCancel').addEventListener('click', () => {
+                document.getElementById('gstModal').classList.remove('open');
+            });
+            document.getElementById('gstModalAdd').addEventListener('click', saveCustomGst);
+            document.getElementById('customGstInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); saveCustomGst(); }
+            });
+            document.getElementById('gstModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) document.getElementById('gstModal').classList.remove('open');
+            });
+
+            // Actions
+            document.getElementById('saveInvoiceBtn').addEventListener('click', saveInvoice);
+            document.getElementById('printBtn').addEventListener('click', printInvoice);
+            document.getElementById('whatsappBtn').addEventListener('click', whatsappInvoice);
+            document.getElementById('pdfBtn').addEventListener('click', pdfInvoice);
+
+            // Header
+            document.getElementById('historyBtn').addEventListener('click', () => {
+                window.location.href = 'quotation-history.html';
+            });
+            document.getElementById('cancelBtn').addEventListener('click', () => {
+                if (invoiceData.items.length > 0) {
+                    if (!confirm('You have unsaved data. Are you sure you want to cancel?')) return;
+                }
+                window.location.href = 'quotation-history.html';
+            });
+
+            // ESC key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay.open').forEach(modal => {
+                        modal.classList.remove('open');
+                    });
+                }
+            });
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+
+        function init() {
+            showLoading(true);
+
+            // Load products dropdown
+            loadItemsDropdown();
+
+            // Load data from URL
+            const hasData = loadDataFromURL();
+
+            if (hasData) {
+                fillInvoiceData();
+            } else {
+                // Empty invoice - user can create manually
+                showToast('📝 Create a new invoice', 'info', 3000);
+                const existing = loadInvoicesFromStorage();
+                const count = existing.length + 1;
+                invoiceData.invoiceNumber = 'INV-' + String(count).padStart(4, '0');
+                updatePreview();
+            }
+
+            // Bind events
+            bindEvents();
+
+            showLoading(false);
+            console.log('⚜️ H4 Invoice loaded successfully');
+        }
+
+        // Make functions globally accessible for inline onclick
+        window.removeItem = removeItem;
+
+        // Run init
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>
