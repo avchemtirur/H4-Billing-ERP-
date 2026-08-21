@@ -915,6 +915,12 @@
     <!-- ============================================================
     JAVASCRIPT
     ============================================================ -->
+    
+    <!-- ============================================================
+    FORM NAVIGATION - Load before Product Master JS
+    ============================================================ -->
+    <script src="./js/form-navigation.js"></script>
+
     <script>
         // ============================================================
         // H4 PRODUCT MASTER - COMPLETE FIXED VERSION
@@ -1678,6 +1684,66 @@
             }
 
             // ============================================================
+            // FORM NAVIGATION SETUP
+            // ============================================================
+
+            function setupFormNavigation() {
+                // This function sets up Enter key navigation through form fields
+                // Using the H4FormNavigation utility if available
+                if (typeof H4FormNavigation !== 'undefined' && H4FormNavigation.setup) {
+                    const fieldIds = [
+                        'productCode',
+                        'productName',
+                        'productCategory',
+                        'productBrand',
+                        'productDescription',
+                        'productUnit',
+                        'productHsn',
+                        'productGst',
+                        'productRate',
+                        'productCost',
+                        'productDealerPrice',
+                        'productContractorPrice',
+                        'productMrp',
+                        'productOpeningStock',
+                        'productMinStock'
+                    ];
+                    
+                    // Filter out fields that don't exist on the page
+                    const existingFields = fieldIds.filter(id => document.getElementById(id) !== null);
+                    
+                    if (existingFields.length > 0) {
+                        H4FormNavigation.setup(existingFields);
+                        console.log('📋 Form navigation setup complete');
+                    }
+                } else {
+                    // Fallback: manual Enter key navigation
+                    const fields = document.querySelectorAll('#productModal input, #productModal select, #productModal textarea');
+                    fields.forEach((field, index) => {
+                        field.addEventListener('keydown', function(e) {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                const nextField = fields[index + 1];
+                                if (nextField) {
+                                    nextField.focus();
+                                    if (nextField.type === 'select-one') {
+                                        nextField.click();
+                                    }
+                                } else {
+                                    // Last field - trigger save
+                                    const saveBtn = document.getElementById('modalSave');
+                                    if (saveBtn) {
+                                        saveBtn.click();
+                                    }
+                                }
+                            }
+                        });
+                    });
+                    console.log('📋 Manual form navigation setup complete');
+                }
+            }
+
+            // ============================================================
             // INIT
             // ============================================================
 
@@ -1687,6 +1753,7 @@
                 renderProducts();
                 setupImageUpload();
                 setupStockStatus();
+                setupFormNavigation(); // New: Form navigation setup
                 bindEvents();
                 console.log('📦 H4 Product Master loaded successfully');
                 console.log(`📋 ${products.length} products loaded`);
