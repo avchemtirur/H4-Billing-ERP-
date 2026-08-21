@@ -1,2036 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <meta name="theme-color" content="#6C3BC5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>H4 Billing ERP</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="./assets/icons/icon-512.png">
-    
-    <!-- CSS Imports -->
+    <!-- ============================================================
+    H4 CSS FILES
+    ============================================================ -->
     <link rel="stylesheet" href="./css/app.css">
     <link rel="stylesheet" href="./css/mobile.css">
     <link rel="stylesheet" href="./css/desktop.css">
     <link rel="stylesheet" href="./css/print.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        
-        <!-- ============================================================
-        LOADING SCREEN
-        ============================================================ -->
-        <div id="loadingScreen" role="status" aria-label="Loading H4 Billing ERP">
-            <div class="loader-container">
-                <div class="loader-spinner"></div>
-                <div class="loader-logo">H4</div>
-                <p class="loader-text">Loading H4 Billing ERP...</p>
-                <p class="loader-sub">Initializing application</p>
-                <div class="loader-progress">
-                    <div class="loader-progress-bar" id="loaderProgressBar"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- ============================================================
-        HEADER
-        ============================================================ -->
-        <header id="appHeader" role="banner">
-            <div class="header-left">
-                <button id="menuToggle" class="menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
-                    <span class="menu-icon"></span>
-                    <span class="menu-icon"></span>
-                    <span class="menu-icon"></span>
-                </button>
-                <div class="brand-wrapper">
-                    <span class="brand-icon">H4</span>
-                    <span id="appTitle" class="brand-text">H4 Billing ERP</span>
-                </div>
-            </div>
-            
-            <div class="header-center">
-                <div class="search-wrapper" id="globalSearchWrapper">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="globalSearchInput" placeholder="Search customers, products, invoices..." aria-label="Global search" class="global-search-input">
-                    <button id="globalSearchClear" class="search-clear" aria-label="Clear search" style="display:none;">✕</button>
-                </div>
-            </div>
-            
-            <div class="header-right">
-                <span id="connectionStatus" class="connection-status online" role="status" aria-live="polite">
-                    <span class="status-dot"></span>
-                    <span class="status-text">Online</span>
-                </span>
-                
-                <div class="header-controls">
-                    <button id="scaleToggle" class="scale-btn" aria-label="Toggle UI scale" title="Scale: 100%">
-                        <span class="scale-icon">Aa</span>
-                        <span class="scale-value">100%</span>
-                    </button>
-                    <button id="themeToggle" class="theme-btn" aria-label="Toggle dark/light theme" title="Toggle theme">
-                        <span class="theme-icon">🌙</span>
-                    </button>
-                </div>
-            </div>
-        </header>
-        
-        <!-- ============================================================
-        SIDEBAR NAVIGATION
-        ============================================================ -->
-        <nav id="sideMenu" role="navigation" aria-label="Main navigation">
-            <div class="nav-header">
-                <span class="nav-brand">H4 Billing ERP</span>
-                <button id="navCloseBtn" class="nav-close" aria-label="Close navigation menu">✕</button>
-            </div>
-            
-            <ul class="nav-list" id="navList">
-                <!-- Dashboard -->
-                <li>
-                    <a href="#dashboard" data-page="dashboard" class="nav-link active" data-nav="dashboard">
-                        <span class="nav-icon">📊</span>
-                        <span class="nav-label">Dashboard</span>
-                    </a>
-                </li>
-                
-                <!-- Invoices -->
-                <li class="nav-section">
-                    <span class="nav-section-label">INVOICES</span>
-                </li>
-                <li>
-                    <a href="#invoice" data-page="invoice" class="nav-link" data-nav="invoice">
-                        <span class="nav-icon">🧾</span>
-                        <span class="nav-label">New Invoice</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#invoiceHistory" data-page="invoiceHistory" class="nav-link" data-nav="invoiceHistory">
-                        <span class="nav-icon">📋</span>
-                        <span class="nav-label">Invoice History</span>
-                    </a>
-                </li>
-                
-                <!-- Quotations -->
-                <li class="nav-section">
-                    <span class="nav-section-label">QUOTATIONS</span>
-                </li>
-                <li>
-                    <a href="#quotation" data-page="quotation" class="nav-link" data-nav="quotation">
-                        <span class="nav-icon">📄</span>
-                        <span class="nav-label">New Quotation</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#quotationHistory" data-page="quotationHistory" class="nav-link" data-nav="quotationHistory">
-                        <span class="nav-icon">📑</span>
-                        <span class="nav-label">Quotation History</span>
-                    </a>
-                </li>
-                
-                <!-- Masters -->
-                <li class="nav-section">
-                    <span class="nav-section-label">MASTERS</span>
-                </li>
-                <li>
-                    <a href="#products" data-page="products" class="nav-link" data-nav="products">
-                        <span class="nav-icon">📦</span>
-                        <span class="nav-label">Products</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#customers" data-page="customers" class="nav-link" data-nav="customers">
-                        <span class="nav-icon">👥</span>
-                        <span class="nav-label">Customers</span>
-                    </a>
-                </li>
-                
-                <!-- Transactions -->
-                <li class="nav-section">
-                    <span class="nav-section-label">TRANSACTIONS</span>
-                </li>
-                <li>
-                    <a href="#payments" data-page="payments" class="nav-link" data-nav="payments">
-                        <span class="nav-icon">💰</span>
-                        <span class="nav-label">Payments</span>
-                    </a>
-                </li>
-                
-                <!-- Configuration -->
-                <li class="nav-section">
-                    <span class="nav-section-label">CONFIGURATION</span>
-                </li>
-                <li>
-                    <a href="#templates" data-page="templates" class="nav-link" data-nav="templates">
-                        <span class="nav-icon">🎨</span>
-                        <span class="nav-label">Templates</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#companySettings" data-page="companySettings" class="nav-link" data-nav="companySettings">
-                        <span class="nav-icon">🏢</span>
-                        <span class="nav-label">Company</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#settings" data-page="settings" class="nav-link" data-nav="settings">
-                        <span class="nav-icon">⚙️</span>
-                        <span class="nav-label">Settings</span>
-                    </a>
-                </li>
-                
-                <!-- System -->
-                <li class="nav-section">
-                    <span class="nav-section-label">SYSTEM</span>
-                </li>
-                <li>
-                    <a href="#backup" data-page="backup" class="nav-link" data-nav="backup">
-                        <span class="nav-icon">💾</span>
-                        <span class="nav-label">Backup & Restore</span>
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="nav-footer">
-                <span class="nav-version">v2.0.0</span>
-                <span class="nav-status" id="navConnectionStatus">● Online</span>
-                <span class="nav-db-status" id="navDbStatus">● DB Connected</span>
-            </div>
-        </nav>
-        
-        <!-- ============================================================
-        MAIN CONTENT
-        ============================================================ -->
-        <main id="mainContent" role="main">
-            
-            <!-- ============================================================
-            DASHBOARD
-            ============================================================ -->
-            <section id="dashboard" class="page active" aria-label="Dashboard">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Dashboard</h1>
-                        <p class="page-subtitle">Overview of your business</p>
-                    </div>
-                    <div class="page-header-right">
-                        <span id="dashboardLastUpdate" class="last-update">Last updated: just now</span>
-                    </div>
-                </div>
-                
-                <!-- Quick Actions -->
-                <div class="quick-actions" role="toolbar" aria-label="Quick actions">
-                    <button id="newInvoiceBtn" class="qa-btn primary" aria-label="Create new invoice">
-                        <span class="qa-icon">🧾</span>
-                        <span class="qa-label">New Invoice</span>
-                    </button>
-                    <button id="newQuotationBtn" class="qa-btn secondary" aria-label="Create new quotation">
-                        <span class="qa-icon">📄</span>
-                        <span class="qa-label">New Quotation</span>
-                    </button>
-                    <button id="addCustomerBtn" class="qa-btn tertiary" aria-label="Add new customer">
-                        <span class="qa-icon">👤</span>
-                        <span class="qa-label">Add Customer</span>
-                    </button>
-                    <button id="addProductBtn" class="qa-btn tertiary" aria-label="Add new product">
-                        <span class="qa-icon">📦</span>
-                        <span class="qa-label">Add Product</span>
-                    </button>
-                    <button id="recordPaymentBtn" class="qa-btn tertiary" aria-label="Record payment">
-                        <span class="qa-icon">💰</span>
-                        <span class="qa-label">Record Payment</span>
-                    </button>
-                </div>
-                
-                <!-- KPI Cards -->
-                <div class="kpi-grid">
-                    <div class="kpi-card" id="totalSales">
-                        <span class="kpi-icon">💰</span>
-                        <span class="kpi-value">₹0.00</span>
-                        <span class="kpi-label">Total Sales</span>
-                    </div>
-                    <div class="kpi-card" id="totalInvoices">
-                        <span class="kpi-icon">🧾</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Total Invoices</span>
-                    </div>
-                    <div class="kpi-card" id="totalQuotations">
-                        <span class="kpi-icon">📄</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Total Quotations</span>
-                    </div>
-                    <div class="kpi-card" id="totalCustomers">
-                        <span class="kpi-icon">👥</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Total Customers</span>
-                    </div>
-                    <div class="kpi-card" id="totalProducts">
-                        <span class="kpi-icon">📦</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Total Products</span>
-                    </div>
-                    <div class="kpi-card" id="totalPaid">
-                        <span class="kpi-icon">✅</span>
-                        <span class="kpi-value">₹0.00</span>
-                        <span class="kpi-label">Total Paid</span>
-                    </div>
-                    <div class="kpi-card" id="totalOutstanding">
-                        <span class="kpi-icon">⏳</span>
-                        <span class="kpi-value">₹0.00</span>
-                        <span class="kpi-label">Outstanding</span>
-                    </div>
-                    <div class="kpi-card" id="todaySales">
-                        <span class="kpi-icon">📊</span>
-                        <span class="kpi-value">₹0.00</span>
-                        <span class="kpi-label">Today's Sales</span>
-                    </div>
-                    <div class="kpi-card" id="monthSales">
-                        <span class="kpi-icon">📈</span>
-                        <span class="kpi-value">₹0.00</span>
-                        <span class="kpi-label">This Month Sales</span>
-                    </div>
-                    <div class="kpi-card" id="monthCollection">
-                        <span class="kpi-icon">🏦</span>
-                        <span class="kpi-value">₹0.00</span>
-                        <span class="kpi-label">Month Collection</span>
-                    </div>
-                    <div class="kpi-card" id="unpaidCount">
-                        <span class="kpi-icon">🔴</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Unpaid</span>
-                    </div>
-                    <div class="kpi-card" id="partialCount">
-                        <span class="kpi-icon">🟡</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Partially Paid</span>
-                    </div>
-                    <div class="kpi-card" id="paidCount">
-                        <span class="kpi-icon">🟢</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Paid</span>
-                    </div>
-                </div>
-                
-                <!-- Quotation Metrics -->
-                <div class="section-title">
-                    <h2>Quotation Metrics</h2>
-                </div>
-                <div class="kpi-grid">
-                    <div class="kpi-card" id="quotationConversionRate">
-                        <span class="kpi-icon">🔄</span>
-                        <span class="kpi-value">0%</span>
-                        <span class="kpi-label">Conversion Rate</span>
-                    </div>
-                    <div class="kpi-card" id="pendingQuotations">
-                        <span class="kpi-icon">⏳</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Pending Quotations</span>
-                    </div>
-                    <div class="kpi-card" id="acceptedQuotations">
-                        <span class="kpi-icon">✅</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Accepted</span>
-                    </div>
-                    <div class="kpi-card" id="expiredQuotations">
-                        <span class="kpi-icon">⛔</span>
-                        <span class="kpi-value">0</span>
-                        <span class="kpi-label">Expired</span>
-                    </div>
-                </div>
-                
-                <!-- Recent Activity -->
-                <div class="activity-grid">
-                    <div class="activity-card">
-                        <div class="activity-header">
-                            <h3>Recent Invoices</h3>
-                            <a href="#invoiceHistory" class="view-all">View All</a>
-                        </div>
-                        <div id="recentInvoices" class="activity-list">
-                            <p class="empty-state">No recent invoices</p>
-                        </div>
-                    </div>
-                    <div class="activity-card">
-                        <div class="activity-header">
-                            <h3>Recent Quotations</h3>
-                            <a href="#quotationHistory" class="view-all">View All</a>
-                        </div>
-                        <div id="recentQuotations" class="activity-list">
-                            <p class="empty-state">No recent quotations</p>
-                        </div>
-                    </div>
-                    <div class="activity-card">
-                        <div class="activity-header">
-                            <h3>Recent Payments</h3>
-                            <a href="#payments" class="view-all">View All</a>
-                        </div>
-                        <div id="recentPayments" class="activity-list">
-                            <p class="empty-state">No recent payments</p>
-                        </div>
-                    </div>
-                    <div class="activity-card">
-                        <div class="activity-header">
-                            <h3>Top Customers</h3>
-                        </div>
-                        <div id="topCustomers" class="activity-list">
-                            <p class="empty-state">No customer data</p>
-                        </div>
-                    </div>
-                    <div class="activity-card">
-                        <div class="activity-header">
-                            <h3>Top Products</h3>
-                        </div>
-                        <div id="topProducts" class="activity-list">
-                            <p class="empty-state">No product data</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            INVOICE
-            ============================================================ -->
-            <section id="invoice" class="page" aria-label="New Invoice">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>New Invoice</h1>
-                        <p class="page-subtitle">Create a new invoice</p>
-                    </div>
-                    <div class="page-header-right">
-                        <button id="invoiceTogglePreview" class="toggle-preview-btn" aria-label="Toggle preview">
-                            👁️ Preview
-                        </button>
-                    </div>
-                </div>
-                
-                <div id="invoiceBuilder" class="document-builder">
-                    <!-- Invoice Header -->
-                    <div id="invoiceHeader" class="doc-header">
-                        <div class="doc-title-area">
-                            <h2>INVOICE</h2>
-                            <span id="invoiceNumberDisplay" class="doc-number">INV-0001</span>
-                        </div>
-                        <div class="doc-date-area">
-                            <div class="date-field">
-                                <label for="invoiceDate">Date</label>
-                                <input type="date" id="invoiceDate" class="doc-date-input">
-                            </div>
-                            <div class="date-field">
-                                <label for="invoiceDueDate">Due Date</label>
-                                <input type="date" id="invoiceDueDate" class="doc-date-input">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Customer Section -->
-                    <div id="invoiceCustomerSection" class="doc-customer-section">
-                        <label for="invoiceCustomerSelect">Customer</label>
-                        <div class="customer-select-wrapper">
-                            <select id="invoiceCustomerSelect" class="customer-select" aria-label="Select customer">
-                                <option value="">Select Customer</option>
-                            </select>
-                            <button id="invoiceAddCustomerBtn" class="add-btn" aria-label="Add new customer">+ Add New</button>
-                        </div>
-                        <div id="invoiceCustomerDetails" class="customer-details"></div>
-                    </div>
-                    
-                    <!-- Metadata -->
-                    <div id="invoiceMetaSection" class="doc-meta-section">
-                        <div class="meta-field">
-                            <label for="invoiceReference">Reference / PO Number</label>
-                            <input type="text" id="invoiceReference" placeholder="Reference number" class="meta-input">
-                        </div>
-                        <div class="meta-field">
-                            <label for="invoicePaymentTerms">Payment Terms</label>
-                            <input type="text" id="invoicePaymentTerms" placeholder="e.g., 30 days" class="meta-input">
-                        </div>
-                    </div>
-                    
-                    <!-- Items -->
-                    <div id="invoiceItemsContainer" class="doc-items-container">
-                        <div class="items-header">
-                            <h3>Items</h3>
-                            <button id="addInvoiceItemBtn" class="add-item-btn">+ Add Item</button>
-                        </div>
-                        <div id="invoiceItemCardsContainer" class="item-cards-container">
-                            <p class="empty-state">No items added. Click "Add Item" to start.</p>
-                        </div>
-                        <div id="invoiceItemTableContainer" class="item-table-container" style="display:none;">
-                            <!-- Table view for desktop -->
-                        </div>
-                    </div>
-                    
-                    <!-- Document Level Discount -->
-                    <div id="invoiceDiscountSection" class="doc-discount-section">
-                        <div class="discount-header">
-                            <h4>Document Discount</h4>
-                            <div class="discount-toggle">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="invoiceDiscountEnabled" class="discount-toggle-input">
-                                    <span class="toggle-slider"></span>
-                                    Enable Discount
-                                </label>
-                            </div>
-                        </div>
-                        <div id="invoiceDiscountDetails" class="discount-details" style="display:none;">
-                            <div class="discount-row">
-                                <div class="discount-field">
-                                    <label for="invoiceDiscountType">Discount Type</label>
-                                    <select id="invoiceDiscountType" class="discount-type-select">
-                                        <option value="none">No Discount</option>
-                                        <option value="percentage">Percentage (%)</option>
-                                        <option value="flat">Flat Amount (₹)</option>
-                                    </select>
-                                </div>
-                                <div class="discount-field">
-                                    <label for="invoiceDiscountValue">Discount Value</label>
-                                    <input type="number" id="invoiceDiscountValue" placeholder="0" class="discount-input" inputmode="decimal" min="0" step="0.01">
-                                </div>
-                            </div>
-                            <div class="discount-result">
-                                <span class="discount-label">Discount Amount:</span>
-                                <span id="invoiceDiscountAmount" class="discount-amount">₹0.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- GST -->
-                    <div id="invoiceGstSection" class="doc-gst-section">
-                        <div class="gst-header">
-                            <h4>GST</h4>
-                            <div class="gst-toggle">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="invoiceGstEnabled" class="gst-toggle-input">
-                                    <span class="toggle-slider"></span>
-                                    GST
-                                </label>
-                            </div>
-                        </div>
-                        <div id="invoiceGstDetails" class="gst-details" style="display:none;">
-                            <div class="gst-row">
-                                <div class="gst-field">
-                                    <label for="invoiceGstType">GST Type</label>
-                                    <select id="invoiceGstType" class="gst-type-select">
-                                        <option value="intra">Intra-State (CGST+SGST)</option>
-                                        <option value="inter">Inter-State (IGST)</option>
-                                    </select>
-                                </div>
-                                <div class="gst-field">
-                                    <label for="invoiceCustomerGstin">Customer GSTIN</label>
-                                    <input type="text" id="invoiceCustomerGstin" placeholder="Customer GSTIN" class="gst-input">
-                                </div>
-                            </div>
-                            <div class="gst-breakdown">
-                                <div class="gst-breakdown-row">
-                                    <span class="gst-breakdown-label">CGST</span>
-                                    <span id="invoiceCgstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                                <div class="gst-breakdown-row">
-                                    <span class="gst-breakdown-label">SGST</span>
-                                    <span id="invoiceSgstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                                <div class="gst-breakdown-row">
-                                    <span class="gst-breakdown-label">IGST</span>
-                                    <span id="invoiceIgstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                                <div class="gst-breakdown-row total">
-                                    <span class="gst-breakdown-label">Total GST</span>
-                                    <span id="invoiceTotalGstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Totals -->
-                    <div id="invoiceTotalsContainer" class="doc-totals-container">
-                        <div class="totals-grid">
-                            <div class="total-row">
-                                <span class="total-label">Subtotal</span>
-                                <span id="invoiceSubtotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Item Discount</span>
-                                <span id="invoiceItemDiscountTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Document Discount</span>
-                                <span id="invoiceDocDiscountTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Taxable Amount</span>
-                                <span id="invoiceTaxableAmount" class="total-value">₹0.00</span>
-                            </div>
-                            <div id="invoiceGstBreakdown" class="gst-breakdown">
-                                <div class="total-row">
-                                    <span class="total-label">CGST</span>
-                                    <span id="invoiceCgst" class="total-value">₹0.00</span>
-                                </div>
-                                <div class="total-row">
-                                    <span class="total-label">SGST</span>
-                                    <span id="invoiceSgst" class="total-value">₹0.00</span>
-                                </div>
-                                <div class="total-row">
-                                    <span class="total-label">IGST</span>
-                                    <span id="invoiceIgst" class="total-value">₹0.00</span>
-                                </div>
-                                <div class="total-row">
-                                    <span class="total-label">Total GST</span>
-                                    <span id="invoiceTotalGst" class="total-value">₹0.00</span>
-                                </div>
-                            </div>
-                            <div class="total-row grand-total">
-                                <span class="total-label">Grand Total</span>
-                                <span id="invoiceGrandTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Round Off</span>
-                                <span id="invoiceRoundOff" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row rounded-total">
-                                <span class="total-label">Rounded Total</span>
-                                <span id="invoiceRoundedTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row amount-words">
-                                <span class="total-label">Amount in Words</span>
-                                <span id="invoiceAmountWords" class="total-value">Zero Only</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Payment Summary -->
-                    <div id="invoicePaymentSummary" class="doc-payment-summary">
-                        <h4>Payment Summary</h4>
-                        <div class="payment-summary-grid">
-                            <div class="ps-row">
-                                <span class="ps-label">Invoice Total</span>
-                                <span id="invoicePsTotal" class="ps-value">₹0.00</span>
-                            </div>
-                            <div class="ps-row">
-                                <span class="ps-label">Paid</span>
-                                <span id="invoicePsPaid" class="ps-value">₹0.00</span>
-                            </div>
-                            <div class="ps-row">
-                                <span class="ps-label">Balance</span>
-                                <span id="invoicePsBalance" class="ps-value">₹0.00</span>
-                            </div>
-                            <div class="ps-row">
-                                <span class="ps-label">Status</span>
-                                <span id="invoicePsStatus" class="ps-status unpaid">Unpaid</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Warranty -->
-                    <div id="invoiceWarrantySection" class="doc-warranty-section">
-                        <div class="warranty-toggle">
-                            <label class="toggle-label">
-                                <input type="checkbox" id="invoiceWarrantyEnabled" class="warranty-toggle-input">
-                                <span class="toggle-slider"></span>
-                                Warranty
-                            </label>
-                        </div>
-                        <div id="invoiceWarrantyDetails" class="warranty-details" style="display:none;">
-                            <div class="warranty-field">
-                                <label for="invoiceWarrantyType">Warranty Type</label>
-                                <select id="invoiceWarrantyType" class="warranty-type-select">
-                                    <option value="standard">Standard</option>
-                                    <option value="extended">Extended</option>
-                                    <option value="premium">Premium</option>
-                                </select>
-                            </div>
-                            <div class="warranty-field">
-                                <label for="invoiceWarrantyPeriod">Warranty Period</label>
-                                <input type="text" id="invoiceWarrantyPeriod" placeholder="e.g., 10 Years" class="warranty-input">
-                            </div>
-                            <div class="warranty-field">
-                                <label for="invoiceWarrantyTerms">Warranty Terms</label>
-                                <textarea id="invoiceWarrantyTerms" class="warranty-textarea" rows="2" placeholder="Warranty terms and conditions"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Notes -->
-                    <div id="invoiceNotesSection" class="doc-notes-section">
-                        <label for="invoiceNotes">Notes</label>
-                        <textarea id="invoiceNotes" class="doc-textarea" rows="3" placeholder="Additional notes..."></textarea>
-                    </div>
-                    
-                    <!-- Terms -->
-                    <div id="invoiceTermsSection" class="doc-terms-section">
-                        <label for="invoiceTerms">Terms & Conditions</label>
-                        <textarea id="invoiceTerms" class="doc-textarea" rows="3" placeholder="Terms and conditions..."></textarea>
-                    </div>
-                    
-                    <!-- Template Selection -->
-                    <div id="invoiceTemplateSection" class="doc-template-section">
-                        <label for="invoiceTemplateSelect">Template</label>
-                        <select id="invoiceTemplateSelect" class="template-select">
-                            <option value="professional">Professional</option>
-                            <option value="modern">Modern</option>
-                            <option value="classic">Classic</option>
-                            <option value="minimal">Minimal</option>
-                            <option value="h4-branded">H4 Branded</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Actions -->
-                    <div id="invoiceActions" class="doc-actions">
-                        <button id="invoiceSaveBtn" class="action-btn primary">💾 Save Invoice</button>
-                        <button id="invoicePreviewBtn" class="action-btn secondary">👁️ Preview</button>
-                        <button id="invoicePrintBtn" class="action-btn secondary">🖨️ Print</button>
-                        <button id="invoicePdfBtn" class="action-btn secondary">📄 PDF</button>
-                        <button id="invoiceWhatsAppBtn" class="action-btn secondary">📱 WhatsApp</button>
-                        <button id="invoiceShareBtn" class="action-btn secondary">📤 Share</button>
-                        <button id="invoiceResetBtn" class="action-btn danger">🗑️ Reset</button>
-                    </div>
-                    
-                    <!-- Document Preview -->
-                    <div id="invoiceDocumentPreview" class="doc-preview" style="display:none;">
-                        <div class="preview-header">
-                            <h3>Document Preview</h3>
-                            <button id="invoicePreviewClose" class="preview-close">✕</button>
-                        </div>
-                        <div id="invoicePreviewContent" class="preview-content">
-                            <!-- Preview rendered here -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            INVOICE HISTORY
-            ============================================================ -->
-            <section id="invoiceHistory" class="page" aria-label="Invoice History">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Invoice History</h1>
-                        <p class="page-subtitle">View and manage all invoices</p>
-                    </div>
-                    <div class="page-header-right">
-                        <span id="invoiceHistoryCount" class="record-count">0 invoices</span>
-                    </div>
-                </div>
-                
-                <div id="invoiceHistoryView" class="history-view">
-                    <div id="invoiceHistorySearch" class="history-search">
-                        <input type="text" id="invoiceHistorySearchInput" placeholder="Search by invoice number, customer..." class="search-input">
-                        <button id="invoiceHistorySearchBtn" class="search-btn">🔍</button>
-                        <button id="invoiceHistoryClearSearch" class="clear-search-btn" style="display:none;">✕</button>
-                    </div>
-                    
-                    <div id="invoiceHistoryFilters" class="history-filters">
-                        <div class="filter-group">
-                            <label for="invoiceHistoryDateFrom">From</label>
-                            <input type="date" id="invoiceHistoryDateFrom" class="filter-date">
-                        </div>
-                        <div class="filter-group">
-                            <label for="invoiceHistoryDateTo">To</label>
-                            <input type="date" id="invoiceHistoryDateTo" class="filter-date">
-                        </div>
-                        <div class="filter-group">
-                            <label for="invoiceHistoryCustomerFilter">Customer</label>
-                            <select id="invoiceHistoryCustomerFilter" class="filter-select">
-                                <option value="">All Customers</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="invoiceHistoryStatusFilter">Status</label>
-                            <select id="invoiceHistoryStatusFilter" class="filter-select">
-                                <option value="">All Status</option>
-                                <option value="paid">Paid</option>
-                                <option value="unpaid">Unpaid</option>
-                                <option value="partial">Partially Paid</option>
-                                <option value="overpaid">Overpaid</option>
-                            </select>
-                        </div>
-                        <button id="invoiceHistoryApplyFilters" class="apply-filters-btn">Apply Filters</button>
-                        <button id="invoiceHistoryClearFilters" class="clear-filters-btn">Clear</button>
-                    </div>
-                    
-                    <div id="invoiceHistoryList" class="history-list">
-                        <p class="empty-state">No invoices found</p>
-                    </div>
-                    
-                    <div id="invoiceHistoryPagination" class="history-pagination">
-                        <button id="invoiceHistoryPrev" class="page-btn" disabled>Previous</button>
-                        <span id="invoiceHistoryPageInfo" class="page-info">Page 1 of 1</span>
-                        <button id="invoiceHistoryNext" class="page-btn" disabled>Next</button>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            QUOTATION
-            ============================================================ -->
-            <section id="quotation" class="page" aria-label="New Quotation">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>New Quotation</h1>
-                        <p class="page-subtitle">Create a new quotation</p>
-                    </div>
-                    <div class="page-header-right">
-                        <button id="quotationTogglePreview" class="toggle-preview-btn" aria-label="Toggle preview">
-                            👁️ Preview
-                        </button>
-                    </div>
-                </div>
-                
-                <div id="quotationBuilder" class="document-builder">
-                    <!-- Quotation Header -->
-                    <div id="quotationHeader" class="doc-header">
-                        <div class="doc-title-area">
-                            <h2>QUOTATION</h2>
-                            <span id="quotationNumberDisplay" class="doc-number">QUO-0001</span>
-                        </div>
-                        <div class="doc-date-area">
-                            <div class="date-field">
-                                <label for="quotationDate">Date</label>
-                                <input type="date" id="quotationDate" class="doc-date-input">
-                            </div>
-                            <div class="date-field">
-                                <label for="quotationValidUntil">Valid Until</label>
-                                <input type="date" id="quotationValidUntil" class="doc-date-input">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Customer Section -->
-                    <div id="quotationCustomerSection" class="doc-customer-section">
-                        <label for="quotationCustomerSelect">Customer</label>
-                        <div class="customer-select-wrapper">
-                            <select id="quotationCustomerSelect" class="customer-select" aria-label="Select customer">
-                                <option value="">Select Customer</option>
-                            </select>
-                            <button id="quotationAddCustomerBtn" class="add-btn" aria-label="Add new customer">+ Add New</button>
-                        </div>
-                        <div id="quotationCustomerDetails" class="customer-details"></div>
-                    </div>
-                    
-                    <!-- Metadata -->
-                    <div id="quotationMetaSection" class="doc-meta-section">
-                        <div class="meta-field">
-                            <label for="quotationReference">Reference</label>
-                            <input type="text" id="quotationReference" placeholder="Reference number" class="meta-input">
-                        </div>
-                        <div class="meta-field">
-                            <label for="quotationProjectName">Project Name</label>
-                            <input type="text" id="quotationProjectName" placeholder="Project name" class="meta-input">
-                        </div>
-                    </div>
-                    
-                    <!-- Items -->
-                    <div id="quotationItemsContainer" class="doc-items-container">
-                        <div class="items-header">
-                            <h3>Items / Scope of Work</h3>
-                            <button id="addQuotationItemBtn" class="add-item-btn">+ Add Item</button>
-                        </div>
-                        <div id="quotationItemCardsContainer" class="item-cards-container">
-                            <p class="empty-state">No items added. Click "Add Item" to start.</p>
-                        </div>
-                        <div id="quotationItemTableContainer" class="item-table-container" style="display:none;">
-                            <!-- Table view for desktop -->
-                        </div>
-                    </div>
-                    
-                    <!-- Document Level Discount -->
-                    <div id="quotationDiscountSection" class="doc-discount-section">
-                        <div class="discount-header">
-                            <h4>Document Discount</h4>
-                            <div class="discount-toggle">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="quotationDiscountEnabled" class="discount-toggle-input">
-                                    <span class="toggle-slider"></span>
-                                    Enable Discount
-                                </label>
-                            </div>
-                        </div>
-                        <div id="quotationDiscountDetails" class="discount-details" style="display:none;">
-                            <div class="discount-row">
-                                <div class="discount-field">
-                                    <label for="quotationDiscountType">Discount Type</label>
-                                    <select id="quotationDiscountType" class="discount-type-select">
-                                        <option value="none">No Discount</option>
-                                        <option value="percentage">Percentage (%)</option>
-                                        <option value="flat">Flat Amount (₹)</option>
-                                    </select>
-                                </div>
-                                <div class="discount-field">
-                                    <label for="quotationDiscountValue">Discount Value</label>
-                                    <input type="number" id="quotationDiscountValue" placeholder="0" class="discount-input" inputmode="decimal" min="0" step="0.01">
-                                </div>
-                            </div>
-                            <div class="discount-result">
-                                <span class="discount-label">Discount Amount:</span>
-                                <span id="quotationDiscountAmount" class="discount-amount">₹0.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- GST -->
-                    <div id="quotationGstSection" class="doc-gst-section">
-                        <div class="gst-header">
-                            <h4>GST</h4>
-                            <div class="gst-toggle">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="quotationGstEnabled" class="gst-toggle-input">
-                                    <span class="toggle-slider"></span>
-                                    GST
-                                </label>
-                            </div>
-                        </div>
-                        <div id="quotationGstDetails" class="gst-details" style="display:none;">
-                            <div class="gst-row">
-                                <div class="gst-field">
-                                    <label for="quotationGstType">GST Type</label>
-                                    <select id="quotationGstType" class="gst-type-select">
-                                        <option value="intra">Intra-State (CGST+SGST)</option>
-                                        <option value="inter">Inter-State (IGST)</option>
-                                    </select>
-                                </div>
-                                <div class="gst-field">
-                                    <label for="quotationCustomerGstin">Customer GSTIN</label>
-                                    <input type="text" id="quotationCustomerGstin" placeholder="Customer GSTIN" class="gst-input">
-                                </div>
-                            </div>
-                            <div class="gst-breakdown">
-                                <div class="gst-breakdown-row">
-                                    <span class="gst-breakdown-label">CGST</span>
-                                    <span id="quotationCgstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                                <div class="gst-breakdown-row">
-                                    <span class="gst-breakdown-label">SGST</span>
-                                    <span id="quotationSgstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                                <div class="gst-breakdown-row">
-                                    <span class="gst-breakdown-label">IGST</span>
-                                    <span id="quotationIgstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                                <div class="gst-breakdown-row total">
-                                    <span class="gst-breakdown-label">Total GST</span>
-                                    <span id="quotationTotalGstDisplay" class="gst-breakdown-value">₹0.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Totals -->
-                    <div id="quotationTotalsContainer" class="doc-totals-container">
-                        <div class="totals-grid">
-                            <div class="total-row">
-                                <span class="total-label">Subtotal</span>
-                                <span id="quotationSubtotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Item Discount</span>
-                                <span id="quotationItemDiscountTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Document Discount</span>
-                                <span id="quotationDocDiscountTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Taxable Amount</span>
-                                <span id="quotationTaxableAmount" class="total-value">₹0.00</span>
-                            </div>
-                            <div id="quotationGstBreakdown" class="gst-breakdown">
-                                <div class="total-row">
-                                    <span class="total-label">CGST</span>
-                                    <span id="quotationCgst" class="total-value">₹0.00</span>
-                                </div>
-                                <div class="total-row">
-                                    <span class="total-label">SGST</span>
-                                    <span id="quotationSgst" class="total-value">₹0.00</span>
-                                </div>
-                                <div class="total-row">
-                                    <span class="total-label">IGST</span>
-                                    <span id="quotationIgst" class="total-value">₹0.00</span>
-                                </div>
-                                <div class="total-row">
-                                    <span class="total-label">Total GST</span>
-                                    <span id="quotationTotalGst" class="total-value">₹0.00</span>
-                                </div>
-                            </div>
-                            <div class="total-row grand-total">
-                                <span class="total-label">Grand Total</span>
-                                <span id="quotationGrandTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span class="total-label">Round Off</span>
-                                <span id="quotationRoundOff" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row rounded-total">
-                                <span class="total-label">Rounded Total</span>
-                                <span id="quotationRoundedTotal" class="total-value">₹0.00</span>
-                            </div>
-                            <div class="total-row amount-words">
-                                <span class="total-label">Amount in Words</span>
-                                <span id="quotationAmountWords" class="total-value">Zero Only</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Warranty -->
-                    <div id="quotationWarrantySection" class="doc-warranty-section">
-                        <div class="warranty-toggle">
-                            <label class="toggle-label">
-                                <input type="checkbox" id="quotationWarrantyEnabled" class="warranty-toggle-input">
-                                <span class="toggle-slider"></span>
-                                Warranty
-                            </label>
-                        </div>
-                        <div id="quotationWarrantyDetails" class="warranty-details" style="display:none;">
-                            <div class="warranty-field">
-                                <label for="quotationWarrantyType">Warranty Type</label>
-                                <select id="quotationWarrantyType" class="warranty-type-select">
-                                    <option value="standard">Standard</option>
-                                    <option value="extended">Extended</option>
-                                    <option value="premium">Premium</option>
-                                </select>
-                            </div>
-                            <div class="warranty-field">
-                                <label for="quotationWarrantyPeriod">Warranty Period</label>
-                                <input type="text" id="quotationWarrantyPeriod" placeholder="e.g., 10 Years" class="warranty-input">
-                            </div>
-                            <div class="warranty-field">
-                                <label for="quotationWarrantyTerms">Warranty Terms</label>
-                                <textarea id="quotationWarrantyTerms" class="warranty-textarea" rows="2" placeholder="Warranty terms and conditions"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Notes -->
-                    <div id="quotationNotesSection" class="doc-notes-section">
-                        <label for="quotationNotes">Notes</label>
-                        <textarea id="quotationNotes" class="doc-textarea" rows="3" placeholder="Additional notes..."></textarea>
-                    </div>
-                    
-                    <!-- Terms -->
-                    <div id="quotationTermsSection" class="doc-terms-section">
-                        <label for="quotationTerms">Terms & Conditions</label>
-                        <textarea id="quotationTerms" class="doc-textarea" rows="3" placeholder="Terms and conditions..."></textarea>
-                    </div>
-                    
-                    <!-- Template Selection -->
-                    <div id="quotationTemplateSection" class="doc-template-section">
-                        <label for="quotationTemplateSelect">Template</label>
-                        <select id="quotationTemplateSelect" class="template-select">
-                            <option value="professional">Professional</option>
-                            <option value="modern">Modern</option>
-                            <option value="classic">Classic</option>
-                            <option value="minimal">Minimal</option>
-                            <option value="h4-branded">H4 Branded</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Actions -->
-                    <div id="quotationActions" class="doc-actions">
-                        <button id="quotationSaveBtn" class="action-btn primary">💾 Save Quotation</button>
-                        <button id="quotationPreviewBtn" class="action-btn secondary">👁️ Preview</button>
-                        <button id="quotationPrintBtn" class="action-btn secondary">🖨️ Print</button>
-                        <button id="quotationPdfBtn" class="action-btn secondary">📄 PDF</button>
-                        <button id="quotationWhatsAppBtn" class="action-btn secondary">📱 WhatsApp</button>
-                        <button id="quotationShareBtn" class="action-btn secondary">📤 Share</button>
-                        <button id="quotationConvertBtn" class="action-btn success">🔄 Convert to Invoice</button>
-                        <button id="quotationResetBtn" class="action-btn danger">🗑️ Reset</button>
-                    </div>
-                    
-                    <!-- Document Preview -->
-                    <div id="quotationDocumentPreview" class="doc-preview" style="display:none;">
-                        <div class="preview-header">
-                            <h3>Document Preview</h3>
-                            <button id="quotationPreviewClose" class="preview-close">✕</button>
-                        </div>
-                        <div id="quotationPreviewContent" class="preview-content">
-                            <!-- Preview rendered here -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            QUOTATION HISTORY
-            ============================================================ -->
-            <section id="quotationHistory" class="page" aria-label="Quotation History">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Quotation History</h1>
-                        <p class="page-subtitle">View and manage all quotations</p>
-                    </div>
-                    <div class="page-header-right">
-                        <span id="quotationHistoryCount" class="record-count">0 quotations</span>
-                    </div>
-                </div>
-                
-                <div id="quotationHistoryView" class="history-view">
-                    <div id="quotationHistorySearch" class="history-search">
-                        <input type="text" id="quotationHistorySearchInput" placeholder="Search by quotation number, customer..." class="search-input">
-                        <button id="quotationHistorySearchBtn" class="search-btn">🔍</button>
-                        <button id="quotationHistoryClearSearch" class="clear-search-btn" style="display:none;">✕</button>
-                    </div>
-                    
-                    <div id="quotationHistoryFilters" class="history-filters">
-                        <div class="filter-group">
-                            <label for="quotationHistoryDateFrom">From</label>
-                            <input type="date" id="quotationHistoryDateFrom" class="filter-date">
-                        </div>
-                        <div class="filter-group">
-                            <label for="quotationHistoryDateTo">To</label>
-                            <input type="date" id="quotationHistoryDateTo" class="filter-date">
-                        </div>
-                        <div class="filter-group">
-                            <label for="quotationHistoryCustomerFilter">Customer</label>
-                            <select id="quotationHistoryCustomerFilter" class="filter-select">
-                                <option value="">All Customers</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="quotationHistoryStatusFilter">Status</label>
-                            <select id="quotationHistoryStatusFilter" class="filter-select">
-                                <option value="">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="accepted">Accepted</option>
-                                <option value="expired">Expired</option>
-                                <option value="converted">Converted</option>
-                            </select>
-                        </div>
-                        <button id="quotationHistoryApplyFilters" class="apply-filters-btn">Apply Filters</button>
-                        <button id="quotationHistoryClearFilters" class="clear-filters-btn">Clear</button>
-                    </div>
-                    
-                    <div id="quotationHistoryList" class="history-list">
-                        <p class="empty-state">No quotations found</p>
-                    </div>
-                    
-                    <div id="quotationHistoryPagination" class="history-pagination">
-                        <button id="quotationHistoryPrev" class="page-btn" disabled>Previous</button>
-                        <span id="quotationHistoryPageInfo" class="page-info">Page 1 of 1</span>
-                        <button id="quotationHistoryNext" class="page-btn" disabled>Next</button>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            PRODUCTS
-            ============================================================ -->
-            <section id="products" class="page" aria-label="Products">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Products</h1>
-                        <p class="page-subtitle">Manage your product catalog</p>
-                    </div>
-                    <div class="page-header-right">
-                        <button id="addProductPageBtn" class="header-action-btn">+ Add Product</button>
-                        <span id="productCount" class="record-count">0 products</span>
-                    </div>
-                </div>
-                
-                <div id="productsView" class="master-view">
-                    <div id="productSearch" class="master-search">
-                        <input type="text" id="productSearchInput" placeholder="Search by name, SKU, category..." class="search-input">
-                        <button id="productSearchBtn" class="search-btn">🔍</button>
-                        <button id="productClearSearch" class="clear-search-btn" style="display:none;">✕</button>
-                    </div>
-                    
-                    <div id="productCategoryFilter" class="master-filter">
-                        <label for="productCategorySelect">Category</label>
-                        <select id="productCategorySelect" class="filter-select">
-                            <option value="">All Categories</option>
-                            <option value="Tile Adhesive">Tile Adhesive</option>
-                            <option value="Waterproofing">Waterproofing</option>
-                            <option value="Epoxy Flooring">Epoxy Flooring</option>
-                            <option value="General Products">General Products</option>
-                            <option value="Services">Services</option>
-                        </select>
-                    </div>
-                    
-                    <div id="productList" class="master-list">
-                        <p class="empty-state">No products found</p>
-                    </div>
-                    
-                    <div id="productFormContainer" class="master-form-container" style="display:none;">
-                        <!-- Product form will be rendered here -->
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            CUSTOMERS
-            ============================================================ -->
-            <section id="customers" class="page" aria-label="Customers">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Customers</h1>
-                        <p class="page-subtitle">Manage your customers</p>
-                    </div>
-                    <div class="page-header-right">
-                        <button id="addCustomerPageBtn" class="header-action-btn">+ Add Customer</button>
-                        <span id="customerCount" class="record-count">0 customers</span>
-                    </div>
-                </div>
-                
-                <div id="customersView" class="master-view">
-                    <div id="customerSearch" class="master-search">
-                        <input type="text" id="customerSearchInput" placeholder="Search by name, phone, email..." class="search-input">
-                        <button id="customerSearchBtn" class="search-btn">🔍</button>
-                        <button id="customerClearSearch" class="clear-search-btn" style="display:none;">✕</button>
-                    </div>
-                    
-                    <div id="customerList" class="master-list">
-                        <p class="empty-state">No customers found</p>
-                    </div>
-                    
-                    <div id="customerFormContainer" class="master-form-container" style="display:none;">
-                        <!-- Customer form will be rendered here -->
-                    </div>
-                    
-                    <div id="customerHistoryContainer" class="customer-history-container" style="display:none;">
-                        <!-- Customer history will be rendered here -->
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            PAYMENTS
-            ============================================================ -->
-            <section id="payments" class="page" aria-label="Payments">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Payments</h1>
-                        <p class="page-subtitle">Manage payments and transactions</p>
-                    </div>
-                    <div class="page-header-right">
-                        <button id="addPaymentPageBtn" class="header-action-btn">+ Record Payment</button>
-                        <span id="paymentCount" class="record-count">0 payments</span>
-                    </div>
-                </div>
-                
-                <div id="paymentsView" class="master-view">
-                    <div id="paymentSearch" class="master-search">
-                        <input type="text" id="paymentSearchInput" placeholder="Search by customer, invoice, reference..." class="search-input">
-                        <button id="paymentSearchBtn" class="search-btn">🔍</button>
-                        <button id="paymentClearSearch" class="clear-search-btn" style="display:none;">✕</button>
-                    </div>
-                    
-                    <div id="paymentFilters" class="master-filters">
-                        <div class="filter-group">
-                            <label for="paymentFilterDateFrom">From</label>
-                            <input type="date" id="paymentFilterDateFrom" class="filter-date">
-                        </div>
-                        <div class="filter-group">
-                            <label for="paymentFilterDateTo">To</label>
-                            <input type="date" id="paymentFilterDateTo" class="filter-date">
-                        </div>
-                        <div class="filter-group">
-                            <label for="paymentFilterCustomer">Customer</label>
-                            <select id="paymentFilterCustomer" class="filter-select">
-                                <option value="">All Customers</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="paymentFilterMethod">Method</label>
-                            <select id="paymentFilterMethod" class="filter-select">
-                                <option value="">All Methods</option>
-                                <option value="Cash">Cash</option>
-                                <option value="UPI">UPI</option>
-                                <option value="Bank Transfer">Bank Transfer</option>
-                                <option value="Card">Card</option>
-                                <option value="Cheque">Cheque</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <button id="paymentApplyFilters" class="apply-filters-btn">Apply Filters</button>
-                        <button id="paymentClearFilters" class="clear-filters-btn">Clear</button>
-                    </div>
-                    
-                    <div id="paymentSummary" class="payment-summary">
-                        <div class="ps-card">
-                            <span class="ps-label">Total Payments</span>
-                            <span id="paymentTotalAmount" class="ps-value">₹0.00</span>
-                        </div>
-                        <div class="ps-card">
-                            <span class="ps-label">This Month</span>
-                            <span id="paymentMonthAmount" class="ps-value">₹0.00</span>
-                        </div>
-                        <div class="ps-card">
-                            <span class="ps-label">Today</span>
-                            <span id="paymentTodayAmount" class="ps-value">₹0.00</span>
-                        </div>
-                    </div>
-                    
-                    <div id="paymentList" class="master-list">
-                        <p class="empty-state">No payments found</p>
-                    </div>
-                    
-                    <div id="paymentFormContainer" class="master-form-container" style="display:none;">
-                        <!-- Payment form will be rendered here -->
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            TEMPLATES
-            ============================================================ -->
-            <section id="templates" class="page" aria-label="Templates">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Templates</h1>
-                        <p class="page-subtitle">Customize your document templates</p>
-                    </div>
-                    <div class="page-header-right">
-                        <button id="addTemplateBtn" class="header-action-btn">+ New Template</button>
-                    </div>
-                </div>
-                
-                <div id="templatesView" class="templates-view">
-                    <div id="invoiceTemplatesContainer" class="template-section">
-                        <h3>Invoice Templates</h3>
-                        <div class="template-grid">
-                            <div class="template-card" data-template="professional" data-type="invoice">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">INVOICE</div>
-                                        <div class="sample-body">Professional layout with clean design</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">Professional</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="professional">Select</button>
-                                    <button class="template-edit-btn" data-template="professional">Edit</button>
-                                </div>
-                            </div>
-                            <div class="template-card" data-template="modern" data-type="invoice">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">INVOICE</div>
-                                        <div class="sample-body">Modern design with accent colors</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">Modern</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="modern">Select</button>
-                                    <button class="template-edit-btn" data-template="modern">Edit</button>
-                                </div>
-                            </div>
-                            <div class="template-card" data-template="classic" data-type="invoice">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">INVOICE</div>
-                                        <div class="sample-body">Classic traditional layout</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">Classic</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="classic">Select</button>
-                                    <button class="template-edit-btn" data-template="classic">Edit</button>
-                                </div>
-                            </div>
-                            <div class="template-card" data-template="minimal" data-type="invoice">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">INVOICE</div>
-                                        <div class="sample-body">Minimal clean design</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">Minimal</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="minimal">Select</button>
-                                    <button class="template-edit-btn" data-template="minimal">Edit</button>
-                                </div>
-                            </div>
-                            <div class="template-card" data-template="h4-branded" data-type="invoice">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">INVOICE</div>
-                                        <div class="sample-body">H4 branded design</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">H4 Branded</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="h4-branded">Select</button>
-                                    <button class="template-edit-btn" data-template="h4-branded">Edit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="quotationTemplatesContainer" class="template-section">
-                        <h3>Quotation Templates</h3>
-                        <div class="template-grid">
-                            <div class="template-card" data-template="professional" data-type="quotation">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">QUOTATION</div>
-                                        <div class="sample-body">Professional quotation layout</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">Professional</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="professional">Select</button>
-                                    <button class="template-edit-btn" data-template="professional">Edit</button>
-                                </div>
-                            </div>
-                            <div class="template-card" data-template="modern" data-type="quotation">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">QUOTATION</div>
-                                        <div class="sample-body">Modern quotation design</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">Modern</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="modern">Select</button>
-                                    <button class="template-edit-btn" data-template="modern">Edit</button>
-                                </div>
-                            </div>
-                            <div class="template-card" data-template="classic" data-type="quotation">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">QUOTATION</div>
-                                        <div class="sample-body">Classic quotation layout</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">Classic</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="classic">Select</button>
-                                    <button class="template-edit-btn" data-template="classic">Edit</button>
-                                </div>
-                            </div>
-                            <div class="template-card" data-template="h4-branded" data-type="quotation">
-                                <div class="template-preview">
-                                    <div class="template-sample">
-                                        <div class="sample-header">QUOTATION</div>
-                                        <div class="sample-body">H4 branded quotation</div>
-                                    </div>
-                                </div>
-                                <span class="template-name">H4 Branded</span>
-                                <div class="template-actions">
-                                    <button class="template-select-btn" data-template="h4-branded">Select</button>
-                                    <button class="template-edit-btn" data-template="h4-branded">Edit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="templateEditorContainer" class="template-editor" style="display:none;">
-                        <div class="editor-header">
-                            <h3 id="templateEditorTitle">Edit Template</h3>
-                            <button id="templateEditorClose" class="editor-close">✕</button>
-                        </div>
-                        <div id="templateEditorContent" class="editor-content"></div>
-                    </div>
-                    
-                    <div id="templatePreviewContainer" class="template-preview-container" style="display:none;">
-                        <div class="preview-header">
-                            <h3>Template Preview</h3>
-                            <button id="templatePreviewClose" class="preview-close">✕</button>
-                        </div>
-                        <div id="templatePreviewContent" class="preview-content"></div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            COMPANY SETTINGS
-            ============================================================ -->
-            <section id="companySettings" class="page" aria-label="Company Settings">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Company Settings</h1>
-                        <p class="page-subtitle">Manage your company information</p>
-                    </div>
-                    <div class="page-header-right">
-                        <span id="companySaveStatus" class="save-status">Saved</span>
-                    </div>
-                </div>
-                
-                <div id="companySettingsView" class="company-view">
-                    <div id="companyFormContainer" class="company-form-container">
-                        <form id="companyForm" class="company-form">
-                            <div class="form-section">
-                                <h3>Basic Information</h3>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="companyName">Company Name *</label>
-                                        <input type="text" id="companyName" class="form-input" placeholder="Your company name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="companyBrand">Brand Name</label>
-                                        <input type="text" id="companyBrand" class="form-input" placeholder="Brand name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="companyAddress">Address</label>
-                                    <textarea id="companyAddress" class="form-textarea" rows="3" placeholder="Company address"></textarea>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="companyPhone">Phone</label>
-                                        <input type="tel" id="companyPhone" class="form-input" placeholder="Phone number" inputmode="numeric">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="companyWhatsApp">WhatsApp</label>
-                                        <input type="tel" id="companyWhatsApp" class="form-input" placeholder="WhatsApp number" inputmode="numeric">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="companyEmail">Email</label>
-                                        <input type="email" id="companyEmail" class="form-input" placeholder="Email address">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="companyWebsite">Website</label>
-                                        <input type="url" id="companyWebsite" class="form-input" placeholder="Website URL">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="companyGstin">GSTIN</label>
-                                        <input type="text" id="companyGstin" class="form-input" placeholder="GSTIN">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="companyPan">PAN</label>
-                                        <input type="text" id="companyPan" class="form-input" placeholder="PAN number">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="companyState">State</label>
-                                        <input type="text" id="companyState" class="form-input" placeholder="State">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="companyPin">PIN Code</label>
-                                        <input type="text" id="companyPin" class="form-input" placeholder="PIN Code" inputmode="numeric">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div id="companyLogoContainer" class="form-section">
-                                <h3>Logo</h3>
-                                <div class="form-group">
-                                    <label for="companyLogoUpload">Company Logo</label>
-                                    <div class="file-upload-wrapper">
-                                        <input type="file" id="companyLogoUpload" class="form-file" accept="image/*">
-                                        <button type="button" id="companyLogoUploadBtn" class="upload-btn">Choose Logo</button>
-                                    </div>
-                                    <div id="companyLogoPreview" class="logo-preview">
-                                        <img id="companyLogoImg" src="" alt="Company logo" style="display:none;">
-                                        <span class="logo-placeholder">No logo uploaded</span>
-                                    </div>
-                                    <button type="button" id="companyLogoRemove" class="remove-btn" style="display:none;">Remove Logo</button>
-                                </div>
-                            </div>
-                            
-                            <div id="companyBankDetailsContainer" class="form-section">
-                                <h3>Bank Details</h3>
-                                <div class="form-group">
-                                    <label for="companyBankName">Bank Name</label>
-                                    <input type="text" id="companyBankName" class="form-input" placeholder="Bank name">
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="companyBankAccount">Account Number</label>
-                                        <input type="text" id="companyBankAccount" class="form-input" placeholder="Account number">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="companyBankIfsc">IFSC Code</label>
-                                        <input type="text" id="companyBankIfsc" class="form-input" placeholder="IFSC code">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="companyBankBranch">Branch</label>
-                                    <input type="text" id="companyBankBranch" class="form-input" placeholder="Branch name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="companyUpiId">UPI ID</label>
-                                    <input type="text" id="companyUpiId" class="form-input" placeholder="UPI ID (e.g., company@upi)">
-                                </div>
-                            </div>
-                            
-                            <div id="companySignatureContainer" class="form-section">
-                                <h3>Signature</h3>
-                                <div class="form-group">
-                                    <label for="companyAuthorizedPerson">Authorized Person</label>
-                                    <input type="text" id="companyAuthorizedPerson" class="form-input" placeholder="Authorized person name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="companySignatureUpload">Signature</label>
-                                    <div class="file-upload-wrapper">
-                                        <input type="file" id="companySignatureUpload" class="form-file" accept="image/*">
-                                        <button type="button" id="companySignatureUploadBtn" class="upload-btn">Choose Signature</button>
-                                    </div>
-                                    <div id="companySignaturePreview" class="signature-preview">
-                                        <img id="companySignatureImg" src="" alt="Signature" style="display:none;">
-                                        <span class="signature-placeholder">No signature uploaded</span>
-                                    </div>
-                                    <button type="button" id="companySignatureRemove" class="remove-btn" style="display:none;">Remove Signature</button>
-                                </div>
-                            </div>
-                            
-                            <div class="form-section">
-                                <h3>Default Terms</h3>
-                                <div class="form-group">
-                                    <label for="companyDefaultTerms">Default Terms & Conditions</label>
-                                    <textarea id="companyDefaultTerms" class="form-textarea" rows="4" placeholder="Default terms and conditions that will appear on all documents"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="companyDefaultWarranty">Default Warranty</label>
-                                    <textarea id="companyDefaultWarranty" class="form-textarea" rows="2" placeholder="Default warranty terms"></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="submit" id="companySaveBtn" class="action-btn primary">💾 Save Company Details</button>
-                                <button type="reset" id="companyResetBtn" class="action-btn secondary">↩️ Reset</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            SETTINGS
-            ============================================================ -->
-            <section id="settings" class="page" aria-label="Settings">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Settings</h1>
-                        <p class="page-subtitle">Configure application settings</p>
-                    </div>
-                    <div class="page-header-right">
-                        <span id="settingsSaveStatus" class="save-status">Saved</span>
-                    </div>
-                </div>
-                
-                <div id="settingsView" class="settings-view">
-                    <!-- Document Numbering -->
-                    <div id="settingsDocumentNumbering" class="settings-section">
-                        <h3>Document Numbering</h3>
-                        
-                        <div id="settingsInvoiceNumbering" class="settings-subsection">
-                            <h4>Invoice Numbering</h4>
-                            <div class="setting-row">
-                                <div class="setting-group">
-                                    <label for="invoicePrefix">Prefix</label>
-                                    <input type="text" id="invoicePrefix" class="setting-input" value="INV-">
-                                </div>
-                                <div class="setting-group">
-                                    <label for="invoiceStartNumber">Starting Number</label>
-                                    <input type="number" id="invoiceStartNumber" class="setting-input" value="1" inputmode="numeric">
-                                </div>
-                                <div class="setting-group">
-                                    <label for="invoicePadding">Padding (digits)</label>
-                                    <input type="number" id="invoicePadding" class="setting-input" value="4" inputmode="numeric" min="1" max="10">
-                                </div>
-                            </div>
-                            <div class="setting-row">
-                                <div class="setting-group">
-                                    <label class="toggle-label">
-                                        <input type="checkbox" id="invoiceYearlyReset" class="setting-toggle">
-                                        <span class="toggle-slider"></span>
-                                        Reset yearly
-                                    </label>
-                                </div>
-                                <div class="setting-group">
-                                    <label class="toggle-label">
-                                        <input type="checkbox" id="invoiceFinancialYearReset" class="setting-toggle">
-                                        <span class="toggle-slider"></span>
-                                        Reset by financial year
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="settingsQuotationNumbering" class="settings-subsection">
-                            <h4>Quotation Numbering</h4>
-                            <div class="setting-row">
-                                <div class="setting-group">
-                                    <label for="quotationPrefix">Prefix</label>
-                                    <input type="text" id="quotationPrefix" class="setting-input" value="QUO-">
-                                </div>
-                                <div class="setting-group">
-                                    <label for="quotationStartNumber">Starting Number</label>
-                                    <input type="number" id="quotationStartNumber" class="setting-input" value="1" inputmode="numeric">
-                                </div>
-                                <div class="setting-group">
-                                    <label for="quotationPadding">Padding (digits)</label>
-                                    <input type="number" id="quotationPadding" class="setting-input" value="4" inputmode="numeric" min="1" max="10">
-                                </div>
-                            </div>
-                            <div class="setting-row">
-                                <div class="setting-group">
-                                    <label class="toggle-label">
-                                        <input type="checkbox" id="quotationYearlyReset" class="setting-toggle">
-                                        <span class="toggle-slider"></span>
-                                        Reset yearly
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="settingsPaymentNumbering" class="settings-subsection">
-                            <h4>Payment Numbering</h4>
-                            <div class="setting-row">
-                                <div class="setting-group">
-                                    <label for="paymentPrefix">Prefix</label>
-                                    <input type="text" id="paymentPrefix" class="setting-input" value="PAY-">
-                                </div>
-                                <div class="setting-group">
-                                    <label for="paymentStartNumber">Starting Number</label>
-                                    <input type="number" id="paymentStartNumber" class="setting-input" value="1" inputmode="numeric">
-                                </div>
-                                <div class="setting-group">
-                                    <label for="paymentPadding">Padding (digits)</label>
-                                    <input type="number" id="paymentPadding" class="setting-input" value="4" inputmode="numeric" min="1" max="10">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Units -->
-                    <div id="settingsUnits" class="settings-section">
-                        <h3>Units</h3>
-                        <div class="setting-group">
-                            <label>Available Units</label>
-                            <div id="unitList" class="tag-list">
-                                <span class="tag">Nos <button class="tag-remove" data-unit="Nos">×</button></span>
-                                <span class="tag">Bag <button class="tag-remove" data-unit="Bag">×</button></span>
-                                <span class="tag">Kg <button class="tag-remove" data-unit="Kg">×</button></span>
-                                <span class="tag">Gram <button class="tag-remove" data-unit="Gram">×</button></span>
-                                <span class="tag">Litre <button class="tag-remove" data-unit="Litre">×</button></span>
-                                <span class="tag">ML <button class="tag-remove" data-unit="ML">×</button></span>
-                                <span class="tag">Meter <button class="tag-remove" data-unit="Meter">×</button></span>
-                                <span class="tag">Sq.ft <button class="tag-remove" data-unit="Sq.ft">×</button></span>
-                                <span class="tag">Sq.m <button class="tag-remove" data-unit="Sq.m">×</button></span>
-                                <span class="tag">Box <button class="tag-remove" data-unit="Box">×</button></span>
-                                <span class="tag">Set <button class="tag-remove" data-unit="Set">×</button></span>
-                                <span class="tag">Piece <button class="tag-remove" data-unit="Piece">×</button></span>
-                                <span class="tag">Hour <button class="tag-remove" data-unit="Hour">×</button></span>
-                                <span class="tag">Day <button class="tag-remove" data-unit="Day">×</button></span>
-                                <span class="tag">Trip <button class="tag-remove" data-unit="Trip">×</button></span>
-                                <span class="tag">Job <button class="tag-remove" data-unit="Job">×</button></span>
-                            </div>
-                            <div class="tag-input-group">
-                                <input type="text" id="newUnitInput" class="setting-input" placeholder="Add new unit">
-                                <button id="addUnitBtn" class="add-tag-btn">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- GST Rates -->
-                    <div id="settingsGstRates" class="settings-section">
-                        <h3>GST Rates</h3>
-                        <div class="setting-group">
-                            <label>Available GST Rates (%)</label>
-                            <div id="gstRateList" class="tag-list">
-                                <span class="tag">0 <button class="tag-remove" data-rate="0">×</button></span>
-                                <span class="tag">5 <button class="tag-remove" data-rate="5">×</button></span>
-                                <span class="tag">7 <button class="tag-remove" data-rate="7">×</button></span>
-                                <span class="tag">9 <button class="tag-remove" data-rate="9">×</button></span>
-                                <span class="tag">12 <button class="tag-remove" data-rate="12">×</button></span>
-                                <span class="tag">18 <button class="tag-remove" data-rate="18">×</button></span>
-                                <span class="tag">28 <button class="tag-remove" data-rate="28">×</button></span>
-                            </div>
-                            <div class="tag-input-group">
-                                <input type="number" id="newGstRateInput" class="setting-input" placeholder="Add GST rate" inputmode="decimal" step="0.1">
-                                <button id="addGstRateBtn" class="add-tag-btn">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Rounding -->
-                    <div id="settingsRounding" class="settings-section">
-                        <h3>Rounding</h3>
-                        <div class="setting-row">
-                            <div class="setting-group">
-                                <label for="roundingMethod">Rounding Method</label>
-                                <select id="roundingMethod" class="setting-select">
-                                    <option value="none">No Rounding</option>
-                                    <option value="nearest">Nearest</option>
-                                    <option value="up">Round Up</option>
-                                    <option value="down">Round Down</option>
-                                </select>
-                            </div>
-                            <div class="setting-group">
-                                <label for="roundingPrecision">Rounding Precision</label>
-                                <select id="roundingPrecision" class="setting-select">
-                                    <option value="1">1 (Nearest whole number)</option>
-                                    <option value="0.5">0.5</option>
-                                    <option value="0.1">0.1</option>
-                                    <option value="0.01">0.01</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Theme -->
-                    <div id="settingsTheme" class="settings-section">
-                        <h3>Theme</h3>
-                        <div class="setting-row">
-                            <div class="setting-group">
-                                <label for="themeSelect">Theme Mode</label>
-                                <select id="themeSelect" class="setting-select">
-                                    <option value="light">☀️ Light</option>
-                                    <option value="dark">🌙 Dark</option>
-                                    <option value="system">🖥️ System Default</option>
-                                </select>
-                            </div>
-                            <div class="setting-group">
-                                <label for="accentColorSelect">Accent Color</label>
-                                <select id="accentColorSelect" class="setting-select">
-                                    <option value="purple">Purple</option>
-                                    <option value="purple-gold">Purple + Gold</option>
-                                    <option value="blue">Blue</option>
-                                    <option value="teal">Teal</option>
-                                    <option value="custom">Custom</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div id="customColorContainer" class="setting-group" style="display:none;">
-                            <label for="customAccentColor">Custom Accent Color</label>
-                            <input type="color" id="customAccentColor" class="color-picker" value="#6C3BC5">
-                        </div>
-                    </div>
-                    
-                    <!-- Scale -->
-                    <div id="settingsScale" class="settings-section">
-                        <h3>UI Scale</h3>
-                        <div class="setting-group">
-                            <label for="scaleSelect">UI Scale</label>
-                            <select id="scaleSelect" class="setting-select">
-                                <option value="80">80%</option>
-                                <option value="90">90%</option>
-                                <option value="100" selected>100%</option>
-                                <option value="110">110%</option>
-                                <option value="120">120%</option>
-                                <option value="150">150%</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <!-- General -->
-                    <div id="settingsGeneral" class="settings-section">
-                        <h3>General</h3>
-                        <div class="setting-row">
-                            <div class="setting-group">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="autoSaveDrafts" class="setting-toggle" checked>
-                                    <span class="toggle-slider"></span>
-                                    Auto-save drafts
-                                </label>
-                            </div>
-                            <div class="setting-group">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="enableNotifications" class="setting-toggle" checked>
-                                    <span class="toggle-slider"></span>
-                                    Enable notifications
-                                </label>
-                            </div>
-                        </div>
-                        <div class="setting-row">
-                            <div class="setting-group">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="enableAnalytics" class="setting-toggle">
-                                    <span class="toggle-slider"></span>
-                                    Enable analytics
-                                </label>
-                            </div>
-                            <div class="setting-group">
-                                <label class="toggle-label">
-                                    <input type="checkbox" id="enableOffline" class="setting-toggle" checked>
-                                    <span class="toggle-slider"></span>
-                                    Offline mode
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-actions">
-                        <button id="settingsSaveBtn" class="action-btn primary">💾 Save Settings</button>
-                        <button id="settingsResetBtn" class="action-btn secondary">↩️ Reset to Defaults</button>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- ============================================================
-            BACKUP & RESTORE
-            ============================================================ -->
-            <section id="backup" class="page" aria-label="Backup & Restore">
-                <div class="page-header">
-                    <div class="page-header-left">
-                        <h1>Backup & Restore</h1>
-                        <p class="page-subtitle">Backup and restore your data</p>
-                    </div>
-                    <div class="page-header-right">
-                        <span id="backupStatusBadge" class="status-badge">Ready</span>
-                    </div>
-                </div>
-                
-                <div id="backupView" class="backup-view">
-                    <div id="backupExportContainer" class="backup-section">
-                        <div class="backup-section-header">
-                            <h3>📤 Export Backup</h3>
-                            <span class="backup-size" id="backupExportSize">0 KB</span>
-                        </div>
-                        <p class="backup-description">Export all data including customers, products, invoices, quotations, payments, company, templates, and settings.</p>
-                        <div class="backup-actions">
-                            <button id="backupExportBtn" class="action-btn primary">📤 Export Backup</button>
-                            <button id="backupExportWithImagesBtn" class="action-btn secondary">📤 Export with Images</button>
-                            <button id="backupExportEncryptedBtn" class="action-btn secondary">🔐 Encrypted Export</button>
-                        </div>
-                        <div id="backupLastExport" class="backup-info">
-                            <span class="info-label">Last export:</span>
-                            <span class="info-value" id="backupLastExportTime">Never</span>
-                        </div>
-                    </div>
-                    
-                    <div id="backupImportContainer" class="backup-section">
-                        <div class="backup-section-header">
-                            <h3>📥 Import Backup</h3>
-                            <span class="backup-status" id="backupImportStatus">Ready</span>
-                        </div>
-                        <p class="backup-description">Restore data from a backup file. <strong>Current data will be overwritten.</strong></p>
-                        <div class="backup-actions">
-                            <div class="file-input-wrapper">
-                                <input type="file" id="backupFileInput" class="backup-file-input" accept=".json,.h4backup,.h4encrypted">
-                                <button id="backupFileSelectBtn" class="action-btn secondary">📂 Choose File</button>
-                                <span id="backupFileName" class="file-name">No file selected</span>
-                            </div>
-                            <button id="backupImportBtn" class="action-btn primary" disabled>📥 Import Backup</button>
-                            <button id="backupValidateBtn" class="action-btn secondary" disabled>✅ Validate</button>
-                        </div>
-                        <div id="backupValidationResult" class="backup-validation" style="display:none;"></div>
-                    </div>
-                    
-                    <div id="backupStatusContainer" class="backup-section">
-                        <div class="backup-section-header">
-                            <h3>📊 Backup Status</h3>
-                            <span class="backup-records" id="backupTotalRecords">0 records</span>
-                        </div>
-                        <div id="backupStatus" class="backup-info-grid">
-                            <div class="backup-info-item">
-                                <span class="bi-icon">🏢</span>
-                                <span class="bi-label">Company</span>
-                                <span id="backupCompanyCount" class="bi-value">0</span>
-                            </div>
-                            <div class="backup-info-item">
-                                <span class="bi-icon">👥</span>
-                                <span class="bi-label">Customers</span>
-                                <span id="backupCustomerCount" class="bi-value">0</span>
-                            </div>
-                            <div class="backup-info-item">
-                                <span class="bi-icon">📦</span>
-                                <span class="bi-label">Products</span>
-                                <span id="backupProductCount" class="bi-value">0</span>
-                            </div>
-                            <div class="backup-info-item">
-                                <span class="bi-icon">🧾</span>
-                                <span class="bi-label">Invoices</span>
-                                <span id="backupInvoiceCount" class="bi-value">0</span>
-                            </div>
-                            <div class="backup-info-item">
-                                <span class="bi-icon">📄</span>
-                                <span class="bi-label">Quotations</span>
-                                <span id="backupQuotationCount" class="bi-value">0</span>
-                            </div>
-                            <div class="backup-info-item">
-                                <span class="bi-icon">💰</span>
-                                <span class="bi-label">Payments</span>
-                                <span id="backupPaymentCount" class="bi-value">0</span>
-                            </div>
-                            <div class="backup-info-item">
-                                <span class="bi-icon">🎨</span>
-                                <span class="bi-label">Templates</span>
-                                <span id="backupTemplateCount" class="bi-value">0</span>
-                            </div>
-                            <div class="backup-info-item">
-                                <span class="bi-icon">⚙️</span>
-                                <span class="bi-label">Settings</span>
-                                <span id="backupSettingsCount" class="bi-value">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="backupActions" class="backup-section backup-danger">
-                        <div class="backup-section-header">
-                            <h3>⚠️ Danger Zone</h3>
-                            <span class="danger-label">Irreversible actions</span>
-                        </div>
-                        <p class="backup-warning">⚠️ These actions are irreversible. Please create a backup before proceeding.</p>
-                        <div class="backup-danger-actions">
-                            <button id="backupClearAllBtn" class="action-btn danger">🗑️ Clear All Data</button>
-                            <button id="backupArchiveBtn" class="action-btn secondary">📦 Archive Old Data</button>
-                            <button id="backupExportSchemaBtn" class="action-btn secondary">📋 Export Schema</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-        </main>
-        
-        <!-- ============================================================
-        MODAL SYSTEM
-        ============================================================ -->
-        <div id="modalOverlay" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true">
-            <div id="modalContent" class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTitle">Modal Title</h3>
-                    <button id="modalCloseBtn" class="modal-close" aria-label="Close modal">✕</button>
-                </div>
-                <div id="modalBody" class="modal-body">
-                    <!-- Modal content will be rendered here -->
-                </div>
-                <div id="modalFooter" class="modal-footer">
-                    <button id="modalCancelBtn" class="modal-btn secondary">Cancel</button>
-                    <button id="modalConfirmBtn" class="modal-btn primary">Confirm</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- ============================================================
-        TOAST / NOTIFICATION SYSTEM
-        ============================================================ -->
-        <div id="toastContainer" class="toast-container" role="status" aria-live="polite">
-            <!-- Toasts will be rendered here -->
-        </div>
-        
-        <!-- ============================================================
-        CONFIRMATION MODAL
-        ============================================================ -->
-        <div id="confirmOverlay" class="confirm-overlay" style="display:none;" role="alertdialog" aria-modal="true">
-            <div id="confirmContent" class="confirm-content">
-                <div class="confirm-icon">⚠️</div>
-                <h3 id="confirmTitle">Are you sure?</h3>
-                <p id="confirmMessage">This action cannot be undone.</p>
-                <div class="confirm-actions">
-                    <button id="confirmCancelBtn" class="confirm-btn secondary">Cancel</button>
-                    <button id="confirmOkBtn" class="confirm-btn danger">Confirm</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- ============================================================
-        GLOBAL SEARCH RESULTS
-        ============================================================ -->
-        <div id="globalSearchResults" class="global-search-results" style="display:none;">
-            <div class="search-results-header">
-                <span class="results-title">Search Results</span>
-                <button id="searchResultsClose" class="results-close">✕</button>
-            </div>
-            <div id="searchResultsContent" class="search-results-content">
-                <!-- Search results rendered here -->
-            </div>
-        </div>
-        
-    </div>
-    
+
     <!-- ============================================================
-    MAIN APPLICATION SCRIPT
+    H4 HEADER
     ============================================================ -->
-    <script type="module" src="./js/core/app.js"></script>
+    <header class="h4-header">
+        <a href="#" class="brand" id="brandLink">
+            <span class="brand-icon">⚜️</span>
+            <span class="brand-name">H4 <span>ERP</span></span>
+        </a>
+        <div class="header-actions">
+            <button class="btn" id="historyBtn">📋 History</button>
+            <button class="btn btn-primary-header" id="newQuotationBtn">+ New Quotation</button>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    GLOBAL SEARCH BAR
+    ============================================================ -->
+    <div class="h4-search-bar" id="globalSearchBar">
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="globalSearchInput" placeholder="Search Customers, Products, Quotations, Invoices...">
+            <button class="search-clear" id="searchClearBtn">✕</button>
+        </div>
+        <div class="search-hint">
+            <span>Try:</span>
+            <span class="hint-tag">Customer name</span>
+            <span class="hint-tag">QTN-0001</span>
+            <span class="hint-tag">INV-0001</span>
+            <span class="hint-tag">Mobile</span>
+            <span class="hint-tag">Product</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    DASHBOARD
+    ============================================================ -->
+    <div class="h4-dashboard" id="dashboard">
+        <h1 class="dashboard-title">📊 Dashboard</h1>
+        <p class="dashboard-subtitle">Manage your business from one place</p>
+
+        <div class="h4-module-grid" id="moduleGrid">
+            <!-- Company -->
+            <a href="#" class="h4-module-card company" data-module="company">
+                <span class="card-icon company-icon">🏢</span>
+                <div>
+                    <div class="card-title">Company</div>
+                    <div class="card-subtitle">Profile & Settings</div>
+                </div>
+                <span class="card-badge">Profile</span>
+            </a>
+
+            <!-- Quotation -->
+            <a href="#" class="h4-module-card quotation" data-module="quotation">
+                <span class="card-icon quotation-icon">📄</span>
+                <div>
+                    <div class="card-title">Quotation</div>
+                    <div class="card-subtitle">Create & Manage</div>
+                </div>
+                <span class="card-badge">New</span>
+            </a>
+
+            <!-- Products -->
+            <a href="#" class="h4-module-card products" data-module="products">
+                <span class="card-icon products-icon">📦</span>
+                <div>
+                    <div class="card-title">Products</div>
+                    <div class="card-subtitle">Product Master</div>
+                </div>
+                <span class="card-badge">Master</span>
+            </a>
+
+            <!-- Invoice -->
+            <a href="#" class="h4-module-card invoice" data-module="invoice">
+                <span class="card-icon invoice-icon">🧾</span>
+                <div>
+                    <div class="card-title">Invoice</div>
+                    <div class="card-subtitle">Create & Manage</div>
+                </div>
+                <span class="card-badge">New</span>
+            </a>
+
+            <!-- Templates -->
+            <a href="#" class="h4-module-card templates" data-module="templates">
+                <span class="card-icon templates-icon">🎨</span>
+                <div>
+                    <div class="card-title">Templates</div>
+                    <div class="card-subtitle">Invoice & Quotation</div>
+                </div>
+                <span class="card-badge">Design</span>
+            </a>
+
+            <!-- Payments -->
+            <a href="#" class="h4-module-card payments" data-module="payments">
+                <span class="card-icon payments-icon">💰</span>
+                <div>
+                    <div class="card-title">Payments</div>
+                    <div class="card-subtitle">Track Payments</div>
+                </div>
+                <span class="card-badge">Track</span>
+            </a>
+
+            <!-- Customers -->
+            <a href="#" class="h4-module-card customers" data-module="customers">
+                <span class="card-icon customers-icon">👥</span>
+                <div>
+                    <div class="card-title">Customers</div>
+                    <div class="card-subtitle">Customer Master</div>
+                </div>
+                <span class="card-badge">Master</span>
+            </a>
+
+            <!-- Theme -->
+            <a href="#" class="h4-module-card theme" data-module="theme">
+                <span class="card-icon theme-icon">🎨</span>
+                <div>
+                    <div class="card-title">Theme</div>
+                    <div class="card-subtitle">Theme Manager</div>
+                </div>
+                <span class="card-badge">Style</span>
+            </a>
+
+            <!-- Backup -->
+            <a href="#" class="h4-module-card backup" data-module="backup">
+                <span class="card-icon backup-icon">💾</span>
+                <div>
+                    <div class="card-title">Backup</div>
+                    <div class="card-subtitle">Backup & Restore</div>
+                </div>
+                <span class="card-badge">Data</span>
+            </a>
+
+            <!-- Settings -->
+            <a href="#" class="h4-module-card settings" data-module="settings">
+                <span class="card-icon settings-icon">⚙️</span>
+                <div>
+                    <div class="card-title">Settings</div>
+                    <div class="card-subtitle">System Settings</div>
+                </div>
+                <span class="card-badge">System</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="h4-toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // H4 BILLING ERP - MAIN APP
+        // ============================================================
+
+        (function() {
+            'use strict';
+
+            // ---------- DOM REFS ----------
+            const searchInput = document.getElementById('globalSearchInput');
+            const searchClearBtn = document.getElementById('searchClearBtn');
+            const toastContainer = document.getElementById('toastContainer');
+            const moduleCards = document.querySelectorAll('.h4-module-card');
+            const historyBtn = document.getElementById('historyBtn');
+            const newQuotationBtn = document.getElementById('newQuotationBtn');
+
+            // ---------- TOAST ----------
+            function showToast(message, type = 'info', duration = 3000) {
+                const toast = document.createElement('div');
+                const iconMap = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
+                toast.className = `h4-toast h4-toast-${type}`;
+                toast.innerHTML = `
+                    <span class="toast-icon">${iconMap[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <button class="toast-close">✕</button>
+                `;
+                toastContainer.appendChild(toast);
+
+                const closeBtn = toast.querySelector('.toast-close');
+                closeBtn.addEventListener('click', () => {
+                    toast.remove();
+                });
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px) scale(0.95)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, duration);
+            }
+
+            // ---------- SEARCH ----------
+            function handleSearch() {
+                const query = searchInput.value.trim().toLowerCase();
+                searchClearBtn.classList.toggle('visible', query.length > 0);
+
+                if (query.length === 0) {
+                    moduleCards.forEach(card => {
+                        card.style.display = '';
+                        card.style.opacity = '1';
+                    });
+                    return;
+                }
+
+                let found = false;
+                moduleCards.forEach(card => {
+                    const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+                    const subtitle = card.querySelector('.card-subtitle')?.textContent?.toLowerCase() || '';
+                    const badge = card.querySelector('.card-badge')?.textContent?.toLowerCase() || '';
+                    const match = title.includes(query) || subtitle.includes(query) || badge.includes(query);
+                    
+                    if (match) {
+                        card.style.display = '';
+                        card.style.opacity = '1';
+                        found = true;
+                    } else {
+                        card.style.display = 'none';
+                        card.style.opacity = '0';
+                    }
+                });
+
+                if (!found) {
+                    showToast('🔍 No modules found matching "' + query + '"', 'info', 2000);
+                }
+            }
+
+            searchInput.addEventListener('input', handleSearch);
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    handleSearch();
+                    searchInput.blur();
+                }
+            });
+
+            searchClearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                handleSearch();
+                searchInput.focus();
+            });
+
+            // ---------- MODULE CLICKS ----------
+            moduleCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const module = this.dataset.module;
+                    const title = this.querySelector('.card-title')?.textContent || 'Module';
+                    
+                    showToast(`🚀 Opening ${title}...`, 'info', 1500);
+
+                    const routes = {
+                        'company': 'company.html',
+                        'quotation': 'quotation-builder.html',
+                        'products': 'products.html',
+                        'invoice': 'invoice.html',
+                        'templates': 'templates.html',
+                        'payments': 'payments.html',
+                        'customers': 'customers.html',
+                        'theme': 'theme.html',
+                        'backup': 'backup.html',
+                        'settings': 'settings.html'
+                    };
+
+                    const url = routes[module];
+                    if (url) {
+                        setTimeout(() => {
+                            window.location.href = url;
+                        }, 400);
+                    } else {
+                        showToast(`⚠️ ${title} page coming soon`, 'warning', 2000);
+                    }
+                });
+            });
+
+            // ---------- HEADER BUTTONS ----------
+            historyBtn.addEventListener('click', function() {
+                showToast('📋 Opening Quotation History...', 'info', 1500);
+                setTimeout(() => {
+                    window.location.href = 'quotation-history.html';
+                }, 400);
+            });
+
+            newQuotationBtn.addEventListener('click', function() {
+                showToast('📄 Creating new quotation...', 'info', 1500);
+                setTimeout(() => {
+                    window.location.href = 'quotation-builder.html';
+                }, 400);
+            });
+
+            // ---------- BRAND LINK ----------
+            document.getElementById('brandLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                showToast('⚜️ H4 Billing ERP', 'info', 1500);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // ---------- KEYBOARD SHORTCUTS ----------
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+                if (e.key === 'Escape' && document.activeElement === searchInput) {
+                    searchInput.value = '';
+                    handleSearch();
+                    searchInput.blur();
+                }
+            });
+
+            // ---------- WELCOME TOAST ----------
+            setTimeout(() => {
+                showToast('⚜️ Welcome to H4 Billing ERP', 'success', 2500);
+            }, 500);
+
+            console.log('⚜️ H4 Billing ERP loaded successfully');
+            console.log('📌 Press Ctrl+/ to focus search');
+
+        })();
+    </script>
+
 </body>
 </html>
