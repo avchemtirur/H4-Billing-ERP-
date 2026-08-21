@@ -4,353 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>H4 Billing ERP - Invoice</title>
+    
+    <link rel="stylesheet" href="./css/app.css">
+    <link rel="stylesheet" href="./css/mobile.css">
+    <link rel="stylesheet" href="./css/desktop.css">
+    <link rel="stylesheet" href="./css/print.css">
+    
+    <!-- html2pdf for actual PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <style>
         /* ============================================================
-           RESET & BASE - H4 GOLDEN THEME
+           INVOICE BUILDER STYLES
            ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --gold: #FFD700;
-            --gold-dark: #D4AF37;
-            --gold-light: #FFE44D;
-            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #F59E0B 100%);
-            
-            --primary: #1a1a2e;
-            --primary-dark: #0d0d1a;
-            --primary-light: #2d2d4a;
-            
-            --bg: #f8f6f0;
-            --card-bg: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4B5563;
-            --text-muted: #9CA3AF;
-            --border: #e5e0d5;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
-            --convert: #10b981;
-            --convert-dark: #059669;
-            --header-height: 76px;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text-primary);
-            min-height: 100vh;
+        .invoice-container {
+            max-width: 900px;
+            margin: 0 auto;
             padding: 16px;
-            padding-top: calc(16px + var(--header-height));
         }
 
-        /* ============================================================
-           FIXED HEADER - H4 GOLDEN
-           ============================================================ */
-        .app-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--primary);
-            border-bottom: 3px solid var(--gold);
-            z-index: 100;
-            padding: 12px 20px;
-            box-shadow: 0 4px 20px rgba(26, 26, 46, 0.3);
-        }
-
-        .app-header .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .app-header .header-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gold);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .app-header .header-title .h4-icon {
-            font-size: 22px;
-        }
-
-        .app-header .top-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .app-header .top-actions .btn {
-            background: rgba(255, 215, 0, 0.15);
-            color: var(--gold);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            min-height: 40px;
-            padding: 8px 14px;
-            font-size: 13px;
-        }
-
-        .app-header .top-actions .btn:hover {
-            background: rgba(255, 215, 0, 0.25);
-        }
-
-        .app-header .top-actions .btn-history {
-            background: rgba(255, 215, 0, 0.25);
-            border-color: var(--gold);
-            font-weight: 600;
-        }
-
-        .app-header .top-actions .btn-history:hover {
-            background: rgba(255, 215, 0, 0.35);
-        }
-
-        /* ============================================================
-           BUTTONS
-           ============================================================ */
-        .btn {
-            padding: 14px 24px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            touch-action: manipulation;
-            min-height: 56px;
-            letter-spacing: 0.3px;
-        }
-
-        .btn-primary {
-            background: var(--gold-gradient);
-            color: var(--primary);
-            box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
-        }
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-        }
-        .btn-primary:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .btn-secondary {
-            background: var(--bg);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover {
-            background: var(--border);
-            color: var(--text-primary);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: #fff;
-            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
-        }
-        .btn-success:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: #fff;
-        }
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: #fff;
-        }
-        .btn-warning:hover {
-            background: #d97706;
-        }
-
-        .btn-convert {
-            background: var(--convert);
-            color: #fff;
-            font-weight: 700;
-            padding: 16px 24px;
-            font-size: 18px;
-            border: none;
-            border-radius: var(--radius-sm);
-            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
-            justify-content: center;
-            min-height: 60px;
-        }
-        .btn-convert:hover {
-            background: var(--convert-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 24px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-sm { padding: 10px 16px; font-size: 14px; min-height: 44px; }
-        .btn-xs { padding: 6px 12px; font-size: 12px; min-height: 32px; }
-        .btn-block { width: 100%; justify-content: center; }
-        .btn-lg { padding: 16px 32px; font-size: 18px; min-height: 60px; }
-
-        /* ============================================================
-           FORM ELEMENTS - LARGE
-           ============================================================ */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
+        .builder-ui {
             display: block;
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 6px;
-            color: var(--text-secondary);
         }
 
-        .form-group label .required {
-            color: var(--danger);
-            margin-left: 2px;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 16px 18px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 17px;
-            font-family: inherit;
-            transition: var(--transition);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            -webkit-appearance: none;
-            min-height: 56px;
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-            padding: 16px 18px;
-            line-height: 1.6;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
-        }
-
-        .form-group .input-error {
-            color: var(--danger);
-            font-size: 13px;
-            margin-top: 6px;
+        .invoice-document {
             display: none;
+            background: #ffffff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            font-family: 'Inter', Arial, sans-serif;
         }
 
-        .form-group.error input,
-        .form-group.error select {
-            border-color: var(--danger);
+        /* ---------- PRINT/PDF ONLY - Hide builder UI ---------- */
+        @media print {
+            .builder-ui {
+                display: none !important;
+            }
+            .invoice-document {
+                display: block !important;
+                padding: 20px !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            .app-header {
+                display: none !important;
+            }
+            .toast-container {
+                display: none !important;
+            }
+            .loading-overlay {
+                display: none !important;
+            }
+            body {
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+            }
         }
 
-        .form-group.error .input-error {
-            display: block;
-        }
-
-        .form-group .helper-text {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        /* ============================================================
-           INVOICE STEPS
-           ============================================================ */
-        .step {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .step.active {
-            display: block;
-        }
-
-        .step-section {
-            scroll-margin-top: 80px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .step-container {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 28px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-        }
-
-        .step-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--text-primary);
-        }
-
-        .step-description {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-bottom: 24px;
-        }
-
-        .step-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            margin-top: 28px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border);
-            flex-wrap: wrap;
-        }
-
-        .step-actions .btn-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        /* ============================================================
-           STEP INDICATORS
-           ============================================================ */
+        /* ---------- STEP INDICATORS ---------- */
         .step-indicators {
             display: flex;
             justify-content: center;
@@ -421,9 +134,262 @@
             background: var(--gold);
         }
 
-        /* ============================================================
-           PRICING SUMMARY
-           ============================================================ */
+        /* ---------- STEPS ---------- */
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .step-section {
+            scroll-margin-top: 80px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .step-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .step-actions .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ---------- FORM ELEMENTS ---------- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        .form-group label .required {
+            color: var(--danger);
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 17px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            -webkit-appearance: none;
+            min-height: 56px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+            padding: 16px 18px;
+            line-height: 1.6;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+        }
+
+        .form-group .input-error {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--danger);
+        }
+
+        .form-group.error .input-error {
+            display: block;
+        }
+
+        /* ---------- CUSTOMER SECTION ---------- */
+        .customer-section {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            border: 2px solid var(--border);
+        }
+
+        .customer-select-wrapper {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .customer-select-wrapper select {
+            flex: 1;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 17px;
+            font-family: inherit;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            min-width: 200px;
+            min-height: 56px;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .customer-select-wrapper .btn {
+            flex-shrink: 0;
+            min-height: 56px;
+        }
+
+        .customer-details {
+            display: none;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--gold);
+            margin-top: 12px;
+        }
+
+        .customer-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .customer-details .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ---------- ITEMS ---------- */
+        .items-list {
+            margin: 16px 0;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 0.6fr 0.8fr 0.8fr 0.5fr 0.5fr;
+            gap: 8px;
+            align-items: center;
+            padding: 12px 14px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .item-row .item-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .item-row .item-details {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .item-row .item-total {
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .item-row .item-actions {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .item-row .item-actions .btn {
+            min-height: 28px;
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        .add-item-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr;
+            gap: 12px;
+            align-items: end;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 2px dashed var(--border);
+        }
+
+        .add-item-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .add-item-form .form-group label {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .add-item-form input,
+        .add-item-form select {
+            padding: 14px 16px;
+            font-size: 16px;
+            min-height: 48px;
+        }
+
+        /* ---------- PRICING ---------- */
         .pricing-summary {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -529,9 +495,7 @@
             align-items: end;
         }
 
-        /* ============================================================
-           AMOUNT IN WORDS
-           ============================================================ */
+        /* ---------- AMOUNT IN WORDS ---------- */
         .amount-words {
             padding: 20px;
             background: var(--bg);
@@ -556,78 +520,118 @@
             margin-top: 6px;
         }
 
-        /* ============================================================
-           ITEMS
-           ============================================================ */
-        .items-list {
-            margin: 16px 0;
-        }
-
-        .item-row {
-            display: grid;
-            grid-template-columns: 2fr 0.8fr 1fr 0.6fr 0.4fr;
-            gap: 10px;
-            align-items: center;
-            padding: 14px 16px;
-            background: var(--bg);
-            border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .item-row .item-name {
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .item-row .item-details {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .item-row .item-total {
-            font-weight: 700;
-            color: var(--text-primary);
-            text-align: right;
-            font-size: 15px;
-        }
-
-        .item-row .item-actions {
-            display: flex;
-            gap: 6px;
-            justify-content: flex-end;
-        }
-
-        .add-item-form {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 0.5fr;
-            gap: 12px;
-            align-items: end;
+        /* ---------- PREVIEW ---------- */
+        .preview-content {
             padding: 20px;
             background: var(--bg);
             border-radius: var(--radius-sm);
-            border: 2px dashed var(--border);
+            min-height: 100px;
+            border: 2px solid var(--border);
+            margin-bottom: 16px;
         }
 
-        .add-item-form .form-group {
-            margin-bottom: 0;
+        .preview-content .preview-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
         }
 
-        .add-item-form .form-group label {
-            font-size: 13px;
-            margin-bottom: 4px;
+        .preview-content .preview-row:last-child {
+            border-bottom: none;
         }
 
-        .add-item-form input,
-        .add-item-form select {
-            padding: 14px 16px;
-            font-size: 16px;
-            min-height: 48px;
+        /* ---------- MODAL ---------- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9997;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
         }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
+        .modal-overlay.open { display: flex; }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: modalIn 0.3s ease;
+            border: 2px solid var(--gold);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.95) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 2px solid var(--gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            background: var(--primary);
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--gold);
+            padding: 4px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        .modal-close:hover {
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+            background: var(--bg);
+        }
+
+        /* ---------- TOAST ---------- */
         .toast-container {
             position: fixed;
             top: calc(var(--header-height) + 16px);
@@ -681,75 +685,103 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* ============================================================
-           LOADING
-           ============================================================ */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 20px;
-            backdrop-filter: blur(4px);
-        }
-
-        .loading-overlay.show {
-            display: flex;
-        }
-
-        .loading-overlay .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--border);
-            border-top: 4px solid var(--gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-overlay .text {
-            color: var(--text-secondary);
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            touch-action: manipulation;
+            min-height: 56px;
+            letter-spacing: 0.3px;
         }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+        .btn-primary {
+            background: var(--gold-gradient);
+            color: var(--primary);
+            box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+        }
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+        }
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-convert {
+            background: var(--convert);
+            color: #fff;
+            font-weight: 700;
+            padding: 16px 24px;
+            font-size: 18px;
+            border: none;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+            justify-content: center;
+            min-height: 60px;
+        }
+        .btn-convert:hover {
+            background: var(--convert-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-sm { padding: 10px 16px; font-size: 14px; min-height: 44px; }
+        .btn-xs { padding: 6px 12px; font-size: 12px; min-height: 32px; }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn-lg { padding: 16px 32px; font-size: 18px; min-height: 60px; }
+
+        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 768px) {
-            body {
-                padding: 12px;
-                padding-top: calc(12px + var(--header-height));
-            }
-
-            .app-header {
-                padding: 10px 14px;
-            }
-
-            .app-header .header-title {
-                font-size: 15px;
-            }
-            .app-header .header-title .h4-icon {
-                font-size: 18px;
-            }
-
-            .app-header .top-actions .btn {
-                font-size: 11px;
-                padding: 6px 10px;
-                min-height: 32px;
-            }
-
-            :root {
-                --header-height: 64px;
-            }
-
             .step-indicators {
                 gap: 4px;
                 padding: 10px 14px;
@@ -782,7 +814,7 @@
             .item-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 6px;
-                padding: 12px;
+                padding: 10px;
             }
 
             .item-row .item-actions {
@@ -800,23 +832,12 @@
                 grid-column: span 2;
             }
 
-            .add-item-form input,
-            .add-item-form select {
-                min-height: 44px;
-                font-size: 15px;
-                padding: 12px 14px;
-            }
-
             .pricing-summary {
                 grid-template-columns: 1fr;
             }
 
             .pricing-summary .summary-item.total {
                 grid-column: span 1;
-            }
-
-            .pricing-summary .summary-item.total .value {
-                font-size: 20px;
             }
 
             .step-actions {
@@ -844,10 +865,18 @@
                 min-height: 54px;
             }
 
-            .btn-convert {
+            .customer-select-wrapper {
+                flex-direction: column;
+            }
+
+            .customer-select-wrapper select {
+                min-height: 50px;
                 font-size: 16px;
-                min-height: 54px;
-                padding: 14px 18px;
+                padding: 14px 16px;
+            }
+
+            .customer-select-wrapper .btn {
+                min-height: 50px;
             }
 
             .form-group input,
@@ -875,6 +904,11 @@
                 font-size: 17px;
             }
 
+            .modal-content {
+                max-width: 100%;
+                margin: 12px;
+            }
+
             .toast-container {
                 top: calc(var(--header-height) + 12px);
                 right: 12px;
@@ -890,19 +924,6 @@
         }
 
         @media (max-width: 480px) {
-            .app-header .header-title {
-                font-size: 13px;
-            }
-            .app-header .header-title .h4-icon {
-                font-size: 16px;
-            }
-
-            .app-header .top-actions .btn {
-                font-size: 10px;
-                padding: 4px 8px;
-                min-height: 28px;
-            }
-
             .step-container {
                 padding: 14px;
             }
@@ -963,7 +984,7 @@
     <!-- ============================================================
     FIXED HEADER - H4 GOLDEN
     ============================================================ -->
-    <header class="app-header">
+    <header class="app-header builder-ui">
         <div class="header-top">
             <span class="header-title">
                 <span class="h4-icon">🧾</span> H4 Invoice
@@ -976,6 +997,11 @@
     </header>
 
     <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
     LOADING OVERLAY
     ============================================================ -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -984,315 +1010,309 @@
     </div>
 
     <!-- ============================================================
-    TOAST CONTAINER
+    INVOICE BUILDER UI
     ============================================================ -->
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="invoice-container builder-ui" id="builderUI">
 
-    <!-- ============================================================
-    STEP INDICATORS - 6 STEPS
-    ============================================================ -->
-    <div class="step-indicators" id="stepIndicators">
-        <div class="step-indicator active" data-step="1">
-            1
-            <span class="step-label">Customer</span>
-        </div>
-        <div class="step-connector" data-connector="1"></div>
-        <div class="step-indicator" data-step="2">
-            2
-            <span class="step-label">Site</span>
-        </div>
-        <div class="step-connector" data-connector="2"></div>
-        <div class="step-indicator" data-step="3">
-            3
-            <span class="step-label">Items</span>
-        </div>
-        <div class="step-connector" data-connector="3"></div>
-        <div class="step-indicator" data-step="4">
-            4
-            <span class="step-label">Pricing</span>
-        </div>
-        <div class="step-connector" data-connector="4"></div>
-        <div class="step-indicator" data-step="5">
-            5
-            <span class="step-label">Words</span>
-        </div>
-        <div class="step-connector" data-connector="5"></div>
-        <div class="step-indicator" data-step="6">
-            6
-            <span class="step-label">Actions</span>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    STEP 1: CUSTOMER
-    ============================================================ -->
-    <div class="step active" id="step1">
-        <div class="step-container step-section" id="step1Section">
-            <h2 class="step-title">👤 Customer</h2>
-            <p class="step-description">Select a customer for this invoice.</p>
-
-            <!-- Customer Selection -->
-            <div class="customer-section" style="background:var(--bg);padding:20px;border-radius:var(--radius);margin-bottom:16px;border:2px solid var(--border);">
-                <div class="section-label" style="font-weight:700;font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--text-primary);">Select Customer</div>
-                <div class="customer-select-wrapper" style="display:flex;gap:12px;flex-wrap:wrap;">
-                    <select id="customerSelect" style="flex:1;padding:16px 18px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:17px;font-family:inherit;background:var(--card-bg);color:var(--text-primary);min-width:200px;min-height:56px;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;">
-                        <option value="">-- Select Customer --</option>
-                    </select>
-                    <button class="btn btn-primary" id="addCustomerBtn" style="flex-shrink:0;min-height:56px;">+ Add Customer</button>
-                </div>
+        <!-- STEP INDICATORS -->
+        <div class="step-indicators" id="stepIndicators">
+            <div class="step-indicator active" data-step="1">
+                1
+                <span class="step-label">Customer</span>
             </div>
-
-            <!-- Customer Details - Auto fill -->
-            <div class="customer-details" id="customerDetails" style="display:none;padding:16px 20px;background:var(--card-bg);border-radius:var(--radius-sm);border:2px solid var(--gold);margin-top:12px;">
-                <div class="detail-row" style="display:flex;justify-content:space-between;padding:6px 0;font-size:15px;border-bottom:1px solid var(--border);">
-                    <span style="color:var(--text-secondary);font-weight:500;">Name</span>
-                    <span id="detailName" style="font-weight:600;color:var(--text-primary);">-</span>
-                </div>
-                <div class="detail-row" style="display:flex;justify-content:space-between;padding:6px 0;font-size:15px;border-bottom:1px solid var(--border);">
-                    <span style="color:var(--text-secondary);font-weight:500;">Mobile</span>
-                    <span id="detailMobile" style="font-weight:600;color:var(--text-primary);">-</span>
-                </div>
-                <div class="detail-row" style="display:flex;justify-content:space-between;padding:6px 0;font-size:15px;border-bottom:1px solid var(--border);">
-                    <span style="color:var(--text-secondary);font-weight:500;">Address</span>
-                    <span id="detailAddress" style="font-weight:600;color:var(--text-primary);">-</span>
-                </div>
+            <div class="step-connector" data-connector="1"></div>
+            <div class="step-indicator" data-step="2">
+                2
+                <span class="step-label">Site</span>
             </div>
-
-            <div class="form-group" id="customerNameGroup" style="display:none;">
-                <label>Customer Name <span class="required">*</span></label>
-                <input type="text" id="customerName" readonly style="background:var(--bg);">
-                <div class="input-error">⚠️ Customer is required</div>
+            <div class="step-connector" data-connector="2"></div>
+            <div class="step-indicator" data-step="3">
+                3
+                <span class="step-label">Items</span>
             </div>
-
-            <div class="step-actions">
-                <div></div>
-                <button class="btn btn-primary btn-lg" id="nextFromCustomer">Next →</button>
+            <div class="step-connector" data-connector="3"></div>
+            <div class="step-indicator" data-step="4">
+                4
+                <span class="step-label">Pricing</span>
+            </div>
+            <div class="step-connector" data-connector="4"></div>
+            <div class="step-indicator" data-step="5">
+                5
+                <span class="step-label">Words</span>
+            </div>
+            <div class="step-connector" data-connector="5"></div>
+            <div class="step-indicator" data-step="6">
+                6
+                <span class="step-label">Actions</span>
             </div>
         </div>
-    </div>
 
-    <!-- ============================================================
-    STEP 2: SITE
-    ============================================================ -->
-    <div class="step" id="step2">
-        <div class="step-container step-section" id="step2Section">
-            <h2 class="step-title">📍 Site / Project</h2>
-            <p class="step-description">Enter the site or project location.</p>
+        <!-- STEP 1: CUSTOMER -->
+        <div class="step active" id="step1">
+            <div class="step-container step-section" id="step1Section">
+                <h2 class="step-title">👤 Customer</h2>
+                <p class="step-description">Select a customer for this invoice.</p>
 
-            <div class="form-group" id="siteNameGroup">
-                <label>Site / Project Name <span class="required">*</span></label>
-                <input type="text" id="siteName" placeholder="Enter site/project name">
-                <div class="input-error">⚠️ Site / Project is required</div>
-            </div>
-
-            <div class="step-actions">
-                <button class="btn btn-secondary btn-lg" id="prevFromSite">← Back</button>
-                <button class="btn btn-primary btn-lg" id="nextFromSite">Next →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    STEP 3: ITEMS
-    ============================================================ -->
-    <div class="step" id="step3">
-        <div class="step-container step-section" id="step3Section">
-            <h2 class="step-title">📦 Items</h2>
-            <p class="step-description">Select items from the database.</p>
-
-            <div class="items-list" id="itemsList">
-                <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
-                    <div style="font-size:32px;margin-bottom:8px;">📭</div>
-                    <p>No items added yet. Select your first item below.</p>
-                </div>
-            </div>
-
-            <div class="add-item-form" id="addItemForm">
-                <div class="form-group" id="itemSelectGroup">
-                    <label>Item <span class="required">*</span></label>
-                    <select id="itemSelect">
-                        <option value="">-- Select Item --</option>
-                    </select>
-                    <div class="input-error">⚠️ Please select an item</div>
-                </div>
-                <div class="form-group" id="itemQtyGroup">
-                    <label>Qty <span class="required">*</span></label>
-                    <input type="number" id="itemQty" value="1" min="0.5" step="0.5">
-                    <div class="input-error">⚠️ Quantity must be greater than 0</div>
-                </div>
-                <div class="form-group">
-                    <label>Rate</label>
-                    <input type="text" id="itemRate" readonly style="background:var(--bg);" value="Auto">
-                </div>
-                <div class="form-group" style="display:flex;align-items:end;">
-                    <button class="btn btn-primary btn-block" id="addItemBtn">➕ Add</button>
-                </div>
-            </div>
-
-            <div style="margin-top:12px;">
-                <button class="btn btn-secondary btn-block" id="addAnotherItemBtn">➕ Add Another Item</button>
-            </div>
-
-            <div class="step-actions">
-                <button class="btn btn-secondary btn-lg" id="prevFromItems">← Back</button>
-                <button class="btn btn-primary btn-lg" id="nextFromItems">Next →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    STEP 4: PRICING / TOTAL
-    ============================================================ -->
-    <div class="step" id="step4">
-        <div class="step-container step-section" id="step4Section">
-            <h2 class="step-title">💰 Pricing / Total</h2>
-            <p class="step-description">Configure discount and GST.</p>
-
-            <!-- Discount -->
-            <div class="form-group">
-                <label>Discount</label>
-                <div class="discount-toggle">
-                    <span class="toggle-label">OFF</span>
-                    <div class="toggle-switch" id="discountToggle">
-                        <div class="toggle-knob"></div>
-                    </div>
-                    <span class="toggle-label">ON</span>
-                </div>
-                <div class="discount-input-group" id="discountInputs" style="display:none;">
-                    <div class="form-group" style="margin-bottom:0;">
-                        <label>Type</label>
-                        <select id="discountType">
-                            <option value="percentage">%</option>
-                            <option value="fixed">₹</option>
+                <div class="customer-section">
+                    <div style="font-weight:700;font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--text-primary);">Select Customer</div>
+                    <div class="customer-select-wrapper">
+                        <select id="customerSelect">
+                            <option value="">-- Select Customer --</option>
                         </select>
+                        <button class="btn btn-primary" id="addCustomerBtn">+ Add Customer</button>
                     </div>
-                    <div class="form-group" style="margin-bottom:0;">
-                        <label>Value</label>
-                        <input type="number" id="discountValue" value="0" min="0" step="0.5">
+
+                    <div class="customer-details" id="customerDetails">
+                        <div class="detail-row">
+                            <span style="color:var(--text-secondary);font-weight:500;">Name</span>
+                            <span id="detailName" style="font-weight:600;color:var(--text-primary);">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span style="color:var(--text-secondary);font-weight:500;">Mobile</span>
+                            <span id="detailMobile" style="font-weight:600;color:var(--text-primary);">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span style="color:var(--text-secondary);font-weight:500;">Address</span>
+                            <span id="detailAddress" style="font-weight:600;color:var(--text-primary);">-</span>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- GST -->
-            <div class="form-group" id="gstGroup">
-                <label>GST Rate <span class="required">*</span></label>
-                <div class="gst-input-group">
-                    <select id="gstSelect">
-                        <option value="">-- Select GST --</option>
-                        <option value="0">0%</option>
-                        <option value="5">5%</option>
-                        <option value="9">9%</option>
-                        <option value="18" selected>18%</option>
-                        <option value="28">28%</option>
-                    </select>
-                    <button class="btn btn-secondary btn-sm" id="addGstBtn">+ Add GST Rate</button>
+                    <input type="hidden" id="customerName">
+                    <input type="hidden" id="customerMobile">
+                    <input type="hidden" id="customerAddress">
                 </div>
-                <div class="input-error">⚠️ Please select GST rate</div>
-            </div>
 
-            <!-- Pricing Summary -->
-            <div class="pricing-summary" id="pricingSummary">
-                <div class="summary-item">
-                    <span class="label">Subtotal</span>
-                    <span class="value" id="subtotalDisplay">₹0.00</span>
+                <div class="form-group" id="customerNameGroup" style="display:none;">
+                    <label>Customer Name <span class="required">*</span></label>
+                    <input type="text" id="customerNameDisplay" readonly style="background:var(--bg);">
+                    <div class="input-error">⚠️ Customer is required</div>
                 </div>
-                <div class="summary-item">
-                    <span class="label">Discount</span>
-                    <span class="value" id="discountDisplay">₹0.00</span>
-                </div>
-                <div class="summary-item">
-                    <span class="label">Taxable Amount</span>
-                    <span class="value" id="taxableDisplay">₹0.00</span>
-                </div>
-                <div class="summary-item">
-                    <span class="label">GST Amount</span>
-                    <span class="value" id="gstAmountDisplay">₹0.00</span>
-                </div>
-                <div class="summary-item total">
-                    <span class="label">GRAND TOTAL</span>
-                    <span class="value" id="grandTotalDisplay">₹0.00</span>
-                </div>
-            </div>
 
-            <div class="step-actions">
-                <button class="btn btn-secondary btn-lg" id="prevFromPricing">← Back</button>
-                <button class="btn btn-primary btn-lg" id="nextFromPricing">Next →</button>
+                <div class="step-actions">
+                    <div></div>
+                    <button class="btn btn-primary btn-lg" id="nextFromCustomer">Next →</button>
+                </div>
             </div>
         </div>
+
+        <!-- STEP 2: SITE -->
+        <div class="step" id="step2">
+            <div class="step-container step-section" id="step2Section">
+                <h2 class="step-title">📍 Site / Project</h2>
+                <p class="step-description">Enter the site or project location.</p>
+
+                <div class="form-group" id="siteNameGroup">
+                    <label>Site / Project Name <span class="required">*</span></label>
+                    <input type="text" id="siteName" placeholder="Enter site/project name">
+                    <div class="input-error">⚠️ Site / Project is required</div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary btn-lg" id="prevFromSite">← Back</button>
+                    <button class="btn btn-primary btn-lg" id="nextFromSite">Next →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: ITEMS -->
+        <div class="step" id="step3">
+            <div class="step-container step-section" id="step3Section">
+                <h2 class="step-title">📦 Items</h2>
+                <p class="step-description">Select items from the database.</p>
+
+                <div class="items-list" id="itemsList">
+                    <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                        <div style="font-size:32px;margin-bottom:8px;">📭</div>
+                        <p>No items added yet. Select your first item below.</p>
+                    </div>
+                </div>
+
+                <div class="add-item-form" id="addItemForm">
+                    <div class="form-group" id="itemSelectGroup">
+                        <label>Item <span class="required">*</span></label>
+                        <select id="itemSelect">
+                            <option value="">-- Select Item --</option>
+                        </select>
+                        <div class="input-error">⚠️ Please select an item</div>
+                    </div>
+                    <div class="form-group" id="itemQtyGroup">
+                        <label>Qty <span class="required">*</span></label>
+                        <input type="number" id="itemQty" value="1" min="0.5" step="0.5">
+                        <div class="input-error">⚠️ Quantity must be greater than 0</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Rate</label>
+                        <input type="text" id="itemRate" readonly style="background:var(--bg);" value="Auto">
+                    </div>
+                    <div class="form-group" style="display:flex;align-items:end;">
+                        <button class="btn btn-primary btn-block" id="addItemBtn">➕ Add</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:12px;">
+                    <button class="btn btn-secondary btn-block" id="addAnotherItemBtn">➕ Add Another Item</button>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary btn-lg" id="prevFromItems">← Back</button>
+                    <button class="btn btn-primary btn-lg" id="nextFromItems">Next →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 4: PRICING -->
+        <div class="step" id="step4">
+            <div class="step-container step-section" id="step4Section">
+                <h2 class="step-title">💰 Pricing / Total</h2>
+                <p class="step-description">Configure discount and GST.</p>
+
+                <div class="form-group">
+                    <label>Discount</label>
+                    <div class="discount-toggle">
+                        <span class="toggle-label">OFF</span>
+                        <div class="toggle-switch" id="discountToggle">
+                            <div class="toggle-knob"></div>
+                        </div>
+                        <span class="toggle-label">ON</span>
+                    </div>
+                    <div class="discount-input-group" id="discountInputs" style="display:none;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Type</label>
+                            <select id="discountType">
+                                <option value="percentage">%</option>
+                                <option value="fixed">₹</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Value</label>
+                            <input type="number" id="discountValue" value="0" min="0" step="0.5">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="gstGroup">
+                    <label>GST Rate <span class="required">*</span></label>
+                    <div class="gst-input-group">
+                        <select id="gstSelect">
+                            <option value="">-- Select GST --</option>
+                            <option value="0">0%</option>
+                            <option value="5">5%</option>
+                            <option value="9">9%</option>
+                            <option value="18" selected>18%</option>
+                            <option value="28">28%</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" id="addGstBtn">+ Add GST Rate</button>
+                    </div>
+                    <div class="input-error">⚠️ Please select GST rate</div>
+                </div>
+
+                <div class="pricing-summary" id="pricingSummary">
+                    <div class="summary-item">
+                        <span class="label">Subtotal</span>
+                        <span class="value" id="subtotalDisplay">₹0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Discount</span>
+                        <span class="value" id="discountDisplay">₹0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Taxable Amount</span>
+                        <span class="value" id="taxableDisplay">₹0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">GST Amount</span>
+                        <span class="value" id="gstAmountDisplay">₹0.00</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span class="label">GRAND TOTAL</span>
+                        <span class="value" id="grandTotalDisplay">₹0.00</span>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary btn-lg" id="prevFromPricing">← Back</button>
+                    <button class="btn btn-primary btn-lg" id="nextFromPricing">Next →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5: AMOUNT IN WORDS -->
+        <div class="step" id="step5">
+            <div class="step-container step-section" id="step5Section">
+                <h2 class="step-title">📝 Amount in Words</h2>
+                <p class="step-description">Review the total amount in words.</p>
+
+                <div class="amount-words">
+                    <div class="label">Amount in Words</div>
+                    <div class="words" id="amountInWords">Zero</div>
+                    <div style="margin-top:8px;font-size:14px;color:var(--text-secondary);">
+                        Total Amount: <span id="wordsTotalDisplay" style="font-weight:700;color:var(--primary);">₹0.00</span>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary btn-lg" id="prevFromWords">← Back</button>
+                    <button class="btn btn-primary btn-lg" id="nextFromWords">Next →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 6: ACTIONS -->
+        <div class="step" id="step6">
+            <div class="step-container step-section" id="step6Section">
+                <h2 class="step-title">📄 Actions</h2>
+                <p class="step-description">Review and finalize your invoice.</p>
+
+                <div class="preview-content">
+                    <div class="preview-row">
+                        <span><strong>Invoice No:</strong></span>
+                        <span id="previewInvoiceNo">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span><strong>Quotation Ref:</strong></span>
+                        <span id="previewQuotationRef">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span><strong>Customer:</strong></span>
+                        <span id="previewCustomer">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span><strong>Site:</strong></span>
+                        <span id="previewSite">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span><strong>Items:</strong></span>
+                        <span id="previewItemCount">0 items</span>
+                    </div>
+                    <div class="preview-row" style="border-bottom:2px solid var(--gold);padding-bottom:10px;margin-top:4px;">
+                        <span><strong>Grand Total:</strong></span>
+                        <span id="previewTotal" style="font-size:18px;font-weight:700;color:var(--primary);">₹0.00</span>
+                    </div>
+                    <div class="preview-row" style="border-bottom:none;padding-top:6px;">
+                        <span><strong>Amount in Words:</strong></span>
+                        <span id="previewWords" style="font-weight:500;">Zero</span>
+                    </div>
+                </div>
+
+                <div class="step-actions" style="flex-direction:column;align-items:stretch;gap:12px;">
+                    <div class="btn-group" style="display:flex;gap:12px;flex-wrap:wrap;width:100%;">
+                        <button class="btn btn-success btn-lg" id="saveInvoiceBtn" style="flex:1;min-width:150px;">💾 Save Invoice</button>
+                        <button class="btn btn-secondary btn-lg" id="printBtn" style="flex:1;min-width:150px;">🖨️ Print</button>
+                        <button class="btn btn-convert btn-lg" id="whatsappBtn" style="flex:1;min-width:150px;">📱 WhatsApp</button>
+                        <button class="btn btn-primary btn-lg" id="pdfBtn" style="flex:1;min-width:150px;">📄 PDF</button>
+                    </div>
+                    <button class="btn btn-secondary btn-lg" id="prevFromActions">← Back</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ============================================================
-    STEP 5: AMOUNT IN WORDS
+    INVOICE DOCUMENT (For Print/PDF)
     ============================================================ -->
-    <div class="step" id="step5">
-        <div class="step-container step-section" id="step5Section">
-            <h2 class="step-title">📝 Amount in Words</h2>
-            <p class="step-description">Review the total amount in words.</p>
-
-            <div class="amount-words" style="padding:24px;background:var(--bg);border-radius:var(--radius-sm);border:2px solid var(--gold);margin-top:16px;text-align:center;">
-                <div class="label" style="font-size:14px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;">Amount in Words</div>
-                <div class="words" id="amountInWords" style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:8px;">Zero</div>
-                <div style="margin-top:8px;font-size:14px;color:var(--text-secondary);">
-                    Total Amount: <span id="wordsTotalDisplay" style="font-weight:700;color:var(--primary);">₹0.00</span>
-                </div>
-            </div>
-
-            <div class="step-actions">
-                <button class="btn btn-secondary btn-lg" id="prevFromWords">← Back</button>
-                <button class="btn btn-primary btn-lg" id="nextFromWords">Next →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    STEP 6: ACTIONS
-    ============================================================ -->
-    <div class="step" id="step6">
-        <div class="step-container step-section" id="step6Section">
-            <h2 class="step-title">📄 Actions</h2>
-            <p class="step-description">Review and finalize your invoice.</p>
-
-            <div class="preview-content" style="padding:20px;background:var(--bg);border-radius:var(--radius-sm);min-height:100px;border:2px solid var(--border);margin-bottom:16px;">
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
-                    <span><strong>Invoice No:</strong></span>
-                    <span id="previewInvoiceNo">-</span>
-                </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
-                    <span><strong>Quotation Ref:</strong></span>
-                    <span id="previewQuotationRef">-</span>
-                </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
-                    <span><strong>Customer:</strong></span>
-                    <span id="previewCustomer">-</span>
-                </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
-                    <span><strong>Site:</strong></span>
-                    <span id="previewSite">-</span>
-                </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
-                    <span><strong>Items:</strong></span>
-                    <span id="previewItemCount">0 items</span>
-                </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:2px solid var(--gold);padding-bottom:10px;margin-top:4px;">
-                    <span><strong>Grand Total:</strong></span>
-                    <span id="previewTotal" style="font-size:18px;font-weight:700;color:var(--primary);">₹0.00</span>
-                </div>
-                <div class="preview-row" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:none;padding-top:6px;">
-                    <span><strong>Amount in Words:</strong></span>
-                    <span id="previewWords" style="font-weight:500;">Zero</span>
-                </div>
-            </div>
-
-            <div class="step-actions" style="flex-direction:column;align-items:stretch;gap:12px;">
-                <div class="btn-group" style="display:flex;gap:12px;flex-wrap:wrap;width:100%;">
-                    <button class="btn btn-success btn-lg" id="saveInvoiceBtn" style="flex:1;min-width:150px;">💾 Save Invoice</button>
-                    <button class="btn btn-secondary btn-lg" id="printBtn" style="flex:1;min-width:150px;">🖨️ Print</button>
-                    <button class="btn btn-convert btn-lg" id="whatsappBtn" style="flex:1;min-width:150px;">📱 WhatsApp</button>
-                    <button class="btn btn-primary btn-lg" id="pdfBtn" style="flex:1;min-width:150px;">📄 PDF</button>
-                </div>
-                <button class="btn btn-secondary btn-lg" id="prevFromActions">← Back</button>
-            </div>
-        </div>
+    <div class="invoice-document" id="invoiceDocument">
+        <!-- Will be populated by JavaScript -->
     </div>
 
     <!-- ============================================================
@@ -1326,7 +1346,7 @@
     </div>
 
     <!-- ============================================================
-    CUSTOM GST MODAL
+    ADD GST MODAL
     ============================================================ -->
     <div class="modal-overlay" id="gstModal">
         <div class="modal-content">
@@ -1352,1049 +1372,1485 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // LOCAL STORAGE KEYS
-        // ============================================================
-        const STORAGE_KEY = 'h4_quotations_v1';
-        const INVOICE_STORAGE_KEY = 'h4_invoices_v1';
-
-        // ============================================================
-        // MOCK PRODUCTS (for manual add only)
-        // ============================================================
-        const productDatabase = [
-            { id: 'p1', name: 'H4 Tile Adhesive', rate: 450, type: 'general' },
-            { id: 'p2', name: 'H4 Waterproofing', rate: 850, type: 'waterproofing' },
-            { id: 'p3', name: 'H4 ShieldX Epoxy', rate: 1200, type: 'epoxy' },
-            { id: 'p4', name: 'H4 Grout', rate: 350, type: 'general' },
-            { id: 'p5', name: 'H4 Primer', rate: 280, type: 'general' },
-            { id: 'p6', name: 'H4 Acrylic Coating', rate: 650, type: 'waterproofing' },
-            { id: 'p7', name: 'H4 Polyurethane', rate: 950, type: 'waterproofing' },
-            { id: 'p8', name: 'H4 Cement Adhesive', rate: 320, type: 'general' },
-        ];
-
-        // ============================================================
-        // MOCK CUSTOMER SERVICE
-        // ============================================================
-        const customerService = {
-            customers: [
-                { id: 'c1', name: 'ABC Builders', phone: '9876543210', address: 'Tirur, Malappuram' },
-                { id: 'c2', name: 'XYZ Construction', phone: '9876543211', address: 'Malappuram, Kerala' },
-                { id: 'c3', name: 'Anwar', phone: '9876543212', address: 'Calicut, Kerala' },
-                { id: 'c4', name: 'Rahman Constructions', phone: '9876543213', address: 'Kochi, Kerala' },
-                { id: 'c5', name: 'Sneha Interiors', phone: '9876543214', address: 'Trivandrum, Kerala' },
-            ],
-
-            getCustomers() {
-                return this.customers;
-            },
-
-            getCustomer(id) {
-                return this.customers.find(c => c.id === id);
-            },
-
-            addCustomer(data) {
-                const newCustomer = {
-                    id: 'c' + Date.now(),
-                    ...data
-                };
-                this.customers.push(newCustomer);
-                return newCustomer;
-            }
-        };
-
-        // ============================================================
-        // STATE
+        // H4 INVOICE - COMPLETE FIXED VERSION
         // ============================================================
 
-        let invoiceData = {
-            invoiceNumber: '',
-            quotationNumber: '',
-            quotationId: '',
-            customerId: '',
-            customer: { name: '', phone: '', address: '' },
-            site: '',
-            items: [],
-            discountEnabled: false,
-            discountType: 'percentage',
-            discountValue: 0,
-            discountAmount: 0,
-            gstRate: 18,
-            gstAmount: 0,
-            subtotal: 0,
-            taxableAmount: 0,
-            grandTotal: 0,
-            quotationType: 'general',
-            createdAt: '',
-            status: 'draft'
-        };
+        (function() {
+            'use strict';
 
-        let currentStep = 1;
-        let isFromQuotation = false;
-        let hasValidCustomer = false;
+            // ============================================================
+            // CONSTANTS
+            // ============================================================
+            const STORAGE_KEY = 'h4_quotations_v1';
+            const INVOICE_STORAGE_KEY = 'h4_invoices_v1';
+            const COMPANY_STORAGE_KEY = 'h4_company_config';
+            const PRODUCT_STORAGE_KEY = 'h4_products_v1';
+            const CUSTOMER_STORAGE_KEY = 'h4_customers_v1';
+            const THEME_STORAGE_KEY = 'h4_theme_config';
 
-        // ============================================================
-        // DOM REFS
-        // ============================================================
-
-        const toastContainer = document.getElementById('toastContainer');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-
-        // ============================================================
-        // TOAST
-        // ============================================================
-
-        function showToast(message, type = 'info', duration = 3500) {
-            const toast = document.createElement('div');
-            const iconMap = {
-                success: '✅',
-                error: '❌',
-                warning: '⚠️',
-                info: 'ℹ️'
-            };
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <span class="toast-icon">${iconMap[type] || 'ℹ️'}</span>
-                <span>${message}</span>
-                <button class="toast-close">✕</button>
-            `;
-            toastContainer.appendChild(toast);
-
-            const closeBtn = toast.querySelector('.toast-close');
-            closeBtn.addEventListener('click', () => {
-                toast.remove();
-            });
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
-        }
-
-        function showLoading(show) {
-            loadingOverlay.classList.toggle('show', show);
-        }
-
-        // ============================================================
-        // NUMBER TO WORDS
-        // ============================================================
-
-        function numberToWords(num) {
-            if (num === 0) return 'Zero';
-            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
-                'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+            // ============================================================
+            // DEFAULT PRODUCTS
+            // ============================================================
+            const defaultProducts = [
+                { id: 'p1', name: 'H4 Tile Adhesive', rate: 450, type: 'general' },
+                { id: 'p2', name: 'H4 Waterproofing', rate: 850, type: 'waterproofing' },
+                { id: 'p3', name: 'H4 ShieldX Epoxy', rate: 1200, type: 'epoxy' },
+                { id: 'p4', name: 'H4 Grout', rate: 350, type: 'general' },
+                { id: 'p5', name: 'H4 Primer', rate: 280, type: 'general' },
+                { id: 'p6', name: 'H4 Acrylic Coating', rate: 650, type: 'waterproofing' },
+                { id: 'p7', name: 'H4 Polyurethane', rate: 950, type: 'waterproofing' },
+                { id: 'p8', name: 'H4 Cement Adhesive', rate: 320, type: 'general' },
             ];
-            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
-            let words = '';
-            let remainder = Math.floor(num);
+            // ============================================================
+            // DEFAULT THEME
+            // ============================================================
+            const defaultTheme = {
+                primaryColor: '#1a1a2e',
+                accentColor: '#FFD700',
+                accentDark: '#D4AF37',
+                bgColor: '#f8f6f0',
+                cardBg: '#ffffff',
+                borderColor: '#e5e0d5',
+                textPrimary: '#1a1a2e',
+                textSecondary: '#4B5563',
+                textMuted: '#9CA3AF',
+                fontFamily: 'Inter, Arial, sans-serif',
+                fontSize: '14px',
+                headingFontSize: '20px',
+                logoSize: '60px',
+                logoPosition: 'left',
+                cardRadius: '16px',
+                spacing: '16px'
+            };
 
-            if (remainder >= 10000000) {
-                words += ones[Math.floor(remainder / 10000000)] + ' Crore ';
-                remainder %= 10000000;
-            }
-            if (remainder >= 100000) {
-                words += ones[Math.floor(remainder / 100000)] + ' Lakh ';
-                remainder %= 100000;
-            }
-            if (remainder >= 1000) {
-                words += ones[Math.floor(remainder / 1000)] + ' Thousand ';
-                remainder %= 1000;
-            }
-            if (remainder >= 100) {
-                words += ones[Math.floor(remainder / 100)] + ' Hundred ';
-                remainder %= 100;
-            }
-            if (remainder > 0) {
-                if (remainder < 20) {
-                    words += ones[remainder] + ' ';
-                } else {
-                    words += tens[Math.floor(remainder / 10)] + ' ';
-                    if (remainder % 10 > 0) {
-                        words += ones[remainder % 10] + ' ';
+            // ============================================================
+            // CUSTOMER SERVICE - WITH PERMANENT STORAGE
+            // ============================================================
+            const customerService = {
+                customers: [],
+
+                loadCustomers() {
+                    try {
+                        const data = localStorage.getItem(CUSTOMER_STORAGE_KEY);
+                        if (data) {
+                            this.customers = JSON.parse(data);
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn('Error loading customers:', e);
                     }
+                    this.customers = [
+                        { id: 'c1', name: 'ABC Builders', phone: '9876543210', address: 'Tirur, Malappuram' },
+                        { id: 'c2', name: 'XYZ Construction', phone: '9876543211', address: 'Malappuram, Kerala' },
+                        { id: 'c3', name: 'Anwar', phone: '9876543212', address: 'Calicut, Kerala' },
+                        { id: 'c4', name: 'Rahman Constructions', phone: '9876543213', address: 'Kochi, Kerala' },
+                        { id: 'c5', name: 'Sneha Interiors', phone: '9876543214', address: 'Trivandrum, Kerala' },
+                    ];
+                    this.saveCustomers();
+                },
+
+                saveCustomers() {
+                    try {
+                        localStorage.setItem(CUSTOMER_STORAGE_KEY, JSON.stringify(this.customers));
+                    } catch (e) {
+                        console.error('Error saving customers:', e);
+                    }
+                },
+
+                getCustomers() {
+                    return this.customers;
+                },
+
+                getCustomer(id) {
+                    return this.customers.find(c => c.id === id);
+                },
+
+                addCustomer(data) {
+                    const newCustomer = {
+                        id: 'c' + Date.now(),
+                        ...data
+                    };
+                    this.customers.push(newCustomer);
+                    this.saveCustomers();
+                    return newCustomer;
                 }
-            }
+            };
 
-            const paise = Math.round((num - Math.floor(num)) * 100);
-            let finalWords = 'Rupees ' + words.trim();
-            if (paise > 0) {
-                finalWords += ' and ' + numberToWords(paise) + ' Paise';
-            }
-            finalWords += ' Only';
-            return finalWords;
-        }
+            // ============================================================
+            // STATE
+            // ============================================================
 
-        // ============================================================
-        // STORAGE FUNCTIONS
-        // ============================================================
+            let invoiceData = {
+                invoiceNumber: '',
+                quotationNumber: '',
+                quotationId: '',
+                customerId: '',
+                customer: { name: '', phone: '', address: '' },
+                site: '',
+                items: [],
+                discountEnabled: false,
+                discountType: 'percentage',
+                discountValue: 0,
+                discountAmount: 0,
+                gstRate: 18,
+                gstAmount: 0,
+                subtotal: 0,
+                taxableAmount: 0,
+                grandTotal: 0,
+                quotationType: 'general',
+                createdAt: '',
+                invoiceDate: '',
+                status: 'draft'
+            };
 
-        function loadQuotationsFromStorage() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
-        }
+            let currentStep = 1;
+            let isFromQuotation = false;
+            let hasValidCustomer = false;
+            let productDatabase = [];
+            let editingItemId = null;
+            let themeConfig = { ...defaultTheme };
+            let companyConfig = null;
 
-        function saveQuotationsToStorage(data) {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            } catch (e) {
-                console.error('Error saving quotations:', e);
-            }
-        }
+            // ============================================================
+            // DOM REFS
+            // ============================================================
 
-        function loadInvoicesFromStorage() {
-            try {
-                const data = localStorage.getItem(INVOICE_STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
-        }
+            const toastContainer = document.getElementById('toastContainer');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const builderUI = document.getElementById('builderUI');
+            const invoiceDocument = document.getElementById('invoiceDocument');
 
-        function saveInvoicesToStorage(invoices) {
-            try {
-                localStorage.setItem(INVOICE_STORAGE_KEY, JSON.stringify(invoices));
-            } catch (e) {
-                console.error('Error saving invoices:', e);
-            }
-        }
+            // ============================================================
+            // LOAD PRODUCTS
+            // ============================================================
 
-        // ============================================================
-        // LOAD DATA FROM URL
-        // ============================================================
-
-        function loadDataFromURL() {
-            const params = new URLSearchParams(window.location.search);
-            const dataParam = params.get('data');
-
-            if (dataParam) {
+            function loadProducts() {
                 try {
-                    const decoded = decodeURIComponent(dataParam);
-                    const parsed = JSON.parse(decoded);
-                    
-                    // Preserve rates from quotation - DO NOT override with product database
-                    invoiceData = { ...invoiceData, ...parsed };
-                    isFromQuotation = true;
-                    
-                    // Generate invoice number
-                    const existing = loadInvoicesFromStorage();
-                    const count = existing.length + 1;
-                    invoiceData.invoiceNumber = 'INV-' + String(count).padStart(4, '0');
-                    
-                    showToast('✅ Invoice data loaded from quotation', 'success', 2000);
-                    return true;
+                    const data = localStorage.getItem(PRODUCT_STORAGE_KEY);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (parsed.length > 0) {
+                            productDatabase = parsed;
+                            return;
+                        }
+                    }
                 } catch (e) {
-                    console.error('Error parsing invoice data:', e);
-                    showToast('❌ Error loading invoice data', 'error');
-                    return false;
+                    console.warn('Error loading products:', e);
                 }
+                productDatabase = [...defaultProducts];
+                try {
+                    localStorage.setItem(PRODUCT_STORAGE_KEY, JSON.stringify(productDatabase));
+                } catch (e) {}
             }
 
-            // Check for invoice param (for viewing existing invoice)
-            const invoiceParam = params.get('invoice');
-            if (invoiceParam) {
-                const invoices = loadInvoicesFromStorage();
-                const found = invoices.find(inv => inv.invoiceNumber === invoiceParam);
-                if (found) {
-                    invoiceData = found;
-                    isFromQuotation = false;
-                    showToast(`📄 Invoice ${invoiceParam} loaded`, 'info', 2000);
-                    return true;
+            // ============================================================
+            // LOAD COMPANY CONFIG
+            // ============================================================
+
+            function loadCompanyConfig() {
+                try {
+                    const data = localStorage.getItem(COMPANY_STORAGE_KEY);
+                    if (data) {
+                        companyConfig = JSON.parse(data);
+                        return companyConfig;
+                    }
+                } catch (e) {
+                    console.warn('Error loading company config:', e);
                 }
-                showToast('❌ Invoice not found', 'error');
-                return false;
+                companyConfig = null;
+                return null;
             }
 
-            // No data - show empty invoice
-            return false;
-        }
+            // ============================================================
+            // LOAD THEME CONFIG
+            // ============================================================
 
-        // ============================================================
-        // STEP NAVIGATION
-        // ============================================================
-
-        function showStep(step) {
-            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-            const stepElement = document.getElementById(`step${step}`);
-            if (stepElement) stepElement.classList.add('active');
-            currentStep = step;
-            updateIndicators(step);
-            scrollToStep(document.getElementById(`step${step}Section`));
-        }
-
-        function updateIndicators(step) {
-            const indicators = document.querySelectorAll('.step-indicator');
-            const connectors = document.querySelectorAll('.step-connector');
-            indicators.forEach((el, index) => {
-                const num = index + 1;
-                el.classList.remove('active', 'completed');
-                if (num === step) el.classList.add('active');
-                else if (num < step) el.classList.add('completed');
-            });
-            connectors.forEach((el, index) => {
-                el.classList.toggle('completed', index + 1 < step);
-            });
-        }
-
-        function scrollToStep(element) {
-            if (!element) {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                return;
-            }
-            if (document.activeElement) document.activeElement.blur();
-            setTimeout(() => {
-                element.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 50);
-        }
-
-        function goToNextStep() {
-            if (!validateStep(currentStep)) return;
-            if (document.activeElement) document.activeElement.blur();
-            if (currentStep < 6) {
-                showStep(currentStep + 1);
-            }
-        }
-
-        function goToPrevStep() {
-            if (document.activeElement) document.activeElement.blur();
-            if (currentStep > 1) {
-                showStep(currentStep - 1);
-            }
-        }
-
-        // ============================================================
-        // VALIDATION
-        // ============================================================
-
-        function validateStep(step) {
-            switch (step) {
-                case 1:
-                    return validateCustomer();
-                case 2:
-                    return validateSite();
-                case 3:
-                    return validateItems();
-                case 4:
-                    return validatePricing();
-                case 5:
-                    return true;
-                default:
-                    return true;
-            }
-        }
-
-        function validateCustomer() {
-            const customerId = document.getElementById('customerSelect').value;
-            const name = document.getElementById('customerName').value.trim();
-
-            if (!customerId || !name) {
-                showToast('⚠️ Customer is required', 'error');
-                document.getElementById('customerNameGroup').style.display = 'block';
-                document.getElementById('customerNameGroup').classList.add('error');
-                return false;
-            }
-
-            document.getElementById('customerNameGroup').style.display = 'none';
-            document.getElementById('customerNameGroup').classList.remove('error');
-            return true;
-        }
-
-        function validateSite() {
-            const site = document.getElementById('siteName').value.trim();
-            const group = document.getElementById('siteNameGroup');
-            if (!site) {
-                group.classList.add('error');
-                showToast('⚠️ Site / Project is required', 'error');
-                return false;
-            }
-            group.classList.remove('error');
-            invoiceData.site = site;
-            return true;
-        }
-
-        function validateItems() {
-            if (invoiceData.items.length === 0) {
-                showToast('⚠️ Please add at least one item', 'error');
-                return false;
-            }
-            for (const item of invoiceData.items) {
-                if (item.rate === 0) {
-                    showToast(`⚠️ Rate not available for "${item.name}"`, 'error');
-                    return false;
+            function loadThemeConfig() {
+                try {
+                    const data = localStorage.getItem(THEME_STORAGE_KEY);
+                    if (data) {
+                        themeConfig = { ...defaultTheme, ...JSON.parse(data) };
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('Error loading theme config:', e);
                 }
-            }
-            return true;
-        }
-
-        function validatePricing() {
-            const gstSelect = document.getElementById('gstSelect');
-            const gstGroup = document.getElementById('gstGroup');
-            if (!gstSelect.value) {
-                gstGroup.classList.add('error');
-                showToast('⚠️ Please select GST rate', 'error');
-                return false;
-            }
-            gstGroup.classList.remove('error');
-            return true;
-        }
-
-        // ============================================================
-        // CUSTOMER FUNCTIONS
-        // ============================================================
-
-        function loadCustomerDropdown() {
-            const select = document.getElementById('customerSelect');
-            select.innerHTML = '<option value="">-- Select Customer --</option>';
-            const customers = customerService.getCustomers();
-            customers.forEach(c => {
-                const option = document.createElement('option');
-                option.value = c.id;
-                option.textContent = c.name;
-                select.appendChild(option);
-            });
-        }
-
-        function onCustomerSelect() {
-            const select = document.getElementById('customerSelect');
-            const customerId = select.value;
-
-            if (!customerId) {
-                document.getElementById('customerDetails').style.display = 'none';
-                document.getElementById('customerNameGroup').style.display = 'none';
-                document.getElementById('customerName').value = '';
-                document.getElementById('customerMobile').value = '';
-                document.getElementById('customerAddress').value = '';
-                hasValidCustomer = false;
-                invoiceData.customerId = '';
-                invoiceData.customer = { name: '', phone: '', address: '' };
-                updatePreview();
-                return;
+                themeConfig = { ...defaultTheme };
             }
 
-            const customer = customerService.getCustomer(customerId);
-            if (!customer) return;
+            // ============================================================
+            // TOAST
+            // ============================================================
 
-            hasValidCustomer = true;
-            invoiceData.customerId = customerId;
-            invoiceData.customer = {
-                name: customer.name,
-                phone: customer.phone || '',
-                address: customer.address || ''
-            };
+            function showToast(message, type = 'info', duration = 3500) {
+                const toast = document.createElement('div');
+                const iconMap = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    <span class="toast-icon">${iconMap[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <button class="toast-close">✕</button>
+                `;
+                toastContainer.appendChild(toast);
 
-            // Auto-fill customer details
-            document.getElementById('customerDetails').style.display = 'block';
-            document.getElementById('detailName').textContent = customer.name;
-            document.getElementById('detailMobile').textContent = customer.phone || 'N/A';
-            document.getElementById('detailAddress').textContent = customer.address || 'N/A';
+                const closeBtn = toast.querySelector('.toast-close');
+                closeBtn.addEventListener('click', () => {
+                    toast.remove();
+                });
 
-            document.getElementById('customerName').value = customer.name;
-            document.getElementById('customerMobile').value = customer.phone || '';
-            document.getElementById('customerAddress').value = customer.address || '';
-
-            document.getElementById('customerNameGroup').style.display = 'none';
-
-            showToast(`✅ Customer selected: ${customer.name}`, 'success', 2000);
-            updatePreview();
-            updatePricing();
-        }
-
-        function openAddCustomer() {
-            document.getElementById('addCustomerModal').classList.add('open');
-            document.getElementById('newCustomerName').value = '';
-            document.getElementById('newCustomerMobile').value = '';
-            document.getElementById('newCustomerAddress').value = '';
-            document.getElementById('newCustomerName').focus();
-        }
-
-        function saveNewCustomer() {
-            const name = document.getElementById('newCustomerName').value.trim();
-            if (!name) {
-                showToast('⚠️ Customer name is required', 'error');
-                return;
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100%)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, duration);
             }
 
-            const newCustomer = {
-                name: name,
-                phone: document.getElementById('newCustomerMobile').value.trim(),
-                address: document.getElementById('newCustomerAddress').value.trim()
-            };
+            function showLoading(show) {
+                loadingOverlay.classList.toggle('show', show);
+            }
 
-            const saved = customerService.addCustomer(newCustomer);
-            loadCustomerDropdown();
-            document.getElementById('customerSelect').value = saved.id;
-            onCustomerSelect();
-            document.getElementById('addCustomerModal').classList.remove('open');
-            showToast(`✅ Customer "${name}" added successfully!`, 'success');
-        }
+            // ============================================================
+            // NUMBER TO WORDS
+            // ============================================================
 
-        // ============================================================
-        // FILL DATA FROM URL
-        // ============================================================
+            function numberToWords(num) {
+                if (num === 0) return 'Zero';
+                const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+                    'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+                ];
+                const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
-        function fillInvoiceData() {
-            // Customer - auto select if exists
-            if (invoiceData.customer?.name) {
-                const customers = customerService.getCustomers();
-                const found = customers.find(c => c.name === invoiceData.customer.name);
-                if (found) {
-                    document.getElementById('customerSelect').value = found.id;
-                    onCustomerSelect();
-                } else {
-                    // Add customer to service if not exists
-                    const newCustomer = customerService.addCustomer({
-                        name: invoiceData.customer.name,
-                        phone: invoiceData.customer.phone || '',
-                        address: invoiceData.customer.address || ''
-                    });
-                    loadCustomerDropdown();
-                    document.getElementById('customerSelect').value = newCustomer.id;
-                    onCustomerSelect();
+                let words = '';
+                let remainder = Math.floor(num);
+
+                if (remainder >= 10000000) {
+                    words += ones[Math.floor(remainder / 10000000)] + ' Crore ';
+                    remainder %= 10000000;
                 }
-            }
-
-            // Site
-            document.getElementById('siteName').value = invoiceData.site || '';
-
-            // Items - preserve rates from quotation
-            invoiceData.items.forEach(item => {
-                addItemToList(item);
-            });
-            renderItems();
-
-            // Discount
-            if (invoiceData.discountEnabled) {
-                document.getElementById('discountToggle').classList.add('active');
-                document.getElementById('discountToggle').querySelector('.toggle-knob').style.left = '27px';
-                document.getElementById('discountInputs').style.display = 'grid';
-                document.getElementById('discountType').value = invoiceData.discountType || 'percentage';
-                document.getElementById('discountValue').value = invoiceData.discountValue || 0;
-            }
-
-            // GST
-            if (invoiceData.gstRate) {
-                const gstSelect = document.getElementById('gstSelect');
-                let found = false;
-                for (let i = 0; i < gstSelect.options.length; i++) {
-                    if (parseFloat(gstSelect.options[i].value) === invoiceData.gstRate) {
-                        gstSelect.value = invoiceData.gstRate;
-                        found = true;
-                        break;
+                if (remainder >= 100000) {
+                    words += ones[Math.floor(remainder / 100000)] + ' Lakh ';
+                    remainder %= 100000;
+                }
+                if (remainder >= 1000) {
+                    words += ones[Math.floor(remainder / 1000)] + ' Thousand ';
+                    remainder %= 1000;
+                }
+                if (remainder >= 100) {
+                    words += ones[Math.floor(remainder / 100)] + ' Hundred ';
+                    remainder %= 100;
+                }
+                if (remainder > 0) {
+                    if (remainder < 20) {
+                        words += ones[remainder] + ' ';
+                    } else {
+                        words += tens[Math.floor(remainder / 10)] + ' ';
+                        if (remainder % 10 > 0) {
+                            words += ones[remainder % 10] + ' ';
+                        }
                     }
                 }
-                if (!found) {
+
+                const paise = Math.round((num - Math.floor(num)) * 100);
+                let finalWords = 'Rupees ' + words.trim();
+                if (paise > 0) {
+                    finalWords += ' and ' + numberToWords(paise) + ' Paise';
+                }
+                finalWords += ' Only';
+                return finalWords;
+            }
+
+            // ============================================================
+            // STORAGE FUNCTIONS
+            // ============================================================
+
+            function loadQuotationsFromStorage() {
+                try {
+                    const data = localStorage.getItem(STORAGE_KEY);
+                    return data ? JSON.parse(data) : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function saveQuotationsToStorage(data) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                } catch (e) {
+                    console.error('Error saving quotations:', e);
+                }
+            }
+
+            function loadInvoicesFromStorage() {
+                try {
+                    const data = localStorage.getItem(INVOICE_STORAGE_KEY);
+                    return data ? JSON.parse(data) : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function saveInvoicesToStorage(invoices) {
+                try {
+                    localStorage.setItem(INVOICE_STORAGE_KEY, JSON.stringify(invoices));
+                } catch (e) {
+                    console.error('Error saving invoices:', e);
+                }
+            }
+
+            // ============================================================
+            // GENERATE INVOICE NUMBER
+            // ============================================================
+
+            function getNextInvoiceNumber() {
+                const existing = loadInvoicesFromStorage();
+                const prefix = companyConfig?.invoicePrefix || 'INV-';
+                
+                if (existing.length === 0) {
+                    return prefix + '0001';
+                }
+                
+                let maxNum = 0;
+                for (const inv of existing) {
+                    if (inv.invoiceNumber && inv.invoiceNumber.startsWith(prefix)) {
+                        const numStr = inv.invoiceNumber.replace(prefix, '');
+                        const num = parseInt(numStr, 10);
+                        if (!isNaN(num) && num > maxNum) {
+                            maxNum = num;
+                        }
+                    }
+                }
+                
+                const nextNum = maxNum + 1;
+                return prefix + String(nextNum).padStart(4, '0');
+            }
+
+            // ============================================================
+            // LOAD DATA FROM URL
+            // ============================================================
+
+            function loadDataFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                const dataParam = params.get('data');
+
+                if (dataParam) {
+                    try {
+                        const decoded = decodeURIComponent(dataParam);
+                        const parsed = JSON.parse(decoded);
+                        
+                        invoiceData = { ...invoiceData, ...parsed };
+                        isFromQuotation = true;
+                        
+                        invoiceData.invoiceNumber = getNextInvoiceNumber();
+                        invoiceData.invoiceDate = new Date().toISOString().split('T')[0];
+                        invoiceData.createdAt = invoiceData.invoiceDate;
+                        
+                        showToast('✅ Invoice data loaded from quotation', 'success', 2000);
+                        return true;
+                    } catch (e) {
+                        console.error('Error parsing invoice data:', e);
+                        showToast('❌ Error loading invoice data', 'error');
+                        return false;
+                    }
+                }
+
+                const invoiceParam = params.get('invoice');
+                if (invoiceParam) {
+                    const invoices = loadInvoicesFromStorage();
+                    const found = invoices.find(inv => inv.invoiceNumber === invoiceParam);
+                    if (found) {
+                        invoiceData = found;
+                        isFromQuotation = false;
+                        showToast(`📄 Invoice ${invoiceParam} loaded`, 'info', 2000);
+                        return true;
+                    }
+                    showToast('❌ Invoice not found', 'error');
+                    return false;
+                }
+
+                return false;
+            }
+
+            // ============================================================
+            // STEP NAVIGATION
+            // ============================================================
+
+            function showStep(step) {
+                document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+                const stepElement = document.getElementById(`step${step}`);
+                if (stepElement) stepElement.classList.add('active');
+                currentStep = step;
+                updateIndicators(step);
+                scrollToStep(document.getElementById(`step${step}Section`));
+            }
+
+            function updateIndicators(step) {
+                const indicators = document.querySelectorAll('.step-indicator');
+                const connectors = document.querySelectorAll('.step-connector');
+                indicators.forEach((el, index) => {
+                    const num = index + 1;
+                    el.classList.remove('active', 'completed');
+                    if (num === step) el.classList.add('active');
+                    else if (num < step) el.classList.add('completed');
+                });
+                connectors.forEach((el, index) => {
+                    el.classList.toggle('completed', index + 1 < step);
+                });
+            }
+
+            function scrollToStep(element) {
+                if (!element) {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    return;
+                }
+                if (document.activeElement) document.activeElement.blur();
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 50);
+            }
+
+            function goToNextStep() {
+                if (!validateStep(currentStep)) return;
+                if (document.activeElement) document.activeElement.blur();
+                if (currentStep < 6) {
+                    showStep(currentStep + 1);
+                }
+            }
+
+            function goToPrevStep() {
+                if (document.activeElement) document.activeElement.blur();
+                if (currentStep > 1) {
+                    showStep(currentStep - 1);
+                }
+            }
+
+            // ============================================================
+            // VALIDATION - WITH DISCOUNT VALIDATION
+            // ============================================================
+
+            function validateStep(step) {
+                switch (step) {
+                    case 1: return validateCustomer();
+                    case 2: return validateSite();
+                    case 3: return validateItems();
+                    case 4: return validatePricing();
+                    case 5: return true;
+                    default: return true;
+                }
+            }
+
+            function validateCustomer() {
+                const customerId = document.getElementById('customerSelect').value;
+                const name = document.getElementById('customerName')?.value?.trim() || '';
+
+                if (!customerId || !name) {
+                    showToast('⚠️ Customer is required', 'error');
+                    document.getElementById('customerNameGroup').style.display = 'block';
+                    document.getElementById('customerNameGroup').classList.add('error');
+                    return false;
+                }
+
+                document.getElementById('customerNameGroup').style.display = 'none';
+                document.getElementById('customerNameGroup').classList.remove('error');
+                return true;
+            }
+
+            function validateSite() {
+                const site = document.getElementById('siteName').value.trim();
+                const group = document.getElementById('siteNameGroup');
+                if (!site) {
+                    group.classList.add('error');
+                    showToast('⚠️ Site / Project is required', 'error');
+                    return false;
+                }
+                group.classList.remove('error');
+                invoiceData.site = site;
+                return true;
+            }
+
+            function validateItems() {
+                if (invoiceData.items.length === 0) {
+                    showToast('⚠️ Please add at least one item', 'error');
+                    return false;
+                }
+                for (const item of invoiceData.items) {
+                    if (item.rate === 0) {
+                        showToast(`⚠️ Rate not available for "${item.name}"`, 'error');
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function validatePricing() {
+                const gstSelect = document.getElementById('gstSelect');
+                const gstGroup = document.getElementById('gstGroup');
+                if (!gstSelect.value) {
+                    gstGroup.classList.add('error');
+                    showToast('⚠️ Please select GST rate', 'error');
+                    return false;
+                }
+                gstGroup.classList.remove('error');
+                
+                // ✅ DISCOUNT VALIDATION - Complete
+                const discountVal = invoiceData.discountValue || 0;
+                const subtotal = invoiceData.subtotal || 0;
+                
+                if (invoiceData.discountEnabled) {
+                    // Check for negative values
+                    if (discountVal < 0) {
+                        showToast('⚠️ Discount cannot be negative', 'error');
+                        return false;
+                    }
+                    
+                    if (invoiceData.discountType === 'percentage') {
+                        if (discountVal > 100) {
+                            showToast('⚠️ Discount percentage cannot exceed 100%', 'error');
+                            return false;
+                        }
+                    }
+                    
+                    if (invoiceData.discountType === 'fixed') {
+                        if (discountVal > subtotal) {
+                            showToast('⚠️ Fixed discount cannot exceed subtotal', 'error');
+                            return false;
+                        }
+                    }
+                }
+                
+                return true;
+            }
+
+            // ============================================================
+            // CUSTOMER FUNCTIONS
+            // ============================================================
+
+            function loadCustomerDropdown() {
+                const select = document.getElementById('customerSelect');
+                select.innerHTML = '<option value="">-- Select Customer --</option>';
+                const customers = customerService.getCustomers();
+                customers.forEach(c => {
                     const option = document.createElement('option');
-                    option.value = invoiceData.gstRate;
-                    option.textContent = invoiceData.gstRate + '%';
-                    gstSelect.appendChild(option);
-                    gstSelect.value = invoiceData.gstRate;
-                }
+                    option.value = c.id;
+                    option.textContent = c.name;
+                    select.appendChild(option);
+                });
             }
 
-            // Update preview
-            updatePreview();
+            function onCustomerSelect() {
+                const select = document.getElementById('customerSelect');
+                const customerId = select.value;
 
-            // Update pricing
-            updatePricing();
+                if (!customerId) {
+                    document.getElementById('customerDetails').style.display = 'none';
+                    document.getElementById('customerNameGroup').style.display = 'none';
+                    document.getElementById('customerName').value = '';
+                    document.getElementById('customerMobile').value = '';
+                    document.getElementById('customerAddress').value = '';
+                    document.getElementById('customerNameDisplay').value = '';
+                    hasValidCustomer = false;
+                    invoiceData.customerId = '';
+                    invoiceData.customer = { name: '', phone: '', address: '' };
+                    updatePreview();
+                    return;
+                }
 
-            showToast('✅ Invoice data filled successfully', 'success', 2000);
-        }
+                const customer = customerService.getCustomer(customerId);
+                if (!customer) return;
 
-        // ============================================================
-        // ITEMS - Preserve quotation rates
-        // ============================================================
+                hasValidCustomer = true;
+                invoiceData.customerId = customerId;
+                invoiceData.customer = {
+                    name: customer.name,
+                    phone: customer.phone || '',
+                    address: customer.address || ''
+                };
 
-        function loadItemsDropdown() {
-            const select = document.getElementById('itemSelect');
-            select.innerHTML = '<option value="">-- Select Item --</option>';
-            productDatabase.forEach(product => {
-                const option = document.createElement('option');
-                option.value = product.id;
-                option.textContent = product.name;
-                option.dataset.rate = product.rate;
-                option.dataset.type = product.type;
-                select.appendChild(option);
-            });
-        }
+                document.getElementById('customerDetails').style.display = 'block';
+                document.getElementById('detailName').textContent = customer.name;
+                document.getElementById('detailMobile').textContent = customer.phone || 'N/A';
+                document.getElementById('detailAddress').textContent = customer.address || 'N/A';
 
-        function onItemSelect() {
-            const select = document.getElementById('itemSelect');
-            const rateInput = document.getElementById('itemRate');
-            const selectedOption = select.options[select.selectedIndex];
-            if (selectedOption && selectedOption.value) {
-                const rate = parseFloat(selectedOption.dataset.rate) || 0;
-                if (rate > 0) {
-                    rateInput.value = `₹${rate.toFixed(2)}`;
-                    rateInput.style.color = 'var(--text-primary)';
+                document.getElementById('customerName').value = customer.name;
+                document.getElementById('customerMobile').value = customer.phone || '';
+                document.getElementById('customerAddress').value = customer.address || '';
+                document.getElementById('customerNameDisplay').value = customer.name;
+
+                document.getElementById('customerNameGroup').style.display = 'none';
+
+                showToast(`✅ Customer selected: ${customer.name}`, 'success', 2000);
+                updatePreview();
+                updatePricing();
+            }
+
+            function openAddCustomer() {
+                document.getElementById('addCustomerModal').classList.add('open');
+                document.getElementById('newCustomerName').value = '';
+                document.getElementById('newCustomerMobile').value = '';
+                document.getElementById('newCustomerAddress').value = '';
+                document.getElementById('newCustomerName').focus();
+            }
+
+            function saveNewCustomer() {
+                const name = document.getElementById('newCustomerName').value.trim();
+                if (!name) {
+                    showToast('⚠️ Customer name is required', 'error');
+                    return;
+                }
+
+                const newCustomer = {
+                    name: name,
+                    phone: document.getElementById('newCustomerMobile').value.trim(),
+                    address: document.getElementById('newCustomerAddress').value.trim()
+                };
+
+                const saved = customerService.addCustomer(newCustomer);
+                loadCustomerDropdown();
+                document.getElementById('customerSelect').value = saved.id;
+                onCustomerSelect();
+                document.getElementById('addCustomerModal').classList.remove('open');
+                showToast(`✅ Customer "${name}" added successfully!`, 'success');
+            }
+
+            // ============================================================
+            // FILL DATA FROM URL
+            // ============================================================
+
+            function fillInvoiceData() {
+                invoiceData.items = [];
+                
+                if (invoiceData.customer?.name) {
+                    const customers = customerService.getCustomers();
+                    const found = customers.find(c => c.name === invoiceData.customer.name);
+                    if (found) {
+                        document.getElementById('customerSelect').value = found.id;
+                        onCustomerSelect();
+                    } else {
+                        const newCustomer = customerService.addCustomer({
+                            name: invoiceData.customer.name,
+                            phone: invoiceData.customer.phone || '',
+                            address: invoiceData.customer.address || ''
+                        });
+                        loadCustomerDropdown();
+                        document.getElementById('customerSelect').value = newCustomer.id;
+                        onCustomerSelect();
+                    }
+                }
+
+                document.getElementById('siteName').value = invoiceData.site || '';
+
+                if (invoiceData.items && invoiceData.items.length > 0) {
+                    invoiceData.items.forEach(item => {
+                        addItemToList(item);
+                    });
+                    renderItems();
+                }
+
+                if (invoiceData.discountEnabled) {
+                    document.getElementById('discountToggle').classList.add('active');
+                    document.getElementById('discountToggle').querySelector('.toggle-knob').style.left = '27px';
+                    document.getElementById('discountInputs').style.display = 'grid';
+                    document.getElementById('discountType').value = invoiceData.discountType || 'percentage';
+                    document.getElementById('discountValue').value = invoiceData.discountValue || 0;
+                }
+
+                if (invoiceData.gstRate) {
+                    const gstSelect = document.getElementById('gstSelect');
+                    let found = false;
+                    for (let i = 0; i < gstSelect.options.length; i++) {
+                        if (parseFloat(gstSelect.options[i].value) === invoiceData.gstRate) {
+                            gstSelect.value = invoiceData.gstRate;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        const option = document.createElement('option');
+                        option.value = invoiceData.gstRate;
+                        option.textContent = invoiceData.gstRate + '%';
+                        gstSelect.appendChild(option);
+                        gstSelect.value = invoiceData.gstRate;
+                    }
+                }
+
+                if (!invoiceData.invoiceDate) {
+                    invoiceData.invoiceDate = new Date().toISOString().split('T')[0];
+                }
+
+                updatePreview();
+                updatePricing();
+                showToast('✅ Invoice data filled successfully', 'success', 2000);
+            }
+
+            // ============================================================
+            // ITEMS
+            // ============================================================
+
+            function loadItemsDropdown() {
+                const select = document.getElementById('itemSelect');
+                select.innerHTML = '<option value="">-- Select Item --</option>';
+                productDatabase.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = product.name;
+                    option.dataset.rate = product.rate;
+                    option.dataset.type = product.type;
+                    select.appendChild(option);
+                });
+            }
+
+            function onItemSelect() {
+                const select = document.getElementById('itemSelect');
+                const rateInput = document.getElementById('itemRate');
+                const selectedOption = select.options[select.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    const rate = parseFloat(selectedOption.dataset.rate) || 0;
+                    if (rate > 0) {
+                        rateInput.value = `₹${rate.toFixed(2)}`;
+                        rateInput.style.color = 'var(--text-primary)';
+                    } else {
+                        rateInput.value = '⚠️ Rate not available';
+                        rateInput.style.color = 'var(--danger)';
+                    }
                 } else {
-                    rateInput.value = '⚠️ Rate not available';
-                    rateInput.style.color = 'var(--danger)';
+                    rateInput.value = 'Auto';
+                    rateInput.style.color = 'var(--text-muted)';
                 }
-            } else {
-                rateInput.value = 'Auto';
-                rateInput.style.color = 'var(--text-muted)';
-            }
-            document.getElementById('itemSelectGroup').classList.remove('error');
-        }
-
-        function addItem() {
-            const select = document.getElementById('itemSelect');
-            const qtyInput = document.getElementById('itemQty');
-            const qty = parseFloat(qtyInput.value);
-            const selectedOption = select.options[select.selectedIndex];
-
-            if (!selectedOption || !selectedOption.value) {
-                document.getElementById('itemSelectGroup').classList.add('error');
-                showToast('⚠️ Please select an item', 'error');
-                return;
-            }
-            if (!qty || qty <= 0) {
-                document.getElementById('itemQtyGroup').classList.add('error');
-                showToast('⚠️ Quantity must be greater than 0', 'error');
-                return;
+                document.getElementById('itemSelectGroup').classList.remove('error');
             }
 
-            const product = productDatabase.find(p => p.id === selectedOption.value);
-            if (!product) {
-                showToast('Product not found', 'error');
-                return;
+            function addItem() {
+                const select = document.getElementById('itemSelect');
+                const qtyInput = document.getElementById('itemQty');
+                const qty = parseFloat(qtyInput.value);
+                const selectedOption = select.options[select.selectedIndex];
+
+                if (!selectedOption || !selectedOption.value) {
+                    document.getElementById('itemSelectGroup').classList.add('error');
+                    showToast('⚠️ Please select an item', 'error');
+                    return;
+                }
+                if (!qty || qty <= 0) {
+                    document.getElementById('itemQtyGroup').classList.add('error');
+                    showToast('⚠️ Quantity must be greater than 0', 'error');
+                    return;
+                }
+
+                const product = productDatabase.find(p => p.id === selectedOption.value);
+                if (!product) {
+                    showToast('Product not found', 'error');
+                    return;
+                }
+
+                const rate = product.rate || 0;
+                if (rate === 0) {
+                    showToast(`⚠️ Rate not available for "${product.name}"`, 'error');
+                    return;
+                }
+
+                if (editingItemId) {
+                    const index = invoiceData.items.findIndex(item => item.id === editingItemId);
+                    if (index !== -1) {
+                        invoiceData.items[index] = {
+                            ...invoiceData.items[index],
+                            name: product.name,
+                            quantity: qty,
+                            rate: rate,
+                            total: qty * rate
+                        };
+                    }
+                    editingItemId = null;
+                    document.getElementById('addItemBtn').textContent = '➕ Add';
+                } else {
+                    const newItem = {
+                        id: 'item_' + Date.now(),
+                        name: product.name,
+                        quantity: qty,
+                        rate: rate,
+                        total: qty * rate
+                    };
+                    invoiceData.items.push(newItem);
+                }
+
+                select.value = '';
+                document.getElementById('itemRate').value = 'Auto';
+                qtyInput.value = '1';
+                document.getElementById('itemSelectGroup').classList.remove('error');
+                document.getElementById('itemQtyGroup').classList.remove('error');
+
+                renderItems();
+                updatePricing();
+                updatePreview();
+                showToast(`✅ ${editingItemId ? 'Updated' : 'Added'}: ${product.name}`, 'success', 1500);
             }
 
-            const rate = product.rate || 0;
-            if (rate === 0) {
-                showToast(`⚠️ Rate not available for "${product.name}"`, 'error');
-                return;
+            function addItemToList(item) {
+                invoiceData.items.push({
+                    id: 'item_' + Date.now(),
+                    name: item.name,
+                    quantity: item.quantity || 1,
+                    rate: item.rate || 0,
+                    total: (item.quantity || 1) * (item.rate || 0)
+                });
             }
 
-            const newItem = {
-                id: 'item_' + Date.now(),
-                name: product.name,
-                quantity: qty,
-                rate: rate,
-                total: qty * rate
-            };
+            function addAnotherItem() {
+                editingItemId = null;
+                document.getElementById('addItemBtn').textContent = '➕ Add';
+                document.getElementById('addItemForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('itemSelect').focus();
+            }
 
-            invoiceData.items.push(newItem);
+            function editItem(id) {
+                const item = invoiceData.items.find(i => i.id === id);
+                if (!item) return;
 
-            select.value = '';
-            document.getElementById('itemRate').value = 'Auto';
-            qtyInput.value = '1';
-            document.getElementById('itemSelectGroup').classList.remove('error');
-            document.getElementById('itemQtyGroup').classList.remove('error');
+                editingItemId = id;
+                
+                const select = document.getElementById('itemSelect');
+                const product = productDatabase.find(p => p.name === item.name);
+                if (product) {
+                    select.value = product.id;
+                }
+                document.getElementById('itemQty').value = item.quantity;
+                document.getElementById('itemRate').value = `₹${item.rate.toFixed(2)}`;
+                document.getElementById('addItemBtn').textContent = '✏️ Update';
+                
+                document.getElementById('addItemForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('itemSelect').focus();
+                
+                showToast(`✏️ Editing: ${item.name}`, 'info', 1500);
+            }
 
-            renderItems();
-            updatePricing();
-            updatePreview();
-            showToast(`✅ Added: ${product.name}`, 'success', 1500);
-        }
+            function removeItem(id) {
+                invoiceData.items = invoiceData.items.filter(item => item.id !== id);
+                if (editingItemId === id) {
+                    editingItemId = null;
+                    document.getElementById('addItemBtn').textContent = '➕ Add';
+                }
+                renderItems();
+                updatePricing();
+                updatePreview();
+                showToast('Item removed', 'info', 1500);
+            }
 
-        function addItemToList(item) {
-            // IMPORTANT: Preserve the rate from quotation
-            invoiceData.items.push({
-                id: 'item_' + Date.now(),
-                name: item.name,
-                quantity: item.quantity || 1,
-                rate: item.rate || 0,
-                total: (item.quantity || 1) * (item.rate || 0)
-            });
-        }
+            function renderItems() {
+                const container = document.getElementById('itemsList');
+                if (invoiceData.items.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                            <div style="font-size:32px;margin-bottom:8px;">📭</div>
+                            <p>No items added yet. Select your first item below.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                container.innerHTML = invoiceData.items.map((item, index) => `
+                    <div class="item-row">
+                        <span class="item-name">${index + 1}. ${item.name}</span>
+                        <span class="item-details">Qty: ${item.quantity}</span>
+                        <span class="item-details">₹${item.rate.toFixed(2)}</span>
+                        <span class="item-total">₹${item.total.toFixed(2)}</span>
+                        <div class="item-actions">
+                            <button class="btn btn-warning btn-xs edit-item-btn" data-id="${item.id}">✏️</button>
+                            <button class="btn btn-danger btn-xs remove-item-btn" data-id="${item.id}">✕</button>
+                        </div>
+                    </div>
+                `).join('');
+                container.querySelectorAll('.edit-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => editItem(btn.dataset.id));
+                });
+                container.querySelectorAll('.remove-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => removeItem(btn.dataset.id));
+                });
+            }
 
-        function addAnotherItem() {
-            document.getElementById('addItemForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            document.getElementById('itemSelect').focus();
-        }
+            // ============================================================
+            // PRICING - WITH DISCOUNT VALIDATION
+            // ============================================================
 
-        function removeItem(id) {
-            invoiceData.items = invoiceData.items.filter(item => item.id !== id);
-            renderItems();
-            updatePricing();
-            updatePreview();
-            showToast('Item removed', 'info', 1500);
-        }
+            function updatePricing() {
+                const subtotal = invoiceData.items.reduce((sum, item) => sum + (item.total || 0), 0);
 
-        function renderItems() {
-            const container = document.getElementById('itemsList');
-            if (invoiceData.items.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
-                        <div style="font-size:32px;margin-bottom:8px;">📭</div>
-                        <p>No items added yet. Select your first item below.</p>
+                let discountAmount = 0;
+                if (invoiceData.discountEnabled) {
+                    let discountValue = invoiceData.discountValue || 0;
+                    // Clamp values to valid range
+                    if (discountValue < 0) discountValue = 0;
+                    if (invoiceData.discountType === 'percentage') {
+                        discountValue = Math.min(discountValue, 100);
+                        discountAmount = (subtotal * discountValue) / 100;
+                    } else {
+                        discountValue = Math.min(discountValue, subtotal);
+                        discountAmount = discountValue;
+                    }
+                }
+
+                const taxableAmount = Math.max(subtotal - discountAmount, 0);
+                const gstRate = parseFloat(invoiceData.gstRate) || 0;
+                const gstAmount = (taxableAmount * gstRate) / 100;
+                const grandTotal = taxableAmount + gstAmount;
+
+                invoiceData.subtotal = subtotal;
+                invoiceData.discountAmount = discountAmount;
+                invoiceData.taxableAmount = taxableAmount;
+                invoiceData.gstAmount = gstAmount;
+                invoiceData.grandTotal = grandTotal;
+
+                document.getElementById('subtotalDisplay').textContent = `₹${subtotal.toFixed(2)}`;
+                document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)}`;
+                document.getElementById('taxableDisplay').textContent = `₹${taxableAmount.toFixed(2)}`;
+                document.getElementById('gstAmountDisplay').textContent = `₹${gstAmount.toFixed(2)}`;
+                document.getElementById('grandTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
+
+                document.getElementById('amountInWords').textContent = numberToWords(grandTotal);
+                document.getElementById('wordsTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
+
+                updatePreview();
+            }
+
+            function toggleDiscount() {
+                const toggle = document.getElementById('discountToggle');
+                const inputs = document.getElementById('discountInputs');
+                invoiceData.discountEnabled = toggle.classList.toggle('active');
+                toggle.querySelector('.toggle-knob').style.left = invoiceData.discountEnabled ? '27px' : '3px';
+                inputs.style.display = invoiceData.discountEnabled ? 'grid' : 'none';
+                if (!invoiceData.discountEnabled) {
+                    invoiceData.discountValue = 0;
+                    document.getElementById('discountValue').value = 0;
+                }
+                updatePricing();
+            }
+
+            function onDiscountChange() {
+                invoiceData.discountType = document.getElementById('discountType').value;
+                invoiceData.discountValue = parseFloat(document.getElementById('discountValue').value) || 0;
+                updatePricing();
+            }
+
+            function onGstChange() {
+                const select = document.getElementById('gstSelect');
+                if (select.value) {
+                    invoiceData.gstRate = parseFloat(select.value);
+                    document.getElementById('gstGroup').classList.remove('error');
+                    updatePricing();
+                }
+            }
+
+            function addCustomGst() {
+                document.getElementById('gstModal').classList.add('open');
+                document.getElementById('customGstInput').value = '';
+                document.getElementById('customGstInput').focus();
+            }
+
+            function saveCustomGst() {
+                const input = document.getElementById('customGstInput');
+                const value = parseFloat(input.value);
+                if (!value || value <= 0) {
+                    showToast('Please enter a valid GST rate', 'error');
+                    return;
+                }
+                const select = document.getElementById('gstSelect');
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value + '%';
+                select.appendChild(option);
+                select.value = value;
+                invoiceData.gstRate = value;
+                document.getElementById('gstGroup').classList.remove('error');
+                document.getElementById('gstModal').classList.remove('open');
+                showToast(`✅ GST ${value}% added`, 'success');
+                updatePricing();
+            }
+
+            // ============================================================
+            // UPDATE PREVIEW
+            // ============================================================
+
+            function updatePreview() {
+                const invoiceNo = invoiceData.invoiceNumber || 'INV-XXXX';
+                const qtnRef = invoiceData.quotationNumber || '-';
+                const customer = invoiceData.customer?.name || 'No customer';
+                const site = invoiceData.site || 'No site';
+
+                document.getElementById('previewInvoiceNo').textContent = invoiceNo;
+                document.getElementById('previewQuotationRef').textContent = qtnRef;
+                document.getElementById('previewCustomer').textContent = customer;
+                document.getElementById('previewSite').textContent = site;
+                document.getElementById('previewItemCount').textContent = `${invoiceData.items.length} items`;
+                document.getElementById('previewTotal').textContent = `₹${invoiceData.grandTotal.toFixed(2)}`;
+                document.getElementById('previewWords').textContent = numberToWords(invoiceData.grandTotal);
+            }
+
+            // ============================================================
+            // GENERATE INVOICE DOCUMENT HTML - WITH FULL THEME
+            // ============================================================
+
+            function generateInvoiceDocument() {
+                const company = companyConfig || {};
+                const theme = themeConfig || defaultTheme;
+                
+                const invoiceNo = invoiceData.invoiceNumber || 'INV-XXXX';
+                const qtnRef = invoiceData.quotationNumber || '';
+                const customerName = invoiceData.customer?.name || 'N/A';
+                const customerPhone = invoiceData.customer?.phone || 'N/A';
+                const customerAddress = invoiceData.customer?.address || 'N/A';
+                const site = invoiceData.site || 'N/A';
+                const date = invoiceData.invoiceDate || new Date().toISOString().split('T')[0];
+                const formattedDate = date.split('-').reverse().join('-');
+                
+                // Theme colors
+                const primaryColor = theme.primaryColor || '#1a1a2e';
+                const accentColor = theme.accentColor || '#FFD700';
+                const accentDark = theme.accentDark || '#D4AF37';
+                const bgColor = theme.bgColor || '#f8f6f0';
+                const cardBg = theme.cardBg || '#ffffff';
+                const borderColor = theme.borderColor || '#e5e0d5';
+                const textPrimary = theme.textPrimary || '#1a1a2e';
+                const textSecondary = theme.textSecondary || '#4B5563';
+                const textMuted = theme.textMuted || '#9CA3AF';
+                const fontFamily = theme.fontFamily || 'Inter, Arial, sans-serif';
+                const fontSize = theme.fontSize || '14px';
+                const headingFontSize = theme.headingFontSize || '20px';
+                const logoSize = theme.logoSize || '60px';
+                const logoPosition = theme.logoPosition || 'left';
+                const cardRadius = theme.cardRadius || '16px';
+                const spacing = theme.spacing || '16px';
+                
+                let itemsHtml = '';
+                invoiceData.items.forEach((item, index) => {
+                    itemsHtml += `
+                        <tr>
+                            <td style="padding:8px 12px;border-bottom:1px solid ${borderColor};text-align:center;font-size:${fontSize};color:${textPrimary};">${index + 1}</td>
+                            <td style="padding:8px 12px;border-bottom:1px solid ${borderColor};font-size:${fontSize};color:${textPrimary};">${item.name}</td>
+                            <td style="padding:8px 12px;border-bottom:1px solid ${borderColor};text-align:center;font-size:${fontSize};color:${textPrimary};">${item.quantity}</td>
+                            <td style="padding:8px 12px;border-bottom:1px solid ${borderColor};text-align:right;font-size:${fontSize};color:${textPrimary};">₹${item.rate.toFixed(2)}</td>
+                            <td style="padding:8px 12px;border-bottom:1px solid ${borderColor};text-align:right;font-size:${fontSize};color:${textPrimary};">₹${item.total.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                const logoAlign = logoPosition === 'left' ? 'flex-start' : logoPosition === 'right' ? 'flex-end' : 'center';
+                const headerFlex = logoPosition === 'left' ? 'row' : logoPosition === 'right' ? 'row-reverse' : 'row';
+
+                return `
+                    <div style="max-width:900px;margin:0 auto;padding:40px;background:${cardBg};font-family:${fontFamily};color:${textPrimary};border-radius:${cardRadius};">
+                        <!-- Header -->
+                        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid ${accentColor};padding-bottom:${spacing};margin-bottom:${spacing};flex-direction:${headerFlex};">
+                            <div style="flex:1;">
+                                ${company.logo ? `<img src="${company.logo}" style="max-height:${logoSize};max-width:150px;object-fit:contain;" alt="Company Logo">` : ''}
+                                ${!company.logo ? `<h2 style="font-size:${headingFontSize};font-weight:700;color:${textPrimary};">${company.companyName || 'Company Name'}</h2>` : ''}
+                                <div style="font-size:${fontSize};color:${textSecondary};margin-top:4px;">
+                                    ${company.address || ''}
+                                    ${company.address && (company.place || company.district) ? ', ' : ''}
+                                    ${company.place || ''} ${company.district || ''} ${company.state || ''} ${company.pin || ''}
+                                </div>
+                                <div style="font-size:${fontSize};color:${textSecondary};">
+                                    ${company.mobile ? `📞 ${company.mobile}` : ''}
+                                    ${company.whatsapp ? ` | 💬 ${company.whatsapp}` : ''}
+                                    ${company.email ? ` | ✉️ ${company.email}` : ''}
+                                </div>
+                                <div style="font-size:${fontSize};color:${textSecondary};">
+                                    ${company.gstin ? `GSTIN: ${company.gstin}` : ''}
+                                    ${company.gstin && company.pan ? ' | ' : ''}
+                                    ${company.pan ? `PAN: ${company.pan}` : ''}
+                                </div>
+                            </div>
+                            <div style="text-align:${logoPosition === 'right' ? 'left' : 'right'};">
+                                ${company.h4Logo ? `<img src="${company.h4Logo}" style="max-height:50px;max-width:120px;object-fit:contain;" alt="H4 Logo">` : `<span style="font-size:${headingFontSize};font-weight:700;color:${accentColor};">⚜️ H4</span>`}
+                                <div style="font-size:${headingFontSize};font-weight:700;color:${textPrimary};margin-top:4px;">TAX INVOICE</div>
+                            </div>
+                        </div>
+
+                        <!-- Invoice Details -->
+                        <div style="display:flex;justify-content:space-between;margin-bottom:${spacing};padding:12px 16px;background:${bgColor};border-radius:8px;">
+                            <div>
+                                <div style="font-size:${fontSize};color:${textMuted};">Invoice No</div>
+                                <div style="font-size:${headingFontSize};font-weight:700;color:${textPrimary};">${invoiceNo}</div>
+                            </div>
+                            <div>
+                                <div style="font-size:${fontSize};color:${textMuted};">Date</div>
+                                <div style="font-size:${headingFontSize};font-weight:700;color:${textPrimary};">${formattedDate}</div>
+                            </div>
+                            ${qtnRef ? `
+                            <div>
+                                <div style="font-size:${fontSize};color:${textMuted};">Quotation Ref</div>
+                                <div style="font-size:${headingFontSize};font-weight:700;color:${textPrimary};">${qtnRef}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Customer -->
+                        <div style="margin-bottom:${spacing};">
+                            <div style="font-size:${fontSize};font-weight:700;color:${textPrimary};margin-bottom:4px;">Bill To</div>
+                            <div style="font-size:${fontSize};font-weight:600;color:${textPrimary};">${customerName}</div>
+                            <div style="font-size:${fontSize};color:${textSecondary};">📱 ${customerPhone}</div>
+                            <div style="font-size:${fontSize};color:${textSecondary};">📍 ${customerAddress}</div>
+                            <div style="font-size:${fontSize};color:${textSecondary};">Site: ${site}</div>
+                        </div>
+
+                        <!-- Items Table -->
+                        <table style="width:100%;border-collapse:collapse;margin-bottom:${spacing};">
+                            <thead>
+                                <tr style="background:${primaryColor};color:${accentColor};">
+                                    <th style="padding:10px 12px;text-align:center;font-size:${fontSize};">#</th>
+                                    <th style="padding:10px 12px;text-align:left;font-size:${fontSize};">Product</th>
+                                    <th style="padding:10px 12px;text-align:center;font-size:${fontSize};">Qty</th>
+                                    <th style="padding:10px 12px;text-align:right;font-size:${fontSize};">Rate</th>
+                                    <th style="padding:10px 12px;text-align:right;font-size:${fontSize};">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml || '<tr><td colspan="5" style="padding:20px;text-align:center;color:'+textMuted+';">No items</td></tr>'}
+                            </tbody>
+                        </table>
+
+                        <!-- Summary -->
+                        <div style="display:flex;justify-content:flex-end;margin-bottom:${spacing};">
+                            <div style="width:280px;">
+                                <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:${fontSize};color:${textSecondary};">
+                                    <span>Subtotal</span>
+                                    <span>₹${invoiceData.subtotal.toFixed(2)}</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:${fontSize};color:${textSecondary};">
+                                    <span>Discount</span>
+                                    <span>-₹${invoiceData.discountAmount.toFixed(2)}</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:${fontSize};color:${textSecondary};">
+                                    <span>Taxable Amount</span>
+                                    <span>₹${invoiceData.taxableAmount.toFixed(2)}</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:${fontSize};color:${textSecondary};">
+                                    <span>GST (${invoiceData.gstRate}%)</span>
+                                    <span>₹${invoiceData.gstAmount.toFixed(2)}</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:2px solid ${accentColor};font-size:${headingFontSize};font-weight:700;color:${textPrimary};">
+                                    <span>GRAND TOTAL</span>
+                                    <span>₹${invoiceData.grandTotal.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Amount in Words -->
+                        <div style="padding:12px 16px;background:${bgColor};border-radius:8px;border-left:4px solid ${accentColor};margin-bottom:${spacing};">
+                            <div style="font-size:${fontSize};color:${textMuted};text-transform:uppercase;letter-spacing:0.5px;">Amount in Words</div>
+                            <div style="font-size:${headingFontSize};font-weight:600;color:${textPrimary};">${numberToWords(invoiceData.grandTotal)}</div>
+                        </div>
+
+                        <!-- QR Code -->
+                        ${company.qrEnabled && company.qrUpiId ? `
+                        <div style="text-align:center;margin:${spacing} 0;padding:12px;background:${bgColor};border-radius:8px;">
+                            <div style="font-size:${fontSize};color:${textMuted};">Scan to Pay</div>
+                            <div style="font-size:${fontSize};font-weight:600;color:${textPrimary};">UPI: ${company.qrUpiId}</div>
+                        </div>
+                        ` : ''}
+
+                        <!-- Footer -->
+                        <div style="border-top:2px solid ${borderColor};padding-top:${spacing};margin-top:${spacing};font-size:${fontSize};color:${textSecondary};text-align:center;">
+                            ${company.footerThankYou || 'Thank you for your business.'}
+                            <br>
+                            ${company.footerTerms || ''}
+                            ${company.footerPayment ? `<br>${company.footerPayment}` : ''}
+                            ${company.footerAdditional ? `<br>${company.footerAdditional}` : ''}
+                            <br>
+                            <span style="font-size:11px;color:${textMuted};">${company.companyName || ''} | GSTIN: ${company.gstin || ''}</span>
+                        </div>
                     </div>
                 `;
-                return;
-            }
-            container.innerHTML = invoiceData.items.map((item, index) => `
-                <div class="item-row">
-                    <span class="item-name">${index + 1}. ${item.name}</span>
-                    <span class="item-details">Qty: ${item.quantity}</span>
-                    <span class="item-details">₹${item.rate.toFixed(2)}</span>
-                    <span class="item-total">₹${item.total.toFixed(2)}</span>
-                    <div class="item-actions">
-                        <button class="btn btn-danger btn-xs remove-item-btn" data-id="${item.id}">✕</button>
-                    </div>
-                </div>
-            `).join('');
-            container.querySelectorAll('.remove-item-btn').forEach(btn => {
-                btn.addEventListener('click', () => removeItem(btn.dataset.id));
-            });
-        }
-
-        // ============================================================
-        // PRICING - Live Calculation
-        // ============================================================
-
-        function updatePricing() {
-            const subtotal = invoiceData.items.reduce((sum, item) => sum + (item.total || 0), 0);
-
-            let discountAmount = 0;
-            if (invoiceData.discountEnabled) {
-                const discountValue = invoiceData.discountValue || 0;
-                if (invoiceData.discountType === 'percentage') {
-                    discountAmount = (subtotal * discountValue) / 100;
-                } else {
-                    discountAmount = Math.min(discountValue, subtotal);
-                }
             }
 
-            const taxableAmount = subtotal - discountAmount;
-            const gstRate = parseFloat(invoiceData.gstRate) || 0;
-            const gstAmount = (taxableAmount * gstRate) / 100;
-            const grandTotal = taxableAmount + gstAmount;
+            // ============================================================
+            // PRINT
+            // ============================================================
 
-            invoiceData.subtotal = subtotal;
-            invoiceData.discountAmount = discountAmount;
-            invoiceData.taxableAmount = taxableAmount;
-            invoiceData.gstAmount = gstAmount;
-            invoiceData.grandTotal = grandTotal;
-
-            document.getElementById('subtotalDisplay').textContent = `₹${subtotal.toFixed(2)}`;
-            document.getElementById('discountDisplay').textContent = `-₹${discountAmount.toFixed(2)}`;
-            document.getElementById('taxableDisplay').textContent = `₹${taxableAmount.toFixed(2)}`;
-            document.getElementById('gstAmountDisplay').textContent = `₹${gstAmount.toFixed(2)}`;
-            document.getElementById('grandTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
-
-            // Update Amount in Words (Step 5)
-            document.getElementById('amountInWords').textContent = numberToWords(grandTotal);
-            document.getElementById('wordsTotalDisplay').textContent = `₹${grandTotal.toFixed(2)}`;
-
-            updatePreview();
-        }
-
-        function toggleDiscount() {
-            const toggle = document.getElementById('discountToggle');
-            const inputs = document.getElementById('discountInputs');
-            invoiceData.discountEnabled = toggle.classList.toggle('active');
-            toggle.querySelector('.toggle-knob').style.left = invoiceData.discountEnabled ? '27px' : '3px';
-            inputs.style.display = invoiceData.discountEnabled ? 'grid' : 'none';
-            if (!invoiceData.discountEnabled) {
-                invoiceData.discountValue = 0;
-                document.getElementById('discountValue').value = 0;
-            }
-            updatePricing();
-        }
-
-        function onDiscountChange() {
-            invoiceData.discountType = document.getElementById('discountType').value;
-            invoiceData.discountValue = parseFloat(document.getElementById('discountValue').value) || 0;
-            updatePricing();
-        }
-
-        function onGstChange() {
-            const select = document.getElementById('gstSelect');
-            if (select.value) {
-                invoiceData.gstRate = parseFloat(select.value);
-                document.getElementById('gstGroup').classList.remove('error');
-                updatePricing();
-            }
-        }
-
-        function addCustomGst() {
-            document.getElementById('gstModal').classList.add('open');
-            document.getElementById('customGstInput').value = '';
-            document.getElementById('customGstInput').focus();
-        }
-
-        function saveCustomGst() {
-            const input = document.getElementById('customGstInput');
-            const value = parseFloat(input.value);
-            if (!value || value <= 0) {
-                showToast('Please enter a valid GST rate', 'error');
-                return;
-            }
-            const select = document.getElementById('gstSelect');
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = value + '%';
-            select.appendChild(option);
-            select.value = value;
-            invoiceData.gstRate = value;
-            document.getElementById('gstGroup').classList.remove('error');
-            document.getElementById('gstModal').classList.remove('open');
-            showToast(`✅ GST ${value}% added`, 'success');
-            updatePricing();
-        }
-
-        // ============================================================
-        // UPDATE PREVIEW
-        // ============================================================
-
-        function updatePreview() {
-            const invoiceNo = invoiceData.invoiceNumber || 'INV-XXXX';
-            const qtnRef = invoiceData.quotationNumber || '-';
-            const customer = invoiceData.customer?.name || 'No customer';
-            const site = invoiceData.site || 'No site';
-
-            document.getElementById('previewInvoiceNo').textContent = invoiceNo;
-            document.getElementById('previewQuotationRef').textContent = qtnRef;
-            document.getElementById('previewCustomer').textContent = customer;
-            document.getElementById('previewSite').textContent = site;
-            document.getElementById('previewItemCount').textContent = `${invoiceData.items.length} items`;
-            document.getElementById('previewTotal').textContent = `₹${invoiceData.grandTotal.toFixed(2)}`;
-            document.getElementById('previewWords').textContent = numberToWords(invoiceData.grandTotal);
-        }
-
-        // ============================================================
-        // SAVE INVOICE - Update Quotation Status
-        // ============================================================
-
-        function saveInvoice() {
-            // Validate all steps
-            if (!validateCustomer()) return;
-            if (!validateSite()) return;
-            if (!validateItems()) return;
-            if (!validatePricing()) return;
-
-            // Generate invoice number if not set
-            if (!invoiceData.invoiceNumber) {
-                const existing = loadInvoicesFromStorage();
-                const count = existing.length + 1;
-                invoiceData.invoiceNumber = 'INV-' + String(count).padStart(4, '0');
+            function printInvoice() {
+                builderUI.style.display = 'none';
+                invoiceDocument.innerHTML = generateInvoiceDocument();
+                invoiceDocument.style.display = 'block';
+                
+                const afterPrintHandler = function() {
+                    invoiceDocument.style.display = 'none';
+                    builderUI.style.display = 'block';
+                    window.removeEventListener('afterprint', afterPrintHandler);
+                };
+                window.addEventListener('afterprint', afterPrintHandler);
+                
+                setTimeout(() => {
+                    if (builderUI.style.display === 'none') {
+                        invoiceDocument.style.display = 'none';
+                        builderUI.style.display = 'block';
+                        window.removeEventListener('afterprint', afterPrintHandler);
+                    }
+                }, 3000);
+                
+                window.print();
             }
 
-            // Save site
-            invoiceData.site = document.getElementById('siteName').value.trim();
-            invoiceData.status = 'final';
-            invoiceData.createdAt = new Date().toISOString().split('T')[0];
+            // ============================================================
+            // PDF - ACTUAL PDF GENERATION using html2pdf
+            // ============================================================
 
-            // Save to storage
-            const existing = loadInvoicesFromStorage();
-            const index = existing.findIndex(inv => inv.invoiceNumber === invoiceData.invoiceNumber);
-            if (index !== -1) {
-                existing[index] = invoiceData;
-            } else {
-                existing.push(invoiceData);
-            }
-            saveInvoicesToStorage(existing);
-
-            // ✅ IMPORTANT: Update Quotation Status
-            if (invoiceData.quotationId) {
-                const quotations = loadQuotationsFromStorage();
-                const qIndex = quotations.findIndex(q => q.id === invoiceData.quotationId);
-                if (qIndex !== -1) {
-                    quotations[qIndex].status = 'converted';
-                    quotations[qIndex].convertedToInvoice = invoiceData.invoiceNumber;
-                    saveQuotationsToStorage(quotations);
-                    showToast(`✅ Quotation ${quotations[qIndex].quotationNumber} marked as CONVERTED`, 'success', 3000);
-                }
-            }
-
-            showToast(`✅ Invoice ${invoiceData.invoiceNumber} saved successfully!`, 'success');
-
-            // Update preview
-            updatePreview();
-        }
-
-        // ============================================================
-        // PRINT / WHATSAPP / PDF
-        // ============================================================
-
-        function printInvoice() {
-            showToast('🖨️ Printing invoice...', 'info', 2000);
-            window.print();
-        }
-
-        function whatsappInvoice() {
-            const customerName = invoiceData.customer?.name || 'Customer';
-            const total = invoiceData.grandTotal || 0;
-            const invoiceNo = invoiceData.invoiceNumber || 'INV-XXXX';
-            const qtnRef = invoiceData.quotationNumber || '';
-            
-            let msg = `🏢 *H4 INVOICE*\n`;
-            msg += `📄 *Invoice No:* ${invoiceNo}\n`;
-            if (qtnRef) {
-                msg += `📋 *Quotation Ref:* ${qtnRef}\n`;
-            }
-            msg += `\n👤 *Customer:* ${customerName}\n`;
-            msg += `📍 *Site:* ${invoiceData.site || 'N/A'}\n`;
-            msg += `📱 *Mobile:* ${invoiceData.customer?.phone || 'N/A'}\n`;
-            
-            msg += `\n📦 *Items:*\n`;
-            invoiceData.items.forEach((item, i) => {
-                msg += `  ${i+1}. ${item.name} — ${item.quantity} × ₹${item.rate.toFixed(2)} = ₹${item.total.toFixed(2)}\n`;
-            });
-            
-            msg += `\n💰 *Subtotal:* ₹${invoiceData.subtotal.toFixed(2)}\n`;
-            msg += `💸 *Discount:* -₹${invoiceData.discountAmount.toFixed(2)}\n`;
-            msg += `🧾 *Taxable Amount:* ₹${invoiceData.taxableAmount.toFixed(2)}\n`;
-            msg += `📊 *GST (${invoiceData.gstRate}%):* ₹${invoiceData.gstAmount.toFixed(2)}\n`;
-            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-            msg += `💎 *GRAND TOTAL:* ₹${invoiceData.grandTotal.toFixed(2)}\n`;
-            msg += `\n📝 *Amount in Words:*\n${numberToWords(invoiceData.grandTotal)}\n`;
-            msg += `\n🙏 Thank you for your business!`;
-            
-            const encoded = encodeURIComponent(msg);
-            window.open(`https://wa.me/?text=${encoded}`, '_blank');
-            showToast('📱 Opening WhatsApp...', 'info', 2000);
-        }
-
-        function pdfInvoice() {
-            showToast('📄 Generating PDF...', 'info', 2000);
-            window.print();
-        }
-
-        // ============================================================
-        // BIND EVENTS
-        // ============================================================
-
-        function bindEvents() {
-            // Customer
-            document.getElementById('customerSelect').addEventListener('change', onCustomerSelect);
-            document.getElementById('addCustomerBtn').addEventListener('click', openAddCustomer);
-
-            document.getElementById('addCustomerModalClose').addEventListener('click', () => {
-                document.getElementById('addCustomerModal').classList.remove('open');
-            });
-            document.getElementById('addCustomerCancel').addEventListener('click', () => {
-                document.getElementById('addCustomerModal').classList.remove('open');
-            });
-            document.getElementById('addCustomerSave').addEventListener('click', saveNewCustomer);
-            document.getElementById('addCustomerModal').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) document.getElementById('addCustomerModal').classList.remove('open');
-            });
-
-            // Navigation - Next
-            document.getElementById('nextFromCustomer').addEventListener('click', goToNextStep);
-            document.getElementById('nextFromSite').addEventListener('click', goToNextStep);
-            document.getElementById('nextFromItems').addEventListener('click', goToNextStep);
-            document.getElementById('nextFromPricing').addEventListener('click', goToNextStep);
-            document.getElementById('nextFromWords').addEventListener('click', goToNextStep);
-
-            // Navigation - Prev
-            document.getElementById('prevFromSite').addEventListener('click', goToPrevStep);
-            document.getElementById('prevFromItems').addEventListener('click', goToPrevStep);
-            document.getElementById('prevFromPricing').addEventListener('click', goToPrevStep);
-            document.getElementById('prevFromWords').addEventListener('click', goToPrevStep);
-            document.getElementById('prevFromActions').addEventListener('click', goToPrevStep);
-
-            // Site
-            document.getElementById('siteName').addEventListener('input', () => {
-                document.getElementById('siteNameGroup').classList.remove('error');
-            });
-
-            // Items
-            document.getElementById('itemSelect').addEventListener('change', onItemSelect);
-            document.getElementById('itemQty').addEventListener('input', () => {
-                document.getElementById('itemQtyGroup').classList.remove('error');
-            });
-            document.getElementById('addItemBtn').addEventListener('click', addItem);
-            document.getElementById('addAnotherItemBtn').addEventListener('click', addAnotherItem);
-            document.getElementById('itemQty').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') { e.preventDefault(); addItem(); }
-            });
-
-            // Pricing
-            document.getElementById('discountToggle').addEventListener('click', toggleDiscount);
-            document.getElementById('discountType').addEventListener('change', onDiscountChange);
-            document.getElementById('discountValue').addEventListener('input', onDiscountChange);
-            document.getElementById('gstSelect').addEventListener('change', onGstChange);
-            document.getElementById('addGstBtn').addEventListener('click', addCustomGst);
-
-            // GST Modal
-            document.getElementById('gstModalClose').addEventListener('click', () => {
-                document.getElementById('gstModal').classList.remove('open');
-            });
-            document.getElementById('gstModalCancel').addEventListener('click', () => {
-                document.getElementById('gstModal').classList.remove('open');
-            });
-            document.getElementById('gstModalAdd').addEventListener('click', saveCustomGst);
-            document.getElementById('customGstInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') { e.preventDefault(); saveCustomGst(); }
-            });
-            document.getElementById('gstModal').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) document.getElementById('gstModal').classList.remove('open');
-            });
-
-            // Actions
-            document.getElementById('saveInvoiceBtn').addEventListener('click', saveInvoice);
-            document.getElementById('printBtn').addEventListener('click', printInvoice);
-            document.getElementById('whatsappBtn').addEventListener('click', whatsappInvoice);
-            document.getElementById('pdfBtn').addEventListener('click', pdfInvoice);
-
-            // Header
-            document.getElementById('historyBtn').addEventListener('click', () => {
-                window.location.href = 'quotation-history.html';
-            });
-            document.getElementById('cancelBtn').addEventListener('click', () => {
-                if (invoiceData.items.length > 0) {
-                    if (!confirm('You have unsaved data. Are you sure you want to cancel?')) return;
-                }
-                window.location.href = 'quotation-history.html';
-            });
-
-            // ESC key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    document.querySelectorAll('.modal-overlay.open').forEach(modal => {
-                        modal.classList.remove('open');
+            function generatePDF() {
+                showLoading(true);
+                
+                const documentHtml = generateInvoiceDocument();
+                invoiceDocument.innerHTML = documentHtml;
+                invoiceDocument.style.display = 'block';
+                builderUI.style.display = 'none';
+                
+                const opt = {
+                    margin:        [10, 10, 10, 10],
+                    filename:     invoiceData.invoiceNumber + '.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, logging: false },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+                
+                setTimeout(() => {
+                    html2pdf().set(opt).from(invoiceDocument).save().then(function() {
+                        invoiceDocument.style.display = 'none';
+                        builderUI.style.display = 'block';
+                        showLoading(false);
+                        showToast('✅ PDF downloaded successfully!', 'success', 3000);
+                    }).catch(function(err) {
+                        console.error('PDF generation error:', err);
+                        invoiceDocument.style.display = 'none';
+                        builderUI.style.display = 'block';
+                        showLoading(false);
+                        showToast('❌ Error generating PDF', 'error');
                     });
-                }
-            });
-        }
-
-        // ============================================================
-        // INIT
-        // ============================================================
-
-        function init() {
-            showLoading(true);
-
-            // Load customer dropdown
-            loadCustomerDropdown();
-
-            // Load products dropdown
-            loadItemsDropdown();
-
-            // Load data from URL
-            const hasData = loadDataFromURL();
-
-            if (hasData) {
-                fillInvoiceData();
-            } else {
-                // Empty invoice - user can create manually
-                showToast('📝 Create a new invoice', 'info', 3000);
-                const existing = loadInvoicesFromStorage();
-                const count = existing.length + 1;
-                invoiceData.invoiceNumber = 'INV-' + String(count).padStart(4, '0');
-                updatePreview();
-                updatePricing();
+                }, 500);
             }
 
-            // Bind events
-            bindEvents();
+            function pdfInvoice() {
+                if (!validateCustomer()) return;
+                if (!validateSite()) return;
+                if (!validateItems()) return;
+                if (!validatePricing()) return;
+                generatePDF();
+            }
 
-            showLoading(false);
-            console.log('🧾 H4 Invoice loaded successfully');
-        }
+            // ============================================================
+            // WHATSAPP
+            // ============================================================
 
-        // Make functions globally accessible for inline onclick
-        window.removeItem = removeItem;
+            function whatsappInvoice() {
+                const customerName = invoiceData.customer?.name || 'Customer';
+                const total = invoiceData.grandTotal || 0;
+                const invoiceNo = invoiceData.invoiceNumber || 'INV-XXXX';
+                const qtnRef = invoiceData.quotationNumber || '';
+                const date = invoiceData.invoiceDate || new Date().toISOString().split('T')[0];
+                const formattedDate = date.split('-').reverse().join('-');
+                
+                let msg = `🏢 *H4 INVOICE*\n`;
+                msg += `📄 *Invoice No:* ${invoiceNo}\n`;
+                if (qtnRef) {
+                    msg += `📋 *Quotation Ref:* ${qtnRef}\n`;
+                }
+                msg += `📅 *Date:* ${formattedDate}\n`;
+                msg += `\n👤 *Customer:* ${customerName}\n`;
+                msg += `📍 *Site:* ${invoiceData.site || 'N/A'}\n`;
+                msg += `📱 *Mobile:* ${invoiceData.customer?.phone || 'N/A'}\n`;
+                
+                msg += `\n📦 *Items:*\n`;
+                invoiceData.items.forEach((item, i) => {
+                    msg += `  ${i+1}. ${item.name} — ${item.quantity} × ₹${item.rate.toFixed(2)} = ₹${item.total.toFixed(2)}\n`;
+                });
+                
+                msg += `\n💰 *Subtotal:* ₹${invoiceData.subtotal.toFixed(2)}\n`;
+                msg += `💸 *Discount:* -₹${invoiceData.discountAmount.toFixed(2)}\n`;
+                msg += `🧾 *Taxable Amount:* ₹${invoiceData.taxableAmount.toFixed(2)}\n`;
+                msg += `📊 *GST (${invoiceData.gstRate}%):* ₹${invoiceData.gstAmount.toFixed(2)}\n`;
+                msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+                msg += `💎 *GRAND TOTAL:* ₹${invoiceData.grandTotal.toFixed(2)}\n`;
+                msg += `\n📝 *Amount in Words:*\n${numberToWords(invoiceData.grandTotal)}\n`;
+                msg += `\n🙏 Thank you for your business!`;
+                
+                const encoded = encodeURIComponent(msg);
+                window.open(`https://wa.me/?text=${encoded}`, '_blank');
+                showToast('📱 Opening WhatsApp...', 'info', 2000);
+            }
 
-        // Run init
-        document.addEventListener('DOMContentLoaded', init);
+            // ============================================================
+            // SAVE INVOICE
+            // ============================================================
+
+            function saveInvoice() {
+                if (!validateCustomer()) return;
+                if (!validateSite()) return;
+                if (!validateItems()) return;
+                if (!validatePricing()) return;
+
+                if (!invoiceData.invoiceNumber) {
+                    invoiceData.invoiceNumber = getNextInvoiceNumber();
+                }
+
+                invoiceData.site = document.getElementById('siteName').value.trim();
+                invoiceData.status = 'final';
+                if (!invoiceData.invoiceDate) {
+                    invoiceData.invoiceDate = new Date().toISOString().split('T')[0];
+                }
+                invoiceData.createdAt = invoiceData.invoiceDate;
+
+                const existing = loadInvoicesFromStorage();
+                const index = existing.findIndex(inv => inv.invoiceNumber === invoiceData.invoiceNumber);
+                if (index !== -1) {
+                    existing[index] = invoiceData;
+                } else {
+                    existing.push(invoiceData);
+                }
+                saveInvoicesToStorage(existing);
+
+                if (invoiceData.quotationId) {
+                    const quotations = loadQuotationsFromStorage();
+                    const qIndex = quotations.findIndex(q => q.id === invoiceData.quotationId);
+                    if (qIndex !== -1) {
+                        quotations[qIndex].status = 'converted';
+                        quotations[qIndex].convertedToInvoice = invoiceData.invoiceNumber;
+                        saveQuotationsToStorage(quotations);
+                        showToast(`✅ Quotation ${quotations[qIndex].quotationNumber} marked as CONVERTED`, 'success', 3000);
+                    }
+                }
+
+                showToast(`✅ Invoice ${invoiceData.invoiceNumber} saved successfully!`, 'success');
+                updatePreview();
+            }
+
+            // ============================================================
+            // BIND EVENTS
+            // ============================================================
+
+            function bindEvents() {
+                document.getElementById('customerSelect').addEventListener('change', onCustomerSelect);
+                document.getElementById('addCustomerBtn').addEventListener('click', openAddCustomer);
+
+                document.getElementById('addCustomerModalClose').addEventListener('click', () => {
+                    document.getElementById('addCustomerModal').classList.remove('open');
+                });
+                document.getElementById('addCustomerCancel').addEventListener('click', () => {
+                    document.getElementById('addCustomerModal').classList.remove('open');
+                });
+                document.getElementById('addCustomerSave').addEventListener('click', saveNewCustomer);
+                document.getElementById('addCustomerModal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) document.getElementById('addCustomerModal').classList.remove('open');
+                });
+
+                document.getElementById('nextFromCustomer').addEventListener('click', goToNextStep);
+                document.getElementById('nextFromSite').addEventListener('click', goToNextStep);
+                document.getElementById('nextFromItems').addEventListener('click', goToNextStep);
+                document.getElementById('nextFromPricing').addEventListener('click', goToNextStep);
+                document.getElementById('nextFromWords').addEventListener('click', goToNextStep);
+
+                document.getElementById('prevFromSite').addEventListener('click', goToPrevStep);
+                document.getElementById('prevFromItems').addEventListener('click', goToPrevStep);
+                document.getElementById('prevFromPricing').addEventListener('click', goToPrevStep);
+                document.getElementById('prevFromWords').addEventListener('click', goToPrevStep);
+                document.getElementById('prevFromActions').addEventListener('click', goToPrevStep);
+
+                document.getElementById('siteName').addEventListener('input', () => {
+                    document.getElementById('siteNameGroup').classList.remove('error');
+                });
+
+                document.getElementById('itemSelect').addEventListener('change', onItemSelect);
+                document.getElementById('itemQty').addEventListener('input', () => {
+                    document.getElementById('itemQtyGroup').classList.remove('error');
+                });
+                document.getElementById('addItemBtn').addEventListener('click', addItem);
+                document.getElementById('addAnotherItemBtn').addEventListener('click', addAnotherItem);
+                document.getElementById('itemQty').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') { e.preventDefault(); addItem(); }
+                });
+
+                document.getElementById('discountToggle').addEventListener('click', toggleDiscount);
+                document.getElementById('discountType').addEventListener('change', onDiscountChange);
+                document.getElementById('discountValue').addEventListener('input', onDiscountChange);
+                document.getElementById('gstSelect').addEventListener('change', onGstChange);
+                document.getElementById('addGstBtn').addEventListener('click', addCustomGst);
+
+                document.getElementById('gstModalClose').addEventListener('click', () => {
+                    document.getElementById('gstModal').classList.remove('open');
+                });
+                document.getElementById('gstModalCancel').addEventListener('click', () => {
+                    document.getElementById('gstModal').classList.remove('open');
+                });
+                document.getElementById('gstModalAdd').addEventListener('click', saveCustomGst);
+                document.getElementById('customGstInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') { e.preventDefault(); saveCustomGst(); }
+                });
+                document.getElementById('gstModal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) document.getElementById('gstModal').classList.remove('open');
+                });
+
+                document.getElementById('saveInvoiceBtn').addEventListener('click', saveInvoice);
+                document.getElementById('printBtn').addEventListener('click', printInvoice);
+                document.getElementById('whatsappBtn').addEventListener('click', whatsappInvoice);
+                document.getElementById('pdfBtn').addEventListener('click', pdfInvoice);
+
+                document.getElementById('historyBtn').addEventListener('click', () => {
+                    window.location.href = 'invoice-history.html';
+                });
+                document.getElementById('cancelBtn').addEventListener('click', () => {
+                    if (invoiceData.items.length > 0) {
+                        if (!confirm('You have unsaved data. Are you sure you want to cancel?')) return;
+                    }
+                    window.location.href = 'invoice-history.html';
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.modal-overlay.open').forEach(modal => {
+                            modal.classList.remove('open');
+                        });
+                    }
+                });
+            }
+
+            // ============================================================
+            // INIT
+            // ============================================================
+
+            function init() {
+                showLoading(true);
+
+                customerService.loadCustomers();
+                loadProducts();
+                loadCompanyConfig();
+                loadThemeConfig();
+                
+                loadCustomerDropdown();
+                loadItemsDropdown();
+
+                const hasData = loadDataFromURL();
+
+                if (hasData) {
+                    fillInvoiceData();
+                } else {
+                    invoiceData.invoiceNumber = getNextInvoiceNumber();
+                    invoiceData.invoiceDate = new Date().toISOString().split('T')[0];
+                    updatePreview();
+                    updatePricing();
+                    showToast('📝 Create a new invoice', 'info', 3000);
+                }
+
+                bindEvents();
+                showLoading(false);
+                console.log('🧾 H4 Invoice loaded successfully');
+                console.log('🎨 Theme loaded:', themeConfig);
+                console.log('🏢 Company loaded:', companyConfig);
+            }
+
+            window.removeItem = removeItem;
+            window.editItem = editItem;
+            document.addEventListener('DOMContentLoaded', init);
+
+        })();
     </script>
 
 </body>
