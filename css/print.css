@@ -1,0 +1,92 @@
+/* ============================================================
+   H4 BILLING ERP - PRINT.CSS
+   Print/PDF A4 Layout
+   ============================================================ */
+
+@media print {
+    /* ---------- HIDE NON-PRINT ELEMENTS ---------- */
+    .h4-header { 
+        display: none !important; 
+    }
+    .h4-search-bar { 
+        display: none !important; 
+    }
+    .h4-module-card .card-badge { 
+        display: none !important; 
+    }
+    .h4-toast-container { 
+        display: none !important; 
+    }
+    .h4-module-card .card-icon { 
+        font-size: 28px !important; 
+    }
+    
+    /* ---------- BODY ---------- */
+    body { 
+        padding-top: 0 !important; 
+        background: white !important;
+    }
+    
+    /* ---------- DASHBOARD ---------- */
+    .h4-dashboard { 
+        padding: 20px !important; 
+        max-width: 100% !important; 
+    }
+    .h4-dashboard .dashboard-title { 
+        font-size: 24px !important; 
+    }
+    .h4-dashboard .dashboard-subtitle { 
+        font-size: 16px !important; 
+    }
+    
+    /* ---------- MODULE GRID - 4 COLUMN PRINT ---------- */
+    .h4-module-grid { 
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 12px !important;
+        page-break-inside: avoid !important;
+    }
+    
+    .h4-module-card {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        border: 1px solid #E2E8F0 !important;
+        box-shadow: none !important;
+        min-height: 90px !important;
+        padding: 14px 12px !important;
+        background: white !important;
+        border-radius: 8px !important;
+    }
+    
+    .h4-module-card::before {
+        height: 2px !important;
+    }
+    
+    .h4-module-card .card-title { 
+        font-size: 14px !important; 
+        color: #0F172A !important;
+    }
+    .h4-module-card .card-subtitle { 
+        font-size: 11px !important; 
+        color: #64748B !important;
+    }
+    
+    /* ---------- GRADIENT COLORS FOR PRINT ---------- */
+    .h4-module-card.company { background: #F5F3FF !important; border-color: #C4B5FD !important; }
+    .h4-module-card.invoice { background: #ECFEFF !important; border-color: #67E8F9 !important; }
+    .h4-module-card.quotation { background: #EFF6FF !important; border-color: #93C5FD !important; }
+    .h4-module-card.products { background: #FFF7ED !important; border-color: #FDBA74 !important; }
+    .h4-module-card.customers { background: #F5F3FF !important; border-color: #A78BFA !important; }
+    .h4-module-card.templates { background: #FDF2F8 !important; border-color: #F9A8D4 !important; }
+    .h4-module-card.payments { background: #ECFDF5 !important; border-color: #6EE7B7 !important; }
+    .h4-module-card.theme { background: #F5F3FF !important; border-color: #C4B5FD !important; }
+    .h4-module-card.backup { background: #FEF2F2 !important; border-color: #FCA5A5 !important; }
+    .h4-module-card.settings { background: #F8FAFC !important; border-color: #CBD5E1 !important; }
+}
+
+/* ---------- SCREEN PRINT PREVIEW ---------- */
+@media screen and (max-width: 768px) {
+    .print-preview-btn {
+        display: none !important;
+    }
+}
