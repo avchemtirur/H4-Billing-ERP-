@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>H4 Billing ERP - Company</title>
+    
+    <link rel="stylesheet" href="./css/app.css">
+    <link rel="stylesheet" href="./css/mobile.css">
+    <link rel="stylesheet" href="./css/desktop.css">
+    <link rel="stylesheet" href="./css/print.css">
+    
+    <style>
+        /* ---------- COMPANY MODULE SPECIFIC ---------- */
+        .company-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .company-section {
+            background: var(--h4-card-bg);
+            border-radius: var(--h4-radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--h4-shadow);
+            border: 1px solid var(--h4-border);
+        }
+
+        .company-section .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--h4-text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .company-section .section-title .icon {
+            font-size: 20px;
+        }
+
+        .company-section .section-title .badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: var(--h4-bg);
+            color: var(--h4-text-muted);
+            border: 1px solid var(--h4-border);
+            margin-left: auto;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-row .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--h4-text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .form-group label .required {
+            color: var(--h4-red);
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--h4-border);
+            border-radius: var(--h4-radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            transition: var(--h4-transition);
+            background: var(--h4-card-bg);
+            color: var(--h4-text-primary);
+            min-height: 44px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--h4-cyan);
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.10);
+        }
+
+        .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .form-group .helper-text {
+            font-size: 11px;
+            color: var(--h4-text-muted);
+            margin-top: 4px;
+        }
+
+        /* ---------- IMAGE UPLOAD ---------- */
+        .image-upload-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .image-upload-group .preview-box {
+            width: 80px;
+            height: 80px;
+            border: 2px dashed var(--h4-border);
+            border-radius: var(--h4-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--h4-text-muted);
+            overflow: hidden;
+            background: var(--h4-bg);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .image-upload-group .preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .image-upload-group .preview-box .placeholder-text {
+            font-size: 12px;
+            color: var(--h4-text-muted);
+            text-align: center;
+            padding: 4px;
+        }
+
+        .image-upload-group .preview-box.has-image {
+            border-color: var(--h4-cyan);
+            border-style: solid;
+        }
+
+        .image-upload-group .upload-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-upload {
+            padding: 8px 14px;
+            border: 2px solid var(--h4-border);
+            border-radius: var(--h4-radius-sm);
+            background: var(--h4-card-bg);
+            color: var(--h4-text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--h4-transition);
+            font-family: inherit;
+            min-height: 36px;
+        }
+
+        .btn-upload:hover {
+            border-color: var(--h4-cyan);
+            color: var(--h4-text-primary);
+        }
+
+        .btn-upload.primary {
+            background: var(--h4-cyan);
+            color: #fff;
+            border-color: var(--h4-cyan);
+        }
+
+        .btn-upload.primary:hover {
+            background: #0891B2;
+            border-color: #0891B2;
+        }
+
+        .btn-upload.danger {
+            border-color: var(--h4-red);
+            color: var(--h4-red);
+        }
+
+        .btn-upload.danger:hover {
+            background: var(--h4-red);
+            color: #fff;
+        }
+
+        /* Hide file input */
+        .file-input-hidden {
+            display: none;
+        }
+
+        /* ---------- TOGGLE SWITCH ---------- */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+        }
+
+        .toggle-group .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--h4-text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            background: var(--h4-border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: var(--h4-transition);
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--h4-cyan);
+        }
+
+        .toggle-switch .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: var(--h4-transition);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 23px;
+        }
+
+        /* ---------- RADIO GROUP ---------- */
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--h4-text-secondary);
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--h4-cyan);
+            cursor: pointer;
+        }
+
+        /* ---------- VISIBILITY GRID ---------- */
+        .visibility-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .visibility-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--h4-bg);
+            border-radius: var(--h4-radius-sm);
+            border: 1px solid var(--h4-border);
+        }
+
+        .visibility-item .label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--h4-text-secondary);
+        }
+
+        /* ---------- ACTION BUTTONS ---------- */
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 2px solid var(--h4-border);
+        }
+
+        .action-bar .btn {
+            flex: 1;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .btn-save {
+            background: var(--h4-cyan);
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--h4-radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--h4-transition);
+            font-family: inherit;
+            min-height: 52px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-save:hover {
+            background: #0891B2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-save:active {
+            transform: scale(0.98);
+        }
+
+        .btn-reset {
+            background: var(--h4-bg);
+            color: var(--h4-text-secondary);
+            border: 2px solid var(--h4-border);
+            padding: 14px 24px;
+            border-radius: var(--h4-radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--h4-transition);
+            font-family: inherit;
+            min-height: 52px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-reset:hover {
+            border-color: var(--h4-red);
+            color: var(--h4-red);
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 599px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .company-container {
+                padding: 10px;
+            }
+
+            .company-section {
+                padding: 14px;
+            }
+
+            .visibility-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-bar {
+                flex-direction: column;
+            }
+
+            .action-bar .btn {
+                width: 100%;
+            }
+
+            .image-upload-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (min-width: 600px) and (max-width: 1023px) {
+            .company-container {
+                padding: 20px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .company-container {
+                padding: 32px;
+            }
+
+            .company-section {
+                padding: 28px;
+            }
+        }
+
+        /* ---------- TOAST OVERRIDE ---------- */
+        .h4-toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+            max-width: 90%;
+            width: 100%;
+            align-items: center;
+        }
+
+        .h4-toast {
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: var(--h4-card-bg);
+            color: var(--h4-text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            animation: h4ToastIn 0.35s ease;
+            pointer-events: auto;
+            border-left: 4px solid var(--h4-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 48px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .h4-toast-success { border-left-color: var(--h4-green); }
+        .h4-toast-error { border-left-color: var(--h4-red); }
+        .h4-toast-warning { border-left-color: var(--h4-gold-dark); }
+        .h4-toast-info { border-left-color: var(--h4-cyan); }
+
+        .h4-toast .toast-icon { font-size: 20px; }
+        .h4-toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--h4-text-muted);
+            padding: 0 4px;
+        }
+
+        @keyframes h4ToastIn {
+            from { transform: translateY(20px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    H4 HEADER
+    ============================================================ -->
+    <header class="h4-header">
+        <a href="#" class="brand" id="brandLink">
+            <span class="brand-icon">⚜️</span>
+            <span class="brand-name">H4 <span>ERP</span></span>
+        </a>
+        <div class="header-actions">
+            <button class="btn" id="backBtn">← Back</button>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="h4-toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    COMPANY MODULE
+    ============================================================ -->
+    <div class="company-container">
+
+        <!-- ============================================================
+        SECTION 1: COMPANY INFORMATION
+        ============================================================ -->
+        <div class="company-section">
+            <div class="section-title">
+                <span class="icon">🏢</span>
+                Company Information
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="form-group">
+                <label>Company Name <span class="required">*</span></label>
+                <input type="text" id="companyName" placeholder="Enter company name">
+            </div>
+
+            <div class="form-group">
+                <label>Address <span class="required">*</span></label>
+                <textarea id="companyAddress" placeholder="Enter full address"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Place</label>
+                    <input type="text" id="companyPlace" placeholder="Place / City">
+                </div>
+                <div class="form-group">
+                    <label>District</label>
+                    <input type="text" id="companyDistrict" placeholder="District">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>State</label>
+                    <input type="text" id="companyState" placeholder="State">
+                </div>
+                <div class="form-group">
+                    <label>PIN Code</label>
+                    <input type="text" id="companyPin" placeholder="PIN Code">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="companyMobile" placeholder="Mobile number">
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp Number</label>
+                    <input type="tel" id="companyWhatsapp" placeholder="WhatsApp number">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="companyEmail" placeholder="Email address">
+                </div>
+                <div class="form-group">
+                    <label>Website</label>
+                    <input type="url" id="companyWebsite" placeholder="Website URL">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>GSTIN</label>
+                    <input type="text" id="companyGstin" placeholder="GSTIN number">
+                </div>
+                <div class="form-group">
+                    <label>PAN</label>
+                    <input type="text" id="companyPan" placeholder="PAN number">
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        SECTION 2: BRANDING & IMAGES
+        ============================================================ -->
+        <div class="company-section">
+            <div class="section-title">
+                <span class="icon">🖼️</span>
+                Branding & Images
+                <span class="badge">Optional</span>
+            </div>
+
+            <!-- Logo Type -->
+            <div class="form-group">
+                <label>Logo Type</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="logoType" value="image" checked>
+                        Image
+                    </label>
+                    <label>
+                        <input type="radio" name="logoType" value="text">
+                        Text
+                    </label>
+                </div>
+            </div>
+
+            <!-- Image Logo -->
+            <div id="imageLogoSection">
+                <div class="form-group">
+                    <label>Company Logo</label>
+                    <div class="image-upload-group">
+                        <div class="preview-box" id="logoPreview">
+                            <span class="placeholder-text">📷<br>Logo</span>
+                        </div>
+                        <div class="upload-actions">
+                            <button class="btn-upload primary" id="uploadLogoBtn">📤 Upload</button>
+                            <button class="btn-upload danger" id="removeLogoBtn">🗑️ Remove</button>
+                        </div>
+                    </div>
+                    <input type="file" class="file-input-hidden" id="logoFileInput" accept="image/png,image/jpeg,image/jpg">
+                    <div class="helper-text">PNG, JPG, JPEG (Max 2MB)</div>
+                </div>
+
+                <div class="form-group">
+                    <label>H4 Brand Logo</label>
+                    <div class="image-upload-group">
+                        <div class="preview-box" id="h4LogoPreview">
+                            <span class="placeholder-text">⚜️<br>H4 Logo</span>
+                        </div>
+                        <div class="upload-actions">
+                            <button class="btn-upload primary" id="uploadH4LogoBtn">📤 Upload</button>
+                            <button class="btn-upload danger" id="removeH4LogoBtn">🗑️ Remove</button>
+                        </div>
+                    </div>
+                    <input type="file" class="file-input-hidden" id="h4LogoFileInput" accept="image/png,image/jpeg,image/jpg">
+                    <div class="helper-text">PNG, JPG, JPEG (Max 2MB)</div>
+                </div>
+            </div>
+
+            <!-- Text Logo -->
+            <div id="textLogoSection" style="display:none;">
+                <div class="form-group">
+                    <label>Text Logo</label>
+                    <input type="text" id="textLogo" value="H4" placeholder="Enter text logo">
+                </div>
+            </div>
+
+            <!-- Watermark -->
+            <div class="form-group">
+                <label>Watermark</label>
+                <div class="image-upload-group">
+                    <div class="preview-box" id="watermarkPreview">
+                        <span class="placeholder-text">💧<br>Watermark</span>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="btn-upload primary" id="uploadWatermarkBtn">📤 Upload</button>
+                        <button class="btn-upload danger" id="removeWatermarkBtn">🗑️ Remove</button>
+                    </div>
+                </div>
+                <input type="file" class="file-input-hidden" id="watermarkFileInput" accept="image/png,image/jpeg,image/jpg">
+                <div style="margin-top:8px;">
+                    <div class="toggle-group">
+                        <span class="toggle-label">Enable Watermark</span>
+                        <div class="toggle-switch" id="watermarkToggle">
+                            <div class="toggle-knob"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature -->
+            <div class="form-group">
+                <label>Signature</label>
+                <div class="image-upload-group">
+                    <div class="preview-box" id="signaturePreview">
+                        <span class="placeholder-text">✍️<br>Signature</span>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="btn-upload primary" id="uploadSignatureBtn">📤 Upload</button>
+                        <button class="btn-upload danger" id="removeSignatureBtn">🗑️ Remove</button>
+                    </div>
+                </div>
+                <input type="file" class="file-input-hidden" id="signatureFileInput" accept="image/png,image/jpeg,image/jpg">
+                <div class="helper-text">Signature Image</div>
+            </div>
+
+            <!-- Stamp -->
+            <div class="form-group">
+                <label>Company Stamp</label>
+                <div class="image-upload-group">
+                    <div class="preview-box" id="stampPreview">
+                        <span class="placeholder-text">📜<br>Stamp</span>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="btn-upload primary" id="uploadStampBtn">📤 Upload</button>
+                        <button class="btn-upload danger" id="removeStampBtn">🗑️ Remove</button>
+                    </div>
+                </div>
+                <input type="file" class="file-input-hidden" id="stampFileInput" accept="image/png,image/jpeg,image/jpg">
+                <div class="helper-text">Company Stamp Image</div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        SECTION 3: DOCUMENT SETTINGS
+        ============================================================ -->
+        <div class="company-section">
+            <div class="section-title">
+                <span class="icon">📄</span>
+                Document Settings
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Invoice Prefix</label>
+                    <input type="text" id="invoicePrefix" value="INV-" placeholder="Invoice prefix">
+                </div>
+                <div class="form-group">
+                    <label>Quotation Prefix</label>
+                    <input type="text" id="quotationPrefix" value="QTN-" placeholder="Quotation prefix">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Invoice Starting No.</label>
+                    <input type="number" id="invoiceStart" value="1" min="1" step="1">
+                </div>
+                <div class="form-group">
+                    <label>Quotation Starting No.</label>
+                    <input type="number" id="quotationStart" value="1" min="1" step="1">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Default GST Rate (%)</label>
+                    <select id="defaultGst">
+                        <option value="0">0%</option>
+                        <option value="5">5%</option>
+                        <option value="9">9%</option>
+                        <option value="18" selected>18%</option>
+                        <option value="28">28%</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Currency</label>
+                    <select id="currency">
+                        <option value="₹">₹ INR</option>
+                        <option value="$">$ USD</option>
+                        <option value="€">€ EUR</option>
+                        <option value="£">£ GBP</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Amount Format</label>
+                <select id="amountFormat">
+                    <option value="1,234.00">1,234.00</option>
+                    <option value="1234.00">1234.00</option>
+                    <option value="1,234">1,234</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        SECTION 4: QR CODE
+        ============================================================ -->
+        <div class="company-section">
+            <div class="section-title">
+                <span class="icon">📱</span>
+                QR Code
+                <span class="badge">Optional</span>
+            </div>
+
+            <div class="form-group">
+                <label>QR Type</label>
+                <select id="qrType">
+                    <option value="upi">UPI QR</option>
+                    <option value="payment">Payment QR</option>
+                    <option value="website">Website QR</option>
+                    <option value="custom">Custom QR Image</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="qrUpiSection">
+                <label>UPI ID</label>
+                <input type="text" id="qrUpiId" placeholder="UPI ID (e.g., example@upi)">
+                <div class="helper-text">UPI QR will be auto-generated</div>
+            </div>
+
+            <div class="form-group" id="qrPaymentSection" style="display:none;">
+                <label>Payment QR Image</label>
+                <div class="image-upload-group">
+                    <div class="preview-box" id="qrPaymentPreview">
+                        <span class="placeholder-text">📱<br>QR</span>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="btn-upload primary" id="uploadQrBtn">📤 Upload</button>
+                        <button class="btn-upload danger" id="removeQrBtn">🗑️ Remove</button>
+                    </div>
+                </div>
+                <input type="file" class="file-input-hidden" id="qrFileInput" accept="image/png,image/jpeg,image/jpg">
+            </div>
+
+            <div class="form-group" id="qrWebsiteSection" style="display:none;">
+                <label>Website URL</label>
+                <input type="url" id="qrWebsiteUrl" placeholder="https://example.com">
+            </div>
+
+            <div class="form-group" id="qrCustomSection" style="display:none;">
+                <label>Custom QR Image</label>
+                <div class="image-upload-group">
+                    <div class="preview-box" id="qrCustomPreview">
+                        <span class="placeholder-text">📱<br>Custom QR</span>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="btn-upload primary" id="uploadCustomQrBtn">📤 Upload</button>
+                        <button class="btn-upload danger" id="removeCustomQrBtn">🗑️ Remove</button>
+                    </div>
+                </div>
+                <input type="file" class="file-input-hidden" id="qrCustomFileInput" accept="image/png,image/jpeg,image/jpg">
+            </div>
+
+            <div style="margin-top:8px;">
+                <div class="toggle-group">
+                    <span class="toggle-label">Enable QR Code</span>
+                    <div class="toggle-switch" id="qrToggle">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        SECTION 5: CONTACT INFORMATION
+        ============================================================ -->
+        <div class="company-section">
+            <div class="section-title">
+                <span class="icon">📞</span>
+                Contact Information
+                <span class="badge">Auto Links</span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>📞 Call</label>
+                    <input type="text" id="contactCall" placeholder="Mobile number" readonly style="background:var(--h4-bg);">
+                    <div class="helper-text">Uses Mobile Number</div>
+                </div>
+                <div class="form-group">
+                    <label>💬 WhatsApp</label>
+                    <input type="text" id="contactWhatsapp" placeholder="WhatsApp number" readonly style="background:var(--h4-bg);">
+                    <div class="helper-text">Uses WhatsApp Number</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>✉️ Email</label>
+                    <input type="text" id="contactEmail" placeholder="Email" readonly style="background:var(--h4-bg);">
+                    <div class="helper-text">Uses Email</div>
+                </div>
+                <div class="form-group">
+                    <label>🌐 Website</label>
+                    <input type="text" id="contactWebsite" placeholder="Website" readonly style="background:var(--h4-bg);">
+                    <div class="helper-text">Uses Website</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        SECTION 6: FOOTER
+        ============================================================ -->
+        <div class="company-section">
+            <div class="section-title">
+                <span class="icon">📝</span>
+                Footer
+                <span class="badge">Optional</span>
+            </div>
+
+            <div class="form-group">
+                <label>Thank You Message</label>
+                <input type="text" id="footerThankYou" value="Thank you for your business." placeholder="Thank you message">
+            </div>
+
+            <div class="form-group">
+                <label>Terms & Conditions</label>
+                <textarea id="footerTerms" placeholder="Terms & Conditions..." style="min-height:60px;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Information</label>
+                <textarea id="footerPayment" placeholder="Payment details..." style="min-height:60px;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Footer Text</label>
+                <textarea id="footerAdditional" placeholder="Additional custom text..." style="min-height:50px;"></textarea>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        SECTION 7: VISIBILITY CONTROLS
+        ============================================================ -->
+        <div class="company-section">
+            <div class="section-title">
+                <span class="icon">👁️</span>
+                Visibility Controls
+                <span class="badge">Toggle</span>
+            </div>
+
+            <div class="visibility-grid">
+                <div class="visibility-item">
+                    <span class="label">Company Active</span>
+                    <div class="toggle-switch active" id="visibilityCompany">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show Company Logo</span>
+                    <div class="toggle-switch active" id="visibilityLogo">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show H4 Logo</span>
+                    <div class="toggle-switch active" id="visibilityH4Logo">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show GSTIN</span>
+                    <div class="toggle-switch active" id="visibilityGstin">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show PAN</span>
+                    <div class="toggle-switch active" id="visibilityPan">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show QR</span>
+                    <div class="toggle-switch active" id="visibilityQr">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show WhatsApp</span>
+                    <div class="toggle-switch active" id="visibilityWhatsapp">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show Website</span>
+                    <div class="toggle-switch active" id="visibilityWebsite">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show Signature</span>
+                    <div class="toggle-switch active" id="visibilitySignature">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item">
+                    <span class="label">Show Stamp</span>
+                    <div class="toggle-switch active" id="visibilityStamp">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+                <div class="visibility-item" style="grid-column:1/-1;">
+                    <span class="label">Show Watermark</span>
+                    <div class="toggle-switch" id="visibilityWatermark">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        ACTION BAR
+        ============================================================ -->
+        <div class="action-bar">
+            <button class="btn-save" id="saveBtn">💾 Save Company</button>
+            <button class="btn-reset" id="resetBtn">↻ Reset to Default</button>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // H4 COMPANY MODULE - WITH REAL IMAGE UPLOAD
+        // ============================================================
+
+        (function() {
+            'use strict';
+
+            const COMPANY_STORAGE_KEY = 'h4_company_config';
+
+            // ============================================================
+            // DOM REFS
+            // ============================================================
+
+            const toastContainer = document.getElementById('toastContainer');
+
+            // ============================================================
+            // DEFAULT CONFIG
+            // ============================================================
+
+            const defaultConfig = {
+                companyName: '',
+                address: '',
+                place: '',
+                district: '',
+                state: '',
+                pin: '',
+                mobile: '',
+                whatsapp: '',
+                email: '',
+                website: '',
+                gstin: '',
+                pan: '',
+                
+                logoType: 'image',
+                logo: null,        // base64 data
+                h4Logo: null,      // base64 data
+                textLogo: 'H4',
+                watermark: null,   // base64 data
+                watermarkEnabled: false,
+                signature: null,   // base64 data
+                stamp: null,       // base64 data
+                
+                invoicePrefix: 'INV-',
+                quotationPrefix: 'QTN-',
+                invoiceStart: 1,
+                quotationStart: 1,
+                defaultGst: 18,
+                currency: '₹',
+                amountFormat: '1,234.00',
+                
+                qrType: 'upi',
+                qrUpiId: '',
+                qrPayment: null,   // base64 data
+                qrWebsiteUrl: '',
+                qrCustom: null,    // base64 data
+                qrEnabled: true,
+                
+                footerThankYou: 'Thank you for your business.',
+                footerTerms: '',
+                footerPayment: '',
+                footerAdditional: '',
+                
+                visibility: {
+                    company: true,
+                    logo: true,
+                    h4Logo: true,
+                    gstin: true,
+                    pan: true,
+                    qr: true,
+                    whatsapp: true,
+                    website: true,
+                    signature: true,
+                    stamp: true,
+                    watermark: false
+                }
+            };
+
+            let config = {};
+
+            // ============================================================
+            // TOAST
+            // ============================================================
+
+            function showToast(message, type = 'info', duration = 3000) {
+                const toast = document.createElement('div');
+                const iconMap = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
+                toast.className = `h4-toast h4-toast-${type}`;
+                toast.innerHTML = `
+                    <span class="toast-icon">${iconMap[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <button class="toast-close">✕</button>
+                `;
+                toastContainer.appendChild(toast);
+
+                const closeBtn = toast.querySelector('.toast-close');
+                closeBtn.addEventListener('click', () => {
+                    toast.remove();
+                });
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px) scale(0.95)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, duration);
+            }
+
+            // ============================================================
+            // STORAGE
+            // ============================================================
+
+            function loadConfig() {
+                try {
+                    const data = localStorage.getItem(COMPANY_STORAGE_KEY);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        config = { ...defaultConfig, ...parsed };
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('Error loading company config:', e);
+                }
+                config = { ...defaultConfig };
+            }
+
+            function saveConfig() {
+                try {
+                    localStorage.setItem(COMPANY_STORAGE_KEY, JSON.stringify(config));
+                    showToast('✅ Company configuration saved successfully!', 'success');
+                    return true;
+                } catch (e) {
+                    showToast('❌ Error saving company configuration', 'error');
+                    return false;
+                }
+            }
+
+            // ============================================================
+            // IMAGE UPLOAD HANDLER
+            // ============================================================
+
+            function setupImageUpload(buttonId, fileInputId, previewId, configKey) {
+                const button = document.getElementById(buttonId);
+                const fileInput = document.getElementById(fileInputId);
+                const preview = document.getElementById(previewId);
+
+                if (!button || !fileInput || !preview) return;
+
+                // Click button triggers file input
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    fileInput.click();
+                });
+
+                // Handle file selection
+                fileInput.addEventListener('change', function(e) {
+                    const file = this.files[0];
+                    if (!file) return;
+
+                    // Validate file type
+                    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+                    if (!validTypes.includes(file.type)) {
+                        showToast('⚠️ Please upload PNG or JPG/JPEG image', 'error');
+                        this.value = '';
+                        return;
+                    }
+
+                    // Validate file size (max 2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        showToast('⚠️ Image size should be less than 2MB', 'error');
+                        this.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const base64Data = e.target.result;
+                        
+                        // Update config
+                        config[configKey] = base64Data;
+                        
+                        // Update preview
+                        preview.innerHTML = `<img src="${base64Data}" alt="Uploaded">`;
+                        preview.classList.add('has-image');
+                        
+                        showToast('✅ Image uploaded successfully!', 'success', 1500);
+                    };
+                    reader.onerror = function() {
+                        showToast('❌ Error reading file', 'error');
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // ============================================================
+            // IMAGE REMOVE HANDLER
+            // ============================================================
+
+            function setupImageRemove(buttonId, previewId, configKey) {
+                const button = document.getElementById(buttonId);
+                const preview = document.getElementById(previewId);
+
+                if (!button || !preview) return;
+
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove from config
+                    config[configKey] = null;
+                    
+                    // Reset preview
+                    const placeholder = preview.querySelector('.placeholder-text');
+                    if (placeholder) {
+                        preview.innerHTML = placeholder.outerHTML;
+                    } else {
+                        preview.innerHTML = `<span class="placeholder-text">📷<br>Image</span>`;
+                    }
+                    preview.classList.remove('has-image');
+                    
+                    showToast('🗑️ Image removed', 'info', 1500);
+                });
+            }
+
+            // ============================================================
+            // INIT IMAGE UPLOADS
+            // ============================================================
+
+            function initImageUploads() {
+                // Company Logo
+                setupImageUpload('uploadLogoBtn', 'logoFileInput', 'logoPreview', 'logo');
+                setupImageRemove('removeLogoBtn', 'logoPreview', 'logo');
+
+                // H4 Logo
+                setupImageUpload('uploadH4LogoBtn', 'h4LogoFileInput', 'h4LogoPreview', 'h4Logo');
+                setupImageRemove('removeH4LogoBtn', 'h4LogoPreview', 'h4Logo');
+
+                // Watermark
+                setupImageUpload('uploadWatermarkBtn', 'watermarkFileInput', 'watermarkPreview', 'watermark');
+                setupImageRemove('removeWatermarkBtn', 'watermarkPreview', 'watermark');
+
+                // Signature
+                setupImageUpload('uploadSignatureBtn', 'signatureFileInput', 'signaturePreview', 'signature');
+                setupImageRemove('removeSignatureBtn', 'signaturePreview', 'signature');
+
+                // Stamp
+                setupImageUpload('uploadStampBtn', 'stampFileInput', 'stampPreview', 'stamp');
+                setupImageRemove('removeStampBtn', 'stampPreview', 'stamp');
+
+                // QR Payment
+                setupImageUpload('uploadQrBtn', 'qrFileInput', 'qrPaymentPreview', 'qrPayment');
+                setupImageRemove('removeQrBtn', 'qrPaymentPreview', 'qrPayment');
+
+                // QR Custom
+                setupImageUpload('uploadCustomQrBtn', 'qrCustomFileInput', 'qrCustomPreview', 'qrCustom');
+                setupImageRemove('removeCustomQrBtn', 'qrCustomPreview', 'qrCustom');
+            }
+
+            // ============================================================
+            // FILL PREVIEWS FROM CONFIG
+            // ============================================================
+
+            function fillImagePreviews() {
+                const imageKeys = {
+                    'logoPreview': 'logo',
+                    'h4LogoPreview': 'h4Logo',
+                    'watermarkPreview': 'watermark',
+                    'signaturePreview': 'signature',
+                    'stampPreview': 'stamp',
+                    'qrPaymentPreview': 'qrPayment',
+                    'qrCustomPreview': 'qrCustom'
+                };
+
+                for (const [previewId, configKey] of Object.entries(imageKeys)) {
+                    const preview = document.getElementById(previewId);
+                    if (!preview) continue;
+                    
+                    const data = config[configKey];
+                    if (data && typeof data === 'string' && data.startsWith('data:image')) {
+                        preview.innerHTML = `<img src="${data}" alt="Uploaded">`;
+                        preview.classList.add('has-image');
+                    } else {
+                        const placeholder = preview.querySelector('.placeholder-text');
+                        if (!placeholder) {
+                            const names = {
+                                'logoPreview': '📷<br>Logo',
+                                'h4LogoPreview': '⚜️<br>H4 Logo',
+                                'watermarkPreview': '💧<br>Watermark',
+                                'signaturePreview': '✍️<br>Signature',
+                                'stampPreview': '📜<br>Stamp',
+                                'qrPaymentPreview': '📱<br>QR',
+                                'qrCustomPreview': '📱<br>Custom QR'
+                            };
+                            preview.innerHTML = `<span class="placeholder-text">${names[previewId] || '📷<br>Image'}</span>`;
+                        }
+                        preview.classList.remove('has-image');
+                    }
+                }
+            }
+
+            // ============================================================
+            // FILL FORM FROM CONFIG
+            // ============================================================
+
+            function fillForm() {
+                // Company Information
+                document.getElementById('companyName').value = config.companyName || '';
+                document.getElementById('companyAddress').value = config.address || '';
+                document.getElementById('companyPlace').value = config.place || '';
+                document.getElementById('companyDistrict').value = config.district || '';
+                document.getElementById('companyState').value = config.state || '';
+                document.getElementById('companyPin').value = config.pin || '';
+                document.getElementById('companyMobile').value = config.mobile || '';
+                document.getElementById('companyWhatsapp').value = config.whatsapp || '';
+                document.getElementById('companyEmail').value = config.email || '';
+                document.getElementById('companyWebsite').value = config.website || '';
+                document.getElementById('companyGstin').value = config.gstin || '';
+                document.getElementById('companyPan').value = config.pan || '';
+
+                // Branding
+                const logoTypeRadios = document.querySelectorAll('input[name="logoType"]');
+                logoTypeRadios.forEach(el => {
+                    el.checked = (el.value === (config.logoType || 'image'));
+                });
+                toggleLogoType(config.logoType || 'image');
+
+                document.getElementById('textLogo').value = config.textLogo || 'H4';
+
+                // Document Settings
+                document.getElementById('invoicePrefix').value = config.invoicePrefix || 'INV-';
+                document.getElementById('quotationPrefix').value = config.quotationPrefix || 'QTN-';
+                document.getElementById('invoiceStart').value = config.invoiceStart || 1;
+                document.getElementById('quotationStart').value = config.quotationStart || 1;
+                document.getElementById('defaultGst').value = config.defaultGst || 18;
+                document.getElementById('currency').value = config.currency || '₹';
+                document.getElementById('amountFormat').value = config.amountFormat || '1,234.00';
+
+                // QR
+                document.getElementById('qrType').value = config.qrType || 'upi';
+                toggleQrType(config.qrType || 'upi');
+                document.getElementById('qrUpiId').value = config.qrUpiId || '';
+                document.getElementById('qrWebsiteUrl').value = config.qrWebsiteUrl || '';
+
+                // Footer
+                document.getElementById('footerThankYou').value = config.footerThankYou || 'Thank you for your business.';
+                document.getElementById('footerTerms').value = config.footerTerms || '';
+                document.getElementById('footerPayment').value = config.footerPayment || '';
+                document.getElementById('footerAdditional').value = config.footerAdditional || '';
+
+                // Visibility
+                const visibility = config.visibility || defaultConfig.visibility;
+                setToggle('visibilityCompany', visibility.company !== false);
+                setToggle('visibilityLogo', visibility.logo !== false);
+                setToggle('visibilityH4Logo', visibility.h4Logo !== false);
+                setToggle('visibilityGstin', visibility.gstin !== false);
+                setToggle('visibilityPan', visibility.pan !== false);
+                setToggle('visibilityQr', visibility.qr !== false);
+                setToggle('visibilityWhatsapp', visibility.whatsapp !== false);
+                setToggle('visibilityWebsite', visibility.website !== false);
+                setToggle('visibilitySignature', visibility.signature !== false);
+                setToggle('visibilityStamp', visibility.stamp !== false);
+                setToggle('visibilityWatermark', visibility.watermark === true);
+
+                // Watermark toggle
+                setToggle('watermarkToggle', config.watermarkEnabled === true);
+                document.getElementById('watermarkToggle').dataset.enabled = config.watermarkEnabled === true;
+
+                // QR toggle
+                setToggle('qrToggle', config.qrEnabled !== false);
+                document.getElementById('qrToggle').dataset.enabled = config.qrEnabled !== false;
+
+                // Contact auto-fill
+                updateContactFields();
+
+                // Image previews
+                fillImagePreviews();
+            }
+
+            // ============================================================
+            // TOGGLE HELPERS
+            // ============================================================
+
+            function setToggle(id, active) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (active) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+                el.dataset.enabled = active ? 'true' : 'false';
+            }
+
+            function getToggle(id) {
+                const el = document.getElementById(id);
+                if (!el) return false;
+                return el.classList.contains('active');
+            }
+
+            // ============================================================
+            // TOGGLE LOGO TYPE
+            // ============================================================
+
+            function toggleLogoType(type) {
+                const imageSection = document.getElementById('imageLogoSection');
+                const textSection = document.getElementById('textLogoSection');
+                if (type === 'text') {
+                    imageSection.style.display = 'none';
+                    textSection.style.display = 'block';
+                } else {
+                    imageSection.style.display = 'block';
+                    textSection.style.display = 'none';
+                }
+                config.logoType = type;
+            }
+
+            // ============================================================
+            // TOGGLE QR TYPE
+            // ============================================================
+
+            function toggleQrType(type) {
+                const upiSection = document.getElementById('qrUpiSection');
+                const paymentSection = document.getElementById('qrPaymentSection');
+                const websiteSection = document.getElementById('qrWebsiteSection');
+                const customSection = document.getElementById('qrCustomSection');
+
+                upiSection.style.display = 'none';
+                paymentSection.style.display = 'none';
+                websiteSection.style.display = 'none';
+                customSection.style.display = 'none';
+
+                if (type === 'upi') upiSection.style.display = 'block';
+                else if (type === 'payment') paymentSection.style.display = 'block';
+                else if (type === 'website') websiteSection.style.display = 'block';
+                else if (type === 'custom') customSection.style.display = 'block';
+
+                config.qrType = type;
+            }
+
+            // ============================================================
+            // UPDATE CONTACT FIELDS
+            // ============================================================
+
+            function updateContactFields() {
+                document.getElementById('contactCall').value = config.mobile || '';
+                document.getElementById('contactWhatsapp').value = config.whatsapp || '';
+                document.getElementById('contactEmail').value = config.email || '';
+                document.getElementById('contactWebsite').value = config.website || '';
+            }
+
+            // ============================================================
+            // COLLECT FORM DATA
+            // ============================================================
+
+            function collectFormData() {
+                const visibility = {
+                    company: getToggle('visibilityCompany'),
+                    logo: getToggle('visibilityLogo'),
+                    h4Logo: getToggle('visibilityH4Logo'),
+                    gstin: getToggle('visibilityGstin'),
+                    pan: getToggle('visibilityPan'),
+                    qr: getToggle('visibilityQr'),
+                    whatsapp: getToggle('visibilityWhatsapp'),
+                    website: getToggle('visibilityWebsite'),
+                    signature: getToggle('visibilitySignature'),
+                    stamp: getToggle('visibilityStamp'),
+                    watermark: getToggle('visibilityWatermark')
+                };
+
+                const logoType = document.querySelector('input[name="logoType"]:checked');
+                
+                return {
+                    companyName: document.getElementById('companyName').value.trim(),
+                    address: document.getElementById('companyAddress').value.trim(),
+                    place: document.getElementById('companyPlace').value.trim(),
+                    district: document.getElementById('companyDistrict').value.trim(),
+                    state: document.getElementById('companyState').value.trim(),
+                    pin: document.getElementById('companyPin').value.trim(),
+                    mobile: document.getElementById('companyMobile').value.trim(),
+                    whatsapp: document.getElementById('companyWhatsapp').value.trim(),
+                    email: document.getElementById('companyEmail').value.trim(),
+                    website: document.getElementById('companyWebsite').value.trim(),
+                    gstin: document.getElementById('companyGstin').value.trim(),
+                    pan: document.getElementById('companyPan').value.trim(),
+                    
+                    logoType: logoType ? logoType.value : 'image',
+                    textLogo: document.getElementById('textLogo').value.trim() || 'H4',
+                    watermarkEnabled: getToggle('watermarkToggle'),
+                    
+                    invoicePrefix: document.getElementById('invoicePrefix').value.trim() || 'INV-',
+                    quotationPrefix: document.getElementById('quotationPrefix').value.trim() || 'QTN-',
+                    invoiceStart: parseInt(document.getElementById('invoiceStart').value) || 1,
+                    quotationStart: parseInt(document.getElementById('quotationStart').value) || 1,
+                    defaultGst: parseFloat(document.getElementById('defaultGst').value) || 18,
+                    currency: document.getElementById('currency').value || '₹',
+                    amountFormat: document.getElementById('amountFormat').value || '1,234.00',
+                    
+                    qrType: document.getElementById('qrType').value || 'upi',
+                    qrUpiId: document.getElementById('qrUpiId').value.trim(),
+                    qrWebsiteUrl: document.getElementById('qrWebsiteUrl').value.trim(),
+                    qrEnabled: getToggle('qrToggle'),
+                    
+                    footerThankYou: document.getElementById('footerThankYou').value.trim(),
+                    footerTerms: document.getElementById('footerTerms').value.trim(),
+                    footerPayment: document.getElementById('footerPayment').value.trim(),
+                    footerAdditional: document.getElementById('footerAdditional').value.trim(),
+                    
+                    visibility: visibility
+                };
+            }
+
+            // ============================================================
+            // SAVE
+            // ============================================================
+
+            function saveCompany() {
+                // Validate
+                const name = document.getElementById('companyName').value.trim();
+                if (!name) {
+                    showToast('⚠️ Company Name is required', 'error');
+                    document.getElementById('companyName').focus();
+                    return;
+                }
+
+                const address = document.getElementById('companyAddress').value.trim();
+                if (!address) {
+                    showToast('⚠️ Address is required', 'error');
+                    document.getElementById('companyAddress').focus();
+                    return;
+                }
+
+                // Collect form data (preserves images)
+                const newConfig = collectFormData();
+                
+                // Preserve existing image data
+                const imageKeys = ['logo', 'h4Logo', 'watermark', 'signature', 'stamp', 'qrPayment', 'qrCustom'];
+                for (const key of imageKeys) {
+                    if (config[key]) {
+                        newConfig[key] = config[key];
+                    }
+                }
+                
+                config = { ...config, ...newConfig };
+                
+                if (saveConfig()) {
+                    updateContactFields();
+                    showToast('✅ Company saved successfully!', 'success');
+                }
+            }
+
+            // ============================================================
+            // RESET
+            // ============================================================
+
+            function resetCompany() {
+                if (!confirm('Reset all company settings to default?')) return;
+                config = { ...defaultConfig };
+                saveConfig();
+                fillForm();
+                showToast('↻ Company reset to default', 'info');
+            }
+
+            // ============================================================
+            // BIND EVENTS
+            // ============================================================
+
+            function bindEvents() {
+                // Logo type
+                document.querySelectorAll('input[name="logoType"]').forEach(el => {
+                    el.addEventListener('change', function() {
+                        toggleLogoType(this.value);
+                        config.logoType = this.value;
+                    });
+                });
+
+                // QR type
+                document.getElementById('qrType').addEventListener('change', function() {
+                    toggleQrType(this.value);
+                });
+
+                // Toggle switches - click to toggle
+                document.querySelectorAll('.toggle-switch').forEach(el => {
+                    el.addEventListener('click', function() {
+                        this.classList.toggle('active');
+                        const isActive = this.classList.contains('active');
+                        this.dataset.enabled = isActive ? 'true' : 'false';
+                    });
+                });
+
+                // Save
+                document.getElementById('saveBtn').addEventListener('click', saveCompany);
+
+                // Reset
+                document.getElementById('resetBtn').addEventListener('click', resetCompany);
+
+                // Back
+                document.getElementById('backBtn').addEventListener('click', function() {
+                    window.location.href = 'index.html';
+                });
+
+                // Brand link
+                document.getElementById('brandLink').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                });
+
+                // Auto-update contact fields when mobile/whatsapp/email/website change
+                document.getElementById('companyMobile').addEventListener('input', updateContactFields);
+                document.getElementById('companyWhatsapp').addEventListener('input', updateContactFields);
+                document.getElementById('companyEmail').addEventListener('input', updateContactFields);
+                document.getElementById('companyWebsite').addEventListener('input', updateContactFields);
+            }
+
+            // ============================================================
+            // INIT
+            // ============================================================
+
+            function init() {
+                loadConfig();
+                fillForm();
+                initImageUploads();
+                bindEvents();
+                console.log('🏢 H4 Company Module loaded successfully');
+                console.log('📸 Real image upload enabled');
+            }
+
+            init();
+
+        })();
+    </script>
+
+</body>
+</html>
