@@ -1,0 +1,58 @@
+/* ============================================================
+   H4 BILLING ERP - DESKTOP.CSS
+   Desktop 3/4-Column Layout
+   ============================================================ */
+
+@media (min-width: 600px) and (max-width: 1023px) {
+    /* ---------- MODULE GRID - 3 COLUMN ---------- */
+    .h4-module-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 16px; 
+    }
+    .h4-dashboard { padding: 24px; }
+}
+
+@media (min-width: 1024px) {
+    /* ---------- MODULE GRID - 4 COLUMN ---------- */
+    .h4-module-grid { 
+        grid-template-columns: repeat(4, 1fr); 
+        gap: 20px; 
+    }
+    .h4-dashboard { padding: 32px; }
+    
+    /* ---------- MODULE CARDS LARGER ---------- */
+    .h4-module-card { 
+        padding: 24px 20px; 
+        min-height: 130px; 
+    }
+    .h4-module-card .card-icon { font-size: 34px; }
+    .h4-module-card .card-title { font-size: 17px; }
+    .h4-module-card .card-subtitle { font-size: 13px; }
+    
+    /* ---------- SEARCH ---------- */
+    .h4-search-bar .search-wrapper { max-width: 700px; }
+    .h4-search-bar .search-wrapper input { 
+        font-size: 16px; 
+        min-height: 52px; 
+    }
+    
+    /* ---------- HEADER ---------- */
+    .h4-header { padding: 0 32px; }
+    .h4-header .brand-name { font-size: 20px; }
+    .h4-header .header-actions .btn { 
+        padding: 10px 20px; 
+        font-size: 14px; 
+        min-height: 44px; 
+    }
+}
+
+@media (min-width: 1400px) {
+    .h4-module-grid { 
+        grid-template-columns: repeat(4, 1fr); 
+        gap: 24px; 
+    }
+    .h4-dashboard { 
+        padding: 40px; 
+        max-width: 1600px; 
+    }
+}
