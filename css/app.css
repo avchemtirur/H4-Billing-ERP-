@@ -1019,6 +1019,99 @@ body {
 }
 
 /* ============================================================
+   PRODUCT MODAL - CLEAR FORM FIELDS
+   ============================================================ */
+
+.h4-product-modal input,
+.h4-product-modal select,
+.h4-product-modal textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    background: #FFFFFF !important;
+    color: #172033 !important;
+
+    opacity: 1 !important;
+    filter: none !important;
+
+    border: 2px solid #D8DCE5;
+    border-radius: 10px;
+
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 14px 16px;
+
+    font-family: inherit;
+}
+
+.h4-product-modal input::placeholder,
+.h4-product-modal textarea::placeholder {
+    color: #8A94A6 !important;
+    opacity: 1 !important;
+}
+
+.h4-product-modal label {
+    display: block;
+
+    color: #172033 !important;
+    opacity: 1 !important;
+
+    font-weight: 600;
+    font-size: 16px;
+
+    margin-bottom: 7px;
+}
+
+.h4-product-modal textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.h4-product-modal input:focus,
+.h4-product-modal select:focus,
+.h4-product-modal textarea:focus {
+    outline: none;
+
+    border-color: #F5C400;
+
+    box-shadow: 0 0 0 3px rgba(245,196,0,0.18);
+
+    background: #FFFFFF !important;
+}
+
+.h4-product-modal select {
+    color: #172033 !important;
+    background: #FFFFFF !important;
+}
+
+.h4-product-modal input:disabled,
+.h4-product-modal select:disabled,
+.h4-product-modal textarea:disabled {
+    color: #172033 !important;
+    background: #F5F6F8 !important;
+    opacity: 1 !important;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+
+    .h4-product-modal input,
+    .h4-product-modal select,
+    .h4-product-modal textarea {
+        font-size: 15px;
+        padding: 12px 14px;
+    }
+
+    .h4-product-modal textarea {
+        min-height: 130px;
+    }
+
+    .h4-product-modal label {
+        font-size: 15px;
+    }
+}
+
+/* ============================================================
    RESPONSIVE - PRODUCT
    ============================================================ */
 
