@@ -819,22 +819,43 @@
 
     <!-- ==================== MODALS ==================== -->
 
-    <!-- Quotation Type Modal -->
+    <!-- ============================================================
+    QUOTATION TYPE MODAL - UPDATED WITH 3 OPTIONS
+    ============================================================ -->
     <div class="modal-overlay" id="qtnTypeModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>New Quotation</h3>
+                <h3>📄 New Quotation</h3>
                 <button class="modal-close" onclick="H4App.closeModal('qtnTypeModal')">✕</button>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom:1rem;color:var(--text-secondary);">Choose quotation type</p>
+                <p style="margin-bottom:1rem;color:var(--text-secondary);">
+                    Choose quotation type
+                </p>
                 <div style="display:grid;gap:0.85rem;">
-                    <button class="btn btn-outline btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4App.newQuotation();">
-                        📄 <strong>General Quotation</strong> — standard items & pricing
+
+                    <!-- 1. GENERAL QUOTATION -->
+                    <button class="btn btn-outline btn-block"
+                        style="justify-content:flex-start;padding:1rem;"
+                        onclick="H4App.closeModal('qtnTypeModal'); H4App.newQuotation();">
+                        📄 <strong>General Quotation</strong>
+                        — standard items & pricing
                     </button>
-                    <button class="btn btn-primary btn-block" style="justify-content:flex-start;padding:1rem;" onclick="H4App.closeModal('qtnTypeModal'); H4Notify.success('Epoxy builder coming soon');">
+
+                    <!-- 2. PREMIUM EPOXY FLOORING -->
+                    <button class="btn btn-primary btn-block"
+                        style="justify-content:flex-start;padding:1rem;"
+                        onclick="window.location.href='../quotation/epoxy.html';">
                         ✨ <strong>Premium Epoxy Flooring Proposal</strong>
                     </button>
+
+                    <!-- 3. WATERPROOFING QUOTATION -->
+                    <button class="btn btn-secondary btn-block"
+                        style="justify-content:flex-start;padding:1rem;"
+                        onclick="window.location.href='../quotation/waterproofing.html';">
+                        💧 <strong>Waterproofing Quotation</strong>
+                    </button>
+
                 </div>
             </div>
         </div>
