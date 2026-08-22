@@ -350,6 +350,15 @@
             background: var(--bg);
         }
 
+        /* ---------- UNIT MODAL ---------- */
+        .unit-modal .modal-content {
+            max-width: 450px;
+        }
+
+        .unit-modal .modal-body {
+            padding: 20px;
+        }
+
         /* ---------- FORM ELEMENTS ---------- */
         .form-group {
             margin-bottom: 16px;
@@ -720,7 +729,7 @@
     </div>
 
     <!-- ============================================================
-    ADD/EDIT PRODUCT MODAL - WITH h4-product-modal CLASS
+    ADD/EDIT PRODUCT MODAL
     ============================================================ -->
     <div class="modal-overlay h4-product-modal" id="productModal">
         <div class="modal-content wide">
@@ -736,9 +745,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Product Code <span class="required">*</span></label>
-                        <input type="text" id="productCode" placeholder="e.g., H4-TA-C1">
+                        <input type="text" id="productCode" placeholder="Enter product code">
                         <div class="input-error">⚠️ Product code is required</div>
-                        <div class="helper-text">Enter a unique product code</div>
                     </div>
                     <div class="form-group" id="productNameGroup">
                         <label>Product Name <span class="required">*</span></label>
@@ -750,17 +758,17 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Category</label>
-                        <input type="text" id="productCategory" placeholder="e.g., Tile Adhesive, Waterproofing">
+                        <input type="text" id="productCategory" placeholder="Enter category">
                     </div>
                     <div class="form-group">
                         <label>Brand</label>
-                        <input type="text" id="productBrand" placeholder="e.g., H4">
+                        <input type="text" id="productBrand" placeholder="Enter brand">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea id="productDescription" placeholder="Product description..."></textarea>
+                    <textarea id="productDescription" placeholder="Enter product description..."></textarea>
                 </div>
 
                 <div class="form-row">
@@ -768,21 +776,15 @@
                         <label>Unit <span class="required">*</span></label>
                         <select id="productUnit">
                             <option value="">-- Select Unit --</option>
-                            <option value="Bag">Bag</option>
-                            <option value="Kg">Kg</option>
-                            <option value="Litre">Litre</option>
-                            <option value="Nos">Nos</option>
-                            <option value="Sq.ft">Sq.ft</option>
-                            <option value="Box">Box</option>
-                            <option value="Pack">Pack</option>
-                            <option value="Roll">Roll</option>
-                            <option value="Piece">Piece</option>
                         </select>
                         <div class="input-error">⚠️ Unit is required</div>
+                        <div class="helper-text" style="margin-top:6px;">
+                            <button class="btn btn-secondary btn-xs" id="addUnitBtn" style="padding:4px 10px;font-size:11px;min-height:28px;">➕ Add New Unit</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>HSN/SAC Code</label>
-                        <input type="text" id="productHsn" placeholder="HSN/SAC code">
+                        <input type="text" id="productHsn" placeholder="Enter HSN/SAC code">
                     </div>
                 </div>
 
@@ -812,29 +814,29 @@
                 <div class="form-row">
                     <div class="form-group" id="productRateGroup">
                         <label>Selling Price <span class="required">*</span></label>
-                        <input type="number" id="productRate" placeholder="0.00" min="0" step="0.5">
+                        <input type="number" id="productRate" placeholder="Enter selling price" min="0" step="0.5" inputmode="decimal">
                         <div class="input-error">⚠️ Selling price is required</div>
                     </div>
                     <div class="form-group">
                         <label>Purchase Cost</label>
-                        <input type="number" id="productCost" placeholder="0.00" min="0" step="0.5">
+                        <input type="number" id="productCost" placeholder="Enter purchase cost" min="0" step="0.5" inputmode="decimal">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>Dealer Price</label>
-                        <input type="number" id="productDealerPrice" placeholder="0.00" min="0" step="0.5">
+                        <input type="number" id="productDealerPrice" placeholder="Enter dealer price" min="0" step="0.5" inputmode="decimal">
                     </div>
                     <div class="form-group">
                         <label>Contractor Price</label>
-                        <input type="number" id="productContractorPrice" placeholder="0.00" min="0" step="0.5">
+                        <input type="number" id="productContractorPrice" placeholder="Enter contractor price" min="0" step="0.5" inputmode="decimal">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>MRP</label>
-                    <input type="number" id="productMrp" placeholder="0.00" min="0" step="0.5">
+                    <input type="number" id="productMrp" placeholder="Enter MRP" min="0" step="0.5" inputmode="decimal">
                 </div>
 
                 <!-- Product Image -->
@@ -861,11 +863,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Opening Stock</label>
-                        <input type="number" id="productOpeningStock" placeholder="0" min="0" step="1">
+                        <input type="number" id="productOpeningStock" placeholder="Enter opening stock" min="0" step="1" inputmode="numeric">
                     </div>
                     <div class="form-group">
                         <label>Current Stock</label>
-                        <input type="number" id="productCurrentStock" placeholder="0" min="0" step="1">
+                        <input type="number" id="productCurrentStock" placeholder="Enter current stock" min="0" step="1" inputmode="numeric">
                         <div class="helper-text">Current available stock</div>
                     </div>
                 </div>
@@ -873,7 +875,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Minimum Stock</label>
-                        <input type="number" id="productMinStock" placeholder="0" min="0" step="1">
+                        <input type="number" id="productMinStock" placeholder="Enter minimum stock" min="0" step="1" inputmode="numeric">
                         <div class="helper-text">Alert when stock falls below this</div>
                     </div>
                     <div class="form-group">
@@ -886,6 +888,29 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="modalCancel">Cancel</button>
                 <button class="btn btn-primary" id="modalSave">💾 Save Product</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ADD UNIT MODAL
+    ============================================================ -->
+    <div class="modal-overlay unit-modal" id="unitModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Add New Unit</h3>
+                <button class="modal-close" id="unitModalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Unit Name <span class="required">*</span></label>
+                    <input type="text" id="newUnitName" placeholder="Enter unit name (e.g., Drum, Can, Set)">
+                    <div class="input-error" id="unitError">⚠️ Unit name is required</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="unitCancel">Cancel</button>
+                <button class="btn btn-primary" id="unitSave">💾 Save Unit</button>
             </div>
         </div>
     </div>
@@ -924,16 +949,32 @@
 
     <script>
         // ============================================================
-        // H4 PRODUCT MASTER - COMPLETE FIXED VERSION
+        // H4 PRODUCT MASTER
         // ============================================================
 
         (function() {
             'use strict';
 
             // ============================================================
-            // CONSTANTS - FIXED: h4_products (not v1)
+            // CONSTANTS
             // ============================================================
             const PRODUCT_STORAGE_KEY = 'h4_products';
+            const UNITS_STORAGE_KEY = 'h4_units';
+
+            // ============================================================
+            // DEFAULT UNITS
+            // ============================================================
+            const defaultUnits = [
+                'Bag',
+                'Kg',
+                'Litre',
+                'Nos',
+                'Sq.ft',
+                'Box',
+                'Pack',
+                'Roll',
+                'Piece'
+            ];
 
             // ============================================================
             // DEFAULT PRODUCTS (Sample data)
@@ -1059,6 +1100,7 @@
             let filteredProducts = [];
             let editingProductId = null;
             let deleteProductId = null;
+            let units = [];
 
             // ============================================================
             // DOM REFS
@@ -1078,6 +1120,13 @@
             const modalClose = document.getElementById('modalClose');
             const modalCancel = document.getElementById('modalCancel');
             const modalSave = document.getElementById('modalSave');
+
+            // Unit Modal
+            const unitModal = document.getElementById('unitModal');
+            const unitModalClose = document.getElementById('unitModalClose');
+            const unitCancel = document.getElementById('unitCancel');
+            const unitSave = document.getElementById('unitSave');
+            const newUnitName = document.getElementById('newUnitName');
 
             // Delete Modal
             const deleteModal = document.getElementById('deleteModal');
@@ -1113,6 +1162,86 @@
             const imageFileInput = document.getElementById('imageFileInput');
 
             // ============================================================
+            // UNIT MANAGEMENT
+            // ============================================================
+
+            function loadUnits() {
+                try {
+                    const data = localStorage.getItem(UNITS_STORAGE_KEY);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (parsed.length > 0) {
+                            units = parsed;
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Error loading units:', e);
+                }
+                units = [...defaultUnits];
+                saveUnits();
+            }
+
+            function saveUnits() {
+                try {
+                    localStorage.setItem(UNITS_STORAGE_KEY, JSON.stringify(units));
+                } catch (e) {
+                    console.error('Error saving units:', e);
+                }
+            }
+
+            function loadUnitDropdown() {
+                const select = document.getElementById('productUnit');
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">-- Select Unit --</option>';
+                
+                units.forEach(unit => {
+                    const option = document.createElement('option');
+                    option.value = unit;
+                    option.textContent = unit;
+                    select.appendChild(option);
+                });
+                
+                if (currentValue) {
+                    select.value = currentValue;
+                }
+            }
+
+            function openAddUnitModal() {
+                newUnitName.value = '';
+                document.getElementById('unitError').style.display = 'none';
+                unitModal.classList.add('open');
+                newUnitName.focus();
+            }
+
+            function saveNewUnit() {
+                const name = newUnitName.value.trim();
+                if (!name) {
+                    document.getElementById('unitError').style.display = 'block';
+                    newUnitName.focus();
+                    return;
+                }
+                document.getElementById('unitError').style.display = 'none';
+
+                // Check for duplicate
+                const duplicate = units.find(u => u.toLowerCase() === name.toLowerCase());
+                if (duplicate) {
+                    showToast(`⚠️ Unit "${name}" already exists`, 'error');
+                    newUnitName.focus();
+                    newUnitName.select();
+                    return;
+                }
+
+                // Add new unit
+                units.push(name);
+                saveUnits();
+                loadUnitDropdown();
+                productUnit.value = name;
+                unitModal.classList.remove('open');
+                showToast(`✅ Unit "${name}" added successfully!`, 'success');
+            }
+
+            // ============================================================
             // TOAST
             // ============================================================
 
@@ -1146,7 +1275,7 @@
             }
 
             // ============================================================
-            // STORAGE - FIXED: h4_products key
+            // STORAGE
             // ============================================================
 
             function loadProducts() {
@@ -1176,7 +1305,7 @@
             }
 
             // ============================================================
-            // GENERATE PRODUCT CODE - FIXED: Avoid duplicates
+            // GENERATE PRODUCT CODE
             // ============================================================
 
             function generateProductCode() {
@@ -1236,7 +1365,6 @@
                     const statusLabel = p.status === 'active' ? 'Active' : 'Inactive';
                     const rate = p.sellingPrice || 0;
                     
-                    // Stock status display
                     let stockDisplay = '';
                     const current = p.currentStock || 0;
                     const min = p.minStock || 0;
@@ -1285,7 +1413,6 @@
                     `;
                 }).join('');
 
-                // Bind events
                 document.querySelectorAll('.edit-btn').forEach(btn => {
                     btn.addEventListener('click', () => openEditModal(btn.dataset.id));
                 });
@@ -1354,7 +1481,6 @@
                 modalTitle.textContent = '✏️ Edit Product';
                 modalSave.textContent = '💾 Update Product';
 
-                // Fill form
                 productCode.value = product.code || '';
                 productName.value = product.name || '';
                 productCategory.value = product.category || '';
@@ -1373,7 +1499,6 @@
                 productCurrentStock.value = product.currentStock || '';
                 productMinStock.value = product.minStock || '';
 
-                // Image
                 if (product.image) {
                     imagePreview.innerHTML = `<img src="${product.image}" alt="Product">`;
                 } else {
@@ -1408,7 +1533,6 @@
                 imagePreview.innerHTML = '<span class="placeholder-text">📷<br>Image</span>';
                 imageFileInput.value = '';
 
-                // Clear errors
                 document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
             }
 
@@ -1417,7 +1541,14 @@
             // ============================================================
 
             function saveProduct() {
-                // Validate
+                const code = productCode.value.trim();
+                if (!code) {
+                    document.getElementById('productCodeGroup')?.classList.add('error');
+                    showToast('⚠️ Product code is required', 'error');
+                    productCode.focus();
+                    return;
+                }
+
                 const name = productName.value.trim();
                 if (!name) {
                     document.getElementById('productNameGroup').classList.add('error');
@@ -1439,13 +1570,12 @@
                 const rate = parseFloat(productRate.value);
                 if (!rate || rate <= 0) {
                     document.getElementById('productRateGroup').classList.add('error');
-                    showToast('⚠️ Selling rate is required', 'error');
+                    showToast('⚠️ Selling price is required', 'error');
                     productRate.focus();
                     return;
                 }
                 document.getElementById('productRateGroup').classList.remove('error');
 
-                // Get image data
                 let imageData = null;
                 const img = imagePreview.querySelector('img');
                 if (img) {
@@ -1454,7 +1584,7 @@
 
                 const productData = {
                     id: editingProductId || 'p_' + Date.now(),
-                    code: productCode.value.trim() || generateProductCode(),
+                    code: code.toUpperCase(),
                     name: name,
                     category: productCategory.value.trim(),
                     brand: productBrand.value.trim(),
@@ -1480,12 +1610,18 @@
                 if (editingProductId) {
                     const index = products.findIndex(p => p.id === editingProductId);
                     if (index !== -1) {
-                        // Preserve createdAt
                         productData.createdAt = products[index].createdAt;
                         products[index] = productData;
                         showToast(`✅ Product "${name}" updated successfully!`, 'success');
                     }
                 } else {
+                    const duplicate = products.find(p => p.code && p.code.toUpperCase() === productData.code);
+                    if (duplicate) {
+                        showToast(`⚠️ Product with code "${productData.code}" already exists`, 'error');
+                        document.getElementById('productCodeGroup')?.classList.add('error');
+                        productCode.focus();
+                        return;
+                    }
                     products.push(productData);
                     showToast(`✅ Product "${name}" added successfully!`, 'success');
                 }
@@ -1496,7 +1632,7 @@
             }
 
             // ============================================================
-            // DUPLICATE PRODUCT - FIXED: Better code generation
+            // DUPLICATE PRODUCT
             // ============================================================
 
             function duplicateProduct(id) {
@@ -1506,8 +1642,13 @@
                     return;
                 }
 
-                // Generate unique code for duplicate
-                const newCode = generateProductCode();
+                const existingCodes = products.map(p => p.code || '');
+                let counter = 1;
+                let newCode;
+                do {
+                    newCode = `${product.code}-COPY${counter}`;
+                    counter++;
+                } while (existingCodes.includes(newCode));
 
                 const newProduct = {
                     ...product,
@@ -1635,7 +1776,6 @@
             // ============================================================
 
             function bindEvents() {
-                // Search
                 searchBtn.addEventListener('click', applyFilter);
                 searchInput.addEventListener('keyup', (e) => {
                     if (e.key === 'Enter') applyFilter();
@@ -1645,10 +1785,24 @@
                     applyFilter();
                 });
 
-                // Add Product
                 addProductBtn.addEventListener('click', openAddModal);
 
-                // Modal
+                // Unit Modal
+                document.getElementById('addUnitBtn').addEventListener('click', openAddUnitModal);
+                unitModalClose.addEventListener('click', () => unitModal.classList.remove('open'));
+                unitCancel.addEventListener('click', () => unitModal.classList.remove('open'));
+                unitSave.addEventListener('click', saveNewUnit);
+                unitModal.addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) unitModal.classList.remove('open');
+                });
+                newUnitName.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        saveNewUnit();
+                    }
+                });
+
+                // Product Modal
                 modalClose.addEventListener('click', () => productModal.classList.remove('open'));
                 modalCancel.addEventListener('click', () => productModal.classList.remove('open'));
                 modalSave.addEventListener('click', saveProduct);
@@ -1656,7 +1810,6 @@
                     if (e.target === e.currentTarget) productModal.classList.remove('open');
                 });
 
-                // Delete Modal
                 deleteModalClose.addEventListener('click', () => deleteModal.classList.remove('open'));
                 deleteCancel.addEventListener('click', () => deleteModal.classList.remove('open'));
                 deleteConfirm.addEventListener('click', deleteProduct);
@@ -1664,33 +1817,29 @@
                     if (e.target === e.currentTarget) deleteModal.classList.remove('open');
                 });
 
-                // Back
                 backBtn.addEventListener('click', () => {
                     window.location.href = 'index.html';
                 });
 
-                // Brand link
                 document.querySelector('.brand')?.addEventListener('click', function(e) {
                     e.preventDefault();
                     window.location.href = 'index.html';
                 });
 
-                // Keyboard shortcuts
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         productModal.classList.remove('open');
                         deleteModal.classList.remove('open');
+                        unitModal.classList.remove('open');
                     }
                 });
             }
 
             // ============================================================
-            // FORM NAVIGATION SETUP
+            // FORM NAVIGATION SETUP - FIXED: Added productCurrentStock
             // ============================================================
 
             function setupFormNavigation() {
-                // This function sets up Enter key navigation through form fields
-                // Using the H4FormNavigation utility if available
                 if (typeof H4FormNavigation !== 'undefined' && H4FormNavigation.setup) {
                     const fieldIds = [
                         'productCode',
@@ -1701,24 +1850,24 @@
                         'productUnit',
                         'productHsn',
                         'productGst',
+                        'productStatus',
                         'productRate',
                         'productCost',
                         'productDealerPrice',
                         'productContractorPrice',
                         'productMrp',
                         'productOpeningStock',
+                        'productCurrentStock',  // ✅ ADDED - Previously missing
                         'productMinStock'
                     ];
                     
-                    // Filter out fields that don't exist on the page
                     const existingFields = fieldIds.filter(id => document.getElementById(id) !== null);
                     
                     if (existingFields.length > 0) {
                         H4FormNavigation.setup(existingFields);
-                        console.log('📋 Form navigation setup complete');
+                        console.log('📋 Form navigation setup complete with Current Stock');
                     }
                 } else {
-                    // Fallback: manual Enter key navigation
                     const fields = document.querySelectorAll('#productModal input, #productModal select, #productModal textarea');
                     fields.forEach((field, index) => {
                         field.addEventListener('keydown', function(e) {
@@ -1731,7 +1880,6 @@
                                         nextField.click();
                                     }
                                 } else {
-                                    // Last field - trigger save
                                     const saveBtn = document.getElementById('modalSave');
                                     if (saveBtn) {
                                         saveBtn.click();
@@ -1749,16 +1897,21 @@
             // ============================================================
 
             function init() {
+                // Load units first
+                loadUnits();
+                loadUnitDropdown();
+                
                 loadProducts();
                 filteredProducts = [...products];
                 renderProducts();
                 setupImageUpload();
                 setupStockStatus();
-                setupFormNavigation(); // New: Form navigation setup
+                setupFormNavigation();
                 bindEvents();
                 console.log('📦 H4 Product Master loaded successfully');
                 console.log(`📋 ${products.length} products loaded`);
-                console.log(`🗄️ Storage key: ${PRODUCT_STORAGE_KEY}`);
+                console.log(`📏 ${units.length} units loaded`);
+                console.log(`🗄️ Storage keys: ${PRODUCT_STORAGE_KEY}, ${UNITS_STORAGE_KEY}`);
             }
 
             init();
