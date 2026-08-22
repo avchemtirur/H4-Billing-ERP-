@@ -845,7 +845,7 @@ body {
 .h4-product-modal .form-group select:focus {
     outline: none;
     border-color: var(--h4-gold);
-    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 0 5px rgba(255, 215, 0, 0.15);
 }
 
 .h4-product-modal .form-group .input-error {
