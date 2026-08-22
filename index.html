@@ -271,12 +271,14 @@
                     
                     showToast(`🚀 Opening ${title}...`, 'info', 1500);
 
+                    // ✅ FIXED ROUTES - Root for existing files, modules/ for new files
                     const routes = {
                         'company': 'company.html',
-                        'quotation': 'quotation-builder.html',
+                        'quotation': 'modules/quotation.html',
                         'products': 'products.html',
                         'invoice': 'invoice.html',
-                        'templates': 'templates.html',
+                        'templates': 'modules/templates.html',
+
                         'payments': 'payments.html',
                         'customers': 'customers.html',
                         'theme': 'theme.html',
@@ -290,7 +292,7 @@
                             window.location.href = url;
                         }, 400);
                     } else {
-                        showToast(` ${title} page coming soon`, 'warning', 2000);
+                        showToast(`⚠️ ${title} page coming soon`, 'warning', 2000);
                     }
                 });
             });
@@ -306,7 +308,7 @@
             newQuotationBtn.addEventListener('click', function() {
                 showToast('📄 Creating new quotation...', 'info', 1500);
                 setTimeout(() => {
-                    window.location.href = 'quotation-builder.html';
+                    window.location.href = 'modules/quotation.html';
                 }, 400);
             });
 
