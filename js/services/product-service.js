@@ -1,7 +1,7 @@
 /**
  * H4 Billing ERP - Product Service Module
  * Central service for all product-related operations
- * Version: 1.0.0
+ * Version: 2.0.0
  * 
  * ============================================================
  * RESPONSIBILITY
@@ -30,27 +30,28 @@
  * - EVENTS.SETTINGS_UPDATED (when categories/units change)
  * 
  * ============================================================
- * PRODUCT DATA MODEL
+ * PRODUCT DATA MODEL (UPDATED)
  * ============================================================
  * 
  * id              - Unique product ID
+ * code            - Product code (e.g., H4-TA-C1)
  * name            - Product name
- * supplierId      - Supplier customer ID
- * supplierMobile  - Supplier mobile number
- * code            - Product code
- * sku             - Stock Keeping Unit
  * category        - Product category
  * brand           - Brand name
  * description     - Product description
- * hsn             - HSN/SAC code
  * unit            - Unit of measurement
- * purchaseRate    - Purchase rate
- * sellingRate     - Selling rate
+ * hsn             - HSN/SAC code
+ * gstRate         - GST rate (%)
+ * sellingRate     - Default selling rate
+ * purchaseCost    - Purchase cost
+ * dealerPrice     - Dealer price
+ * contractorPrice - Contractor price
  * mrp             - Maximum Retail Price
- * priceSlabs      - Quantity-based pricing
- * imageIds        - Associated image IDs
- * notes           - Additional notes
- * active          - Active status
+ * image           - Product image (base64)
+ * openingStock    - Opening stock quantity
+ * currentStock    - Current stock quantity
+ * minStock        - Minimum stock alert level
+ * status          - 'active' or 'inactive'
  * createdAt       - Creation timestamp
  * updatedAt       - Last update timestamp
  * 
@@ -63,7 +64,7 @@
  * - Does NOT create another database
  * - Does NOT contain UI logic
  * - Does NOT contain calculation logic
- * - Does NOT add GST fields to Product Master
+ * - Does NOT add taxMode to Product Master
  * ============================================================
  */
 
@@ -185,17 +186,13 @@ class ProductService {
     async addCategory(category) {
         await this.initialize();
 
-        // Validate
         if (!category || category.trim() === '') {
             throw new Error('Category name is required');
         }
 
         const trimmed = category.trim();
-        
-        // Get current categories
         const currentCategories = await this.getCategories(true);
         
-        // Check for duplicate (case-insensitive)
         const duplicate = currentCategories.find(
             c => c.toLowerCase() === trimmed.toLowerCase()
         );
@@ -204,22 +201,18 @@ class ProductService {
             throw new Error(`Category "${trimmed}" already exists`);
         }
 
-        // Add new category
         const updatedCategories = [...currentCategories, trimmed];
         await this._saveCategories(updatedCategories);
 
-        // Update cache
         this._categoriesCache = [...updatedCategories];
         this._lastCacheUpdate = Date.now();
 
-        // Update state
         try {
             state.set('productCategories', updatedCategories);
         } catch (error) {
             // State update is optional
         }
 
-        // Emit settings updated event
         await eventBus.emit(
             EVENTS.SETTINGS_UPDATED,
             {
@@ -247,11 +240,8 @@ class ProductService {
         }
 
         const trimmed = category.trim();
-        
-        // Get current categories
         const currentCategories = await this.getCategories(true);
         
-        // Check if category exists
         const exists = currentCategories.find(
             c => c.toLowerCase() === trimmed.toLowerCase()
         );
@@ -269,24 +259,20 @@ class ProductService {
             );
         }
 
-        // Remove category
         const updatedCategories = currentCategories.filter(
             c => c.toLowerCase() !== trimmed.toLowerCase()
         );
         await this._saveCategories(updatedCategories);
 
-        // Update cache
         this._categoriesCache = [...updatedCategories];
         this._lastCacheUpdate = Date.now();
 
-        // Update state
         try {
             state.set('productCategories', updatedCategories);
         } catch (error) {
             // State update is optional
         }
 
-        // Emit settings updated event
         await eventBus.emit(
             EVENTS.SETTINGS_UPDATED,
             {
@@ -307,11 +293,9 @@ class ProductService {
      * @returns {Promise<void>}
      */
     async _saveCategories(categories) {
-        // Get existing settings
         let settings = await database.get(this._settingsStoreName, this._settingsId);
         
         if (!settings) {
-            // Create settings if it doesn't exist
             settings = {
                 id: this._settingsId,
                 productCategories: categories,
@@ -320,7 +304,6 @@ class ProductService {
             };
             await database.add(this._settingsStoreName, settings);
         } else {
-            // Update existing settings
             settings.productCategories = categories;
             settings.updatedAt = new Date().toISOString();
             await database.put(this._settingsStoreName, settings);
@@ -339,26 +322,21 @@ class ProductService {
     async getUnits(forceRefresh = false) {
         await this.initialize();
 
-        // Check cache
         if (!forceRefresh && this._unitsCache && 
             (Date.now() - this._lastCacheUpdate < this._cacheTimeout)) {
             return [...this._unitsCache];
         }
 
-        // Get settings
         const settings = await database.get(this._settingsStoreName, this._settingsId);
         
         let units;
         if (settings && settings.productUnits && Array.isArray(settings.productUnits)) {
             units = settings.productUnits;
         } else {
-            // If settings don't exist or don't have units, use defaults
             units = [...DEFAULT_UNITS];
-            // Save defaults to settings
             await this._saveUnits(units);
         }
 
-        // Update cache
         this._unitsCache = [...units];
         this._lastCacheUpdate = Date.now();
 
@@ -373,17 +351,13 @@ class ProductService {
     async addUnit(unit) {
         await this.initialize();
 
-        // Validate
         if (!unit || unit.trim() === '') {
             throw new Error('Unit name is required');
         }
 
         const trimmed = unit.trim();
-        
-        // Get current units
         const currentUnits = await this.getUnits(true);
         
-        // Check for duplicate (case-insensitive)
         const duplicate = currentUnits.find(
             u => u.toLowerCase() === trimmed.toLowerCase()
         );
@@ -392,22 +366,18 @@ class ProductService {
             throw new Error(`Unit "${trimmed}" already exists`);
         }
 
-        // Add new unit
         const updatedUnits = [...currentUnits, trimmed];
         await this._saveUnits(updatedUnits);
 
-        // Update cache
         this._unitsCache = [...updatedUnits];
         this._lastCacheUpdate = Date.now();
 
-        // Update state
         try {
             state.set('productUnits', updatedUnits);
         } catch (error) {
             // State update is optional
         }
 
-        // Emit settings updated event
         await eventBus.emit(
             EVENTS.SETTINGS_UPDATED,
             {
@@ -435,11 +405,8 @@ class ProductService {
         }
 
         const trimmed = unit.trim();
-        
-        // Get current units
         const currentUnits = await this.getUnits(true);
         
-        // Check if unit exists
         const exists = currentUnits.find(
             u => u.toLowerCase() === trimmed.toLowerCase()
         );
@@ -448,7 +415,6 @@ class ProductService {
             throw new Error(`Unit "${trimmed}" not found`);
         }
 
-        // Don't allow removing if products are using this unit
         const products = await this.getProducts({ activeOnly: false });
         const productsUsingUnit = products.filter(p => p.unit === trimmed);
         if (productsUsingUnit.length > 0) {
@@ -457,24 +423,20 @@ class ProductService {
             );
         }
 
-        // Remove unit
         const updatedUnits = currentUnits.filter(
             u => u.toLowerCase() !== trimmed.toLowerCase()
         );
         await this._saveUnits(updatedUnits);
 
-        // Update cache
         this._unitsCache = [...updatedUnits];
         this._lastCacheUpdate = Date.now();
 
-        // Update state
         try {
             state.set('productUnits', updatedUnits);
         } catch (error) {
             // State update is optional
         }
 
-        // Emit settings updated event
         await eventBus.emit(
             EVENTS.SETTINGS_UPDATED,
             {
@@ -495,11 +457,9 @@ class ProductService {
      * @returns {Promise<void>}
      */
     async _saveUnits(units) {
-        // Get existing settings
         let settings = await database.get(this._settingsStoreName, this._settingsId);
         
         if (!settings) {
-            // Create settings if it doesn't exist
             settings = {
                 id: this._settingsId,
                 productCategories: DEFAULT_CATEGORIES,
@@ -508,7 +468,6 @@ class ProductService {
             };
             await database.add(this._settingsStoreName, settings);
         } else {
-            // Update existing settings
             settings.productUnits = units;
             settings.updatedAt = new Date().toISOString();
             await database.put(this._settingsStoreName, settings);
@@ -528,7 +487,7 @@ class ProductService {
     }
 
     // ============================================================
-    // GENERATE PRODUCT ID / SKU
+    // GENERATE PRODUCT ID / CODE
     // ============================================================
 
     /**
@@ -539,30 +498,40 @@ class ProductService {
         if (database.generateId && typeof database.generateId === 'function') {
             return database.generateId();
         }
-        return crypto.randomUUID();
+        return 'p_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
     }
 
     /**
-     * Generate a SKU if not provided
+     * Generate a product code if not provided
      * @param {string} name - Product name
      * @param {string} category - Product category
-     * @returns {string} - Generated SKU
+     * @param {Array} existingProducts - Existing products to avoid duplicates
+     * @returns {string} - Generated product code
      */
-    _generateSku(name, category) {
+    _generateProductCode(name, category, existingProducts) {
         const prefix = category ? category.substring(0, 3).toUpperCase() : 'PRD';
         const namePart = name ? name.substring(0, 5).toUpperCase() : 'PROD';
-        const random = Math.floor(1000 + Math.random() * 9000);
-        return `${prefix}-${namePart}-${random}`;
+        
+        // Get existing codes
+        const existingCodes = existingProducts.map(p => p.code || '');
+        let counter = 1;
+        let newCode;
+        
+        do {
+            newCode = `${prefix}-${namePart}-${String(counter).padStart(2, '0')}`;
+            counter++;
+        } while (existingCodes.includes(newCode));
+        
+        return newCode;
     }
 
     // ============================================================
-    // VALIDATION (UPDATED - uses persistent categories/units)
+    // VALIDATION (UPDATED)
     // ============================================================
 
     /**
      * Validate product data
      * @param {Object} data - Product data to validate
-     * @param {string} data.id - Product ID (optional, for update)
      * @returns {Promise<Object>} - { valid: boolean, errors: Array<string> }
      */
     async validateProduct(data) {
@@ -573,7 +542,17 @@ class ProductService {
             errors.push('Product name is required');
         }
 
-        // Category validation - get current categories
+        // Unit is required
+        if (!data.unit || data.unit.trim() === '') {
+            errors.push('Unit is required');
+        } else {
+            const units = await this.getUnits();
+            if (!units.includes(data.unit)) {
+                errors.push(`Invalid unit: ${data.unit}. Valid units: ${units.join(', ')}`);
+            }
+        }
+
+        // Category validation
         if (data.category) {
             const categories = await this.getCategories();
             if (!categories.includes(data.category)) {
@@ -581,46 +560,48 @@ class ProductService {
             }
         }
 
-        // Unit validation - get current units
-        if (data.unit) {
-            const units = await this.getUnits();
-            if (!units.includes(data.unit)) {
-                errors.push(`Invalid unit: ${data.unit}. Valid units: ${units.join(', ')}`);
+        // Selling rate is required
+        if (data.sellingRate === undefined || data.sellingRate === null || data.sellingRate < 0) {
+            errors.push('Selling rate is required and must be a positive number');
+        }
+
+        // GST rate validation
+        if (data.gstRate !== undefined && data.gstRate !== null) {
+            if (isNaN(data.gstRate) || data.gstRate < 0 || data.gstRate > 100) {
+                errors.push('GST rate must be between 0 and 100');
             }
         }
 
-        // Rate validation
-        if (data.sellingRate !== undefined && data.sellingRate !== null) {
-            if (isNaN(data.sellingRate) || data.sellingRate < 0) {
-                errors.push('Selling rate must be a positive number');
-            }
-        }
-
-        if (data.purchaseRate !== undefined && data.purchaseRate !== null) {
-            if (isNaN(data.purchaseRate) || data.purchaseRate < 0) {
-                errors.push('Purchase rate must be a positive number');
-            }
-        }
-
-        if (data.mrp !== undefined && data.mrp !== null) {
-            if (isNaN(data.mrp) || data.mrp < 0) {
-                errors.push('MRP must be a positive number');
-            }
-        }
-
-        // Price slabs validation
-        if (data.priceSlabs && Array.isArray(data.priceSlabs)) {
-            for (const slab of data.priceSlabs) {
-                if (slab.minQty === undefined || slab.minQty === null) {
-                    errors.push('Price slab missing minimum quantity');
-                }
-                if (slab.rate === undefined || slab.rate === null || isNaN(slab.rate) || slab.rate < 0) {
-                    errors.push('Price slab rate must be a positive number');
-                }
-                if (slab.minQty !== null && slab.maxQty !== null && slab.minQty > slab.maxQty) {
-                    errors.push('Price slab minimum quantity cannot be greater than maximum quantity');
+        // Other numeric validations
+        const numericFields = ['purchaseCost', 'dealerPrice', 'contractorPrice', 'mrp'];
+        for (const field of numericFields) {
+            if (data[field] !== undefined && data[field] !== null) {
+                if (isNaN(data[field]) || data[field] < 0) {
+                    errors.push(`${field} must be a positive number`);
                 }
             }
+        }
+
+        // Stock validations
+        if (data.openingStock !== undefined && data.openingStock !== null) {
+            if (isNaN(data.openingStock) || data.openingStock < 0) {
+                errors.push('Opening stock must be a positive number');
+            }
+        }
+        if (data.currentStock !== undefined && data.currentStock !== null) {
+            if (isNaN(data.currentStock) || data.currentStock < 0) {
+                errors.push('Current stock must be a positive number');
+            }
+        }
+        if (data.minStock !== undefined && data.minStock !== null) {
+            if (isNaN(data.minStock) || data.minStock < 0) {
+                errors.push('Minimum stock must be a positive number');
+            }
+        }
+
+        // Status validation
+        if (data.status && !['active', 'inactive'].includes(data.status)) {
+            errors.push('Status must be either "active" or "inactive"');
         }
 
         return {
@@ -630,7 +611,7 @@ class ProductService {
     }
 
     // ============================================================
-    // NORMALIZATION
+    // NORMALIZATION (UPDATED)
     // ============================================================
 
     /**
@@ -644,15 +625,11 @@ class ProductService {
         // Trim string fields
         if (normalized.name) normalized.name = normalized.name.trim();
         if (normalized.code) normalized.code = normalized.code.trim().toUpperCase();
-        if (normalized.sku) normalized.sku = normalized.sku.trim().toUpperCase();
         if (normalized.category) normalized.category = normalized.category.trim();
         if (normalized.brand) normalized.brand = normalized.brand.trim();
         if (normalized.description) normalized.description = normalized.description.trim();
         if (normalized.hsn) normalized.hsn = normalized.hsn.trim();
         if (normalized.unit) normalized.unit = normalized.unit.trim();
-        if (normalized.notes) normalized.notes = normalized.notes.trim();
-        if (normalized.supplierId) normalized.supplierId = normalized.supplierId.trim();
-        if (normalized.supplierMobile) normalized.supplierMobile = normalized.supplierMobile.trim();
 
         // Set default values
         if (!normalized.category) {
@@ -661,34 +638,57 @@ class ProductService {
         if (!normalized.unit) {
             normalized.unit = 'Nos';
         }
-        if (normalized.active === undefined || normalized.active === null) {
-            normalized.active = true;
+        if (normalized.status === undefined || normalized.status === null) {
+            normalized.status = 'active';
         }
         if (normalized.sellingRate === undefined || normalized.sellingRate === null) {
             normalized.sellingRate = 0;
         }
-        if (normalized.purchaseRate === undefined || normalized.purchaseRate === null) {
-            normalized.purchaseRate = 0;
+        if (normalized.gstRate === undefined || normalized.gstRate === null) {
+            normalized.gstRate = 18;
         }
-        if (normalized.mrp === undefined || normalized.mrp === null) {
-            normalized.mrp = 0;
+        if (normalized.openingStock === undefined || normalized.openingStock === null) {
+            normalized.openingStock = 0;
+        }
+        if (normalized.currentStock === undefined || normalized.currentStock === null) {
+            normalized.currentStock = 0;
+        }
+        if (normalized.minStock === undefined || normalized.minStock === null) {
+            normalized.minStock = 0;
         }
 
-        // Ensure price slabs is an array
-        if (!normalized.priceSlabs || !Array.isArray(normalized.priceSlabs)) {
-            normalized.priceSlabs = [];
+        // Numeric fields
+        const numericFields = ['sellingRate', 'purchaseCost', 'dealerPrice', 'contractorPrice', 'mrp', 'gstRate'];
+        for (const field of numericFields) {
+            if (normalized[field] === undefined || normalized[field] === null) {
+                normalized[field] = 0;
+            }
+            if (typeof normalized[field] === 'string') {
+                normalized[field] = parseFloat(normalized[field]) || 0;
+            }
         }
 
-        // Ensure imageIds is an array
-        if (!normalized.imageIds || !Array.isArray(normalized.imageIds)) {
-            normalized.imageIds = [];
+        // Stock fields
+        const stockFields = ['openingStock', 'currentStock', 'minStock'];
+        for (const field of stockFields) {
+            if (normalized[field] === undefined || normalized[field] === null) {
+                normalized[field] = 0;
+            }
+            if (typeof normalized[field] === 'string') {
+                normalized[field] = parseInt(normalized[field], 10) || 0;
+            }
+        }
+
+        // Set image if not present
+        if (!normalized.image) {
+            normalized.image = null;
         }
 
         return normalized;
     }
 
     // ============================================================
-    // CREATE PRODUCT
+    // CREATE PRODUCT (UPDATED)
     // ============================================================
 
     /**
@@ -699,7 +699,7 @@ class ProductService {
     async createProduct(data) {
         await this.initialize();
 
-        // Validate (async)
+        // Validate
         const validation = await this.validateProduct(data);
         if (!validation.valid) {
             throw new Error(`Validation failed: ${validation.errors.join(', ')}`);
@@ -708,15 +708,24 @@ class ProductService {
         // Normalize
         const normalized = this.normalizeProduct(data);
 
-        // Generate SKU if not provided
-        if (!normalized.sku) {
-            normalized.sku = this._generateSku(normalized.name, normalized.category);
+        // Get existing products for code generation
+        const existingProducts = await database.getAll(this._storeName);
+
+        // Generate code if not provided
+        if (!normalized.code) {
+            normalized.code = this._generateProductCode(
+                normalized.name,
+                normalized.category,
+                existingProducts
+            );
         }
 
-        // Check for duplicate SKU
-        const duplicate = await this.findDuplicateProduct(normalized);
+        // Check for duplicate code
+        const duplicate = existingProducts.find(p => 
+            p.code && p.code.toUpperCase() === normalized.code.toUpperCase()
+        );
         if (duplicate) {
-            throw new Error(`Product with SKU ${normalized.sku} already exists`);
+            throw new Error(`Product with code ${normalized.code} already exists`);
         }
 
         // Generate ID
@@ -726,23 +735,24 @@ class ProductService {
         const now = new Date().toISOString();
         const product = {
             id: id,
+            code: normalized.code,
             name: normalized.name,
-            supplierId: normalized.supplierId || '',
-            supplierMobile: normalized.supplierMobile || '',
-            code: normalized.code || '',
-            sku: normalized.sku,
             category: normalized.category,
             brand: normalized.brand || '',
             description: normalized.description || '',
-            hsn: normalized.hsn || '',
             unit: normalized.unit,
-            purchaseRate: normalized.purchaseRate || 0,
+            hsn: normalized.hsn || '',
+            gstRate: normalized.gstRate || 0,
             sellingRate: normalized.sellingRate || 0,
+            purchaseCost: normalized.purchaseCost || 0,
+            dealerPrice: normalized.dealerPrice || 0,
+            contractorPrice: normalized.contractorPrice || 0,
             mrp: normalized.mrp || 0,
-            priceSlabs: normalized.priceSlabs || [],
-            imageIds: normalized.imageIds || [],
-            notes: normalized.notes || '',
-            active: normalized.active !== false,
+            image: normalized.image || null,
+            openingStock: normalized.openingStock || 0,
+            currentStock: normalized.currentStock || 0,
+            minStock: normalized.minStock || 0,
+            status: normalized.status || 'active',
             createdAt: now,
             updatedAt: now
         };
@@ -765,13 +775,13 @@ class ProductService {
             {
                 id: product.id,
                 name: product.name,
-                sku: product.sku,
+                code: product.code,
                 data: product
             },
             'product-service'
         );
 
-        console.log(`📦 Product created: ${product.name} (${product.sku})`);
+        console.log(`📦 Product created: ${product.name} (${product.code})`);
         return product;
     }
 
@@ -787,17 +797,6 @@ class ProductService {
     async getProduct(id) {
         await this.initialize();
         return database.get(this._storeName, id);
-    }
-
-    /**
-     * Get a product by SKU
-     * @param {string} sku - Product SKU
-     * @returns {Promise<Object|null>} - Product or null
-     */
-    async getProductBySku(sku) {
-        await this.initialize();
-        const allProducts = await database.getAll(this._storeName);
-        return allProducts.find(p => p.sku && p.sku.toUpperCase() === sku.toUpperCase()) || null;
     }
 
     /**
@@ -833,7 +832,7 @@ class ProductService {
 
         // Filter active only
         if (options.activeOnly) {
-            products = products.filter(p => p.active !== false);
+            products = products.filter(p => p.status === 'active');
         }
 
         // Filter by category
@@ -871,13 +870,13 @@ class ProductService {
         const products = await database.getAll(this._storeName);
         return products.filter(p => {
             const matchCategory = p.category === category;
-            const matchActive = activeOnly ? p.active !== false : true;
+            const matchActive = activeOnly ? p.status === 'active' : true;
             return matchCategory && matchActive;
         });
     }
 
     // ============================================================
-    // UPDATE PRODUCT
+    // UPDATE PRODUCT (UPDATED)
     // ============================================================
 
     /**
@@ -898,7 +897,7 @@ class ProductService {
         // Merge updates with existing
         const merged = { ...existing, ...updates };
 
-        // Validate merged data (async)
+        // Validate merged data
         const validation = await this.validateProduct(merged);
         if (!validation.valid) {
             throw new Error(`Validation failed: ${validation.errors.join(', ')}`);
@@ -907,11 +906,15 @@ class ProductService {
         // Normalize merged data
         const normalized = this.normalizeProduct(merged);
 
-        // Check for duplicate SKU (if SKU changed)
-        if (normalized.sku && normalized.sku !== existing.sku) {
-            const duplicate = await this.findDuplicateProduct(normalized);
-            if (duplicate && duplicate.id !== id) {
-                throw new Error(`Product with SKU ${normalized.sku} already exists`);
+        // Check for duplicate code (if code changed)
+        if (normalized.code && normalized.code !== existing.code) {
+            const allProducts = await database.getAll(this._storeName);
+            const duplicate = allProducts.find(p => 
+                p.code && p.code.toUpperCase() === normalized.code.toUpperCase() &&
+                p.id !== id
+            );
+            if (duplicate) {
+                throw new Error(`Product with code ${normalized.code} already exists`);
             }
         }
 
@@ -941,13 +944,13 @@ class ProductService {
             {
                 id: updatedProduct.id,
                 name: updatedProduct.name,
-                sku: updatedProduct.sku,
+                code: updatedProduct.code,
                 data: updatedProduct
             },
             'product-service'
         );
 
-        console.log(`📦 Product updated: ${updatedProduct.name} (${updatedProduct.sku})`);
+        console.log(`📦 Product updated: ${updatedProduct.name} (${updatedProduct.code})`);
         return updatedProduct;
     }
 
@@ -965,16 +968,13 @@ class ProductService {
     async deleteProduct(id) {
         await this.initialize();
 
-        // Get product before deletion (for event)
         const product = await database.get(this._storeName, id);
         if (!product) {
             throw new Error(`Product not found: ${id}`);
         }
 
-        // Delete from database
         await database.delete(this._storeName, id);
 
-        // Update state
         try {
             const products = await database.getAll(this._storeName);
             state.set('products', products);
@@ -985,24 +985,23 @@ class ProductService {
             // State update is optional
         }
 
-        // Emit event
         await eventBus.emit(
             EVENTS.PRODUCT_DELETED,
             {
                 id: product.id,
                 name: product.name,
-                sku: product.sku,
+                code: product.code,
                 data: product
             },
             'product-service'
         );
 
-        console.log(`📦 Product deleted: ${product.name} (${product.sku})`);
+        console.log(`📦 Product deleted: ${product.name} (${product.code})`);
         return { success: true, id: id, name: product.name };
     }
 
     // ============================================================
-    // SEARCH PRODUCTS
+    // SEARCH PRODUCTS (UPDATED)
     // ============================================================
 
     /**
@@ -1028,28 +1027,23 @@ class ProductService {
         const term = query.toLowerCase().trim();
         let products = await database.getAll(this._storeName);
 
-        // Filter active only
         if (options.activeOnly) {
-            products = products.filter(p => p.active !== false);
+            products = products.filter(p => p.status === 'active');
         }
 
-        // Filter by category
         if (options.category && options.category !== 'all') {
             products = products.filter(p => p.category === options.category);
         }
 
-        // Search in fields
         const results = products.filter(product => {
             const searchableFields = [
                 product.name,
                 product.code,
-                product.sku,
                 product.category,
                 product.brand,
                 product.description,
                 product.hsn,
-                product.supplierId,
-                product.supplierMobile
+                product.unit
             ];
 
             return searchableFields.some(field => {
@@ -1058,7 +1052,6 @@ class ProductService {
             });
         });
 
-        // Limit results
         if (options.limit) {
             return results.slice(0, options.limit);
         }
@@ -1073,22 +1066,12 @@ class ProductService {
     /**
      * Find potential duplicate products
      * @param {Object} data - Product data to check
-     * @param {string} data.id - Optional ID to exclude from search
      * @returns {Promise<Object|null>} - Duplicate product or null
      */
     async findDuplicateProduct(data) {
         await this.initialize();
 
         const products = await database.getAll(this._storeName);
-
-        // Check by SKU
-        if (data.sku) {
-            const duplicate = products.find(p =>
-                p.sku && p.sku.toUpperCase() === data.sku.toUpperCase() &&
-                p.id !== data.id
-            );
-            if (duplicate) return duplicate;
-        }
 
         // Check by code
         if (data.code) {
@@ -1099,7 +1082,7 @@ class ProductService {
             if (duplicate) return duplicate;
         }
 
-        // Check by name (fuzzy - exact match only)
+        // Check by name (exact match)
         if (data.name) {
             const duplicate = products.find(p =>
                 p.name && p.name.toLowerCase() === data.name.toLowerCase() &&
@@ -1112,7 +1095,7 @@ class ProductService {
     }
 
     // ============================================================
-    // CREATE PRODUCT SNAPSHOT
+    // CREATE PRODUCT SNAPSHOT (UPDATED)
     // ============================================================
 
     /**
@@ -1126,7 +1109,6 @@ class ProductService {
 
         let productData = product;
 
-        // If ID is provided, fetch the product
         if (typeof product === 'string') {
             productData = await database.get(this._storeName, product);
             if (!productData) {
@@ -1134,76 +1116,56 @@ class ProductService {
             }
         }
 
-        // Return snapshot with document-relevant fields
         return {
             id: productData.id,
-            name: productData.name || '',
-            sku: productData.sku || '',
             code: productData.code || '',
+            name: productData.name || '',
             category: productData.category || '',
             description: productData.description || '',
             hsn: productData.hsn || '',
             unit: productData.unit || 'Nos',
+            gstRate: productData.gstRate || 0,
             sellingRate: productData.sellingRate || 0
         };
     }
 
+    // ============================================================
+    // SET PRODUCT STATUS
+    // ============================================================
+
     /**
-     * Get product rate considering price slabs
-     * @param {Object|string} product - Product object or ID
-     * @param {number} quantity - Quantity for slab calculation
-     * @returns {Promise<number>} - Applicable rate
+     * Set product status (active/inactive)
+     * @param {string} id - Product ID
+     * @param {string} status - 'active' or 'inactive'
+     * @returns {Promise<Object>} - Updated product
      */
-    async getProductRate(product, quantity) {
+    async setProductStatus(id, status) {
         await this.initialize();
 
-        let productData = product;
-
-        // If ID is provided, fetch the product
-        if (typeof product === 'string') {
-            productData = await database.get(this._storeName, product);
-            if (!productData) {
-                throw new Error(`Product not found: ${product}`);
-            }
+        if (!['active', 'inactive'].includes(status)) {
+            throw new Error('Status must be "active" or "inactive"');
         }
 
-        // If no price slabs, return selling rate
-        if (!productData.priceSlabs || productData.priceSlabs.length === 0) {
-            return productData.sellingRate || 0;
+        const product = await database.get(this._storeName, id);
+        if (!product) {
+            throw new Error(`Product not found: ${id}`);
         }
 
-        // Sort slabs by minQty
-        const sortedSlabs = [...productData.priceSlabs].sort((a, b) => a.minQty - b.minQty);
-
-        // Find applicable slab
-        for (const slab of sortedSlabs) {
-            if (quantity >= slab.minQty) {
-                if (slab.maxQty === null || quantity <= slab.maxQty) {
-                    return slab.rate;
-                }
-            }
-        }
-
-        // If no slab matches, return the last slab's rate or selling rate
-        const lastSlab = sortedSlabs[sortedSlabs.length - 1];
-        if (lastSlab && lastSlab.maxQty === null) {
-            return lastSlab.rate;
-        }
-
-        return productData.sellingRate || 0;
+        return this.updateProduct(id, { status: status });
     }
 
     // ============================================================
-    // SET PRODUCT ACTIVE STATUS
+    // UPDATE STOCK
     // ============================================================
 
     /**
-     * Set product active status
+     * Update product stock
      * @param {string} id - Product ID
-     * @param {boolean} active - Active status
+     * @param {number} quantity - Quantity to add (positive) or remove (negative)
+     * @param {string} type - 'add' or 'remove'
      * @returns {Promise<Object>} - Updated product
      */
-    async setProductActive(id, active) {
+    async updateStock(id, quantity, type = 'add') {
         await this.initialize();
 
         const product = await database.get(this._storeName, id);
@@ -1211,11 +1173,25 @@ class ProductService {
             throw new Error(`Product not found: ${id}`);
         }
 
-        return this.updateProduct(id, { active: active });
+        const currentStock = product.currentStock || 0;
+        let newStock;
+
+        if (type === 'add') {
+            newStock = currentStock + quantity;
+        } else if (type === 'remove') {
+            if (quantity > currentStock) {
+                throw new Error(`Insufficient stock. Available: ${currentStock}, Requested: ${quantity}`);
+            }
+            newStock = currentStock - quantity;
+        } else {
+            throw new Error('Type must be "add" or "remove"');
+        }
+
+        return this.updateProduct(id, { currentStock: newStock });
     }
 
     // ============================================================
-    // PRODUCT STATISTICS
+    // PRODUCT STATISTICS (UPDATED)
     // ============================================================
 
     /**
@@ -1227,7 +1203,7 @@ class ProductService {
 
         const products = await database.getAll(this._storeName);
         const total = products.length;
-        const active = products.filter(p => p.active !== false).length;
+        const active = products.filter(p => p.status === 'active').length;
         const inactive = total - active;
 
         // Count by category
@@ -1237,19 +1213,19 @@ class ProductService {
             byCategory[category] = (byCategory[category] || 0) + 1;
         }
 
-        // Count products with price slabs
-        const withPriceSlabs = products.filter(p => p.priceSlabs && p.priceSlabs.length > 0).length;
-
-        // Count products with supplier
-        const withSupplier = products.filter(p => p.supplierId || p.supplierMobile).length;
+        // Stock summary
+        const totalStock = products.reduce((sum, p) => sum + (p.currentStock || 0), 0);
+        const lowStockItems = products.filter(p => (p.currentStock || 0) <= (p.minStock || 0) && p.status === 'active');
+        const outOfStock = products.filter(p => (p.currentStock || 0) <= 0 && p.status === 'active');
 
         return {
             total: total,
             active: active,
             inactive: inactive,
             byCategory: byCategory,
-            withPriceSlabs: withPriceSlabs,
-            withSupplier: withSupplier,
+            totalStock: totalStock,
+            lowStockItems: lowStockItems.length,
+            outOfStock: outOfStock.length,
             categories: Object.keys(byCategory)
         };
     }
@@ -1270,7 +1246,31 @@ class ProductService {
     async countActiveProducts() {
         await this.initialize();
         const products = await database.getAll(this._storeName);
-        return products.filter(p => p.active !== false).length;
+        return products.filter(p => p.status === 'active').length;
+    }
+
+    /**
+     * Get low stock products
+     * @param {number} threshold - Optional threshold override
+     * @returns {Promise<Array>} - Products with low stock
+     */
+    async getLowStockProducts(threshold = null) {
+        await this.initialize();
+        const products = await database.getAll(this._storeName);
+        return products.filter(p => {
+            const min = threshold !== null ? threshold : (p.minStock || 0);
+            return (p.currentStock || 0) <= min && p.status === 'active';
+        });
+    }
+
+    /**
+     * Get out of stock products
+     * @returns {Promise<Array>} - Products with zero stock
+     */
+    async getOutOfStockProducts() {
+        await this.initialize();
+        const products = await database.getAll(this._storeName);
+        return products.filter(p => (p.currentStock || 0) <= 0 && p.status === 'active');
     }
 
     // ============================================================
@@ -1303,12 +1303,12 @@ class ProductService {
     }
 
     /**
-     * Bulk set active status
+     * Bulk set status
      * @param {Array<string>} ids - Product IDs
-     * @param {boolean} active - Active status
+     * @param {string} status - 'active' or 'inactive'
      * @returns {Promise<Object>} - Results
      */
-    async bulkSetActive(ids, active) {
+    async bulkSetStatus(ids, status) {
         await this.initialize();
 
         const results = {
@@ -1318,7 +1318,7 @@ class ProductService {
 
         for (const id of ids) {
             try {
-                await this.setProductActive(id, active);
+                await this.setProductStatus(id, status);
                 results.success.push(id);
             } catch (error) {
                 results.failed.push({ id, error: error.message });
@@ -1337,7 +1337,6 @@ class ProductService {
     async bulkUpdateCategory(ids, category) {
         await this.initialize();
 
-        // Validate category
         const categories = await this.getCategories();
         if (!categories.includes(category)) {
             throw new Error(`Invalid category: ${category}`);
@@ -1361,7 +1360,7 @@ class ProductService {
     }
 
     // ============================================================
-    // EXPORT / IMPORT
+    // EXPORT / IMPORT (UPDATED)
     // ============================================================
 
     /**
@@ -1371,45 +1370,36 @@ class ProductService {
      * @returns {string} - CSV string
      */
     exportToCSV(products, options = {}) {
-        const includePriceSlabs = options.includePriceSlabs || false;
-
-        let headers = [
-            'ID', 'Name', 'SKU', 'Code', 'Category', 'Brand',
-            'Description', 'HSN', 'Unit', 'Supplier ID', 'Supplier Mobile',
-            'Purchase Rate', 'Selling Rate', 'MRP', 'Active', 'Created At'
+        const headers = [
+            'ID', 'Code', 'Name', 'Category', 'Brand', 'Description',
+            'Unit', 'HSN', 'GST Rate', 'Selling Rate', 'Purchase Cost',
+            'Dealer Price', 'Contractor Price', 'MRP',
+            'Opening Stock', 'Current Stock', 'Minimum Stock', 'Status',
+            'Created At', 'Updated At'
         ];
 
-        if (includePriceSlabs) {
-            headers.push('Price Slabs');
-        }
-
-        const rows = products.map(p => {
-            const row = [
-                p.id || '',
-                p.name || '',
-                p.sku || '',
-                p.code || '',
-                p.category || '',
-                p.brand || '',
-                p.description || '',
-                p.hsn || '',
-                p.unit || 'Nos',
-                p.supplierId || '',
-                p.supplierMobile || '',
-                p.purchaseRate || 0,
-                p.sellingRate || 0,
-                p.mrp || 0,
-                p.active !== false ? 'Yes' : 'No',
-                p.createdAt || ''
-            ];
-
-            if (includePriceSlabs) {
-                const slabs = p.priceSlabs || [];
-                row.push(JSON.stringify(slabs));
-            }
-
-            return row;
-        });
+        const rows = products.map(p => [
+            p.id || '',
+            p.code || '',
+            p.name || '',
+            p.category || '',
+            p.brand || '',
+            p.description || '',
+            p.unit || 'Nos',
+            p.hsn || '',
+            p.gstRate || 0,
+            p.sellingRate || 0,
+            p.purchaseCost || 0,
+            p.dealerPrice || 0,
+            p.contractorPrice || 0,
+            p.mrp || 0,
+            p.openingStock || 0,
+            p.currentStock || 0,
+            p.minStock || 0,
+            p.status || 'active',
+            p.createdAt || '',
+            p.updatedAt || ''
+        ]);
 
         return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
     }
@@ -1439,31 +1429,30 @@ class ProductService {
                 const key = headers[j];
                 const value = values[j] || '';
 
-                if (key === 'ID') product.id = value;
-                else if (key === 'Name') product.name = value;
-                else if (key === 'SKU') product.sku = value;
-                else if (key === 'Code') product.code = value;
-                else if (key === 'Category') product.category = value;
-                else if (key === 'Brand') product.brand = value;
-                else if (key === 'Description') product.description = value;
-                else if (key === 'HSN') product.hsn = value;
-                else if (key === 'Unit') product.unit = value;
-                else if (key === 'Supplier ID') product.supplierId = value;
-                else if (key === 'Supplier Mobile') product.supplierMobile = value;
-                else if (key === 'Purchase Rate') product.purchaseRate = parseFloat(value) || 0;
-                else if (key === 'Selling Rate') product.sellingRate = parseFloat(value) || 0;
-                else if (key === 'MRP') product.mrp = parseFloat(value) || 0;
-                else if (key === 'Active') product.active = value !== 'No';
-                else if (key === 'Price Slabs') {
-                    try {
-                        product.priceSlabs = JSON.parse(value);
-                    } catch (e) {
-                        product.priceSlabs = [];
-                    }
+                switch (key) {
+                    case 'ID': product.id = value; break;
+                    case 'Code': product.code = value; break;
+                    case 'Name': product.name = value; break;
+                    case 'Category': product.category = value; break;
+                    case 'Brand': product.brand = value; break;
+                    case 'Description': product.description = value; break;
+                    case 'Unit': product.unit = value; break;
+                    case 'HSN': product.hsn = value; break;
+                    case 'GST Rate': product.gstRate = parseFloat(value) || 0; break;
+                    case 'Selling Rate': product.sellingRate = parseFloat(value) || 0; break;
+                    case 'Purchase Cost': product.purchaseCost = parseFloat(value) || 0; break;
+                    case 'Dealer Price': product.dealerPrice = parseFloat(value) || 0; break;
+                    case 'Contractor Price': product.contractorPrice = parseFloat(value) || 0; break;
+                    case 'MRP': product.mrp = parseFloat(value) || 0; break;
+                    case 'Opening Stock': product.openingStock = parseInt(value, 10) || 0; break;
+                    case 'Current Stock': product.currentStock = parseInt(value, 10) || 0; break;
+                    case 'Minimum Stock': product.minStock = parseInt(value, 10) || 0; break;
+                    case 'Status': product.status = value === 'active' ? 'active' : 'inactive'; break;
+                    case 'Created At': product.createdAt = value; break;
+                    case 'Updated At': product.updatedAt = value; break;
                 }
             }
 
-            // Skip empty rows
             if (!product.name) continue;
 
             try {
@@ -1500,110 +1489,6 @@ export { productService };
 export default productService;
 
 // ============================================================
-// USAGE EXAMPLES - CATEGORY & UNIT PERSISTENCE
-// ============================================================
-
-/*
-// ============================================================
-// ADD CATEGORY
-// ============================================================
-
-// Add a new category
-const categories = await productService.addCategory('Construction Chemical');
-
-// Result: categories array includes 'Construction Chemical'
-// Category is saved to settings and survives page reload
-
-
-// ============================================================
-// GET CATEGORIES
-// ============================================================
-
-// Get all categories (includes user-added ones)
-const allCategories = await productService.getCategories();
-
-// Returns: ['Tile Adhesive', 'Waterproofing', ... , 'Construction Chemical']
-
-
-// ============================================================
-// ADD UNIT
-// ============================================================
-
-// Add a new unit
-const units = await productService.addUnit('Drum');
-
-// Result: units array includes 'Drum'
-// Unit is saved to settings and survives page reload
-
-
-// ============================================================
-// GET UNITS
-// ============================================================
-
-// Get all units (includes user-added ones)
-const allUnits = await productService.getUnits();
-
-// Returns: ['Nos', 'Bag', ... , 'Drum']
-
-
-// ============================================================
-// REMOVE CATEGORY (with safety check)
-// ============================================================
-
-try {
-    await productService.removeCategory('Construction Chemical');
-} catch (error) {
-    // Error if category is used by products
-    console.error(error.message);
-}
-
-
-// ============================================================
-// REMOVE UNIT (with safety check)
-// ============================================================
-
-try {
-    await productService.removeUnit('Drum');
-} catch (error) {
-    // Error if unit is used by products
-    console.error(error.message);
-}
-
-
-// ============================================================
-// VALIDATION USES PERSISTENT CATEGORIES/UNITS
-// ============================================================
-
-// After adding 'Construction Chemical' and 'Drum':
-
-const validation = await productService.validateProduct({
-    name: 'H4 Special Chemical',
-    category: 'Construction Chemical',  // ✅ Valid - exists in settings
-    unit: 'Drum'                         // ✅ Valid - exists in settings
-});
-
-// validation.valid === true
-
-
-// ============================================================
-// LISTEN FOR SETTINGS UPDATES
-// ============================================================
-
-eventBus.on(EVENTS.SETTINGS_UPDATED, (payload) => {
-    if (payload.payload.type === 'product-category-added') {
-        console.log('New category added:', payload.payload.value);
-        // Refresh category dropdown
-        refreshCategoryDropdown();
-    }
-    if (payload.payload.type === 'product-unit-added') {
-        console.log('New unit added:', payload.payload.value);
-        // Refresh unit dropdown
-        refreshUnitDropdown();
-    }
-});
-*/
-
-// ============================================================
 // SUMMARY
 // ============================================================
 // 
@@ -1611,33 +1496,26 @@ eventBus.on(EVENTS.SETTINGS_UPDATED, (payload) => {
 // SETTINGS: H4BillingERP → settings store (categories & units)
 // EVENTS: PRODUCT_ADDED, PRODUCT_UPDATED, PRODUCT_DELETED, SETTINGS_UPDATED
 // 
-// CATEGORY PERSISTENCE: ✅
-// - addCategory() saves to settings
-// - getCategories() reads from settings
-// - removeCategory() removes from settings
-// - Survives page reload
-// - Duplicate prevention
-// - Safety check for products using category
-// 
-// UNIT PERSISTENCE: ✅
-// - addUnit() saves to settings
-// - getUnits() reads from settings
-// - removeUnit() removes from settings
-// - Survives page reload
-// - Duplicate prevention
-// - Safety check for products using unit
-// 
-// VALIDATION: ✅
-// - Uses persistent categories and units
-// - New categories/units accepted immediately
-// 
-// CROSS-MODULE SYNC: ✅
-// - EVENTS.SETTINGS_UPDATED emitted
-// - State updated
-// - All modules get new options
-// 
-// DATA MODEL: ✅
-// - NO GST fields
-// - NO taxMode
+// UPDATED DATA MODEL:
+// ✅ code - Product code (e.g., H4-TA-C1)
+// ✅ name - Product name
+// ✅ category - Product category
+// ✅ brand - Brand name
+// ✅ description - Product description
+// ✅ unit - Unit of measurement
+// ✅ hsn - HSN/SAC code
+// ✅ gstRate - GST rate (%)
+// ✅ sellingRate - Default selling rate
+// ✅ purchaseCost - Purchase cost
+// ✅ dealerPrice - Dealer price
+// ✅ contractorPrice - Contractor price
+// ✅ mrp - Maximum Retail Price
+// ✅ image - Product image (base64)
+// ✅ openingStock - Opening stock quantity
+// ✅ currentStock - Current stock quantity
+// ✅ minStock - Minimum stock alert level
+// ✅ status - 'active' or 'inactive'
+// ✅ createdAt - Creation timestamp
+// ✅ updatedAt - Last update timestamp
 // 
 // ============================================================
