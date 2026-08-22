@@ -720,9 +720,9 @@
     </div>
 
     <!-- ============================================================
-    ADD/EDIT PRODUCT MODAL
+    ADD/EDIT PRODUCT MODAL - WITH h4-product-modal CLASS
     ============================================================ -->
-    <div class="modal-overlay" id="productModal">
+    <div class="modal-overlay h4-product-modal" id="productModal">
         <div class="modal-content wide">
             <div class="modal-header">
                 <h3 id="modalTitle">➕ Add Product</h3>
@@ -735,9 +735,10 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Product Code</label>
+                        <label>Product Code <span class="required">*</span></label>
                         <input type="text" id="productCode" placeholder="e.g., H4-TA-C1">
-                        <div class="helper-text">Optional - Auto-generated if empty</div>
+                        <div class="input-error">⚠️ Product code is required</div>
+                        <div class="helper-text">Enter a unique product code</div>
                     </div>
                     <div class="form-group" id="productNameGroup">
                         <label>Product Name <span class="required">*</span></label>
@@ -787,7 +788,7 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>GST Rate</label>
+                        <label>GST Rate (%)</label>
                         <select id="productGst">
                             <option value="0">0%</option>
                             <option value="5">5%</option>
@@ -810,9 +811,9 @@
 
                 <div class="form-row">
                     <div class="form-group" id="productRateGroup">
-                        <label>Default Selling Rate <span class="required">*</span></label>
+                        <label>Selling Price <span class="required">*</span></label>
                         <input type="number" id="productRate" placeholder="0.00" min="0" step="0.5">
-                        <div class="input-error">⚠️ Selling rate is required</div>
+                        <div class="input-error">⚠️ Selling price is required</div>
                     </div>
                     <div class="form-group">
                         <label>Purchase Cost</label>
