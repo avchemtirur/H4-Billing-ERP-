@@ -59,6 +59,7 @@
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .quotation-card:hover {
@@ -279,8 +280,11 @@
         <!-- Quotation Grid -->
         <div class="quotation-grid" id="quotationGrid">
             
-            <!-- ✅ Epoxy Quotation Card - CORRECT LINK -->
-            <a href="quotation/epoxy.html" class="quotation-card epoxy" data-type="epoxy" data-name="Epoxy">
+            <!-- ✅ Epoxy Quotation - CORRECT RELATIVE PATH from modules/ -->
+            <a href="../quotation/epoxy.html" 
+               class="quotation-card epoxy" 
+               data-type="epoxy" 
+               data-name="Epoxy">
                 <span class="badge">Popular</span>
                 <span class="card-icon">🧪</span>
                 <h3>Epoxy Quotation</h3>
@@ -288,8 +292,11 @@
                 <span class="btn">Create Epoxy →</span>
             </a>
 
-            <!-- ✅ Waterproofing Quotation Card - CORRECT LINK -->
-            <a href="quotation/waterproofing.html" class="quotation-card waterproofing" data-type="waterproofing" data-name="Waterproofing">
+            <!-- ✅ Waterproofing Quotation - CORRECT RELATIVE PATH from modules/ -->
+            <a href="../quotation/waterproofing.html" 
+               class="quotation-card waterproofing" 
+               data-type="waterproofing" 
+               data-name="Waterproofing">
                 <span class="badge" style="background: #3182ce;">Popular</span>
                 <span class="card-icon">💧</span>
                 <h3>Waterproofing Quotation</h3>
@@ -297,15 +304,24 @@
                 <span class="btn">Create Waterproofing →</span>
             </a>
 
-            <!-- Additional Quotation Types -->
-            <a href="quotation/painting.html" class="quotation-card" data-type="painting" data-name="Painting" style="border-color: #e2e8f0;">
+            <!-- ✅ Painting Quotation - CORRECT RELATIVE PATH from modules/ -->
+            <a href="../quotation/painting.html" 
+               class="quotation-card" 
+               data-type="painting" 
+               data-name="Painting" 
+               style="border-color: #e2e8f0;">
                 <span class="card-icon">🎨</span>
                 <h3>Painting Quotation</h3>
                 <p>Interior, exterior, and industrial painting services</p>
                 <span class="btn" style="background: #9f7aea;">Create Painting →</span>
             </a>
 
-            <a href="quotation/flooring.html" class="quotation-card" data-type="flooring" data-name="Flooring" style="border-color: #e2e8f0;">
+            <!-- ✅ Flooring Quotation - CORRECT RELATIVE PATH from modules/ -->
+            <a href="../quotation/flooring.html" 
+               class="quotation-card" 
+               data-type="flooring" 
+               data-name="Flooring" 
+               style="border-color: #e2e8f0;">
                 <span class="card-icon">🏗️</span>
                 <h3>Flooring Quotation</h3>
                 <p>Tile, marble, granite, and all types of flooring</p>
@@ -394,8 +410,8 @@
                     }
                 });
 
-                const visible = document.querySelectorAll('.quotation-card[style*="display: none"]');
-                if (visible.length === quotationCards.length && query !== '') {
+                const hidden = document.querySelectorAll('.quotation-card[style*="display: none"]');
+                if (hidden.length === quotationCards.length && query !== '') {
                     showToast('🔍 No quotations found matching "' + query + '"', 'info', 2000);
                 }
             }
@@ -418,7 +434,6 @@
                     
                     showToast(`🚀 Opening ${name} Quotation...`, 'info', 1500);
                     
-                    // ✅ Using correct path - no "../" prefix
                     setTimeout(() => {
                         window.location.href = href;
                     }, 400);
@@ -429,6 +444,7 @@
             historyBtn.addEventListener('click', function() {
                 showToast('📋 Opening Quotation History...', 'info', 1500);
                 setTimeout(() => {
+                    // ✅ CORRECT RELATIVE PATH from modules/
                     window.location.href = '../quotation-history.html';
                 }, 400);
             });
@@ -436,6 +452,7 @@
             dashboardBtn.addEventListener('click', function() {
                 showToast('🏠 Returning to Dashboard...', 'info', 1500);
                 setTimeout(() => {
+                    // ✅ CORRECT RELATIVE PATH from modules/
                     window.location.href = '../index.html';
                 }, 400);
             });
