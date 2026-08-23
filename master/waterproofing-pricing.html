@@ -495,7 +495,7 @@
         <div class="master-header">
             <div>
                 <h1>💧 <span>Waterproofing</span> Pricing Master</h1>
-                <div class="sub">Admin · Base Rate · Options · Warranty</div>
+                <div class="sub">Admin · Base Rate · Options · Warranty · Materials · Consumption · Charges</div>
             </div>
             <div>
                 <button class="btn-secondary" id="refreshBtn">⟳ Refresh</button>
@@ -507,6 +507,9 @@
             <button class="tab-btn active" data-tab="systems">📋 Base Rates <span class="badge" id="systemsCount">0</span></button>
             <button class="tab-btn" data-tab="options">⚙️ Options <span class="badge" id="optionsCount">0</span></button>
             <button class="tab-btn" data-tab="warranties">🛡️ Warranty <span class="badge" id="warrantiesCount">0</span></button>
+            <button class="tab-btn" data-tab="materials">📦 Materials <span class="badge" id="materialsCount">0</span></button>
+            <button class="tab-btn" data-tab="consumption">🔗 Consumption <span class="badge" id="consumptionCount">0</span></button>
+            <button class="tab-btn" data-tab="charges">🛠️ Labour/Charges <span class="badge" id="chargesCount">0</span></button>
         </div>
 
         <!-- ========================================================== -->
@@ -601,6 +604,98 @@
                 </div>
             </div>
         </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: MATERIALS -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelMaterials">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchMaterials" placeholder="Search materials..." />
+                </div>
+                <button class="btn-primary" id="addMaterialBtn">＋ Add Material</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Unit</th>
+                                <th>Purchase Rate</th>
+                                <th>Selling Rate</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materialsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: CONSUMPTION -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelConsumption">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchConsumption" placeholder="Search mappings..." />
+                </div>
+                <button class="btn-primary" id="addConsumptionBtn">＋ Add Mapping</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>System</th>
+                                <th>Thickness</th>
+                                <th>Consumption</th>
+                                <th>Unit</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="consumptionTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: LABOUR / CHARGES -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelCharges">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchCharges" placeholder="Search charges..." />
+                </div>
+                <button class="btn-primary" id="addChargeBtn">＋ Add Charge</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Charge Name</th>
+                                <th>Method</th>
+                                <th>Rate</th>
+                                <th>Unit</th>
+                                <th>Applies To</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chargesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ========================================================== -->
@@ -636,7 +731,10 @@
             const KEYS = {
                 systems: 'waterproofingSystems',
                 options: 'waterproofingOptions',
-                warranties: 'waterproofingWarranties'
+                warranties: 'waterproofingWarranties',
+                materials: 'waterproofingMaterials',
+                consumption: 'waterproofingConsumptionMappings',
+                charges: 'waterproofingCharges'
             };
 
             // -------------------- HELPERS --------------------
@@ -678,7 +776,7 @@
             const modalCloseBtn = document.getElementById('modalCloseBtn');
             const modalCancelBtn = document.getElementById('modalCancelBtn');
 
-            let currentEntityType = null; // 'system', 'option', 'warranty'
+            let currentEntityType = null;
             let editId = null;
 
             function openModal(title, html, type, id = null) {
@@ -688,9 +786,7 @@
                 editId = id;
                 modal.classList.add('open');
                 document.body.style.overflow = 'hidden';
-                // attach any dynamic events after render
                 setTimeout(() => {
-                    // if system, attach auto-code
                     if (type === 'system') {
                         const autoBtn = document.getElementById('autoCodeBtn');
                         if (autoBtn) autoBtn.addEventListener('click', autoGenerateCode);
@@ -698,7 +794,6 @@
                         if (methodSelect) methodSelect.addEventListener('change', updateUnitField);
                         updateUnitField();
                     }
-                    // if option or warranty, we may need to refresh system list
                 }, 50);
             }
 
@@ -716,7 +811,7 @@
             modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
-            // -------------------- SYSTEM MASTER --------------------
+            // -------------------- SYSTEM MASTER (UNCHANGED) --------------------
             function getSystems() { return getData(KEYS.systems); }
             function saveSystems(list) { setData(KEYS.systems, list); }
 
@@ -753,8 +848,6 @@
                     `;
                 });
                 tbody.innerHTML = html;
-
-                // attach events
                 tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editSystem(parseInt(b.dataset
                 .id))));
                 tbody.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => deleteSystem(parseInt(b
@@ -762,14 +855,16 @@
             }
 
             function deleteSystem(id) {
-                if (!confirm('Delete this system permanently? This may affect options/warranties.')) return;
+                if (!confirm('Delete this system permanently?')) return;
                 let list = getSystems();
                 const newList = list.filter(s => s.id !== id);
                 if (newList.length === list.length) { showToast('System not found.', 'error'); return; }
                 saveSystems(newList);
                 renderSystems();
-                renderOptions(); // refresh applicable systems in option list
+                renderOptions();
                 renderWarranties();
+                renderConsumption(); // Refresh consumption dropdowns indirectly
+                renderCharges();
                 showToast('🗑️ System deleted.', 'success');
             }
 
@@ -777,7 +872,6 @@
                 const list = getSystems();
                 const sys = list.find(s => s.id === id);
                 if (!sys) { showToast('System not found.', 'error'); return; }
-                // build form
                 const html = buildSystemForm(sys);
                 openModal('✎ Edit Waterproofing System', html, 'system', id);
             }
@@ -820,7 +914,6 @@
                         <input type="checkbox" id="sysActive" ${d.active !== false ? 'checked' : ''} />
                         <label for="sysActive">Active</label>
                     </div>
-
                     <hr style="margin:1.2rem 0;" />
                     <h4 style="margin-bottom:0.5rem;">Advanced Specifications</h4>
                     <div class="form-group">
@@ -871,7 +964,6 @@
                 const unit = document.getElementById('sysUnit');
                 if (method && unit) unit.value = method.value;
             }
-
             function autoGenerateCode() {
                 const name = document.getElementById('sysName');
                 const code = document.getElementById('sysCode');
@@ -884,7 +976,6 @@
                 code.value = gen;
             }
 
-            // ----- handle system form submit -----
             function handleSystemSubmit(e) {
                 e.preventDefault();
                 const name = document.getElementById('sysName').value.trim();
@@ -899,7 +990,6 @@
                 if (isNaN(baseRate) || baseRate < 0) { showToast('Valid Base Rate is required.', 'warning'); return; }
 
                 const list = getSystems();
-                // check duplicate code (ignore self)
                 const dup = list.find(s => s.code && s.code.toUpperCase() === code.toUpperCase() && s.id !== editId);
                 if (dup) { showToast('⚠️ Code "' + code + '" already exists.', 'error'); return; }
 
@@ -936,11 +1026,13 @@
                 saveSystems(list);
                 closeModal();
                 renderSystems();
-                renderOptions(); // update applicable list
+                renderOptions();
                 renderWarranties();
+                renderConsumption();
+                renderCharges();
             }
 
-            // -------------------- OPTION MASTER --------------------
+            // -------------------- OPTION MASTER (UNCHANGED) --------------------
             function getOptions() { return getData(KEYS.options); }
             function saveOptions(list) { setData(KEYS.options, list); }
 
@@ -961,7 +1053,6 @@
                 filtered.forEach(opt => {
                     const statusClass = opt.active !== false ? 'active' : 'inactive';
                     const statusLabel = opt.active !== false ? 'Active' : 'Inactive';
-                    // applicable systems text
                     let applies = 'All Systems';
                     if (opt.applicableSystems && opt.applicableSystems.length > 0 && !opt.applicableSystems.includes('all')) {
                         const names = opt.applicableSystems.map(id => {
@@ -1020,7 +1111,6 @@
                 const methodOpts = methods.map(m => `<option value="${m}" ${m === d.pricingMethod ? 'selected':''}>${m}</option>`)
                     .join('');
 
-                // system checkboxes
                 const systems = getSystems();
                 let sysCheckboxes = '';
                 if (systems.length === 0) {
@@ -1087,7 +1177,6 @@
                 if (!name) { showToast('Option Name is required.', 'warning'); return; }
                 if (isNaN(rate) || rate < 0) { showToast('Valid Rate is required.', 'warning'); return; }
 
-                // get selected systems
                 const allCheck = document.getElementById('optApplyAll');
                 let applicableSystems = [];
                 if (allCheck && allCheck.checked) {
@@ -1099,7 +1188,6 @@
                 }
 
                 const list = getOptions();
-                // check duplicate name? allow same name? We'll allow but warn? We'll enforce unique name per option.
                 const dup = list.find(o => o.name && o.name.toLowerCase() === name.toLowerCase() && o.id !== editId);
                 if (dup) { showToast('⚠️ Option name already exists.', 'error'); return; }
 
@@ -1129,7 +1217,7 @@
                 renderOptions();
             }
 
-            // -------------------- WARRANTY MASTER --------------------
+            // -------------------- WARRANTY MASTER (UNCHANGED) --------------------
             function getWarranties() { return getData(KEYS.warranties); }
             function saveWarranties(list) { setData(KEYS.warranties, list); }
 
@@ -1284,7 +1372,6 @@
                 }
 
                 const list = getWarranties();
-                // check duplicate years? allow multiple for same year? We'll enforce unique years.
                 const dup = list.find(w => w.years === years && w.id !== editId);
                 if (dup) { showToast('⚠️ Warranty period ' + years + ' years already exists.', 'error'); return; }
 
@@ -1314,15 +1401,484 @@
                 renderWarranties();
             }
 
-            // -------------------- FORM SUBMIT DISPATCH --------------------
+            // ==========================================================
+            // NEW: MATERIAL MASTER
+            // ==========================================================
+            function getMaterials() { return getData(KEYS.materials); }
+            function saveMaterials(list) { setData(KEYS.materials, list); }
+
+            function renderMaterials() {
+                const list = getMaterials();
+                const search = document.getElementById('searchMaterials').value.toLowerCase().trim();
+                const filtered = list.filter(m => (m.name || '').toLowerCase().includes(search));
+                document.getElementById('materialsCount').textContent = filtered.length;
+                const tbody = document.getElementById('materialsTableBody');
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No materials. Add a material.</td></tr>`;
+                    return;
+                }
+                let html = '';
+                filtered.forEach(mat => {
+                    const statusClass = mat.active !== false ? 'active' : 'inactive';
+                    const statusLabel = mat.active !== false ? 'Active' : 'Inactive';
+                    html += `
+                        <tr>
+                            <td><strong>${escapeHtml(mat.name)}</strong></td>
+                            <td>${escapeHtml(mat.unit)}</td>
+                            <td>₹ ${parseFloat(mat.purchaseRate || 0).toFixed(2)}</td>
+                            <td>₹ ${parseFloat(mat.sellingRate || 0).toFixed(2)}</td>
+                            <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+                            <td style="text-align:right;">
+                                <button class="btn-edit" data-id="${mat.id}">✎</button>
+                                <button class="btn-danger" data-id="${mat.id}">✕</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+                tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editMaterial(parseInt(b.dataset.id))));
+                tbody.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => deleteMaterial(parseInt(b.dataset.id))));
+            }
+
+            function deleteMaterial(id) {
+                if (!confirm('Delete this material?')) return;
+                let list = getMaterials();
+                const newList = list.filter(m => m.id !== id);
+                if (newList.length === list.length) { showToast('Material not found.', 'error'); return; }
+                saveMaterials(newList);
+                renderMaterials();
+                renderConsumption(); // refresh dropdowns
+                showToast('🗑️ Material deleted.', 'success');
+            }
+
+            function editMaterial(id) {
+                const list = getMaterials();
+                const mat = list.find(m => m.id === id);
+                if (!mat) { showToast('Material not found.', 'error'); return; }
+                const html = buildMaterialForm(mat);
+                openModal('✎ Edit Material', html, 'material', id);
+            }
+
+            function buildMaterialForm(data = null) {
+                const d = data || {};
+                const units = ['Kg', 'Litre', 'Bag', 'Nos', 'Sq.ft', 'Sq.m', 'Running Ft', 'Custom'];
+                const unitOpts = units.map(u => `<option value="${u}" ${u === d.unit ? 'selected':''}>${u}</option>`).join('');
+                return `
+                    <div class="form-group">
+                        <label>Material Name <span class="required">*</span></label>
+                        <input type="text" id="matName" value="${escapeHtml(d.name||'')}" placeholder="e.g. H4 Waterproofing Powder" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Unit <span class="required">*</span></label>
+                        <select id="matUnit" required>${unitOpts}</select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Purchase Rate (₹)</label>
+                            <input type="number" id="matPurchase" value="${d.purchaseRate!==undefined ? d.purchaseRate : ''}" step="0.01" min="0" />
+                            <div class="hint">Internal cost. Never shown to customer.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Selling Rate (₹)</label>
+                            <input type="number" id="matSelling" value="${d.sellingRate!==undefined ? d.sellingRate : ''}" step="0.01" min="0" />
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="matActive" ${d.active !== false ? 'checked' : ''} />
+                        <label for="matActive">Active</label>
+                    </div>
+                `;
+            }
+
+            function handleMaterialSubmit(e) {
+                e.preventDefault();
+                const name = document.getElementById('matName').value.trim();
+                const unit = document.getElementById('matUnit').value;
+                const purchaseRate = parseFloat(document.getElementById('matPurchase').value) || 0;
+                const sellingRate = parseFloat(document.getElementById('matSelling').value) || 0;
+                const active = document.getElementById('matActive').checked;
+
+                if (!name) { showToast('Material Name is required.', 'warning'); return; }
+                if (!unit) { showToast('Unit is required.', 'warning'); return; }
+
+                const list = getMaterials();
+                const dup = list.find(m => m.name && m.name.toLowerCase() === name.toLowerCase() && m.id !== editId);
+                if (dup) { showToast('⚠️ Material name already exists.', 'error'); return; }
+
+                const matObj = {
+                    id: editId || generateId(list),
+                    name,
+                    unit,
+                    purchaseRate,
+                    sellingRate,
+                    active,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (editId) {
+                    const idx = list.findIndex(m => m.id === editId);
+                    if (idx === -1) { showToast('Material not found.', 'error'); return; }
+                    list[idx] = { ...list[idx], ...matObj };
+                    showToast('✅ Material updated.', 'success');
+                } else {
+                    matObj.createdAt = new Date().toISOString();
+                    list.push(matObj);
+                    showToast('✅ Material added.', 'success');
+                }
+                saveMaterials(list);
+                closeModal();
+                renderMaterials();
+                renderConsumption();
+            }
+
+            // ==========================================================
+            // NEW: CONSUMPTION MAPPING
+            // ==========================================================
+            function getConsumptions() { return getData(KEYS.consumption); }
+            function saveConsumptions(list) { setData(KEYS.consumption, list); }
+
+            function renderConsumption() {
+                const list = getConsumptions();
+                const search = document.getElementById('searchConsumption').value.toLowerCase().trim();
+                const materials = getMaterials();
+                const systems = getSystems();
+
+                const filtered = list.filter(c => {
+                    const mat = materials.find(m => m.id === c.materialId);
+                    const sys = systems.find(s => s.id === c.systemId);
+                    const matName = mat ? mat.name : '';
+                    const sysName = sys ? sys.name : '';
+                    return matName.toLowerCase().includes(search) || sysName.toLowerCase().includes(search);
+                });
+                document.getElementById('consumptionCount').textContent = filtered.length;
+                const tbody = document.getElementById('consumptionTableBody');
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No consumption mappings. Add a mapping.</td></tr>`;
+                    return;
+                }
+                let html = '';
+                filtered.forEach(c => {
+                    const mat = materials.find(m => m.id === c.materialId);
+                    const sys = systems.find(s => s.id === c.systemId);
+                    const statusClass = c.active !== false ? 'active' : 'inactive';
+                    const statusLabel = c.active !== false ? 'Active' : 'Inactive';
+                    html += `
+                        <tr>
+                            <td><strong>${escapeHtml(mat ? mat.name : 'Deleted')}</strong></td>
+                            <td>${escapeHtml(sys ? sys.name : 'Deleted')}</td>
+                            <td>${c.thickness || '-'}</td>
+                            <td>${c.consumption || 0}</td>
+                            <td>${escapeHtml(c.unit || '-')}</td>
+                            <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+                            <td style="text-align:right;">
+                                <button class="btn-edit" data-id="${c.id}">✎</button>
+                                <button class="btn-danger" data-id="${c.id}">✕</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+                tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editConsumption(parseInt(b.dataset.id))));
+                tbody.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => deleteConsumption(parseInt(b.dataset.id))));
+            }
+
+            function deleteConsumption(id) {
+                if (!confirm('Delete this consumption mapping?')) return;
+                let list = getConsumptions();
+                const newList = list.filter(c => c.id !== id);
+                if (newList.length === list.length) { showToast('Mapping not found.', 'error'); return; }
+                saveConsumptions(newList);
+                renderConsumption();
+                showToast('🗑️ Mapping deleted.', 'success');
+            }
+
+            function editConsumption(id) {
+                const list = getConsumptions();
+                const item = list.find(c => c.id === id);
+                if (!item) { showToast('Mapping not found.', 'error'); return; }
+                const html = buildConsumptionForm(item);
+                openModal('✎ Edit Consumption Mapping', html, 'consumption', id);
+            }
+
+            function buildConsumptionForm(data = null) {
+                const d = data || {};
+                const materials = getMaterials();
+                const systems = getSystems();
+
+                const matOpts = materials.map(m => `<option value="${m.id}" ${m.id === d.materialId ? 'selected':''}>${escapeHtml(m.name)}</option>`).join('');
+                const sysOpts = systems.map(s => `<option value="${s.id}" ${s.id === d.systemId ? 'selected':''}>${escapeHtml(s.name)}</option>`).join('');
+
+                return `
+                    <div class="form-group">
+                        <label>Material <span class="required">*</span></label>
+                        <select id="conMaterial" required>
+                            <option value="">-- Select Material --</option>
+                            ${matOpts}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Waterproofing System <span class="required">*</span></label>
+                        <select id="conSystem" required>
+                            <option value="">-- Select System --</option>
+                            ${sysOpts}
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Thickness (mm)</label>
+                            <input type="number" id="conThickness" value="${d.thickness!==undefined ? d.thickness : ''}" step="0.1" min="0" />
+                            <div class="hint">Leave blank if not applicable.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Consumption <span class="required">*</span></label>
+                            <input type="number" id="conConsumption" value="${d.consumption!==undefined ? d.consumption : ''}" step="0.001" min="0" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <input type="text" id="conUnit" value="${escapeHtml(d.unit||'')}" placeholder="e.g. L, kg, Sq.ft" />
+                        <div class="hint">e.g. Litre, Kg, Sq.ft per unit of system.</div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="conActive" ${d.active !== false ? 'checked' : ''} />
+                        <label for="conActive">Active</label>
+                    </div>
+                `;
+            }
+
+            function handleConsumptionSubmit(e) {
+                e.preventDefault();
+                const materialId = parseInt(document.getElementById('conMaterial').value);
+                const systemId = parseInt(document.getElementById('conSystem').value);
+                const thickness = parseFloat(document.getElementById('conThickness').value) || 0;
+                const consumption = parseFloat(document.getElementById('conConsumption').value);
+                const unit = document.getElementById('conUnit').value.trim();
+                const active = document.getElementById('conActive').checked;
+
+                if (!materialId) { showToast('Please select a Material.', 'warning'); return; }
+                if (!systemId) { showToast('Please select a System.', 'warning'); return; }
+                if (isNaN(consumption) || consumption <= 0) { showToast('Valid Consumption is required.', 'warning'); return; }
+
+                const list = getConsumptions();
+                // Optional: prevent duplicate material+system+thickness? We'll allow multiple for now, but warn if same.
+                // Not strictly required.
+
+                const obj = {
+                    id: editId || generateId(list),
+                    materialId,
+                    systemId,
+                    thickness,
+                    consumption,
+                    unit,
+                    active,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (editId) {
+                    const idx = list.findIndex(c => c.id === editId);
+                    if (idx === -1) { showToast('Mapping not found.', 'error'); return; }
+                    list[idx] = { ...list[idx], ...obj };
+                    showToast('✅ Mapping updated.', 'success');
+                } else {
+                    obj.createdAt = new Date().toISOString();
+                    list.push(obj);
+                    showToast('✅ Mapping added.', 'success');
+                }
+                saveConsumptions(list);
+                closeModal();
+                renderConsumption();
+            }
+
+            // ==========================================================
+            // NEW: LABOUR / CHARGES MASTER
+            // ==========================================================
+            function getCharges() { return getData(KEYS.charges); }
+            function saveCharges(list) { setData(KEYS.charges, list); }
+
+            function renderCharges() {
+                const list = getCharges();
+                const search = document.getElementById('searchCharges').value.toLowerCase().trim();
+                const systems = getSystems();
+                const filtered = list.filter(c => (c.name || '').toLowerCase().includes(search));
+                document.getElementById('chargesCount').textContent = filtered.length;
+                const tbody = document.getElementById('chargesTableBody');
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No charges. Add a charge.</td></tr>`;
+                    return;
+                }
+                let html = '';
+                filtered.forEach(ch => {
+                    const statusClass = ch.active !== false ? 'active' : 'inactive';
+                    const statusLabel = ch.active !== false ? 'Active' : 'Inactive';
+                    let applies = 'All Systems';
+                    if (ch.applicableSystems && ch.applicableSystems.length > 0 && !ch.applicableSystems.includes('all')) {
+                        const names = ch.applicableSystems.map(id => {
+                            const sys = systems.find(s => s.id === id);
+                            return sys ? sys.name : '?';
+                        }).filter(Boolean);
+                        applies = names.join(', ') || 'None';
+                    } else if (ch.applicableSystems && ch.applicableSystems.includes('all')) {
+                        applies = 'All Systems';
+                    } else {
+                        applies = 'None';
+                    }
+                    html += `
+                        <tr>
+                            <td><strong>${escapeHtml(ch.name)}</strong></td>
+                            <td>${escapeHtml(ch.pricingMethod)}</td>
+                            <td>₹ ${parseFloat(ch.rate || 0).toFixed(2)}</td>
+                            <td>${escapeHtml(ch.pricingMethod)}</td>
+                            <td style="font-size:0.8rem;">${escapeHtml(applies)}</td>
+                            <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+                            <td style="text-align:right;">
+                                <button class="btn-edit" data-id="${ch.id}">✎</button>
+                                <button class="btn-danger" data-id="${ch.id}">✕</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+                tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editCharge(parseInt(b.dataset.id))));
+                tbody.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => deleteCharge(parseInt(b.dataset.id))));
+            }
+
+            function deleteCharge(id) {
+                if (!confirm('Delete this charge?')) return;
+                let list = getCharges();
+                const newList = list.filter(c => c.id !== id);
+                if (newList.length === list.length) { showToast('Charge not found.', 'error'); return; }
+                saveCharges(newList);
+                renderCharges();
+                showToast('🗑️ Charge deleted.', 'success');
+            }
+
+            function editCharge(id) {
+                const list = getCharges();
+                const ch = list.find(c => c.id === id);
+                if (!ch) { showToast('Charge not found.', 'error'); return; }
+                const html = buildChargeForm(ch);
+                openModal('✎ Edit Charge', html, 'charge', id);
+            }
+
+            function buildChargeForm(data = null) {
+                const d = data || {};
+                const methods = ['Sq.ft', 'Sq.m', 'Running Ft', 'Kg', 'Litre', 'Nos', 'Lump Sum', 'Percentage'];
+                const methodOpts = methods.map(m => `<option value="${m}" ${m === d.pricingMethod ? 'selected':''}>${m}</option>`).join('');
+
+                const systems = getSystems();
+                let sysCheckboxes = '';
+                if (systems.length === 0) {
+                    sysCheckboxes = '<p style="color:#a0aec0;">No systems defined yet.</p>';
+                } else {
+                    const selected = d.applicableSystems || [];
+                    const allChecked = selected.includes('all') ? 'checked' : '';
+                    sysCheckboxes = `
+                        <div class="form-check" style="margin-bottom:0.5rem;">
+                            <input type="checkbox" id="chargeApplyAll" ${allChecked} />
+                            <label for="chargeApplyAll"><strong>All Systems</strong></label>
+                        </div>
+                        <div class="system-checkboxes">
+                            ${systems.map(sys => `
+                                <label>
+                                    <input type="checkbox" class="charge-system-check" value="${sys.id}" ${selected.includes(sys.id) ? 'checked' : ''} />
+                                    ${escapeHtml(sys.name)}
+                                </label>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="form-group">
+                        <label>Charge Name <span class="required">*</span></label>
+                        <input type="text" id="chargeName" value="${escapeHtml(d.name||'')}" placeholder="e.g. Labour, Transportation" required />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pricing Method <span class="required">*</span></label>
+                            <select id="chargePricingMethod" required>${methodOpts}</select>
+                        </div>
+                        <div class="form-group">
+                            <label>Rate (₹) <span class="required">*</span></label>
+                            <input type="number" id="chargeRate" value="${d.rate!==undefined ? d.rate : ''}" step="0.01" min="0" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Applicable Systems</label>
+                        ${sysCheckboxes}
+                        <div class="hint">If none selected, this charge applies to all systems.</div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="chargeActive" ${d.active !== false ? 'checked' : ''} />
+                        <label for="chargeActive">Active</label>
+                    </div>
+                `;
+            }
+
+            function handleChargeSubmit(e) {
+                e.preventDefault();
+                const name = document.getElementById('chargeName').value.trim();
+                const method = document.getElementById('chargePricingMethod').value;
+                const rate = parseFloat(document.getElementById('chargeRate').value);
+                const active = document.getElementById('chargeActive').checked;
+
+                if (!name) { showToast('Charge Name is required.', 'warning'); return; }
+                if (isNaN(rate) || rate < 0) { showToast('Valid Rate is required.', 'warning'); return; }
+
+                let applicableSystems = [];
+                const allCheck = document.getElementById('chargeApplyAll');
+                if (allCheck && allCheck.checked) {
+                    applicableSystems = ['all'];
+                } else {
+                    document.querySelectorAll('.charge-system-check:checked').forEach(cb => {
+                        applicableSystems.push(parseInt(cb.value));
+                    });
+                }
+
+                const list = getCharges();
+                const dup = list.find(c => c.name && c.name.toLowerCase() === name.toLowerCase() && c.id !== editId);
+                if (dup) { showToast('⚠️ Charge name already exists.', 'error'); return; }
+
+                const obj = {
+                    id: editId || generateId(list),
+                    name,
+                    pricingMethod: method,
+                    rate,
+                    applicableSystems,
+                    active,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (editId) {
+                    const idx = list.findIndex(c => c.id === editId);
+                    if (idx === -1) { showToast('Charge not found.', 'error'); return; }
+                    list[idx] = { ...list[idx], ...obj };
+                    showToast('✅ Charge updated.', 'success');
+                } else {
+                    obj.createdAt = new Date().toISOString();
+                    list.push(obj);
+                    showToast('✅ Charge added.', 'success');
+                }
+                saveCharges(list);
+                closeModal();
+                renderCharges();
+            }
+
+            // -------------------- FORM SUBMIT DISPATCH (UPDATED) --------------------
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (currentEntityType === 'system') handleSystemSubmit(e);
                 else if (currentEntityType === 'option') handleOptionSubmit(e);
                 else if (currentEntityType === 'warranty') handleWarrantySubmit(e);
+                else if (currentEntityType === 'material') handleMaterialSubmit(e);
+                else if (currentEntityType === 'consumption') handleConsumptionSubmit(e);
+                else if (currentEntityType === 'charge') handleChargeSubmit(e);
             });
 
-            // -------------------- ADD BUTTONS --------------------
+            // -------------------- ADD BUTTONS (UPDATED) --------------------
             document.getElementById('addSystemBtn').addEventListener('click', function() {
                 const html = buildSystemForm();
                 openModal('➕ Add Waterproofing System', html, 'system');
@@ -1335,13 +1891,28 @@
                 const html = buildWarrantyForm();
                 openModal('➕ Add Warranty', html, 'warranty');
             });
+            document.getElementById('addMaterialBtn').addEventListener('click', function() {
+                const html = buildMaterialForm();
+                openModal('➕ Add Material', html, 'material');
+            });
+            document.getElementById('addConsumptionBtn').addEventListener('click', function() {
+                const html = buildConsumptionForm();
+                openModal('➕ Add Consumption Mapping', html, 'consumption');
+            });
+            document.getElementById('addChargeBtn').addEventListener('click', function() {
+                const html = buildChargeForm();
+                openModal('➕ Add Labour / Charge', html, 'charge');
+            });
 
-            // -------------------- TAB SWITCHING --------------------
+            // -------------------- TAB SWITCHING (UPDATED) --------------------
             const tabBtns = document.querySelectorAll('.tab-btn');
             const panels = {
                 systems: document.getElementById('panelSystems'),
                 options: document.getElementById('panelOptions'),
-                warranties: document.getElementById('panelWarranties')
+                warranties: document.getElementById('panelWarranties'),
+                materials: document.getElementById('panelMaterials'),
+                consumption: document.getElementById('panelConsumption'),
+                charges: document.getElementById('panelCharges')
             };
 
             tabBtns.forEach(btn => {
@@ -1352,20 +1923,25 @@
                     Object.keys(panels).forEach(key => {
                         panels[key].classList.toggle('active', key === tab);
                     });
-                    // re-render if needed (search fields already)
                 });
             });
 
-            // -------------------- SEARCH --------------------
+            // -------------------- SEARCH (UPDATED) --------------------
             document.getElementById('searchSystems').addEventListener('input', renderSystems);
             document.getElementById('searchOptions').addEventListener('input', renderOptions);
             document.getElementById('searchWarranties').addEventListener('input', renderWarranties);
+            document.getElementById('searchMaterials').addEventListener('input', renderMaterials);
+            document.getElementById('searchConsumption').addEventListener('input', renderConsumption);
+            document.getElementById('searchCharges').addEventListener('input', renderCharges);
 
-            // -------------------- REFRESH & NAV --------------------
+            // -------------------- REFRESH & NAV (UPDATED) --------------------
             document.getElementById('refreshBtn').addEventListener('click', function() {
                 renderSystems();
                 renderOptions();
                 renderWarranties();
+                renderMaterials();
+                renderConsumption();
+                renderCharges();
                 showToast('⟳ Refreshed', 'info', 1200);
             });
             document.getElementById('backBtn').addEventListener('click', () => window.location.href = '../../index.html');
@@ -1375,13 +1951,15 @@
             renderSystems();
             renderOptions();
             renderWarranties();
+            renderMaterials();
+            renderConsumption();
+            renderCharges();
 
             setTimeout(() => {
-                const sysCount = getSystems().length;
-                showToast(`💧 ${sysCount} systems, ${getOptions().length} options, ${getWarranties().length} warranties loaded.`, 'success', 2500);
-            }, 400);
+                showToast(`💧 ${getSystems().length} systems, ${getOptions().length} options, ${getWarranties().length} warranties, ${getMaterials().length} materials, ${getConsumptions().length} mappings, ${getCharges().length} charges loaded.`, 'success', 3000);
+            }, 500);
 
-            console.log('💧 Waterproofing Pricing Master loaded.');
+            console.log('💧 Waterproofing Pricing Master fully loaded.');
 
         })();
     </script>
