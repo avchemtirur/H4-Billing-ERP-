@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>H4 – Epoxy Pricing Master</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/mobile.css" />
+    <link rel="stylesheet" href="../css/desktop.css" />
+
+    <style>
+        /* ----- Layout ----- */
+        .master-container {
+            max-width: 1300px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .master-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .master-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+        .master-header h1 span {
+            color: #9f7aea;
+        }
+        .master-header .sub {
+            color: #718096;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 0.1rem;
+        }
+
+        /* ----- Tabs ----- */
+        .tab-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem;
+            background: #f7fafc;
+            padding: 0.4rem 0.4rem 0;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.55rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #4a5568;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .tab-btn:hover {
+            background: #edf2f7;
+        }
+        .tab-btn.active {
+            background: #fff;
+            color: #9f7aea;
+            box-shadow: 0 -2px 0 #9f7aea;
+        }
+        .tab-btn .badge {
+            background: #9f7aea;
+            color: #fff;
+            border-radius: 20px;
+            padding: 0.1rem 0.6rem;
+            font-size: 0.65rem;
+            margin-left: 0.3rem;
+        }
+
+        .tab-panel {
+            display: none;
+            background: #fff;
+            border-radius: 0 0 12px 12px;
+            padding: 1.5rem 0.5rem 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+
+        .panel-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        .panel-toolbar .search-box {
+            flex: 1 1 240px;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 0.2rem 0.8rem;
+            border: 1px solid #e2e8f0;
+        }
+        .panel-toolbar .search-box input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            width: 100%;
+            outline: none;
+        }
+        .panel-toolbar .search-box span {
+            color: #a0aec0;
+        }
+
+        .btn-primary {
+            background: #9f7aea;
+            color: #fff;
+            border: none;
+            padding: 0.55rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover {
+            background: #805ad5;
+        }
+
+        .btn-secondary {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-danger {
+            background: #fc8181;
+            color: #fff;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-danger:hover {
+            background: #f56565;
+        }
+        .btn-edit {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-edit:hover {
+            background: #e2e8f0;
+        }
+        .btn-duplicate {
+            background: #fefcbf;
+            color: #744210;
+            border: 1px solid #ecc94b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-duplicate:hover {
+            background: #f6e05e;
+        }
+        .btn-inactive {
+            background: #fed7d7;
+            color: #9b2c2c;
+            border: 1px solid #fc8181;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-inactive:hover {
+            background: #feb2b2;
+        }
+        .btn-active {
+            background: #c6f6d5;
+            color: #276749;
+            border: 1px solid #48bb78;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-active:hover {
+            background: #9ae6b4;
+        }
+
+        /* ----- Table ----- */
+        .table-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #edf2f7;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0.2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 500px;
+        }
+        thead {
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        th {
+            text-align: left;
+            padding: 0.7rem 0.8rem;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        td {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr.deleted td {
+            opacity: 0.5;
+            background: #f7fafc;
+        }
+        .deleted-badge {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 0.1rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            margin-left: 0.3rem;
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 0.15rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: #c6f6d5;
+            color: #276749;
+        }
+        .badge-status.inactive {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+        .badge-status.deleted {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .empty-row td {
+            text-align: center;
+            color: #a0aec0;
+            padding: 2.5rem 1rem;
+            font-style: italic;
+        }
+
+        .action-cell {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            justify-content: flex-end;
+        }
+
+        /* ----- Modal ----- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 20px;
+            max-width: 760px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+            padding: 1.8rem 2rem 1.8rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.96) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            line-height: 1;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 0 0.3rem;
+            transition: color 0.2s;
+        }
+        .modal-close:hover {
+            color: #4a5568;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+        .form-group label .required {
+            color: #e53e3e;
+            margin-left: 0.1rem;
+        }
+        .form-group .hint {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-top: 0.15rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.55rem 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fff;
+            font-family: inherit;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #9f7aea;
+            box-shadow: 0 0 0 3px rgba(159, 122, 234, 0.12);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 0.2rem;
+        }
+        .form-check input[type="checkbox"] {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: #9f7aea;
+            cursor: pointer;
+        }
+        .form-check label {
+            font-weight: 500;
+            color: #2d3748;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .system-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.2rem;
+            margin-top: 0.3rem;
+        }
+        .system-checkboxes label {
+            font-weight: 400;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .system-checkboxes input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #9f7aea;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.8rem;
+            padding-top: 1rem;
+            border-top: 1px solid #edf2f7;
+        }
+        .btn-cancel {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1.6rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+        .btn-save {
+            background: #9f7aea;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-save:hover {
+            background: #805ad5;
+        }
+
+        /* ----- Toast ----- */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .toast {
+            background: #fff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            border-left: 5px solid #9f7aea;
+            min-width: 200px;
+        }
+        .toast.success { border-left-color: #48bb78; }
+        .toast.error { border-left-color: #fc8181; }
+        .toast .close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #a0aec0;
+            cursor: pointer;
+        }
+        .toast .close:hover {
+            color: #4a5568;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width: 640px) {
+            .master-container { padding: 0 0.8rem; }
+            .master-header { flex-direction: column; align-items: flex-start; }
+            .tab-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+            .modal { padding: 1.2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-row-3 { grid-template-columns: 1fr; }
+            .panel-toolbar { flex-direction: column; align-items: stretch; }
+            .action-cell { justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="h4-header">
+        <a href="../index.html" class="brand" id="brandLink">
+            <span class="brand-icon">⚜️</span>
+            <span class="brand-name">H4 <span>ERP</span></span>
+        </a>
+        <div class="header-actions">
+            <button class="btn" id="backBtn">← Back</button>
+            <button class="btn btn-primary-header" id="dashboardBtn">🏠 Dashboard</button>
+        </div>
+    </header>
+
+    <!-- ===== MAIN ===== -->
+    <div class="master-container">
+
+        <div class="master-header">
+            <div>
+                <h1>🟣 <span>Epoxy</span> Pricing Master</h1>
+                <div class="sub">Admin · Types · Top Coats · Quartz · Thickness · Labour · Equipment · Charges</div>
+            </div>
+            <div>
+                <button class="btn-secondary" id="refreshBtn">⟳ Refresh</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-bar" id="tabBar">
+            <button class="tab-btn active" data-tab="types">📋 Types <span class="badge" id="typesCount">0</span></button>
+            <button class="tab-btn" data-tab="topcoats">🎨 Top Coats <span class="badge" id="topcoatsCount">0</span></button>
+            <button class="tab-btn" data-tab="quartz">💎 Quartz <span class="badge" id="quartzCount">0</span></button>
+            <button class="tab-btn" data-tab="thickness">📏 Thickness <span class="badge" id="thicknessCount">0</span></button>
+            <button class="tab-btn" data-tab="labour">👷 Labour <span class="badge" id="labourCount">0</span></button>
+            <button class="tab-btn" data-tab="equipment">🔧 Equipment <span class="badge" id="equipmentCount">0</span></button>
+            <button class="tab-btn" data-tab="charges">💰 Charges <span class="badge" id="chargesCount">0</span></button>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: EPOXY TYPES -->
+        <!-- ========================================================== -->
+        <div class="tab-panel active" id="panelTypes">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchTypes" placeholder="Search types..." />
+                </div>
+                <button class="btn-primary" id="addTypeBtn">＋ Add Type</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type Name</th>
+                                <th>Standard Rate</th>
+                                <th>Dealer</th>
+                                <th>Contractor</th>
+                                <th>Unit</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="typesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: TOP COATS -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelTopcoats">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchTopcoats" placeholder="Search top coats..." />
+                </div>
+                <button class="btn-primary" id="addTopcoatBtn">＋ Add Top Coat</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Rate</th>
+                                <th>Unit</th>
+                                <th>Pricing Type</th>
+                                <th>Applies To</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topcoatsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: QUARTZ -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelQuartz">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchQuartz" placeholder="Search quartz..." />
+                </div>
+                <button class="btn-primary" id="addQuartzBtn">＋ Add Quartz</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Rate</th>
+                                <th>Unit</th>
+                                <th>Pricing Type</th>
+                                <th>Applies To</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quartzTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: THICKNESS -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelThickness">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchThickness" placeholder="Search thickness..." />
+                </div>
+                <button class="btn-primary" id="addThicknessBtn">＋ Add Thickness</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Thickness</th>
+                                <th>Add. Rate</th>
+                                <th>Pricing Method</th>
+                                <th>Unit</th>
+                                <th>Applies To</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="thicknessTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: LABOUR -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelLabour">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchLabour" placeholder="Search labour..." />
+                </div>
+                <button class="btn-primary" id="addLabourBtn">＋ Add Labour</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Labour Name</th>
+                                <th>Rate</th>
+                                <th>Unit</th>
+                                <th>Pricing Type</th>
+                                <th>Applies To</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="labourTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: EQUIPMENT -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelEquipment">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchEquipment" placeholder="Search equipment..." />
+                </div>
+                <button class="btn-primary" id="addEquipmentBtn">＋ Add Equipment</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Equipment</th>
+                                <th>Rate</th>
+                                <th>Unit</th>
+                                <th>Pricing Type</th>
+                                <th>Applies To</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equipmentTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAB: ADDITIONAL CHARGES -->
+        <!-- ========================================================== -->
+        <div class="tab-panel" id="panelCharges">
+            <div class="panel-toolbar">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchCharges" placeholder="Search charges..." />
+                </div>
+                <button class="btn-primary" id="addChargeBtn">＋ Add Charge</button>
+            </div>
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Charge Name</th>
+                                <th>Rate</th>
+                                <th>Unit</th>
+                                <th>Pricing Type</th>
+                                <th>Applies To</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chargesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- MODAL -->
+    <!-- ========================================================== -->
+    <div class="modal-overlay" id="genericModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add / Edit</h2>
+                <button class="modal-close" id="modalCloseBtn">✕</button>
+            </div>
+            <form id="genericForm" autocomplete="off">
+                <div id="modalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="modalCancelBtn">Cancel</button>
+                    <button type="submit" class="btn-save" id="modalSaveBtn">💾 Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========================================================== -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================================================== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ---------- STORAGE KEYS ----------
+            const KEYS = {
+                types: 'epoxyTypes',
+                topcoats: 'epoxyTopcoats',
+                quartz: 'epoxyQuartz',
+                thickness: 'epoxyThickness',
+                labour: 'epoxyLabour',
+                equipment: 'epoxyEquipment',
+                charges: 'epoxyCharges'
+            };
+
+            // ---------- PRICING TYPES ----------
+            const PRICING_TYPES = [
+                'Per Sq.ft',
+                'Per Sq.m',
+                'Per Running Ft',
+                'Per Kg',
+                'Per Litre',
+                'Per Nos',
+                'Per Day',
+                'Per Hour',
+                'Flat Amount',
+                'Percentage'
+            ];
+
+            const PRICING_METHODS = ['Additional Rate', 'Full Rate'];
+
+            // ---------- RATE PROFILES ----------
+            const RATE_PROFILES = ['Standard', 'Dealer', 'Contractor', 'Special', 'Project'];
+
+            // ---------- INTERNAL COST CATEGORIES ----------
+            const INTERNAL_COST_CATEGORIES = ['Material', 'Labour', 'Equipment', 'Transport', 'Overhead', 'Profit'];
+
+            // ---------- HELPERS ----------
+            function getData(key) {
+                try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; }
+            }
+            function setData(key, data) {
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+            function generateId(list) {
+                return list.length ? Math.max(...list.map(i => i.id || 0)) + 1 : 1;
+            }
+            function escapeHtml(text) {
+                if (!text) return '';
+                return String(text).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m] || m));
+            }
+            function showToast(msg, type = 'info', duration = 3000) {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+                toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${msg}</span><button class="close">✕</button>`;
+                container.appendChild(toast);
+                const close = toast.querySelector('.close');
+                close.addEventListener('click', () => toast.remove());
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(40px)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, duration);
+            }
+
+            // ---------- SOFT DELETE FUNCTIONS ----------
+            function softDelete(list, id) {
+                const item = list.find(i => i.id === id);
+                if (!item) return null;
+                item.deleted = true;
+                item.deletedAt = new Date().toISOString();
+                item.active = false;
+                return item;
+            }
+
+            function restoreItem(list, id) {
+                const item = list.find(i => i.id === id);
+                if (!item) return null;
+                delete item.deleted;
+                delete item.deletedAt;
+                item.active = true;
+                return item;
+            }
+
+            // ---------- MODAL CONTROLS ----------
+            const modal = document.getElementById('genericModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const form = document.getElementById('genericForm');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalCancelBtn = document.getElementById('modalCancelBtn');
+
+            let currentEntityType = null;
+            let editId = null;
+
+            function openModal(title, html, type, id = null) {
+                modalTitle.textContent = title;
+                modalBody.innerHTML = html;
+                currentEntityType = type;
+                editId = id;
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+                currentEntityType = null;
+                editId = null;
+                form.reset();
+                modalBody.innerHTML = '';
+            }
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalCancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+            // ---------- GET TYPES (only active/non-deleted for dropdowns) ----------
+            function getActiveTypes() {
+                return getData(KEYS.types).filter(t => t.active !== false && !t.deleted);
+            }
+
+            // ---------- BUILD APPLICABLE SYSTEMS CHECKBOXES ----------
+            function buildApplicableCheckboxes(selected = [], namePrefix = 'app') {
+                const types = getActiveTypes();
+                if (types.length === 0) {
+                    return '<p style="color:#a0aec0;">No epoxy types defined yet. Please add a type first.</p>';
+                }
+                let html = `
+                    <div class="form-check" style="margin-bottom:0.5rem;">
+                        <input type="checkbox" id="${namePrefix}ApplyAll" ${selected.includes('all') ? 'checked' : ''} />
+                        <label for="${namePrefix}ApplyAll"><strong>All Types</strong></label>
+                    </div>
+                    <div class="system-checkboxes">
+                `;
+                types.forEach(t => {
+                    const checked = selected.includes(t.id) ? 'checked' : '';
+                    html += `
+                        <label>
+                            <input type="checkbox" class="${namePrefix}-system-check" value="${t.id}" ${checked} />
+                            ${escapeHtml(t.name)}
+                        </label>
+                    `;
+                });
+                html += '</div>';
+                return html;
+            }
+
+            // ---------- GET SELECTED SYSTEMS ----------
+            function getSelectedSystems(namePrefix = 'app') {
+                const allCheck = document.getElementById(`${namePrefix}ApplyAll`);
+                if (allCheck && allCheck.checked) {
+                    return ['all'];
+                }
+                const selected = [];
+                document.querySelectorAll(`.${namePrefix}-system-check:checked`).forEach(cb => {
+                    selected.push(parseInt(cb.value));
+                });
+                return selected;
+            }
+
+            // ---------- UNIT OPTIONS ----------
+            function unitOptions(selected = '') {
+                const units = ['Sq.ft', 'Sq.m', 'Running Ft', 'Kg', 'Litre', 'Nos', 'Per Day', 'Per Hour', 'Flat', 'Percentage'];
+                return units.map(u => `<option value="${u}" ${u === selected ? 'selected':''}>${u}</option>`).join('');
+            }
+
+            // ---------- PRICING TYPE OPTIONS ----------
+            function pricingTypeOptions(selected = '') {
+                return PRICING_TYPES.map(pt => `<option value="${pt}" ${pt === selected ? 'selected':''}>${pt}</option>`).join('');
+            }
+
+            // ---------- PRICING METHOD OPTIONS (for thickness) ----------
+            function pricingMethodOptions(selected = '') {
+                return PRICING_METHODS.map(pm => `<option value="${pm}" ${pm === selected ? 'selected':''}>${pm}</option>`).join('');
+            }
+
+            // ---------- RATE PROFILE FIELDS ----------
+            function rateProfileFields(data = null) {
+                const d = data || {};
+                let html = '<div class="form-row">';
+                RATE_PROFILES.forEach(profile => {
+                    const key = 'rate' + profile;
+                    const val = d[key] !== undefined ? d[key] : '';
+                    html += `
+                        <div class="form-group">
+                            <label>${profile}</label>
+                            <input type="number" id="rate${profile}" value="${val}" step="0.01" min="0" placeholder="₹ ${profile}" />
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                return html;
+            }
+
+            // ---------- INTERNAL COST FIELDS ----------
+            function internalCostFields(data = null, prefix = '') {
+                const d = data || {};
+                let html = '<div class="form-row">';
+                INTERNAL_COST_CATEGORIES.forEach(cat => {
+                    const key = prefix + 'cost' + cat;
+                    const val = d[key] !== undefined ? d[key] : '';
+                    html += `
+                        <div class="form-group">
+                            <label>${cat} Cost (₹)</label>
+                            <input type="number" id="${key}" value="${val}" step="0.01" min="0" placeholder="${cat}" />
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                return html;
+            }
+
+            // ---------- DOCUMENT FIELDS (future reserve) ----------
+            function documentFields(data = null) {
+                const d = data || {};
+                return `
+                    <hr style="margin:1rem 0;" />
+                    <h4 style="margin-bottom:0.5rem;">📎 Technical Documents (Optional)</h4>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="text" id="imageUrl" value="${escapeHtml(d.imageUrl||'')}" placeholder="https://example.com/image.jpg" />
+                    </div>
+                    <div class="form-group">
+                        <label>TDS URL</label>
+                        <input type="text" id="tdsUrl" value="${escapeHtml(d.tdsUrl||'')}" placeholder="https://example.com/tds.pdf" />
+                    </div>
+                    <div class="form-group">
+                        <label>Application Guide URL</label>
+                        <input type="text" id="appGuideUrl" value="${escapeHtml(d.appGuideUrl||'')}" placeholder="https://example.com/guide.pdf" />
+                    </div>
+                    <div class="form-group">
+                        <label>Warranty Document URL</label>
+                        <input type="text" id="warrantyDocUrl" value="${escapeHtml(d.warrantyDocUrl||'')}" placeholder="https://example.com/warranty.pdf" />
+                    </div>
+                `;
+            }
+
+            // ==========================================================
+            // 1. EPOXY TYPE MASTER (with Rate Profiles)
+            // ==========================================================
+            function renderTypes() {
+                let list = getData(KEYS.types);
+                const search = document.getElementById('searchTypes').value.toLowerCase().trim();
+                let filtered = list.filter(t => (t.name || '').toLowerCase().includes(search));
+                // Show deleted items with special styling
+                document.getElementById('typesCount').textContent = list.filter(t => !t.deleted).length;
+                const tbody = document.getElementById('typesTableBody');
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No epoxy types. Add a type.</td></tr>`;
+                    return;
+                }
+                let html = '';
+                filtered.forEach(t => {
+                    const isDeleted = t.deleted === true;
+                    const statusClass = isDeleted ? 'deleted' : (t.active !== false ? 'active' : 'inactive');
+                    const statusLabel = isDeleted ? 'Deleted' : (t.active !== false ? 'Active' : 'Inactive');
+                    const rowClass = isDeleted ? 'deleted' : '';
+                    html += `
+                        <tr class="${rowClass}">
+                            <td><strong>${escapeHtml(t.name)}</strong>${isDeleted ? ' <span class="deleted-badge">DELETED</span>' : ''}</td>
+                            <td>₹ ${parseFloat(t.rateStandard || t.baseRate || 0).toFixed(2)}</td>
+                            <td>₹ ${parseFloat(t.rateDealer || 0).toFixed(2)}</td>
+                            <td>₹ ${parseFloat(t.rateContractor || 0).toFixed(2)}</td>
+                            <td>${escapeHtml(t.unit || 'Sq.ft')}</td>
+                            <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+                            <td style="text-align:right;">
+                                <div class="action-cell">
+                                    ${!isDeleted ? `<button class="btn-edit" data-id="${t.id}">✎</button>` : ''}
+                                    ${!isDeleted ? `<button class="btn-duplicate" data-id="${t.id}">📋</button>` : ''}
+                                    ${!isDeleted ? `<button class="btn-inactive" data-id="${t.id}">🔴</button>` : `<button class="btn-active" data-id="${t.id}">🟢</button>`}
+                                    ${!isDeleted ? `<button class="btn-danger" data-id="${t.id}">✕</button>` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+                tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editType(parseInt(b.dataset
+                    .id))));
+                tbody.querySelectorAll('.btn-duplicate').forEach(b => b.addEventListener('click', () => duplicateType(parseInt(
+                    b.dataset.id))));
+                tbody.querySelectorAll('.btn-inactive').forEach(b => b.addEventListener('click', () => toggleTypeActive(parseInt(
+                    b.dataset.id))));
+                tbody.querySelectorAll('.btn-active').forEach(b => b.addEventListener('click', () => restoreType(parseInt(b
+                    .dataset.id))));
+                tbody.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => softDeleteType(parseInt(b
+                    .dataset.id))));
+            }
+
+            function softDeleteType(id) {
+                if (!confirm('Soft-delete this type? It will be hidden from new quotations but preserved for old ones.'))
+                return;
+                let list = getData(KEYS.types);
+                const item = softDelete(list, id);
+                if (!item) { showToast('Type not found.', 'error'); return; }
+                setData(KEYS.types, list);
+                renderTypes();
+                renderTopcoats();
+                renderQuartz();
+                renderThickness();
+                renderLabour();
+                renderEquipment();
+                renderCharges();
+                showToast('🗑️ Type soft-deleted.', 'success');
+            }
+
+            function restoreType(id) {
+                let list = getData(KEYS.types);
+                const item = restoreItem(list, id);
+                if (!item) { showToast('Type not found.', 'error'); return; }
+                setData(KEYS.types, list);
+                renderTypes();
+                renderTopcoats();
+                renderQuartz();
+                renderThickness();
+                renderLabour();
+                renderEquipment();
+                renderCharges();
+                showToast('✅ Type restored.', 'success');
+            }
+
+            function toggleTypeActive(id) {
+                let list = getData(KEYS.types);
+                const item = list.find(t => t.id === id);
+                if (!item) { showToast('Type not found.', 'error'); return; }
+                item.active = !item.active;
+                setData(KEYS.types, list);
+                renderTypes();
+                renderTopcoats();
+                renderQuartz();
+                renderThickness();
+                renderLabour();
+                renderEquipment();
+                renderCharges();
+                showToast(item.active ? '✅ Type activated.' : '🔴 Type deactivated.', 'success');
+            }
+
+            function duplicateType(id) {
+                const list = getData(KEYS.types);
+                const original = list.find(t => t.id === id);
+                if (!original) { showToast('Type not found.', 'error'); return; }
+                const copy = JSON.parse(JSON.stringify(original));
+                delete copy.id;
+                delete copy.deleted;
+                delete copy.deletedAt;
+                copy.name = original.name + ' (Copy)';
+                copy.createdAt = new Date().toISOString();
+                copy.updatedAt = new Date().toISOString();
+                copy.id = generateId(list);
+                list.push(copy);
+                setData(KEYS.types, list);
+                renderTypes();
+                showToast('📋 Type duplicated.', 'success');
+            }
+
+            function editType(id) {
+                const list = getData(KEYS.types);
+                const t = list.find(item => item.id === id);
+                if (!t) { showToast('Type not found.', 'error'); return; }
+                const html = buildTypeForm(t);
+                openModal('✎ Edit Epoxy Type', html, 'type', id);
+            }
+
+            function buildTypeForm(data = null) {
+                const d = data || {};
+                return `
+                    <div class="form-group">
+                        <label>Type Name <span class="required">*</span></label>
+                        <input type="text" id="typeName" value="${escapeHtml(d.name||'')}" placeholder="e.g. Single Colour" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Unit <span class="required">*</span></label>
+                        <select id="typeUnit" required>${unitOptions(d.unit || 'Sq.ft')}</select>
+                    </div>
+
+                    <h4 style="margin:1rem 0 0.5rem;">📊 Rate Profiles</h4>
+                    ${rateProfileFields(d)}
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="typeDescription" rows="2">${escapeHtml(d.description||'')}</textarea>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="typeActive" ${d.active !== false && !d.deleted ? 'checked' : ''} ${d.deleted ? 'disabled' : ''} />
+                        <label for="typeActive">Active</label>
+                        ${d.deleted ? '<span style="color:#e53e3e;margin-left:1rem;">⚠️ This item is deleted. Uncheck to restore.</span>' : ''}
+                    </div>
+
+                    <hr style="margin:1rem 0;" />
+                    <h4 style="margin-bottom:0.5rem;">💰 Internal Cost (Not shown to customer)</h4>
+                    ${internalCostFields(d, 'type')}
+
+                    ${documentFields(d)}
+                `;
+            }
+
+            function handleTypeSubmit(e) {
+                e.preventDefault();
+                const name = document.getElementById('typeName').value.trim();
+                const unit = document.getElementById('typeUnit').value;
+                const active = document.getElementById('typeActive').checked;
+                const description = document.getElementById('typeDescription').value.trim();
+
+                if (!name) { showToast('Type Name is required.', 'warning'); return; }
+
+                // Rate profiles
+                const rates = {};
+                RATE_PROFILES.forEach(profile => {
+                    const key = 'rate' + profile;
+                    const el = document.getElementById(key);
+                    rates[key] = parseFloat(el.value) || 0;
+                });
+
+                // Internal cost
+                const costs = {};
+                INTERNAL_COST_CATEGORIES.forEach(cat => {
+                    const key = 'typecost' + cat;
+                    const el = document.getElementById(key);
+                    costs[key] = parseFloat(el.value) || 0;
+                });
+
+                // Documents
+                const docs = {
+                    imageUrl: document.getElementById('imageUrl').value.trim(),
+                    tdsUrl: document.getElementById('tdsUrl').value.trim(),
+                    appGuideUrl: document.getElementById('appGuideUrl').value.trim(),
+                    warrantyDocUrl: document.getElementById('warrantyDocUrl').value.trim()
+                };
+
+                const list = getData(KEYS.types);
+                const dup = list.find(t => t.name && t.name.toLowerCase() === name.toLowerCase() && t.id !== editId && !t
+                    .deleted);
+                if (dup) { showToast('⚠️ Type name already exists.', 'error'); return; }
+
+                const obj = {
+                    id: editId || generateId(list),
+                    name,
+                    unit,
+                    active,
+                    description,
+                    ...rates,
+                    ...costs,
+                    ...docs,
+                    updatedAt: new Date().toISOString()
+                };
+
+                // Check if restoring a deleted item
+                if (editId) {
+                    const idx = list.findIndex(t => t.id === editId);
+                    if (idx === -1) { showToast('Type not found.', 'error'); return; }
+                    if (list[idx].deleted) {
+                        // Restoring
+                        delete list[idx].deleted;
+                        delete list[idx].deletedAt;
+                        obj.active = true;
+                    }
+                    list[idx] = { ...list[idx], ...obj };
+                    showToast('✅ Type updated.', 'success');
+                } else {
+                    obj.createdAt = new Date().toISOString();
+                    list.push(obj);
+                    showToast('✅ Type added.', 'success');
+                }
+                setData(KEYS.types, list);
+                closeModal();
+                renderTypes();
+                renderTopcoats();
+                renderQuartz();
+                renderThickness();
+                renderLabour();
+                renderEquipment();
+                renderCharges();
+            }
+
+            // ==========================================================
+            // 2-7. OTHER MASTERS (with Pricing Type + Soft Delete)
+            // ==========================================================
+
+            // Generic render function for list-based masters
+            function renderGeneric(listKey, searchId, countId, tbodyId, fields, label, typeName) {
+                let list = getData(listKey);
+                const search = document.getElementById(searchId).value.toLowerCase().trim();
+                let filtered = list.filter(t => (t.name || '').toLowerCase().includes(search) || (t.thickness || '')
+                    .toString().includes(search));
+                document.getElementById(countId).textContent = list.filter(t => !t.deleted).length;
+                const tbody = document.getElementById(tbodyId);
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No ${label.toLowerCase()}. Add one.</td></tr>`;
+                    return;
+                }
+                let html = '';
+                filtered.forEach(t => {
+                    const isDeleted = t.deleted === true;
+                    const statusClass = isDeleted ? 'deleted' : (t.active !== false ? 'active' : 'inactive');
+                    const statusLabel = isDeleted ? 'Deleted' : (t.active !== false ? 'Active' : 'Inactive');
+                    const rowClass = isDeleted ? 'deleted' : '';
+                    const applies = getApplicableText(t.applicableTypes);
+                    const displayName = t.displayName || t.name || (t.thickness ? t.thickness + ' mm' : '');
+                    html += `
+                        <tr class="${rowClass}">
+                            <td><strong>${escapeHtml(displayName)}</strong>${isDeleted ? ' <span class="deleted-badge">DELETED</span>' : ''}</td>
+                            <td>₹ ${parseFloat(t.rate || t.additionalRate || 0).toFixed(2)}</td>
+                            <td>${escapeHtml(t.unit || 'Sq.ft')}</td>
+                            <td>${escapeHtml(t.pricingType || 'Per Sq.ft')}</td>
+                            <td style="font-size:0.8rem;">${escapeHtml(applies)}</td>
+                            <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+                            <td style="text-align:right;">
+                                <div class="action-cell">
+                                    ${!isDeleted ? `<button class="btn-edit" data-id="${t.id}">✎</button>` : ''}
+                                    ${!isDeleted ? `<button class="btn-duplicate" data-id="${t.id}">📋</button>` : ''}
+                                    ${!isDeleted ? `<button class="btn-inactive" data-id="${t.id}">🔴</button>` : `<button class="btn-active" data-id="${t.id}">🟢</button>`}
+                                    ${!isDeleted ? `<button class="btn-danger" data-id="${t.id}">✕</button>` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+                tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editGeneric(listKey, typeName,
+                    parseInt(b.dataset.id))));
+                tbody.querySelectorAll('.btn-duplicate').forEach(b => b.addEventListener('click', () => duplicateGeneric(
+                    listKey, typeName, parseInt(b.dataset.id))));
+                tbody.querySelectorAll('.btn-inactive').forEach(b => b.addEventListener('click', () => toggleGenericActive(
+                    listKey, parseInt(b.dataset.id), renderAll)));
+                tbody.querySelectorAll('.btn-active').forEach(b => b.addEventListener('click', () => restoreGeneric(listKey,
+                    parseInt(b.dataset.id), renderAll)));
+                tbody.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => softDeleteGeneric(listKey,
+                    parseInt(b.dataset.id), renderAll)));
+            }
+
+            function getApplicableText(applicableTypes) {
+                if (!applicableTypes || applicableTypes.length === 0) return 'None';
+                if (applicableTypes.includes('all')) return 'All Types';
+                const types = getActiveTypes();
+                const names = applicableTypes.map(id => {
+                    const t = types.find(ty => ty.id === id);
+                    return t ? t.name : '?';
+                }).filter(Boolean);
+                return names.join(', ') || 'None';
+            }
+
+            function editGeneric(listKey, typeName, id) {
+                const list = getData(listKey);
+                const item = list.find(i => i.id === id);
+                if (!item) { showToast(`${typeName} not found.`, 'error'); return; }
+                const html = buildGenericForm(typeName, item);
+                openModal(`✎ Edit ${typeName}`, html, typeName.toLowerCase(), id);
+            }
+
+            function duplicateGeneric(listKey, typeName, id) {
+                const list = getData(listKey);
+                const original = list.find(i => i.id === id);
+                if (!original) { showToast(`${typeName} not found.`, 'error'); return; }
+                const copy = JSON.parse(JSON.stringify(original));
+                delete copy.id;
+                delete copy.deleted;
+                delete copy.deletedAt;
+                copy.name = original.name ? original.name + ' (Copy)' : (original.thickness ? original.thickness + 0.5 :
+                    'Copy');
+                copy.createdAt = new Date().toISOString();
+                copy.updatedAt = new Date().toISOString();
+                copy.id = generateId(list);
+                list.push(copy);
+                setData(listKey, list);
+                renderAll();
+                showToast('📋 Duplicated.', 'success');
+            }
+
+            function toggleGenericActive(listKey, id, renderFn) {
+                let list = getData(listKey);
+                const item = list.find(i => i.id === id);
+                if (!item) { showToast('Item not found.', 'error'); return; }
+                item.active = !item.active;
+                setData(listKey, list);
+                renderFn();
+                showToast(item.active ? '✅ Activated.' : '🔴 Deactivated.', 'success');
+            }
+
+            function restoreGeneric(listKey, id, renderFn) {
+                let list = getData(listKey);
+                const item = restoreItem(list, id);
+                if (!item) { showToast('Item not found.', 'error'); return; }
+                setData(listKey, list);
+                renderFn();
+                showToast('✅ Restored.', 'success');
+            }
+
+            function softDeleteGeneric(listKey, id, renderFn) {
+                if (!confirm('Soft-delete this item? It will be hidden from new quotations.')) return;
+                let list = getData(listKey);
+                const item = softDelete(list, id);
+                if (!item) { showToast('Item not found.', 'error'); return; }
+                setData(listKey, list);
+                renderFn();
+                showToast('🗑️ Deleted.', 'success');
+            }
+
+            function buildGenericForm(typeName, data = null) {
+                const d = data || {};
+                const selected = d.applicableTypes || [];
+                const isThickness = typeName === 'Thickness';
+                const nameLabel = isThickness ? 'Thickness (mm)' : 'Name';
+                const nameId = isThickness ? 'thicknessVal' : 'itemName';
+                const nameVal = isThickness ? (d.thickness !== undefined ? d.thickness : '') : (d.name || '');
+                const namePlaceholder = isThickness ? 'e.g. 3' : 'e.g. Name';
+
+                let extraFields = '';
+                if (isThickness) {
+                    extraFields = `
+                        <div class="form-group">
+                            <label>Pricing Method <span class="required">*</span></label>
+                            <select id="itemPricingMethod" required>${pricingMethodOptions(d.pricingMethod || 'Additional Rate')}</select>
+                            <div class="hint">"Additional Rate" adds to base. "Full Rate" replaces base.</div>
+                        </div>
+                    `;
+                } else {
+                    extraFields = `
+                        <div class="form-group">
+                            <label>Customer Display Name</label>
+                            <input type="text" id="itemDisplayName" value="${escapeHtml(d.displayName||'')}" placeholder="Optional display name" />
+                            <div class="hint">Shown on customer quotation if different from internal name.</div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="form-group">
+                        <label>${nameLabel} <span class="required">*</span></label>
+                        <input type="${isThickness ? 'number' : 'text'}" id="${nameId}" value="${escapeHtml(nameVal)}" placeholder="${namePlaceholder}" ${isThickness ? 'step="0.5" min="0"' : ''} required />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Rate (₹) <span class="required">*</span></label>
+                            <input type="number" id="itemRate" value="${d.rate !== undefined ? d.rate : (d.additionalRate !== undefined ? d.additionalRate : '')}" step="0.01" min="0" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Unit <span class="required">*</span></label>
+                            <select id="itemUnit" required>${unitOptions(d.unit || 'Sq.ft')}</select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Pricing Type <span class="required">*</span></label>
+                        <select id="itemPricingType" required>${pricingTypeOptions(d.pricingType || 'Per Sq.ft')}</select>
+                        <div class="hint">Determines how this rate is applied in the pricing engine.</div>
+                    </div>
+                    ${extraFields}
+                    <div class="form-group">
+                        <label>Applicable Epoxy Types</label>
+                        ${buildApplicableCheckboxes(selected, 'gen')}
+                        <div class="hint">Select types this applies to. If none selected, it will not appear.</div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="itemActive" ${d.active !== false && !d.deleted ? 'checked' : ''} ${d.deleted ? 'disabled' : ''} />
+                        <label for="itemActive">Active</label>
+                        ${d.deleted ? '<span style="color:#e53e3e;margin-left:1rem;">⚠️ Deleted. Uncheck to restore.</span>' : ''}
+                    </div>
+
+                    <hr style="margin:1rem 0;" />
+                    <h4 style="margin-bottom:0.5rem;">💰 Internal Cost (Not shown to customer)</h4>
+                    ${internalCostFields(d, 'item')}
+                    ${documentFields(d)}
+                `;
+            }
+
+            function handleGenericSubmit(e, listKey, typeName, isThickness = false) {
+                e.preventDefault();
+                const nameEl = document.getElementById(isThickness ? 'thicknessVal' : 'itemName');
+                const nameVal = isThickness ? parseFloat(nameEl.value) : nameEl.value.trim();
+                const rate = parseFloat(document.getElementById('itemRate').value);
+                const unit = document.getElementById('itemUnit').value;
+                const pricingType = document.getElementById('itemPricingType').value;
+                const active = document.getElementById('itemActive').checked;
+                const displayName = document.getElementById('itemDisplayName')?.value.trim() || '';
+                const pricingMethod = document.getElementById('itemPricingMethod')?.value || 'Additional Rate';
+
+                if (!nameVal || (isThickness && isNaN(nameVal)) || (!isThickness && !nameVal)) {
+                    showToast(`${typeName} is required.`, 'warning');
+                    return;
+                }
+                if (isNaN(rate) || rate < 0) { showToast('Valid Rate is required.', 'warning'); return; }
+
+                const applicableTypes = getSelectedSystems('gen');
+
+                // Check duplicates
+                const list = getData(listKey);
+                let dup = null;
+                if (isThickness) {
+                    dup = list.find(i => i.thickness === nameVal && i.id !== editId && !i.deleted);
+                } else {
+                    dup = list.find(i => i.name && i.name.toLowerCase() === nameVal.toLowerCase() && i.id !== editId && !i
+                        .deleted);
+                }
+                if (dup) { showToast(`⚠️ ${typeName} already exists.`, 'error'); return; }
+
+                // Internal cost
+                const costs = {};
+                INTERNAL_COST_CATEGORIES.forEach(cat => {
+                    const key = 'itemcost' + cat;
+                    const el = document.getElementById(key);
+                    costs[key] = parseFloat(el?.value) || 0;
+                });
+
+                // Documents
+                const docs = {
+                    imageUrl: document.getElementById('imageUrl')?.value.trim() || '',
+                    tdsUrl: document.getElementById('tdsUrl')?.value.trim() || '',
+                    appGuideUrl: document.getElementById('appGuideUrl')?.value.trim() || '',
+                    warrantyDocUrl: document.getElementById('warrantyDocUrl')?.value.trim() || ''
+                };
+
+                let obj = {
+                    id: editId || generateId(list),
+                    rate: rate,
+                    unit: unit,
+                    pricingType: pricingType,
+                    applicableTypes: applicableTypes,
+                    active: active,
+                    displayName: displayName,
+                    ...costs,
+                    ...docs,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (isThickness) {
+                    obj.thickness = nameVal;
+                    obj.additionalRate = rate;
+                    obj.pricingMethod = pricingMethod;
+                } else {
+                    obj.name = nameVal;
+                }
+
+                if (editId) {
+                    const idx = list.findIndex(i => i.id === editId);
+                    if (idx === -1) { showToast(`${typeName} not found.`, 'error'); return; }
+                    if (list[idx].deleted) {
+                        delete list[idx].deleted;
+                        delete list[idx].deletedAt;
+                        obj.active = true;
+                    }
+                    list[idx] = { ...list[idx], ...obj };
+                    showToast(`✅ ${typeName} updated.`, 'success');
+                } else {
+                    obj.createdAt = new Date().toISOString();
+                    list.push(obj);
+                    showToast(`✅ ${typeName} added.`, 'success');
+                }
+                setData(listKey, list);
+                closeModal();
+                renderAll();
+            }
+
+            // ---------- RENDER ALL ----------
+            function renderAll() {
+                renderTypes();
+                renderGeneric(KEYS.topcoats, 'searchTopcoats', 'topcoatsCount', 'topcoatsTableBody', ['name', 'rate', 'unit',
+                    'pricingType', 'applicableTypes'
+                ], 'Top Coats', 'Top Coat');
+                renderGeneric(KEYS.quartz, 'searchQuartz', 'quartzCount', 'quartzTableBody', ['name', 'rate', 'unit',
+                    'pricingType', 'applicableTypes'
+                ], 'Quartz', 'Quartz');
+                renderGeneric(KEYS.thickness, 'searchThickness', 'thicknessCount', 'thicknessTableBody', ['thickness',
+                    'additionalRate', 'pricingMethod', 'unit', 'applicableTypes'
+                ], 'Thickness', 'Thickness');
+                renderGeneric(KEYS.labour, 'searchLabour', 'labourCount', 'labourTableBody', ['name', 'rate', 'unit',
+                    'pricingType', 'applicableTypes'
+                ], 'Labour', 'Labour');
+                renderGeneric(KEYS.equipment, 'searchEquipment', 'equipmentCount', 'equipmentTableBody', ['name', 'rate',
+                    'unit', 'pricingType', 'applicableTypes'
+                ], 'Equipment', 'Equipment');
+                renderGeneric(KEYS.charges, 'searchCharges', 'chargesCount', 'chargesTableBody', ['name', 'rate', 'unit',
+                    'pricingType', 'applicableTypes'
+                ], 'Charges', 'Charge');
+            }
+
+            // ---------- FORM SUBMIT DISPATCH ----------
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (currentEntityType === 'type') handleTypeSubmit(e);
+                else if (currentEntityType === 'topcoat') handleGenericSubmit(e, KEYS.topcoats, 'Top Coat');
+                else if (currentEntityType === 'quartz') handleGenericSubmit(e, KEYS.quartz, 'Quartz');
+                else if (currentEntityType === 'thickness') handleGenericSubmit(e, KEYS.thickness, 'Thickness', true);
+                else if (currentEntityType === 'labour') handleGenericSubmit(e, KEYS.labour, 'Labour');
+                else if (currentEntityType === 'equipment') handleGenericSubmit(e, KEYS.equipment, 'Equipment');
+                else if (currentEntityType === 'charge') handleGenericSubmit(e, KEYS.charges, 'Charge');
+            });
+
+            // ---------- ADD BUTTONS ----------
+            function addGeneric(listKey, typeName, isThickness = false) {
+                const html = buildGenericForm(typeName, null);
+                openModal(`➕ Add ${typeName}`, html, typeName.toLowerCase());
+                // Override form submit for this specific case
+                form.onsubmit = function(e) {
+                    e.preventDefault();
+                    handleGenericSubmit(e, listKey, typeName, isThickness);
+                };
+            }
+
+            document.getElementById('addTypeBtn').addEventListener('click', function() {
+                const html = buildTypeForm();
+                openModal('➕ Add Epoxy Type', html, 'type');
+            });
+            document.getElementById('addTopcoatBtn').addEventListener('click', function() {
+                addGeneric(KEYS.topcoats, 'Top Coat');
+            });
+            document.getElementById('addQuartzBtn').addEventListener('click', function() {
+                addGeneric(KEYS.quartz, 'Quartz');
+            });
+            document.getElementById('addThicknessBtn').addEventListener('click', function() {
+                addGeneric(KEYS.thickness, 'Thickness', true);
+            });
+            document.getElementById('addLabourBtn').addEventListener('click', function() {
+                addGeneric(KEYS.labour, 'Labour');
+            });
+            document.getElementById('addEquipmentBtn').addEventListener('click', function() {
+                addGeneric(KEYS.equipment, 'Equipment');
+            });
+            document.getElementById('addChargeBtn').addEventListener('click', function() {
+                addGeneric(KEYS.charges, 'Charge');
+            });
+
+            // ---------- TAB SWITCHING ----------
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const panels = {
+                types: document.getElementById('panelTypes'),
+                topcoats: document.getElementById('panelTopcoats'),
+                quartz: document.getElementById('panelQuartz'),
+                thickness: document.getElementById('panelThickness'),
+                labour: document.getElementById('panelLabour'),
+                equipment: document.getElementById('panelEquipment'),
+                charges: document.getElementById('panelCharges')
+            };
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const tab = this.dataset.tab;
+                    Object.keys(panels).forEach(key => {
+                        panels[key].classList.toggle('active', key === tab);
+                    });
+                });
+            });
+
+            // ---------- SEARCH ----------
+            document.getElementById('searchTypes').addEventListener('input', renderTypes);
+            document.getElementById('searchTopcoats').addEventListener('input', () => renderGeneric(KEYS.topcoats,
+                'searchTopcoats', 'topcoatsCount', 'topcoatsTableBody', [], 'Top Coats', 'Top Coat'));
+            document.getElementById('searchQuartz').addEventListener('input', () => renderGeneric(KEYS.quartz,
+                'searchQuartz', 'quartzCount', 'quartzTableBody', [], 'Quartz', 'Quartz'));
+            document.getElementById('searchThickness').addEventListener('input', () => renderGeneric(KEYS.thickness,
+                'searchThickness', 'thicknessCount', 'thicknessTableBody', [], 'Thickness', 'Thickness'));
+            document.getElementById('searchLabour').addEventListener('input', () => renderGeneric(KEYS.labour,
+                'searchLabour', 'labourCount', 'labourTableBody', [], 'Labour', 'Labour'));
+            document.getElementById('searchEquipment').addEventListener('input', () => renderGeneric(KEYS.equipment,
+                'searchEquipment', 'equipmentCount', 'equipmentTableBody', [], 'Equipment', 'Equipment'));
+            document.getElementById('searchCharges').addEventListener('input', () => renderGeneric(KEYS.charges,
+                'searchCharges', 'chargesCount', 'chargesTableBody', [], 'Charges', 'Charge'));
+
+            // ---------- REFRESH & NAV ----------
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                renderAll();
+                showToast('⟳ Refreshed', 'info', 1200);
+            });
+            document.getElementById('backBtn').addEventListener('click', () => window.location.href = '../index.html');
+            document.getElementById('dashboardBtn').addEventListener('click', () => window.location.href = '../index.html');
+            document.getElementById('brandLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = '../index.html';
+            });
+
+            // ---------- INIT ----------
+            renderAll();
+
+            setTimeout(() => {
+                const types = getData(KEYS.types).filter(t => !t.deleted);
+                showToast(`🟣 ${types.length} types loaded.`, 'success', 2000);
+            }, 400);
+
+            console.log('🟣 Epoxy Pricing Master v2 loaded.');
+            console.log('📌 Features: Rate Profiles, Soft Delete, Internal Cost, Pricing Types');
+
+        })();
+    </script>
+
+</body>
+</html>
