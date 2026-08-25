@@ -3,381 +3,1063 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>H4 – Theme & Template Manager</title>
+    <title>H4 – Theme Designer</title>
 
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/mobile.css" />
     <link rel="stylesheet" href="css/desktop.css" />
 
     <style>
-        /* ===== SHARED LAYOUT ===== */
-        .manager-container { max-width: 1600px; margin: 1.5rem auto; padding: 0 1.5rem; }
-        .manager-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
-        .manager-header h1 { font-size: 1.75rem; font-weight: 700; color: #1a202c; margin: 0; }
-        .manager-header h1 span { color: #9f7aea; }
-        .manager-header .sub { color: #718096; font-size: 0.9rem; font-weight: 400; margin-top: 0.1rem; }
-        .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+        /* ===== LAYOUT ===== */
+        .designer-container {
+            max-width: 1600px;
+            margin: 1rem auto;
+            padding: 0 1.2rem;
+        }
 
-        .btn-primary { background: #9f7aea; color: #fff; border: none; padding: 0.55rem 1.4rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: background 0.2s; }
-        .btn-primary:hover { background: #805ad5; }
-        .btn-secondary { background: #edf2f7; color: #2d3748; border: 1px solid #e2e8f0; padding: 0.5rem 1.2rem; border-radius: 8px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
-        .btn-secondary:hover { background: #e2e8f0; }
-        .btn-danger { background: #fc8181; color: #fff; border: none; padding: 0.3rem 0.8rem; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; transition: background 0.2s; }
-        .btn-danger:hover { background: #f56565; }
-        .btn-edit { background: #edf2f7; color: #2d3748; border: 1px solid #e2e8f0; padding: 0.3rem 0.8rem; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 0.8rem; transition: background 0.2s; }
-        .btn-edit:hover { background: #e2e8f0; }
-        .btn-duplicate { background: #fefcbf; color: #744210; border: 1px solid #ecc94b; padding: 0.3rem 0.8rem; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 0.8rem; transition: background 0.2s; }
-        .btn-duplicate:hover { background: #f6e05e; }
-        .btn-active { background: #c6f6d5; color: #276749; border: 1px solid #48bb78; padding: 0.3rem 0.8rem; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 0.8rem; transition: background 0.2s; }
-        .btn-active:hover { background: #9ae6b4; }
-        .btn-inactive { background: #fed7d7; color: #9b2c2c; border: 1px solid #fc8181; padding: 0.3rem 0.8rem; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 0.8rem; transition: background 0.2s; }
-        .btn-inactive:hover { background: #feb2b2; }
-        .btn-default { background: #ecc94b; color: #744210; border: none; padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.7rem; transition: background 0.2s; }
-        .btn-default:hover { background: #d69e2e; }
-
-        /* ===== TAB SYSTEM ===== */
-        .tab-bar {
+        .designer-header {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 0.25rem;
-            background: #f7fafc;
-            padding: 0.4rem 0.4rem 0;
-            border-radius: 12px 12px 0 0;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
             border-bottom: 2px solid #e2e8f0;
         }
-        .tab-btn {
-            background: transparent;
-            border: none;
-            padding: 0.55rem 1.4rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #4a5568;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
+
+        .designer-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
         }
-        .tab-btn:hover { background: #edf2f7; }
-        .tab-btn.active { background: #fff; color: #9f7aea; box-shadow: 0 -2px 0 #9f7aea; }
-        .tab-btn .badge { background: #9f7aea; color: #fff; border-radius: 20px; padding: 0.1rem 0.6rem; font-size: 0.65rem; margin-left: 0.3rem; }
+        .designer-header h1 span {
+            color: #9f7aea;
+        }
+        .designer-header .sub {
+            color: #718096;
+            font-size: 0.8rem;
+            font-weight: 400;
+        }
 
-        .tab-panel { display: none; background: #fff; border-radius: 0 0 12px 12px; padding: 1.5rem 0.5rem 0.5rem; border: 1px solid #e2e8f0; border-top: none; }
-        .tab-panel.active { display: block; }
-
-        /* ===== THEME GRID ===== */
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-        .theme-card { background: #fff; border-radius: 16px; padding: 1.5rem; border: 2px solid #edf2f7; transition: all 0.3s ease; position: relative; }
-        .theme-card:hover { border-color: #9f7aea; transform: translateY(-4px); box-shadow: 0 10px 20px -8px rgba(0,0,0,0.08); }
-        .theme-card.active-theme { border-color: #9f7aea; background: #faf5ff; }
-        .theme-card.default-theme { border-color: #48bb78; }
-        .theme-card.default-theme::after { content: "★ DEFAULT"; position: absolute; top: 0.5rem; right: 0.5rem; background: #48bb78; color: #fff; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.6rem; font-weight: 700; }
-        .theme-card .preview-box { height: 80px; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #fff; font-weight: 600; overflow: hidden; }
-        .theme-card .theme-name { font-weight: 700; font-size: 1.1rem; color: #1a202c; }
-        .theme-card .theme-desc { font-size: 0.85rem; color: #718096; margin-top: 0.2rem; }
-        .theme-card .theme-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; font-size: 0.75rem; color: #a0aec0; }
-        .theme-card .theme-actions { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.8rem; justify-content: flex-end; }
-
-        /* ===== TEMPLATE GRID ===== */
-        .template-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem; margin-top: 1.5rem; }
-        .template-card { background: #fff; border-radius: 12px; padding: 1rem 1.5rem; border: 1px solid #edf2f7; transition: all 0.3s ease; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.8rem; }
-        .template-card:hover { border-color: #9f7aea; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .template-card .info { flex: 1; min-width: 200px; }
-        .template-card .info .name { font-weight: 700; font-size: 1rem; color: #1a202c; }
-        .template-card .info .details { font-size: 0.82rem; color: #718096; margin-top: 0.15rem; display: flex; flex-wrap: wrap; gap: 0.3rem 0.6rem; align-items: center; }
-        .template-card .info .details .tag { display: inline-block; background: #edf2f7; padding: 0.1rem 0.6rem; border-radius: 12px; font-size: 0.65rem; }
-        .template-card .info .details .theme-name { color: #9f7aea; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
-        .template-card .actions { display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center; }
-
-        /* ===== THEME PREVIEW (mini) ===== */
-        .theme-mini-preview {
+        .btn-primary {
+            background: #9f7aea;
+            color: #fff;
+            border: none;
+            padding: 0.45rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.1rem 0.6rem 0.1rem 0.3rem;
+            gap: 0.3rem;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover {
+            background: #805ad5;
+        }
+
+        .btn-secondary {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.8rem;
+        }
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-danger {
+            background: #fc8181;
+            color: #fff;
+            border: none;
+            padding: 0.25rem 0.7rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: background 0.2s;
+        }
+        .btn-danger:hover {
+            background: #f56565;
+        }
+
+        /* ===== THEME LIST ===== */
+        .theme-list-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
             background: #f7fafc;
+            border-radius: 10px;
+        }
+        .theme-list-bar .theme-tag {
+            background: #fff;
+            padding: 0.2rem 0.8rem;
             border-radius: 16px;
             border: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
-        .theme-mini-preview .dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
+        .theme-list-bar .theme-tag:hover {
+            border-color: #9f7aea;
+            background: #faf5ff;
+        }
+        .theme-list-bar .theme-tag.active {
+            border-color: #9f7aea;
+            background: #9f7aea;
+            color: #fff;
+        }
+        .theme-list-bar .theme-tag .delete-theme {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            font-size: 0.7rem;
+            padding: 0 0.2rem;
+        }
+        .theme-list-bar .theme-tag .delete-theme:hover {
+            color: #fc8181;
+        }
+
+        /* ===== EDITOR LAYOUT ===== */
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 1.2rem;
+        }
+
+        .settings-panel {
+            max-height: 75vh;
+            overflow-y: auto;
+            padding-right: 0.3rem;
+        }
+        .settings-panel::-webkit-scrollbar {
+            width: 3px;
+        }
+        .settings-panel::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 4px;
+        }
+
+        .section-toggle {
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #edf2f7;
+            padding: 0.6rem 0.3rem;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: #2d3748;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            transition: background 0.2s;
+        }
+        .section-toggle:hover {
+            background: #f7fafc;
+        }
+        .section-toggle .arrow {
+            transition: transform 0.3s;
+            font-size: 0.7rem;
+        }
+        .section-toggle.open .arrow {
+            transform: rotate(90deg);
+        }
+
+        .section-content {
+            display: none;
+            padding: 0.5rem 0.3rem 0.7rem;
+        }
+        .section-content.open {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: #2d3748;
+            margin-bottom: 0.1rem;
+        }
+        .form-group .hint {
+            font-size: 0.6rem;
+            color: #a0aec0;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.3rem 0.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #9f7aea;
+        }
+        .form-group input[type="color"] {
+            padding: 0.1rem;
+            height: 32px;
+            cursor: pointer;
+        }
+        .form-group input[type="file"] {
+            padding: 0.15rem;
+            font-size: 0.7rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem;
+        }
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.4rem;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.1rem;
+        }
+        .form-check input[type="checkbox"] {
+            width: 0.9rem;
+            height: 0.9rem;
+            accent-color: #9f7aea;
+            cursor: pointer;
+        }
+        .form-check label {
+            font-weight: 500;
+            font-size: 0.78rem;
+            color: #2d3748;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .scale-control {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .scale-control input[type="range"] {
+            flex: 1;
+            accent-color: #9f7aea;
+        }
+        .scale-control input[type="number"] {
+            width: 55px;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+
+        /* ===== CANVAS ===== */
+        .canvas-preview {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 1.2rem;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: auto;
+        }
+
+        .canvas {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 794px;
+            aspect-ratio: 1 / 1.414;
+            position: relative;
+            overflow: hidden;
             border: 1px solid #e2e8f0;
+        }
+
+        .canvas .doc-header {
+            position: relative;
+            padding: 20px;
+            border-bottom: 2px solid var(--h4-border, #e2e8f0);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .canvas .doc-header .logo-placeholder {
+            width: 60px;
+            height: 50px;
+            background: #9f7aea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.6rem;
             flex-shrink: 0;
         }
-        .theme-mini-preview .bar {
+
+        .canvas .doc-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .canvas .doc-customer {
+            padding: 10px 20px;
+            font-size: 0.82rem;
+            color: #4a5568;
+        }
+
+        .canvas .doc-table {
+            width: calc(100% - 40px);
+            margin: 8px 20px;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .canvas .doc-table th {
+            background: #f7fafc;
+            padding: 6px 10px;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+        }
+        .canvas .doc-table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .canvas .doc-table tr:nth-child(even) td {
+            background: #f7fafc;
+        }
+
+        .canvas .doc-totals {
+            padding: 8px 20px;
+            text-align: right;
+        }
+        .canvas .doc-totals .total-line {
             display: flex;
-            gap: 2px;
-            align-items: center;
+            justify-content: flex-end;
+            gap: 2rem;
+            padding: 2px 0;
+            font-size: 0.8rem;
+        }
+        .canvas .doc-totals .grand-total {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #3182ce;
+            border-top: 2px solid #3182ce;
+            padding-top: 4px;
+        }
+
+        .canvas .doc-footer {
+            padding: 8px 20px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.7rem;
+            color: #718096;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .canvas .selectable {
+            cursor: pointer;
+            transition: outline 0.2s;
+            position: relative;
+        }
+        .canvas .selectable.selected {
+            outline: 2px solid #3182ce;
+            outline-offset: 2px;
+        }
+
+        /* Element with absolute positioning */
+        .canvas .abs-element {
+            position: absolute;
+            cursor: move;
+            touch-action: none;
+            user-select: none;
+            border: 1px solid transparent;
+        }
+        .canvas .abs-element.selected {
+            border-color: #3182ce;
+            outline: 2px solid rgba(49, 130, 206, 0.3);
+            outline-offset: 2px;
+        }
+        .canvas .abs-element .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border: 2px solid #3182ce;
+            border-radius: 50%;
+            z-index: 10;
+            touch-action: none;
+        }
+        .canvas .abs-element .tl { top: -6px; left: -6px; cursor: nwse-resize; }
+        .canvas .abs-element .tr { top: -6px; right: -6px; cursor: nesw-resize; }
+        .canvas .abs-element .bl { bottom: -6px; left: -6px; cursor: nesw-resize; }
+        .canvas .abs-element .br { bottom: -6px; right: -6px; cursor: nwse-resize; }
+
+        .canvas .abs-element .rotate-handle {
+            position: absolute;
+            width: 14px;
             height: 14px;
+            background: #9f7aea;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            top: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: grab;
+            z-index: 10;
+            touch-action: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
-        .theme-mini-preview .bar span {
-            display: block;
-            height: 6px;
-            border-radius: 2px;
-            flex: 1;
-            min-width: 8px;
+        .canvas .abs-element .rotate-line {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: #9f7aea;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9;
         }
 
-        .badge-status { display: inline-block; padding: 0.15rem 0.7rem; border-radius: 20px; font-size: 0.65rem; font-weight: 600; background: #c6f6d5; color: #276749; }
-        .badge-status.inactive { background: #fed7d7; color: #9b2c2c; }
-        .empty-state { text-align: center; color: #a0aec0; padding: 3rem 1rem; border: 2px dashed #e2e8f0; border-radius: 16px; }
-
-        /* ===== MODAL ===== */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 1rem; }
-        .modal-overlay.open { display: flex; }
-        .modal { background: #fff; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 1.8rem 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.25s ease; }
-        @keyframes modalIn { from { opacity: 0; transform: scale(0.96) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
-        .modal-header h2 { font-size: 1.3rem; font-weight: 700; color: #1a202c; margin: 0; }
-        .modal-close { background: none; border: none; font-size: 1.8rem; line-height: 1; color: #a0aec0; cursor: pointer; padding: 0 0.3rem; transition: color 0.2s; }
-        .modal-close:hover { color: #4a5568; }
-
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-weight: 600; font-size: 0.82rem; color: #2d3748; margin-bottom: 0.2rem; }
-        .form-group label .required { color: #e53e3e; }
-        .form-group .hint { font-size: 0.7rem; color: #a0aec0; margin-top: 0.1rem; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.5rem 0.8rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: border-color 0.2s; background: #fff; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #9f7aea; box-shadow: 0 0 0 3px rgba(159,122,234,0.12); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-        .form-check { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem; }
-        .form-check input[type="checkbox"] { width: 1rem; height: 1rem; accent-color: #9f7aea; cursor: pointer; }
-        .form-check label { font-weight: 500; color: #2d3748; margin: 0; cursor: pointer; font-size: 0.85rem; }
-
-        .modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #edf2f7; }
-        .btn-cancel { background: #edf2f7; color: #2d3748; border: 1px solid #e2e8f0; padding: 0.5rem 1.6rem; border-radius: 8px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
-        .btn-cancel:hover { background: #e2e8f0; }
-        .btn-save { background: #9f7aea; color: #fff; border: none; padding: 0.5rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-save:hover { background: #805ad5; }
-
-        .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 99999; display: flex; flex-direction: column; gap: 0.5rem; }
-        .toast { background: #fff; padding: 0.7rem 1rem; border-radius: 12px; box-shadow: 0 10px 20px -8px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 0.6rem; animation: slideIn 0.3s ease; border-left: 5px solid #9f7aea; min-width: 180px; font-size: 0.85rem; }
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .toast {
+            background: #fff;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            animation: slideIn 0.3s ease;
+            border-left: 5px solid #9f7aea;
+            min-width: 160px;
+            font-size: 0.82rem;
+        }
         .toast.success { border-left-color: #48bb78; }
         .toast.error { border-left-color: #fc8181; }
-        .toast .close { margin-left: auto; background: none; border: none; font-size: 1.1rem; color: #a0aec0; cursor: pointer; }
-        .toast .close:hover { color: #4a5568; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+        .toast .close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: #a0aec0;
+            cursor: pointer;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-        .panel-toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
-        .panel-toolbar .search-box { flex: 1 1 260px; display: flex; gap: 0.5rem; align-items: center; background: #f7fafc; border-radius: 8px; padding: 0.2rem 0.8rem; border: 1px solid #e2e8f0; }
-        .panel-toolbar .search-box input { border: none; background: transparent; padding: 0.5rem 0; font-size: 0.9rem; width: 100%; outline: none; }
-        .panel-toolbar .search-box span { color: #a0aec0; }
-
-        .theme-preview-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; margin-right: 0.4rem; vertical-align: middle; border: 1px solid #e2e8f0; }
+        @media (max-width: 1024px) {
+            .editor-layout { grid-template-columns: 1fr; }
+            .settings-panel { max-height: 400px; }
+            .canvas { max-width: 100%; }
+        }
 
         @media (max-width: 640px) {
-            .manager-container { padding: 0 0.8rem; }
-            .manager-header { flex-direction: column; align-items: flex-start; }
-            .modal { padding: 1.2rem; }
+            .designer-container { padding: 0 0.8rem; }
+            .designer-header { flex-direction: column; align-items: flex-start; }
             .form-row { grid-template-columns: 1fr; }
-            .theme-grid { grid-template-columns: 1fr; }
-            .template-card { flex-direction: column; align-items: stretch; }
-            .template-card .actions { justify-content: flex-start; }
-            .tab-btn { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+            .form-row-3 { grid-template-columns: 1fr; }
+            .canvas .doc-table { font-size: 0.65rem; }
+            .canvas .doc-table th, .canvas .doc-table td { padding: 4px 6px; }
         }
     </style>
 </head>
 <body>
 
     <header class="h4-header">
-        <a href="index.html" class="brand" id="brandLink"><span class="brand-icon">⚜️</span><span class="brand-name">H4 <span>ERP</span></span></a>
+        <a href="index.html" class="brand" id="brandLink">
+            <span class="brand-icon">⚜️</span>
+            <span class="brand-name">H4 <span>ERP</span></span>
+        </a>
         <div class="header-actions">
             <button class="btn" id="backBtn">← Back</button>
             <button class="btn btn-primary-header" id="dashboardBtn">🏠 Dashboard</button>
         </div>
     </header>
 
-    <div class="manager-container">
+    <div class="designer-container">
 
-        <div class="manager-header">
+        <div class="designer-header">
             <div>
-                <h1>🎨 <span>Theme &amp; Template</span> Manager</h1>
-                <div class="sub">Design themes · Connect to documents</div>
+                <h1>🎨 <span>Theme</span> Designer</h1>
+                <div class="sub">Canvas · Scale · Position · Drag · Resize · Rotate</div>
             </div>
             <div class="toolbar">
                 <button class="btn-secondary" id="refreshBtn">⟳ Refresh</button>
+                <button class="btn-primary" id="saveThemeBtn">💾 Save Theme</button>
             </div>
         </div>
 
-        <!-- Tabs -->
-        <div class="tab-bar" id="tabBar">
-            <button class="tab-btn active" data-tab="themes">🎨 Themes <span class="badge" id="themesCount">0</span></button>
-            <button class="tab-btn" data-tab="templates">📋 Templates <span class="badge" id="templatesCount">0</span></button>
+        <!-- Theme List -->
+        <div class="theme-list-bar" id="themeListBar">
+            <span style="font-weight:600;font-size:0.8rem;color:#4a5568;">Themes:</span>
+            <span id="themeTags"></span>
+            <button class="btn-secondary" id="newThemeBtn" style="padding:0.2rem 0.8rem;font-size:0.75rem;">＋ New</button>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- TAB: THEMES -->
-        <!-- ========================================================== -->
-        <div class="tab-panel active" id="panelThemes">
-            <div class="panel-toolbar">
-                <div class="search-box">
-                    <span>🔍</span>
-                    <input type="text" id="searchThemes" placeholder="Search themes..." />
-                </div>
-                <button class="btn-primary" id="addThemeBtn">＋ New Theme</button>
-            </div>
-            <div class="theme-grid" id="themeGrid"></div>
-        </div>
+        <div class="editor-layout">
 
-        <!-- ========================================================== -->
-        <!-- TAB: TEMPLATES -->
-        <!-- ========================================================== -->
-        <div class="tab-panel" id="panelTemplates">
-            <div class="panel-toolbar">
-                <div class="search-box">
-                    <span>🔍</span>
-                    <input type="text" id="searchTemplates" placeholder="Search templates..." />
-                </div>
-                <button class="btn-primary" id="addTemplateBtn">＋ New Template</button>
-            </div>
-            <div class="template-grid" id="templateGrid"></div>
-        </div>
+            <!-- ===== LEFT: SETTINGS ===== -->
+            <div class="settings-panel" id="settingsPanel">
 
-    </div>
-
-    <!-- ========================================================== -->
-    <!-- MODAL: THEME -->
-    <!-- ========================================================== -->
-    <div class="modal-overlay" id="themeModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="themeModalTitle">Create Theme</h2>
-                <button class="modal-close" id="themeModalCloseBtn">✕</button>
-            </div>
-            <form id="themeForm" autocomplete="off">
-                <div class="form-group">
-                    <label>Theme Name <span class="required">*</span></label>
-                    <input type="text" id="themeName" placeholder="e.g. H4 Blue Professional" required />
-                </div>
-                <div class="form-group">
-                    <label>Theme ID</label>
-                    <input type="text" id="themeId" readonly style="background:#f7fafc;font-weight:600;" />
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="themeDesc" rows="1" placeholder="Brief description..."></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-check">
-                        <input type="checkbox" id="themeActive" checked />
-                        <label for="themeActive">Active</label>
+                <!-- General -->
+                <button class="section-toggle open" data-section="general">
+                    <span>📋 General</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content open" id="secGeneral">
+                    <div class="form-group">
+                        <label>Theme Name <span class="required">*</span></label>
+                        <input type="text" id="themeName" value="H4 Blue Professional" />
                     </div>
-                    <div class="form-check">
-                        <input type="checkbox" id="themeDefault" />
-                        <label for="themeDefault">Set as Default</label>
+                    <div class="form-group">
+                        <label>Theme ID</label>
+                        <input type="text" id="themeId" value="THEME-0001" readonly style="background:#f7fafc;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="themeDesc" value="Clean professional blue theme" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-check">
+                            <input type="checkbox" id="themeActive" checked />
+                            <label for="themeActive">Active</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="themeDefault" checked />
+                            <label for="themeDefault">Default</label>
+                        </div>
                     </div>
                 </div>
-                <input type="hidden" id="editThemeId" value="" />
-                <div class="modal-footer">
-                    <button type="button" class="btn-cancel" id="themeModalCancelBtn">Cancel</button>
-                    <button type="submit" class="btn-save" id="themeModalSaveBtn">💾 Save Theme</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- ========================================================== -->
-    <!-- MODAL: TEMPLATE -->
-    <!-- ========================================================== -->
-    <div class="modal-overlay" id="templateModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="templateModalTitle">Create Template</h2>
-                <button class="modal-close" id="templateModalCloseBtn">✕</button>
+                <!-- Canvas -->
+                <button class="section-toggle open" data-section="canvas">
+                    <span>📐 Canvas</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content open" id="secCanvas">
+                    <div class="form-row">
+                        <div class="form-group"><label>Width (px)</label><input type="number" id="canvasWidth" value="794" /></div>
+                        <div class="form-group"><label>Height (px)</label><input type="number" id="canvasHeight" value="1123" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Canvas Scale (%)</label>
+                        <div class="scale-control">
+                            <input type="range" id="canvasScale" min="30" max="150" value="100" />
+                            <input type="number" id="canvasScaleVal" value="100" min="30" max="150" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colors -->
+                <button class="section-toggle" data-section="colors">
+                    <span>🎨 Colors</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content" id="secColors">
+                    <div class="form-row">
+                        <div class="form-group"><label>Primary</label><input type="color" id="cPrimary" value="#3182ce" /></div>
+                        <div class="form-group"><label>Secondary</label><input type="color" id="cSecondary" value="#9f7aea" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Accent</label><input type="color" id="cAccent" value="#48bb78" /></div>
+                        <div class="form-group"><label>Background</label><input type="color" id="cBg" value="#ffffff" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Header BG</label><input type="color" id="cHeaderBg" value="#f7fafc" /></div>
+                        <div class="form-group"><label>Footer BG</label><input type="color" id="cFooterBg" value="#f7fafc" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Heading</label><input type="color" id="cHeading" value="#1a202c" /></div>
+                        <div class="form-group"><label>Body Text</label><input type="color" id="cText" value="#4a5568" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Table Header</label><input type="color" id="cTableHeader" value="#f7fafc" /></div>
+                        <div class="form-group"><label>Table Text</label><input type="color" id="cTableText" value="#4a5568" /></div>
+                    </div>
+                    <div class="form-group"><label>Border</label><input type="color" id="cBorder" value="#e2e8f0" /></div>
+                </div>
+
+                <!-- Logo (Abs Element) -->
+                <button class="section-toggle" data-section="logo">
+                    <span>🖼️ Logo</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content" id="secLogo">
+                    <div class="form-check">
+                        <input type="checkbox" id="logoShow" checked />
+                        <label for="logoShow">Show Logo</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Logo URL</label>
+                        <input type="text" id="logoSrc" placeholder="https://example.com/logo.png" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Width (px)</label><input type="number" id="logoWidth" value="120" /></div>
+                        <div class="form-group"><label>Height (px)</label><input type="number" id="logoHeight" value="50" /></div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="logoLockAspect" checked />
+                        <label for="logoLockAspect">Lock Aspect Ratio</label>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>X Position</label><input type="number" id="logoX" value="30" /></div>
+                        <div class="form-group"><label>Y Position</label><input type="number" id="logoY" value="20" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Scale (%)</label>
+                        <div class="scale-control">
+                            <input type="range" id="logoScale" min="10" max="200" value="100" />
+                            <input type="number" id="logoScaleVal" value="100" min="10" max="200" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Rotation (°)</label><input type="number" id="logoRotation" value="0" /></div>
+                        <div class="form-group"><label>Opacity (%)</label><input type="number" id="logoOpacity" value="100" min="0" max="100" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Border Width</label><input type="number" id="logoBorderWidth" value="0" /></div>
+                        <div class="form-group"><label>Border Radius</label><input type="number" id="logoRadius" value="0" /></div>
+                    </div>
+                    <div class="form-group"><label>Border Color</label><input type="color" id="logoBorderColor" value="#3182ce" /></div>
+                    <div class="form-check">
+                        <input type="checkbox" id="logoShadow" />
+                        <label for="logoShadow">Enable Shadow</label>
+                    </div>
+                    <div id="logoShadowControls" style="display:none;margin-top:0.3rem;">
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow X</label><input type="number" id="logoShadowX" value="0" /></div>
+                            <div class="form-group"><label>Shadow Y</label><input type="number" id="logoShadowY" value="4" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Blur</label><input type="number" id="logoShadowBlur" value="12" /></div>
+                            <div class="form-group"><label>Shadow Spread</label><input type="number" id="logoShadowSpread" value="0" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Color</label><input type="color" id="logoShadowColor" value="#000000" /></div>
+                            <div class="form-group"><label>Shadow Opacity (%)</label><input type="number" id="logoShadowOpacity" value="20" min="0" max="100" /></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Header (Abs Element) -->
+                <button class="section-toggle" data-section="header">
+                    <span>🧱 Header</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content" id="secHeader">
+                    <div class="form-group">
+                        <label>Style</label>
+                        <select id="headerStyle">
+                            <option value="simple">Simple</option>
+                            <option value="colorbar" selected>Color Bar</option>
+                            <option value="wave">Wave</option>
+                            <option value="rounded">Rounded</option>
+                            <option value="image">Image</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Width (px)</label><input type="number" id="headerWidth" value="714" /></div>
+                        <div class="form-group"><label>Height (px)</label><input type="number" id="headerHeight" value="80" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>X Position</label><input type="number" id="headerX" value="40" /></div>
+                        <div class="form-group"><label>Y Position</label><input type="number" id="headerY" value="20" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Scale (%)</label>
+                        <div class="scale-control">
+                            <input type="range" id="headerScale" min="50" max="150" value="100" />
+                            <input type="number" id="headerScaleVal" value="100" min="50" max="150" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Padding (px)</label><input type="number" id="headerPadding" value="20" /></div>
+                        <div class="form-group"><label>Opacity (%)</label><input type="number" id="headerOpacity" value="100" min="0" max="100" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Border Width</label><input type="number" id="headerBorderWidth" value="0" /></div>
+                        <div class="form-group"><label>Border Radius</label><input type="number" id="headerBorderRadius" value="0" /></div>
+                    </div>
+                    <div class="form-group"><label>Border Color</label><input type="color" id="headerBorderColor" value="#3182ce" /></div>
+                    <div class="form-group"><label>Border Style</label>
+                        <select id="headerBorderStyle">
+                            <option value="solid">Solid</option>
+                            <option value="dashed">Dashed</option>
+                            <option value="dotted">Dotted</option>
+                        </select>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="headerShadow" />
+                        <label for="headerShadow">Enable Shadow</label>
+                    </div>
+                    <div id="headerShadowControls" style="display:none;margin-top:0.3rem;">
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow X</label><input type="number" id="headerShadowX" value="0" /></div>
+                            <div class="form-group"><label>Shadow Y</label><input type="number" id="headerShadowY" value="4" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Blur</label><input type="number" id="headerShadowBlur" value="12" /></div>
+                            <div class="form-group"><label>Shadow Spread</label><input type="number" id="headerShadowSpread" value="0" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Color</label><input type="color" id="headerShadowColor" value="#000000" /></div>
+                            <div class="form-group"><label>Shadow Opacity (%)</label><input type="number" id="headerShadowOpacity" value="20" min="0" max="100" /></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table (Abs Element) -->
+                <button class="section-toggle" data-section="table">
+                    <span>📊 Table</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content" id="secTable">
+                    <div class="form-row">
+                        <div class="form-group"><label>Width (px)</label><input type="number" id="tableWidth" value="714" /></div>
+                        <div class="form-group"><label>Height (px)</label><input type="number" id="tableHeight" value="300" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>X Position</label><input type="number" id="tableX" value="40" /></div>
+                        <div class="form-group"><label>Y Position</label><input type="number" id="tableY" value="280" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Scale (%)</label>
+                        <div class="scale-control">
+                            <input type="range" id="tableScale" min="50" max="150" value="100" />
+                            <input type="number" id="tableScaleVal" value="100" min="50" max="150" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Header Height</label><input type="number" id="tableHeaderHeight" value="35" /></div>
+                        <div class="form-group"><label>Row Height</label><input type="number" id="tableRowHeight" value="30" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Border Width</label><input type="number" id="tableBorderWidth" value="1" /></div>
+                        <div class="form-group"><label>Border Radius</label><input type="number" id="tableRadius" value="8" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Header Font Size</label><input type="number" id="tableHeaderFontSize" value="14" /></div>
+                        <div class="form-group"><label>Body Font Size</label><input type="number" id="tableBodyFontSize" value="13" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Col 1 Width %</label><input type="number" id="col1Width" value="40" min="10" max="80" /></div>
+                        <div class="form-group"><label>Col 1 Align</label>
+                            <select id="col1Align">
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Col 2 Width %</label><input type="number" id="col2Width" value="15" min="5" max="30" /></div>
+                        <div class="form-group"><label>Col 2 Align</label>
+                            <select id="col2Align">
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Col 3 Width %</label><input type="number" id="col3Width" value="20" min="5" max="30" /></div>
+                        <div class="form-group"><label>Col 3 Align</label>
+                            <select id="col3Align">
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Col 4 Width %</label><input type="number" id="col4Width" value="25" min="10" max="40" /></div>
+                        <div class="form-group"><label>Col 4 Align</label>
+                            <select id="col4Align">
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="tableAlternate" checked />
+                        <label for="tableAlternate">Alternate Row Colors</label>
+                    </div>
+                    <div class="form-group"><label>Alternate Color</label><input type="color" id="tableAlternateColor" value="#f7fafc" /></div>
+                    <div class="form-group"><label>Table Opacity (%)</label><input type="number" id="tableOpacity" value="100" min="0" max="100" /></div>
+                </div>
+
+                <!-- Totals (Abs Element) -->
+                <button class="section-toggle" data-section="totals">
+                    <span>💰 Totals</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content" id="secTotals">
+                    <div class="form-group">
+                        <label>Style</label>
+                        <select id="totalStyle">
+                            <option value="normal">Normal</option>
+                            <option value="highlight" selected>Highlight Box</option>
+                            <option value="coloredbar">Colored Bar</option>
+                            <option value="large">Large Amount</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Width (px)</label><input type="number" id="totalWidth" value="280" /></div>
+                        <div class="form-group"><label>Height (px)</label><input type="number" id="totalHeight" value="80" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>X Position</label><input type="number" id="totalX" value="480" /></div>
+                        <div class="form-group"><label>Y Position</label><input type="number" id="totalY" value="700" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Scale (%)</label>
+                        <div class="scale-control">
+                            <input type="range" id="totalScale" min="50" max="150" value="100" />
+                            <input type="number" id="totalScaleVal" value="100" min="50" max="150" />
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Background</label><input type="color" id="totalBg" value="#ebf8ff" /></div>
+                    <div class="form-group"><label>Text Color</label><input type="color" id="totalTextColor" value="#2b6cb0" /></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Font Size</label><input type="number" id="totalFontSize" value="18" /></div>
+                        <div class="form-group"><label>Padding</label><input type="number" id="totalPadding" value="12" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Border Width</label><input type="number" id="totalBorderWidth" value="0" /></div>
+                        <div class="form-group"><label>Border Radius</label><input type="number" id="totalRadius" value="8" /></div>
+                    </div>
+                    <div class="form-group"><label>Border Color</label><input type="color" id="totalBorderColor" value="#3182ce" /></div>
+                    <div class="form-check">
+                        <input type="checkbox" id="totalShadow" />
+                        <label for="totalShadow">Enable Shadow</label>
+                    </div>
+                    <div id="totalShadowControls" style="display:none;margin-top:0.3rem;">
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow X</label><input type="number" id="totalShadowX" value="0" /></div>
+                            <div class="form-group"><label>Shadow Y</label><input type="number" id="totalShadowY" value="4" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Blur</label><input type="number" id="totalShadowBlur" value="12" /></div>
+                            <div class="form-group"><label>Shadow Spread</label><input type="number" id="totalShadowSpread" value="0" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Color</label><input type="color" id="totalShadowColor" value="#000000" /></div>
+                            <div class="form-group"><label>Shadow Opacity (%)</label><input type="number" id="totalShadowOpacity" value="10" min="0" max="100" /></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signature (Abs Element) -->
+                <button class="section-toggle" data-section="signature">
+                    <span>✍️ Signature</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content" id="secSignature">
+                    <div class="form-check">
+                        <input type="checkbox" id="sigShow" checked />
+                        <label for="sigShow">Show Signature</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Signature URL</label>
+                        <input type="text" id="sigSrc" placeholder="https://example.com/signature.png" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Width</label><input type="number" id="sigWidth" value="120" /></div>
+                        <div class="form-group"><label>Height</label><input type="number" id="sigHeight" value="40" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>X Position</label><input type="number" id="sigX" value="560" /></div>
+                        <div class="form-group"><label>Y Position</label><input type="number" id="sigY" value="920" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Scale (%)</label>
+                        <div class="scale-control">
+                            <input type="range" id="sigScale" min="50" max="200" value="100" />
+                            <input type="number" id="sigScaleVal" value="100" min="50" max="200" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Rotation</label><input type="number" id="sigRotation" value="0" /></div>
+                        <div class="form-group"><label>Opacity</label><input type="number" id="sigOpacity" value="100" min="0" max="100" /></div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="sigShadow" />
+                        <label for="sigShadow">Enable Shadow</label>
+                    </div>
+                    <div id="sigShadowControls" style="display:none;margin-top:0.3rem;">
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow X</label><input type="number" id="sigShadowX" value="0" /></div>
+                            <div class="form-group"><label>Shadow Y</label><input type="number" id="sigShadowY" value="4" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Blur</label><input type="number" id="sigShadowBlur" value="12" /></div>
+                            <div class="form-group"><label>Shadow Spread</label><input type="number" id="sigShadowSpread" value="0" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Shadow Color</label><input type="color" id="sigShadowColor" value="#000000" /></div>
+                            <div class="form-group"><label>Shadow Opacity</label><input type="number" id="sigShadowOpacity" value="15" min="0" max="100" /></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer (Abs Element) -->
+                <button class="section-toggle" data-section="footer">
+                    <span>📝 Footer</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="section-content" id="secFooter">
+                    <div class="form-group">
+                        <label>Footer Text</label>
+                        <input type="text" id="footerText" value="Thank you for your business!" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Width (px)</label><input type="number" id="footerWidth" value="714" /></div>
+                        <div class="form-group"><label>Height (px)</label><input type="number" id="footerHeight" value="50" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>X Position</label><input type="number" id="footerX" value="40" /></div>
+                        <div class="form-group"><label>Y Position</label><input type="number" id="footerY" value="1010" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Scale (%)</label>
+                        <div class="scale-control">
+                            <input type="range" id="footerScale" min="50" max="150" value="100" />
+                            <input type="number" id="footerScaleVal" value="100" min="50" max="150" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Font Size</label><input type="number" id="footerFontSize" value="11" /></div>
+                        <div class="form-group"><label>Color</label><input type="color" id="footerColor" value="#718096" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <select id="footerPosition">
+                            <option value="center">Center</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Border Width</label><input type="number" id="footerBorderWidth" value="0" /></div>
+                        <div class="form-group"><label>Border Color</label><input type="color" id="footerBorderColor" value="#3182ce" /></div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="footerShadow" />
+                        <label for="footerShadow">Enable Shadow</label>
+                    </div>
+                </div>
+
             </div>
-            <form id="templateForm" autocomplete="off">
-                <div class="form-group">
-                    <label>Template Name <span class="required">*</span></label>
-                    <input type="text" id="templateName" placeholder="e.g. H4 Waterproofing Quotation" required />
-                </div>
-                <div class="form-group">
-                    <label>Document Type <span class="required">*</span></label>
-                    <select id="documentType" required>
-                        <option value="quotation">Quotation</option>
-                        <option value="invoice">Invoice</option>
-                        <option value="general">General</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Theme <span class="required">*</span></label>
-                    <select id="templateThemeSelect" required>
-                        <option value="">-- Select Theme --</option>
-                    </select>
-                    <div class="hint" id="templateThemeHint">Select a theme from Theme Manager</div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="templateDesc" rows="2" placeholder="Brief description..."></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-check">
-                        <input type="checkbox" id="templateActive" checked />
-                        <label for="templateActive">Active</label>
+
+            <!-- ===== RIGHT: CANVAS ===== -->
+            <div class="canvas-preview">
+                <div class="canvas" id="themeCanvas">
+                    <!-- Header -->
+                    <div class="doc-header selectable abs-element" id="canvasHeader" style="position:relative;">
+                        <div class="logo-placeholder selectable abs-element" id="canvasLogo" style="position:relative;">
+                            LOGO
+                        </div>
+                        <span class="doc-title selectable">INVOICE</span>
                     </div>
-                    <div class="form-check">
-                        <input type="checkbox" id="templateDefault" />
-                        <label for="templateDefault">Set as Default for this document type</label>
+
+                    <!-- Customer (static) -->
+                    <div class="doc-customer selectable" id="canvasCustomer">
+                        <strong>Customer:</strong> Muhammed Ali<br />
+                        <strong>Project:</strong> Al-Shifa Villa
                     </div>
+
+                    <!-- Table -->
+                    <table class="doc-table selectable abs-element" id="canvasTable">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Waterproofing - Terrace</td><td>1000</td><td>₹25</td><td>₹25,000</td></tr>
+                            <tr><td>UV Protection</td><td>1000</td><td>₹8</td><td>₹8,000</td></tr>
+                            <tr><td>10 Year Warranty</td><td>1000</td><td>₹8</td><td>₹8,000</td></tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Totals -->
+                    <div class="doc-totals selectable abs-element" id="canvasTotals">
+                        <div class="total-line"><span>Subtotal</span><span>₹41,000</span></div>
+                        <div class="total-line"><span>Discount (5%)</span><span>−₹2,050</span></div>
+                        <div class="total-line"><span>GST (18%)</span><span>₹7,011</span></div>
+                        <div class="grand-total">Grand Total: ₹45,961</div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="doc-footer selectable abs-element" id="canvasFooter">Thank you for your business!</div>
                 </div>
-                <input type="hidden" id="editTemplateId" value="" />
-                <!-- Future fields reserved -->
-                <div class="modal-footer">
-                    <button type="button" class="btn-cancel" id="templateModalCancelBtn">Cancel</button>
-                    <button type="submit" class="btn-save" id="templateModalSaveBtn">💾 Save Template</button>
-                </div>
-            </form>
+            </div>
+
         </div>
+
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ========================================================== -->
-    <!-- JAVASCRIPT - MERGED & UPDATED -->
-    <!-- ========================================================== -->
     <script>
         (function() {
             'use strict';
 
-            // ---------- STORAGE KEYS ----------
-            const THEMES_KEY = 'h4_themes';
-            const TEMPLATES_KEY = 'h4_templates';
+            // ---------- STORAGE ----------
+            const STORAGE_KEY = 'h4_themes';
+
+            // ---------- STATE ----------
+            let themes = [];
+            let currentThemeId = null;
 
             // ---------- HELPERS ----------
-            function getThemes() {
-                try { return JSON.parse(localStorage.getItem(THEMES_KEY)) || []; } catch { return []; }
-            }
-            function saveThemes(list) {
-                try { localStorage.setItem(THEMES_KEY, JSON.stringify(list)); return true; } catch (e) {
-                    showToast('⚠️ Storage limit reached. Please reduce image sizes.', 'error', 4000);
-                    return false;
-                }
-            }
-            function getTemplates() {
-                try { return JSON.parse(localStorage.getItem(TEMPLATES_KEY)) || []; } catch { return []; }
-            }
-            function saveTemplates(list) {
-                try { localStorage.setItem(TEMPLATES_KEY, JSON.stringify(list)); return true; } catch (e) {
-                    showToast('⚠️ Storage limit reached.', 'error', 4000);
-                    return false;
-                }
-            }
-            function generateThemeId() {
-                const list = getThemes();
-                let maxNum = 0;
-                list.forEach(t => { if (t.themeId && t.themeId.startsWith('THEME-')) { const num = parseInt(t.themeId.replace(
-                            'THEME-', '')); if (num > maxNum) maxNum = num; } });
-                return 'THEME-' + String(maxNum + 1).padStart(4, '0');
-            }
-            function generateTemplateId() {
-                const list = getTemplates();
-                let maxNum = 0;
-                list.forEach(t => { if (t.templateId && t.templateId.startsWith('TPL-')) { const num = parseInt(t.templateId
-                            .replace('TPL-', '')); if (num > maxNum) maxNum = num; } });
-                return 'TPL-' + String(maxNum + 1).padStart(4, '0');
-            }
-            function escapeHtml(text) {
-                if (!text) return '';
-                return String(text).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' } [m] || m));
-            }
             function showToast(msg, type = 'info', duration = 3000) {
                 const container = document.getElementById('toastContainer');
                 const toast = document.createElement('div');
@@ -394,15 +1076,55 @@
                 }, duration);
             }
 
-            // ---------- DEFAULT THEME ----------
-            function getDefaultTheme() {
+            function getVal(id) { return document.getElementById(id).value; }
+            function getNum(id) { return parseFloat(document.getElementById(id).value) || 0; }
+            function getCheck(id) { return document.getElementById(id).checked; }
+
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? `${parseInt(result[1],16)},${parseInt(result[2],16)},${parseInt(result[3],16)}` : '0,0,0';
+            }
+
+            // ---------- THEME CRUD ----------
+            function loadThemes() {
+                try {
+                    const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                    themes = data;
+                } catch (e) {
+                    themes = [];
+                }
+                if (themes.length === 0) {
+                    // Create default theme
+                    const defaultTheme = createDefaultTheme();
+                    themes.push(defaultTheme);
+                    saveThemes();
+                }
+                renderThemeList();
+                // Select first active theme or first
+                let selected = themes.find(t => t.active !== false && !t._deleted) || themes[0];
+                if (selected) {
+                    currentThemeId = selected.themeId;
+                    loadThemeToUI(selected);
+                }
+            }
+
+            function saveThemes() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(themes));
+                } catch (e) {
+                    showToast('⚠️ Storage limit reached.', 'error');
+                }
+            }
+
+            function createDefaultTheme() {
                 return {
                     themeId: 'THEME-0001',
                     themeName: 'H4 Blue Professional',
-                    description: 'Clean and professional blue theme',
+                    description: 'Clean professional blue theme',
                     active: true,
                     isDefault: true,
                     version: 1,
+                    canvas: { width: 794, height: 1123, scale: 100 },
                     colors: {
                         primary: '#3182ce',
                         secondary: '#9f7aea',
@@ -414,48 +1136,38 @@
                         text: '#4a5568',
                         tableHeader: '#f7fafc',
                         tableText: '#4a5568',
-                        border: '#e2e8f0',
-                        grad1: '#3182ce',
-                        grad2: '#9f7aea',
-                        logoBorder: '#3182ce',
-                        totalBg: '#ebf8ff',
-                        totalText: '#2b6cb0',
-                        footerText: '#718096'
+                        border: '#e2e8f0'
                     },
-                    fonts: {
-                        heading: "'Poppins', sans-serif",
-                        body: "'Poppins', sans-serif",
-                        customName: '',
-                        customUrl: '',
-                        customFormat: 'woff2',
-                        titleSize: 20,
-                        headingSize: 16,
-                        bodySize: 14,
-                        tableSize: 13,
-                        smallSize: 11,
-                        fontWeight: 400,
-                        lineHeight: 1.4,
-                        letterSpacing: 0,
-                        textAlign: 'left'
+                    logo: {
+                        show: true,
+                        src: '',
+                        width: 120,
+                        height: 50,
+                        lockAspect: true,
+                        x: 30,
+                        y: 20,
+                        scale: 100,
+                        rotation: 0,
+                        opacity: 100,
+                        borderWidth: 0,
+                        radius: 0,
+                        borderColor: '#3182ce',
+                        shadow: false,
+                        shadowX: 0,
+                        shadowY: 4,
+                        shadowBlur: 12,
+                        shadowSpread: 0,
+                        shadowColor: '#000000',
+                        shadowOpacity: 20
                     },
-                    page: {
-                        paperSize: 'A4',
-                        orientation: 'portrait',
-                        customWidth: 794,
-                        customHeight: 1123,
-                        marginTop: 40,
-                        marginBottom: 40,
-                        marginLeft: 40,
-                        marginRight: 40,
-                        showPageNumber: false
-                    },
-                    background: { type: 'solid', image: '', position: 'center', size: 'cover', opacity: 100,
-                        gradientAngle: 135 },
                     header: {
                         style: 'colorbar',
+                        width: 714,
                         height: 80,
+                        x: 40,
+                        y: 20,
+                        scale: 100,
                         padding: 20,
-                        image: '',
                         opacity: 100,
                         borderWidth: 0,
                         borderRadius: 0,
@@ -467,34 +1179,45 @@
                         shadowBlur: 12,
                         shadowSpread: 0,
                         shadowColor: '#000000',
-                        shadowOpacity: 20,
-                        customHTML: '',
-                        customWidth: 100,
-                        customAlign: 'center',
-                        customShow: true
+                        shadowOpacity: 20
                     },
-                    elements: [],
                     table: {
-                        alternate: true,
-                        alternateColor: '#f7fafc',
+                        width: 714,
+                        height: 300,
+                        x: 40,
+                        y: 280,
+                        scale: 100,
+                        headerHeight: 35,
+                        rowHeight: 30,
                         borderWidth: 1,
                         radius: 8,
-                        colDescWidth: 40,
-                        colDescAlign: 'left',
-                        colQtyWidth: 15,
-                        colQtyAlign: 'center',
-                        colRateWidth: 20,
-                        colRateAlign: 'right',
-                        colAmountWidth: 25,
-                        colAmountAlign: 'right',
-                        fontSize: 13
+                        headerFontSize: 14,
+                        bodyFontSize: 13,
+                        col1Width: 40,
+                        col1Align: 'left',
+                        col2Width: 15,
+                        col2Align: 'center',
+                        col3Width: 20,
+                        col3Align: 'right',
+                        col4Width: 25,
+                        col4Align: 'right',
+                        alternate: true,
+                        alternateColor: '#f7fafc',
+                        opacity: 100
                     },
                     totals: {
                         style: 'highlight',
+                        width: 280,
+                        height: 80,
+                        x: 480,
+                        y: 700,
+                        scale: 100,
+                        bg: '#ebf8ff',
+                        textColor: '#2b6cb0',
                         fontSize: 18,
                         padding: 12,
-                        radius: 8,
                         borderWidth: 0,
+                        radius: 8,
                         borderColor: '#3182ce',
                         shadow: false,
                         shadowX: 0,
@@ -509,10 +1232,11 @@
                         src: '',
                         width: 120,
                         height: 40,
-                        x: 0,
-                        y: 0,
-                        opacity: 100,
+                        x: 560,
+                        y: 920,
+                        scale: 100,
                         rotation: 0,
+                        opacity: 100,
                         shadow: false,
                         shadowX: 0,
                         shadowY: 4,
@@ -523,813 +1247,1071 @@
                     },
                     footer: {
                         text: 'Thank you for your business!',
+                        width: 714,
+                        height: 50,
+                        x: 40,
+                        y: 1010,
+                        scale: 100,
                         fontSize: 11,
+                        color: '#718096',
                         position: 'center',
                         borderWidth: 0,
                         borderColor: '#3182ce',
-                        shadow: false,
-                        shadowX: 0,
-                        shadowY: 2,
-                        shadowBlur: 8,
-                        shadowSpread: 0,
-                        shadowColor: '#000000',
-                        shadowOpacity: 10
+                        shadow: false
                     },
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
                 };
             }
 
-            // ---------- INIT THEMES ----------
-            function initThemes() {
-                let themes = getThemes();
-                if (themes.length === 0) { const d = getDefaultTheme();
-                    themes.push(d);
-                    saveThemes(themes); }
-                const hasDefault = themes.some(t => t.isDefault === true && !t._deleted);
-                if (!hasDefault) { const firstActive = themes.find(t => t.active !== false && !t._deleted); if (firstActive) { firstActive
-                            .isDefault = true;
-                        saveThemes(themes); } }
-                return themes;
-            }
-
-            // ---------- POPULATE THEME DROPDOWN (for templates) ----------
-            function populateTemplateThemeDropdown() {
-                const themes = getThemes();
-                const select = document.getElementById('templateThemeSelect');
-                const currentVal = select.value;
-                select.innerHTML = '<option value="">-- Select Theme --</option>';
+            // ---------- THEME LIST UI ----------
+            function renderThemeList() {
+                const container = document.getElementById('themeTags');
+                let html = '';
                 themes.forEach(theme => {
                     if (theme._deleted) return;
-                    const opt = document.createElement('option');
-                    opt.value = theme.themeId;
-                    const colors = theme.colors || {};
-                    const primary = colors.primary || '#9f7aea';
-                    const secondary = colors.secondary || '#9f7aea';
-                    opt.textContent = theme.themeName || 'Untitled';
-                    // Store color info for mini preview
-                    opt.dataset.primary = primary;
-                    opt.dataset.secondary = secondary;
-                    select.appendChild(opt);
-                });
-                if (currentVal && [...select.options].some(o => o.value === currentVal)) {
-                    select.value = currentVal;
-                }
-                updateTemplateThemeHint();
-            }
-
-            function updateTemplateThemeHint() {
-                const select = document.getElementById('templateThemeSelect');
-                const hint = document.getElementById('templateThemeHint');
-                const selected = select.options[select.selectedIndex];
-                if (selected && selected.value) {
-                    const primary = selected.dataset.primary || '#9f7aea';
-                    const secondary = selected.dataset.secondary || '#9f7aea';
-                    hint.innerHTML = `
-                        <span class="theme-mini-preview">
-                            <span class="dot" style="background:${primary};"></span>
-                            <span class="bar">
-                                <span style="background:${primary};"></span>
-                                <span style="background:${secondary};"></span>
-                                <span style="background:${primary};width:12px;"></span>
-                            </span>
-                            ${selected.textContent}
+                    const isActive = currentThemeId === theme.themeId;
+                    html += `
+                        <span class="theme-tag ${isActive ? 'active' : ''}" data-id="${theme.themeId}">
+                            ${theme.themeName || 'Untitled'}
+                            <button class="delete-theme" data-id="${theme.themeId}">✕</button>
                         </span>
                     `;
-                } else {
-                    hint.textContent = 'Select a theme from Theme Manager';
-                }
-            }
-
-            document.getElementById('templateThemeSelect').addEventListener('change', updateTemplateThemeHint);
-
-            // ==========================================================
-            // THEME CRUD
-            // ==========================================================
-            function renderThemes() {
-                const themes = getThemes();
-                const grid = document.getElementById('themeGrid');
-                const search = document.getElementById('searchThemes').value.toLowerCase().trim();
-
-                const visible = themes.filter(t => !t._deleted && (t.themeName || '').toLowerCase().includes(search));
-                document.getElementById('themesCount').textContent = visible.length;
-
-                if (visible.length === 0) {
-                    grid.innerHTML =
-                        `<div class="empty-state"><div style="font-size:3rem;margin-bottom:0.5rem;">🎨</div><h3>No Themes Found</h3><p style="color:#a0aec0;">Create your first theme to get started.</p></div>`;
-                    return;
-                }
-
-                let html = '';
-                visible.forEach(theme => {
-                    const isActive = theme.active !== false;
-                    const isDefault = theme.isDefault === true;
-                    const colors = theme.colors || {};
-                    const primary = colors.primary || '#3182ce';
-                    const secondary = colors.secondary || '#9f7aea';
-
-                    html += `
-                        <div class="theme-card ${isActive ? 'active-theme' : ''} ${isDefault ? 'default-theme' : ''}">
-                            <div class="preview-box" style="background: linear-gradient(135deg, ${primary}, ${secondary});">${theme.themeName || 'Untitled Theme'}</div>
-                            <div class="theme-name">${escapeHtml(theme.themeName || 'Untitled')}</div>
-                            <div class="theme-desc">${escapeHtml(theme.description || 'No description')}</div>
-                            <div class="theme-meta">
-                                <span>ID: ${escapeHtml(theme.themeId || '—')}</span>
-                                <span class="badge-status ${isActive ? '' : 'inactive'}">${isActive ? 'Active' : 'Inactive'}</span>
-                                ${isDefault ? '<span style="color:#48bb78;font-weight:700;">★ Default</span>' : ''}
-                            </div>
-                            <div class="theme-actions">
-                                <button class="btn-edit" data-id="${theme.themeId}">✎</button>
-                                <button class="btn-duplicate" data-id="${theme.themeId}">📋</button>
-                                ${!isDefault ? (isActive ? `<button class="btn-inactive" data-id="${theme.themeId}">🔴</button>` : `<button class="btn-active" data-id="${theme.themeId}">🟢</button>`) : ''}
-                                ${!isDefault ? `<button class="btn-danger" data-id="${theme.themeId}">✕</button>` : ''}
-                                ${!isDefault ? `<button class="btn-default" data-id="${theme.themeId}">★ Default</button>` : ''}
-                            </div>
-                        </div>
-                    `;
                 });
-                grid.innerHTML = html;
+                container.innerHTML = html;
 
-                grid.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editTheme(b.dataset.id)));
-                grid.querySelectorAll('.btn-duplicate').forEach(b => b.addEventListener('click', () => duplicateTheme(b.dataset
-                    .id)));
-                grid.querySelectorAll('.btn-inactive').forEach(b => b.addEventListener('click', () => toggleThemeActive(b
-                    .dataset.id, false)));
-                grid.querySelectorAll('.btn-active').forEach(b => b.addEventListener('click', () => toggleThemeActive(b.dataset
-                    .id, true)));
-                grid.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => deleteTheme(b.dataset.id)));
-                grid.querySelectorAll('.btn-default').forEach(b => b.addEventListener('click', () => setDefaultTheme(b.dataset
-                    .id)));
+                // Click to switch
+                container.querySelectorAll('.theme-tag').forEach(tag => {
+                    tag.addEventListener('click', function(e) {
+                        if (e.target.classList.contains('delete-theme')) return;
+                        const id = this.dataset.id;
+                        switchTheme(id);
+                    });
+                });
+
+                // Delete
+                container.querySelectorAll('.delete-theme').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const id = this.dataset.id;
+                        deleteTheme(id);
+                    });
+                });
             }
 
-            function getThemeById(id) { const themes = getThemes(); return themes.find(t => t.themeId === id) || null; }
-
-            function toggleThemeActive(id, setActive) {
-                const themes = getThemes();
+            function switchTheme(id) {
                 const theme = themes.find(t => t.themeId === id);
-                if (!theme) { showToast('Theme not found.', 'error'); return; }
-                if (theme.isDefault && !setActive) { showToast('Cannot deactivate default theme. Set another as default first.',
-                        'warning'); return; }
-                theme.active = setActive;
-                theme.updatedAt = new Date().toISOString();
-                saveThemes(themes);
-                renderThemes();
-                showToast(setActive ? '✅ Theme activated.' : '🔴 Theme deactivated.', 'success');
-            }
-
-            function setDefaultTheme(id) {
-                const themes = getThemes();
-                const theme = themes.find(t => t.themeId === id);
-                if (!theme) { showToast('Theme not found.', 'error'); return; }
-                if (theme.active === false) theme.active = true;
-                themes.forEach(t => { t.isDefault = (t.themeId === id); });
-                saveThemes(themes);
-                renderThemes();
-                showToast('★ Default theme set.', 'success');
+                if (!theme) return;
+                currentThemeId = id;
+                loadThemeToUI(theme);
+                renderThemeList();
+                showToast('📂 Switched to: ' + theme.themeName, 'success', 1500);
             }
 
             function deleteTheme(id) {
-                const themes = getThemes();
+                if (themes.length <= 1) {
+                    showToast('Cannot delete the last theme.', 'warning');
+                    return;
+                }
                 const theme = themes.find(t => t.themeId === id);
-                if (!theme) { showToast('Theme not found.', 'error'); return; }
-                if (theme.isDefault) { showToast('Cannot delete default theme.', 'warning'); return; }
-                if (!confirm('Move this theme to deleted state? It can be restored later.')) return;
+                if (!theme) return;
+                if (!confirm('Delete theme "' + theme.themeName + '"?')) return;
                 theme._deleted = true;
                 theme._deletedAt = new Date().toISOString();
-                saveThemes(themes);
-                renderThemes();
+                saveThemes();
+                // Switch to another theme
+                const next = themes.find(t => !t._deleted && t.themeId !== id);
+                if (next) {
+                    currentThemeId = next.themeId;
+                    loadThemeToUI(next);
+                }
+                renderThemeList();
                 showToast('🗑️ Theme deleted.', 'success');
             }
 
-            function duplicateTheme(id) {
-                const themes = getThemes();
-                const original = themes.find(t => t.themeId === id);
-                if (!original) { showToast('Theme not found.', 'error'); return; }
-                const copy = JSON.parse(JSON.stringify(original));
-                copy.themeId = generateThemeId();
-                copy.themeName = original.themeName + ' (Copy)';
-                copy.isDefault = false;
-                copy.active = true;
-                delete copy._deleted;
-                delete copy._deletedAt;
-                copy.createdAt = new Date().toISOString();
-                copy.updatedAt = new Date().toISOString();
-                copy.version = (original.version || 1) + 1;
-                themes.push(copy);
-                saveThemes(themes);
-                renderThemes();
-                showToast('📋 Theme duplicated.', 'success');
-            }
+            // ---------- NEW THEME ----------
+            document.getElementById('newThemeBtn').addEventListener('click', function() {
+                const count = themes.filter(t => !t._deleted).length + 1;
+                const newTheme = createDefaultTheme();
+                newTheme.themeId = 'THEME-' + String(count).padStart(4, '0');
+                newTheme.themeName = 'H4 Theme ' + count;
+                newTheme.isDefault = false;
+                newTheme.createdAt = new Date().toISOString();
+                newTheme.updatedAt = new Date().toISOString();
+                themes.push(newTheme);
+                saveThemes();
+                currentThemeId = newTheme.themeId;
+                loadThemeToUI(newTheme);
+                renderThemeList();
+                showToast('✅ New theme created: ' + newTheme.themeName, 'success');
+            });
 
-            function editTheme(id) {
-                const theme = getThemeById(id);
-                if (!theme) { showToast('Theme not found.', 'error'); return; }
-                openThemeModal('✎ Edit Theme', theme);
-            }
+            // ---------- LOAD THEME TO UI ----------
+            function loadThemeToUI(theme) {
+                // General
+                document.getElementById('themeId').value = theme.themeId || '';
+                document.getElementById('themeName').value = theme.themeName || '';
+                document.getElementById('themeDesc').value = theme.description || '';
+                document.getElementById('themeActive').checked = theme.active !== false;
+                document.getElementById('themeDefault').checked = theme.isDefault === true;
 
-            // ---------- THEME MODAL ----------
-            const themeModal = document.getElementById('themeModal');
-            const themeModalTitle = document.getElementById('themeModalTitle');
-            const themeForm = document.getElementById('themeForm');
-            const editThemeIdInput = document.getElementById('editThemeId');
-            const themeModalCloseBtn = document.getElementById('themeModalCloseBtn');
-            const themeModalCancelBtn = document.getElementById('themeModalCancelBtn');
-
-            function openThemeModal(title, data = null) {
-                themeModalTitle.textContent = title;
-                if (data) {
-                    editThemeIdInput.value = data.themeId;
-                    document.getElementById('themeId').value = data.themeId;
-                    document.getElementById('themeName').value = data.themeName || '';
-                    document.getElementById('themeDesc').value = data.description || '';
-                    document.getElementById('themeActive').checked = data.active !== false;
-                    document.getElementById('themeDefault').checked = data.isDefault === true;
-                } else {
-                    editThemeIdInput.value = '';
-                    document.getElementById('themeId').value = generateThemeId();
-                    form.reset();
-                    document.getElementById('themeActive').checked = true;
-                    document.getElementById('themeDefault').checked = false;
+                // Canvas
+                if (theme.canvas) {
+                    document.getElementById('canvasWidth').value = theme.canvas.width || 794;
+                    document.getElementById('canvasHeight').value = theme.canvas.height || 1123;
+                    document.getElementById('canvasScale').value = theme.canvas.scale || 100;
+                    document.getElementById('canvasScaleVal').value = theme.canvas.scale || 100;
                 }
-                themeModal.classList.add('open');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => document.getElementById('themeName').focus(), 100);
+
+                // Colors
+                if (theme.colors) {
+                    document.getElementById('cPrimary').value = theme.colors.primary || '#3182ce';
+                    document.getElementById('cSecondary').value = theme.colors.secondary || '#9f7aea';
+                    document.getElementById('cAccent').value = theme.colors.accent || '#48bb78';
+                    document.getElementById('cBg').value = theme.colors.background || '#ffffff';
+                    document.getElementById('cHeaderBg').value = theme.colors.headerBg || '#f7fafc';
+                    document.getElementById('cFooterBg').value = theme.colors.footerBg || '#f7fafc';
+                    document.getElementById('cHeading').value = theme.colors.heading || '#1a202c';
+                    document.getElementById('cText').value = theme.colors.text || '#4a5568';
+                    document.getElementById('cTableHeader').value = theme.colors.tableHeader || '#f7fafc';
+                    document.getElementById('cTableText').value = theme.colors.tableText || '#4a5568';
+                    document.getElementById('cBorder').value = theme.colors.border || '#e2e8f0';
+                }
+
+                // Logo
+                if (theme.logo) {
+                    document.getElementById('logoShow').checked = theme.logo.show !== false;
+                    document.getElementById('logoSrc').value = theme.logo.src || '';
+                    document.getElementById('logoWidth').value = theme.logo.width || 120;
+                    document.getElementById('logoHeight').value = theme.logo.height || 50;
+                    document.getElementById('logoLockAspect').checked = theme.logo.lockAspect !== false;
+                    document.getElementById('logoX').value = theme.logo.x || 30;
+                    document.getElementById('logoY').value = theme.logo.y || 20;
+                    document.getElementById('logoScale').value = theme.logo.scale || 100;
+                    document.getElementById('logoScaleVal').value = theme.logo.scale || 100;
+                    document.getElementById('logoRotation').value = theme.logo.rotation || 0;
+                    document.getElementById('logoOpacity').value = theme.logo.opacity || 100;
+                    document.getElementById('logoBorderWidth').value = theme.logo.borderWidth || 0;
+                    document.getElementById('logoRadius').value = theme.logo.radius || 0;
+                    document.getElementById('logoBorderColor').value = theme.logo.borderColor || '#3182ce';
+                    document.getElementById('logoShadow').checked = theme.logo.shadow || false;
+                    document.getElementById('logoShadowX').value = theme.logo.shadowX || 0;
+                    document.getElementById('logoShadowY').value = theme.logo.shadowY || 4;
+                    document.getElementById('logoShadowBlur').value = theme.logo.shadowBlur || 12;
+                    document.getElementById('logoShadowSpread').value = theme.logo.shadowSpread || 0;
+                    document.getElementById('logoShadowColor').value = theme.logo.shadowColor || '#000000';
+                    document.getElementById('logoShadowOpacity').value = theme.logo.shadowOpacity || 20;
+                    document.getElementById('logoShadowControls').style.display = theme.logo.shadow ? 'block' : 'none';
+                }
+
+                // Header
+                if (theme.header) {
+                    document.getElementById('headerStyle').value = theme.header.style || 'colorbar';
+                    document.getElementById('headerWidth').value = theme.header.width || 714;
+                    document.getElementById('headerHeight').value = theme.header.height || 80;
+                    document.getElementById('headerX').value = theme.header.x || 40;
+                    document.getElementById('headerY').value = theme.header.y || 20;
+                    document.getElementById('headerScale').value = theme.header.scale || 100;
+                    document.getElementById('headerScaleVal').value = theme.header.scale || 100;
+                    document.getElementById('headerPadding').value = theme.header.padding || 20;
+                    document.getElementById('headerOpacity').value = theme.header.opacity || 100;
+                    document.getElementById('headerBorderWidth').value = theme.header.borderWidth || 0;
+                    document.getElementById('headerBorderRadius').value = theme.header.borderRadius || 0;
+                    document.getElementById('headerBorderColor').value = theme.header.borderColor || '#3182ce';
+                    document.getElementById('headerBorderStyle').value = theme.header.borderStyle || 'solid';
+                    document.getElementById('headerShadow').checked = theme.header.shadow || false;
+                    document.getElementById('headerShadowX').value = theme.header.shadowX || 0;
+                    document.getElementById('headerShadowY').value = theme.header.shadowY || 4;
+                    document.getElementById('headerShadowBlur').value = theme.header.shadowBlur || 12;
+                    document.getElementById('headerShadowSpread').value = theme.header.shadowSpread || 0;
+                    document.getElementById('headerShadowColor').value = theme.header.shadowColor || '#000000';
+                    document.getElementById('headerShadowOpacity').value = theme.header.shadowOpacity || 20;
+                    document.getElementById('headerShadowControls').style.display = theme.header.shadow ? 'block' : 'none';
+                }
+
+                // Table
+                if (theme.table) {
+                    document.getElementById('tableWidth').value = theme.table.width || 714;
+                    document.getElementById('tableHeight').value = theme.table.height || 300;
+                    document.getElementById('tableX').value = theme.table.x || 40;
+                    document.getElementById('tableY').value = theme.table.y || 280;
+                    document.getElementById('tableScale').value = theme.table.scale || 100;
+                    document.getElementById('tableScaleVal').value = theme.table.scale || 100;
+                    document.getElementById('tableHeaderHeight').value = theme.table.headerHeight || 35;
+                    document.getElementById('tableRowHeight').value = theme.table.rowHeight || 30;
+                    document.getElementById('tableBorderWidth').value = theme.table.borderWidth || 1;
+                    document.getElementById('tableRadius').value = theme.table.radius || 8;
+                    document.getElementById('tableHeaderFontSize').value = theme.table.headerFontSize || 14;
+                    document.getElementById('tableBodyFontSize').value = theme.table.bodyFontSize || 13;
+                    document.getElementById('col1Width').value = theme.table.col1Width || 40;
+                    document.getElementById('col1Align').value = theme.table.col1Align || 'left';
+                    document.getElementById('col2Width').value = theme.table.col2Width || 15;
+                    document.getElementById('col2Align').value = theme.table.col2Align || 'center';
+                    document.getElementById('col3Width').value = theme.table.col3Width || 20;
+                    document.getElementById('col3Align').value = theme.table.col3Align || 'right';
+                    document.getElementById('col4Width').value = theme.table.col4Width || 25;
+                    document.getElementById('col4Align').value = theme.table.col4Align || 'right';
+                    document.getElementById('tableAlternate').checked = theme.table.alternate !== false;
+                    document.getElementById('tableAlternateColor').value = theme.table.alternateColor || '#f7fafc';
+                    document.getElementById('tableOpacity').value = theme.table.opacity || 100;
+                }
+
+                // Totals
+                if (theme.totals) {
+                    document.getElementById('totalStyle').value = theme.totals.style || 'highlight';
+                    document.getElementById('totalWidth').value = theme.totals.width || 280;
+                    document.getElementById('totalHeight').value = theme.totals.height || 80;
+                    document.getElementById('totalX').value = theme.totals.x || 480;
+                    document.getElementById('totalY').value = theme.totals.y || 700;
+                    document.getElementById('totalScale').value = theme.totals.scale || 100;
+                    document.getElementById('totalScaleVal').value = theme.totals.scale || 100;
+                    document.getElementById('totalBg').value = theme.totals.bg || '#ebf8ff';
+                    document.getElementById('totalTextColor').value = theme.totals.textColor || '#2b6cb0';
+                    document.getElementById('totalFontSize').value = theme.totals.fontSize || 18;
+                    document.getElementById('totalPadding').value = theme.totals.padding || 12;
+                    document.getElementById('totalBorderWidth').value = theme.totals.borderWidth || 0;
+                    document.getElementById('totalRadius').value = theme.totals.radius || 8;
+                    document.getElementById('totalBorderColor').value = theme.totals.borderColor || '#3182ce';
+                    document.getElementById('totalShadow').checked = theme.totals.shadow || false;
+                    document.getElementById('totalShadowX').value = theme.totals.shadowX || 0;
+                    document.getElementById('totalShadowY').value = theme.totals.shadowY || 4;
+                    document.getElementById('totalShadowBlur').value = theme.totals.shadowBlur || 12;
+                    document.getElementById('totalShadowSpread').value = theme.totals.shadowSpread || 0;
+                    document.getElementById('totalShadowColor').value = theme.totals.shadowColor || '#000000';
+                    document.getElementById('totalShadowOpacity').value = theme.totals.shadowOpacity || 10;
+                    document.getElementById('totalShadowControls').style.display = theme.totals.shadow ? 'block' : 'none';
+                }
+
+                // Signature
+                if (theme.signature) {
+                    document.getElementById('sigShow').checked = theme.signature.show !== false;
+                    document.getElementById('sigSrc').value = theme.signature.src || '';
+                    document.getElementById('sigWidth').value = theme.signature.width || 120;
+                    document.getElementById('sigHeight').value = theme.signature.height || 40;
+                    document.getElementById('sigX').value = theme.signature.x || 560;
+                    document.getElementById('sigY').value = theme.signature.y || 920;
+                    document.getElementById('sigScale').value = theme.signature.scale || 100;
+                    document.getElementById('sigScaleVal').value = theme.signature.scale || 100;
+                    document.getElementById('sigRotation').value = theme.signature.rotation || 0;
+                    document.getElementById('sigOpacity').value = theme.signature.opacity || 100;
+                    document.getElementById('sigShadow').checked = theme.signature.shadow || false;
+                    document.getElementById('sigShadowX').value = theme.signature.shadowX || 0;
+                    document.getElementById('sigShadowY').value = theme.signature.shadowY || 4;
+                    document.getElementById('sigShadowBlur').value = theme.signature.shadowBlur || 12;
+                    document.getElementById('sigShadowSpread').value = theme.signature.shadowSpread || 0;
+                    document.getElementById('sigShadowColor').value = theme.signature.shadowColor || '#000000';
+                    document.getElementById('sigShadowOpacity').value = theme.signature.shadowOpacity || 15;
+                    document.getElementById('sigShadowControls').style.display = theme.signature.shadow ? 'block' : 'none';
+                }
+
+                // Footer
+                if (theme.footer) {
+                    document.getElementById('footerText').value = theme.footer.text || 'Thank you for your business!';
+                    document.getElementById('footerWidth').value = theme.footer.width || 714;
+                    document.getElementById('footerHeight').value = theme.footer.height || 50;
+                    document.getElementById('footerX').value = theme.footer.x || 40;
+                    document.getElementById('footerY').value = theme.footer.y || 1010;
+                    document.getElementById('footerScale').value = theme.footer.scale || 100;
+                    document.getElementById('footerScaleVal').value = theme.footer.scale || 100;
+                    document.getElementById('footerFontSize').value = theme.footer.fontSize || 11;
+                    document.getElementById('footerColor').value = theme.footer.color || '#718096';
+                    document.getElementById('footerPosition').value = theme.footer.position || 'center';
+                    document.getElementById('footerBorderWidth').value = theme.footer.borderWidth || 0;
+                    document.getElementById('footerBorderColor').value = theme.footer.borderColor || '#3182ce';
+                    document.getElementById('footerShadow').checked = theme.footer.shadow || false;
+                }
+
+                updatePreview();
             }
 
-            function closeThemeModal() {
-                themeModal.classList.remove('open');
-                document.body.style.overflow = '';
-                themeForm.reset();
-                editThemeIdInput.value = '';
-            }
-
-            themeModalCloseBtn.addEventListener('click', closeThemeModal);
-            themeModalCancelBtn.addEventListener('click', closeThemeModal);
-            themeModal.addEventListener('click', (e) => { if (e.target === themeModal) closeThemeModal(); });
-            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && themeModal.classList.contains('open'))
-                    closeThemeModal(); });
-
-            themeForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const themeId = document.getElementById('themeId').value || generateThemeId();
-                const name = document.getElementById('themeName').value.trim();
-                if (!name) { showToast('Theme Name is required.', 'warning'); return; }
-
-                const themes = getThemes();
-                const editId = document.getElementById('editThemeId').value;
-                const dup = themes.find(t => t.themeName && t.themeName.toLowerCase() === name.toLowerCase() &&
-                    t.themeId !== editId && !t._deleted);
-                if (dup) { showToast('⚠️ Theme name already exists.', 'error'); return; }
-
-                const theme = {
-                    themeId: themeId,
-                    themeName: name,
-                    description: document.getElementById('themeDesc').value.trim(),
-                    active: document.getElementById('themeActive').checked,
-                    isDefault: document.getElementById('themeDefault').checked,
-                    version: (getThemeById(editId)?.version || 0) + 1,
-                    createdAt: getThemeById(editId)?.createdAt || new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
+            // ---------- COLLECT FROM UI ----------
+            function collectThemeFromUI() {
+                return {
+                    themeId: getVal('themeId'),
+                    themeName: getVal('themeName'),
+                    description: getVal('themeDesc'),
+                    active: getCheck('themeActive'),
+                    isDefault: getCheck('themeDefault'),
+                    canvas: {
+                        width: getNum('canvasWidth'),
+                        height: getNum('canvasHeight'),
+                        scale: getNum('canvasScale')
+                    },
                     colors: {
-                        primary: '#3182ce',
-                        secondary: '#9f7aea',
-                        accent: '#48bb78',
-                        background: '#ffffff',
-                        headerBg: '#f7fafc',
-                        footerBg: '#f7fafc',
-                        heading: '#1a202c',
-                        text: '#4a5568',
-                        tableHeader: '#f7fafc',
-                        tableText: '#4a5568',
-                        border: '#e2e8f0',
-                        grad1: '#3182ce',
-                        grad2: '#9f7aea',
-                        logoBorder: '#3182ce',
-                        totalBg: '#ebf8ff',
-                        totalText: '#2b6cb0',
-                        footerText: '#718096'
+                        primary: getVal('cPrimary'),
+                        secondary: getVal('cSecondary'),
+                        accent: getVal('cAccent'),
+                        background: getVal('cBg'),
+                        headerBg: getVal('cHeaderBg'),
+                        footerBg: getVal('cFooterBg'),
+                        heading: getVal('cHeading'),
+                        text: getVal('cText'),
+                        tableHeader: getVal('cTableHeader'),
+                        tableText: getVal('cTableText'),
+                        border: getVal('cBorder')
                     },
-                    fonts: {
-                        heading: "'Poppins', sans-serif",
-                        body: "'Poppins', sans-serif",
-                        customName: '',
-                        customUrl: '',
-                        customFormat: 'woff2',
-                        titleSize: 20,
-                        headingSize: 16,
-                        bodySize: 14,
-                        tableSize: 13,
-                        smallSize: 11,
-                        fontWeight: 400,
-                        lineHeight: 1.4,
-                        letterSpacing: 0,
-                        textAlign: 'left'
+                    logo: {
+                        show: getCheck('logoShow'),
+                        src: getVal('logoSrc'),
+                        width: getNum('logoWidth'),
+                        height: getNum('logoHeight'),
+                        lockAspect: getCheck('logoLockAspect'),
+                        x: getNum('logoX'),
+                        y: getNum('logoY'),
+                        scale: getNum('logoScale'),
+                        rotation: getNum('logoRotation'),
+                        opacity: getNum('logoOpacity'),
+                        borderWidth: getNum('logoBorderWidth'),
+                        radius: getNum('logoRadius'),
+                        borderColor: getVal('logoBorderColor'),
+                        shadow: getCheck('logoShadow'),
+                        shadowX: getNum('logoShadowX'),
+                        shadowY: getNum('logoShadowY'),
+                        shadowBlur: getNum('logoShadowBlur'),
+                        shadowSpread: getNum('logoShadowSpread'),
+                        shadowColor: getVal('logoShadowColor'),
+                        shadowOpacity: getNum('logoShadowOpacity')
                     },
-                    page: {
-                        paperSize: 'A4',
-                        orientation: 'portrait',
-                        customWidth: 794,
-                        customHeight: 1123,
-                        marginTop: 40,
-                        marginBottom: 40,
-                        marginLeft: 40,
-                        marginRight: 40,
-                        showPageNumber: false
-                    },
-                    background: { type: 'solid', image: '', position: 'center', size: 'cover', opacity: 100,
-                        gradientAngle: 135 },
                     header: {
-                        style: 'colorbar',
-                        height: 80,
-                        padding: 20,
-                        image: '',
-                        opacity: 100,
-                        borderWidth: 0,
-                        borderRadius: 0,
-                        borderColor: '#3182ce',
-                        borderStyle: 'solid',
-                        shadow: false,
-                        shadowX: 0,
-                        shadowY: 4,
-                        shadowBlur: 12,
-                        shadowSpread: 0,
-                        shadowColor: '#000000',
-                        shadowOpacity: 20,
-                        customHTML: '',
-                        customWidth: 100,
-                        customAlign: 'center',
-                        customShow: true
+                        style: getVal('headerStyle'),
+                        width: getNum('headerWidth'),
+                        height: getNum('headerHeight'),
+                        x: getNum('headerX'),
+                        y: getNum('headerY'),
+                        scale: getNum('headerScale'),
+                        padding: getNum('headerPadding'),
+                        opacity: getNum('headerOpacity'),
+                        borderWidth: getNum('headerBorderWidth'),
+                        borderRadius: getNum('headerBorderRadius'),
+                        borderColor: getVal('headerBorderColor'),
+                        borderStyle: getVal('headerBorderStyle'),
+                        shadow: getCheck('headerShadow'),
+                        shadowX: getNum('headerShadowX'),
+                        shadowY: getNum('headerShadowY'),
+                        shadowBlur: getNum('headerShadowBlur'),
+                        shadowSpread: getNum('headerShadowSpread'),
+                        shadowColor: getVal('headerShadowColor'),
+                        shadowOpacity: getNum('headerShadowOpacity')
                     },
-                    elements: [],
                     table: {
-                        alternate: true,
-                        alternateColor: '#f7fafc',
-                        borderWidth: 1,
-                        radius: 8,
-                        colDescWidth: 40,
-                        colDescAlign: 'left',
-                        colQtyWidth: 15,
-                        colQtyAlign: 'center',
-                        colRateWidth: 20,
-                        colRateAlign: 'right',
-                        colAmountWidth: 25,
-                        colAmountAlign: 'right',
-                        fontSize: 13
+                        width: getNum('tableWidth'),
+                        height: getNum('tableHeight'),
+                        x: getNum('tableX'),
+                        y: getNum('tableY'),
+                        scale: getNum('tableScale'),
+                        headerHeight: getNum('tableHeaderHeight'),
+                        rowHeight: getNum('tableRowHeight'),
+                        borderWidth: getNum('tableBorderWidth'),
+                        radius: getNum('tableRadius'),
+                        headerFontSize: getNum('tableHeaderFontSize'),
+                        bodyFontSize: getNum('tableBodyFontSize'),
+                        col1Width: getNum('col1Width'),
+                        col1Align: getVal('col1Align'),
+                        col2Width: getNum('col2Width'),
+                        col2Align: getVal('col2Align'),
+                        col3Width: getNum('col3Width'),
+                        col3Align: getVal('col3Align'),
+                        col4Width: getNum('col4Width'),
+                        col4Align: getVal('col4Align'),
+                        alternate: getCheck('tableAlternate'),
+                        alternateColor: getVal('tableAlternateColor'),
+                        opacity: getNum('tableOpacity')
                     },
                     totals: {
-                        style: 'highlight',
-                        fontSize: 18,
-                        padding: 12,
-                        radius: 8,
-                        borderWidth: 0,
-                        borderColor: '#3182ce',
-                        shadow: false,
-                        shadowX: 0,
-                        shadowY: 4,
-                        shadowBlur: 12,
-                        shadowSpread: 0,
-                        shadowColor: '#000000',
-                        shadowOpacity: 10
+                        style: getVal('totalStyle'),
+                        width: getNum('totalWidth'),
+                        height: getNum('totalHeight'),
+                        x: getNum('totalX'),
+                        y: getNum('totalY'),
+                        scale: getNum('totalScale'),
+                        bg: getVal('totalBg'),
+                        textColor: getVal('totalTextColor'),
+                        fontSize: getNum('totalFontSize'),
+                        padding: getNum('totalPadding'),
+                        borderWidth: getNum('totalBorderWidth'),
+                        radius: getNum('totalRadius'),
+                        borderColor: getVal('totalBorderColor'),
+                        shadow: getCheck('totalShadow'),
+                        shadowX: getNum('totalShadowX'),
+                        shadowY: getNum('totalShadowY'),
+                        shadowBlur: getNum('totalShadowBlur'),
+                        shadowSpread: getNum('totalShadowSpread'),
+                        shadowColor: getVal('totalShadowColor'),
+                        shadowOpacity: getNum('totalShadowOpacity')
                     },
                     signature: {
-                        show: true,
-                        src: '',
-                        width: 120,
-                        height: 40,
-                        x: 0,
-                        y: 0,
-                        opacity: 100,
-                        rotation: 0,
-                        shadow: false,
-                        shadowX: 0,
-                        shadowY: 4,
-                        shadowBlur: 12,
-                        shadowSpread: 0,
-                        shadowColor: '#000000',
-                        shadowOpacity: 15
+                        show: getCheck('sigShow'),
+                        src: getVal('sigSrc'),
+                        width: getNum('sigWidth'),
+                        height: getNum('sigHeight'),
+                        x: getNum('sigX'),
+                        y: getNum('sigY'),
+                        scale: getNum('sigScale'),
+                        rotation: getNum('sigRotation'),
+                        opacity: getNum('sigOpacity'),
+                        shadow: getCheck('sigShadow'),
+                        shadowX: getNum('sigShadowX'),
+                        shadowY: getNum('sigShadowY'),
+                        shadowBlur: getNum('sigShadowBlur'),
+                        shadowSpread: getNum('sigShadowSpread'),
+                        shadowColor: getVal('sigShadowColor'),
+                        shadowOpacity: getNum('sigShadowOpacity')
                     },
                     footer: {
-                        text: 'Thank you for your business!',
-                        fontSize: 11,
-                        position: 'center',
-                        borderWidth: 0,
-                        borderColor: '#3182ce',
-                        shadow: false,
-                        shadowX: 0,
-                        shadowY: 2,
-                        shadowBlur: 8,
-                        shadowSpread: 0,
-                        shadowColor: '#000000',
-                        shadowOpacity: 10
-                    }
+                        text: getVal('footerText'),
+                        width: getNum('footerWidth'),
+                        height: getNum('footerHeight'),
+                        x: getNum('footerX'),
+                        y: getNum('footerY'),
+                        scale: getNum('footerScale'),
+                        fontSize: getNum('footerFontSize'),
+                        color: getVal('footerColor'),
+                        position: getVal('footerPosition'),
+                        borderWidth: getNum('footerBorderWidth'),
+                        borderColor: getVal('footerBorderColor'),
+                        shadow: getCheck('footerShadow')
+                    },
+                    updatedAt: new Date().toISOString()
                 };
+            }
 
-                if (editId) {
-                    const idx = themes.findIndex(t => t.themeId === editId);
-                    if (idx === -1) { showToast('Theme not found.', 'error'); return; }
-                    if (theme.isDefault) themes.forEach(t => { t.isDefault = (t.themeId === editId); });
-                    themes[idx] = { ...themes[idx], ...theme };
-                    if (saveThemes(themes)) showToast('✅ Theme updated.', 'success');
+            // ---------- SAVE THEME ----------
+            function saveCurrentTheme() {
+                const themeData = collectThemeFromUI();
+                const idx = themes.findIndex(t => t.themeId === themeData.themeId);
+                if (idx === -1) {
+                    // New theme
+                    themes.push(themeData);
                 } else {
-                    if (theme.isDefault) themes.forEach(t => { t.isDefault = false; });
-                    themes.push(theme);
-                    if (saveThemes(themes)) showToast('✅ Theme created.', 'success');
+                    // Preserve createdAt
+                    themeData.createdAt = themes[idx].createdAt;
+                    themes[idx] = { ...themes[idx], ...themeData };
+                }
+                saveThemes();
+                renderThemeList();
+                showToast('✅ Theme saved: ' + themeData.themeName, 'success');
+            }
+
+            // ---------- UPDATE PREVIEW ----------
+            function updatePreview() {
+                const canvas = document.getElementById('themeCanvas');
+
+                // --- Canvas ---
+                const cw = getNum('canvasWidth');
+                const ch = getNum('canvasHeight');
+                const cScale = getNum('canvasScale') / 100;
+                canvas.style.width = (cw * cScale) + 'px';
+                canvas.style.aspectRatio = cw + ' / ' + ch;
+
+                // --- Colors ---
+                const primary = getVal('cPrimary');
+                const secondary = getVal('cSecondary');
+                const bg = getVal('cBg');
+                const headerBg = getVal('cHeaderBg');
+                const footerBg = getVal('cFooterBg');
+                const heading = getVal('cHeading');
+                const text = getVal('cText');
+                const tableHeader = getVal('cTableHeader');
+                const tableText = getVal('cTableText');
+                const border = getVal('cBorder');
+
+                canvas.style.background = bg;
+                canvas.style.borderColor = border;
+
+                // --- HEADER (Abs Element) ---
+                const headerEl = document.getElementById('canvasHeader');
+                const headerStyle = getVal('headerStyle');
+                const headerWidth = getNum('headerWidth');
+                const headerHeight = getNum('headerHeight');
+                const headerX = getNum('headerX');
+                const headerY = getNum('headerY');
+                const headerScale = getNum('headerScale') / 100;
+                const headerPadding = getNum('headerPadding');
+                const headerOpacity = getNum('headerOpacity') / 100;
+                const headerBorderW = getNum('headerBorderWidth');
+                const headerBorderR = getNum('headerBorderRadius');
+                const headerBorderC = getVal('headerBorderColor');
+                const headerBorderS = getVal('headerBorderStyle');
+                const headerShadow = getCheck('headerShadow');
+                const hShadowX = getNum('headerShadowX');
+                const hShadowY = getNum('headerShadowY');
+                const hShadowBlur = getNum('headerShadowBlur');
+                const hShadowSpread = getNum('headerShadowSpread');
+                const hShadowColor = getVal('headerShadowColor');
+                const hShadowOpacity = getNum('headerShadowOpacity') / 100;
+
+                let headerBgColor = headerBg;
+                let headerTextColor = heading;
+                if (headerStyle === 'colorbar') {
+                    headerBgColor = `linear-gradient(135deg, ${primary}, ${secondary})`;
+                    headerTextColor = '#ffffff';
+                } else if (headerStyle === 'wave') {
+                    headerBgColor = `linear-gradient(135deg, ${primary} 0%, ${primary} 50%, ${secondary} 100%)`;
+                    headerTextColor = '#ffffff';
                 }
 
-                closeThemeModal();
-                renderThemes();
-                populateTemplateThemeDropdown();
-            });
+                const hShadowStyle = headerShadow ?
+                    `box-shadow: ${hShadowX}px ${hShadowY}px ${hShadowBlur}px ${hShadowSpread}px rgba(${hexToRgb(hShadowColor)}, ${hShadowOpacity});` :
+                    '';
 
-            // ==========================================================
-            // TEMPLATE CRUD
-            // ==========================================================
-            function renderTemplates() {
-                const templates = getTemplates();
-                const themes = getThemes();
-                const grid = document.getElementById('templateGrid');
-                const search = document.getElementById('searchTemplates').value.toLowerCase().trim();
+                // Apply absolute positioning + transform
+                headerEl.style.cssText = `
+                    position: absolute;
+                    left: ${headerX}px;
+                    top: ${headerY}px;
+                    width: ${headerWidth}px;
+                    min-height: ${headerHeight}px;
+                    padding: ${headerPadding}px;
+                    background: ${headerBgColor};
+                    color: ${headerTextColor};
+                    border-radius: ${headerStyle === 'rounded' ? '12px' : '0'};
+                    opacity: ${headerOpacity};
+                    border: ${headerBorderW}px ${headerBorderS} ${headerBorderC};
+                    border-radius: ${headerBorderR}px;
+                    ${hShadowStyle}
+                    transform: scale(${headerScale});
+                    transform-origin: top left;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    z-index: 2;
+                    box-sizing: border-box;
+                `;
 
-                const visible = templates.filter(t => !t._deleted && (t.templateName || '').toLowerCase().includes(search));
-                document.getElementById('templatesCount').textContent = visible.length;
+                // --- LOGO (Abs Element inside header) ---
+                const logoShow = getCheck('logoShow');
+                const logoEl = document.getElementById('canvasLogo');
+                const logoSrc = getVal('logoSrc');
+                const logoWidth = getNum('logoWidth');
+                const logoHeight = getNum('logoHeight');
+                const logoX = getNum('logoX');
+                const logoY = getNum('logoY');
+                const logoScale = getNum('logoScale') / 100;
+                const logoRotation = getNum('logoRotation');
+                const logoOpacity = getNum('logoOpacity') / 100;
+                const logoBorderW = getNum('logoBorderWidth');
+                const logoRadius = getNum('logoRadius');
+                const logoBorderC = getVal('logoBorderColor');
+                const logoShadow = getCheck('logoShadow');
+                const lShadowX = getNum('logoShadowX');
+                const lShadowY = getNum('logoShadowY');
+                const lShadowBlur = getNum('logoShadowBlur');
+                const lShadowSpread = getNum('logoShadowSpread');
+                const lShadowColor = getVal('logoShadowColor');
+                const lShadowOpacity = getNum('logoShadowOpacity') / 100;
 
-                if (visible.length === 0) {
-                    grid.innerHTML = `
-                        <div class="empty-state">
-                            <div style="font-size:3rem;margin-bottom:0.5rem;">📋</div>
-                            <h3>No Templates Found</h3>
-                            <p style="color:#a0aec0;">Create your first template to connect themes to documents.</p>
-                        </div>
+                const lShadowStyle = logoShadow ?
+                    `box-shadow: ${lShadowX}px ${lShadowY}px ${lShadowBlur}px ${lShadowSpread}px rgba(${hexToRgb(lShadowColor)}, ${lShadowOpacity});` :
+                    '';
+
+                if (logoShow) {
+                    const w = logoWidth * logoScale;
+                    const h = logoHeight * logoScale;
+                    if (logoSrc) {
+                        logoEl.innerHTML =
+                            `<img src="${logoSrc}" style="width:${w}px;height:${h}px;object-fit:contain;border-radius:${logoRadius}px;border:${logoBorderW}px solid ${logoBorderC};${lShadowStyle}" />`;
+                    } else {
+                        logoEl.innerHTML =
+                            `<div style="width:${w}px;height:${h}px;background:${secondary};border-radius:${logoRadius}px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.7rem;border:${logoBorderW}px solid ${logoBorderC};${lShadowStyle}">LOGO</div>`;
+                    }
+                    logoEl.style.cssText = `
+                        position: absolute;
+                        left: ${logoX}px;
+                        top: ${logoY}px;
+                        transform: rotate(${logoRotation}deg);
+                        opacity: ${logoOpacity};
+                        z-index: 3;
                     `;
-                    return;
+                    logoEl.style.display = 'block';
+                } else {
+                    logoEl.style.display = 'none';
                 }
 
-                let html = '';
-                visible.forEach(t => {
-                    const isActive = t.active !== false;
-                    const isDefault = t.isDefault === true;
-                    const theme = themes.find(th => th.themeId === t.themeId);
-                    const themeName = theme ? theme.themeName : '⚠️ Theme not found';
-                    const themeColors = theme ? theme.colors || {} : {};
-                    const primary = themeColors.primary || '#9f7aea';
-                    const secondary = themeColors.secondary || '#9f7aea';
+                // Title inside header
+                const titleEl = headerEl.querySelector('.doc-title');
+                if (titleEl) {
+                    titleEl.style.color = headerTextColor;
+                    titleEl.style.fontSize = '20px';
+                }
 
-                    html += `
-                        <div class="template-card">
-                            <div class="info">
-                                <div class="name">${escapeHtml(t.templateName)}</div>
-                                <div class="details">
-                                    <span class="tag">${escapeHtml(t.documentType || 'quotation')}</span>
-                                    <span class="theme-name">
-                                        <span class="theme-mini-preview">
-                                            <span class="dot" style="background:${primary};"></span>
-                                            <span class="bar">
-                                                <span style="background:${primary};"></span>
-                                                <span style="background:${secondary};"></span>
-                                                <span style="background:${primary};width:12px;"></span>
-                                            </span>
-                                            ${escapeHtml(themeName)}
-                                        </span>
-                                    </span>
-                                    <span class="badge-status ${isActive ? '' : 'inactive'}">${isActive ? 'Active' : 'Inactive'}</span>
-                                    ${isDefault ? '<span style="color:#48bb78;font-weight:700;">★ Default</span>' : ''}
-                                </div>
-                                ${t.description ? `<div style="font-size:0.8rem;color:#718096;margin-top:0.2rem;">${escapeHtml(t.description)}</div>` : ''}
-                            </div>
-                            <div class="actions">
-                                <button class="btn-edit" data-id="${t.templateId}">✎</button>
-                                <button class="btn-duplicate" data-id="${t.templateId}">📋</button>
-                                ${!isDefault ? (isActive ? `<button class="btn-inactive" data-id="${t.templateId}">🔴</button>` : `<button class="btn-active" data-id="${t.templateId}">🟢</button>`) : ''}
-                                ${!isDefault ? `<button class="btn-default" data-id="${t.templateId}">★</button>` : ''}
-                                ${!isDefault ? `<button class="btn-danger" data-id="${t.templateId}">✕</button>` : ''}
-                            </div>
-                        </div>
+                // --- CUSTOMER (static) ---
+                const customerEl = document.getElementById('canvasCustomer');
+                customerEl.style.color = text;
+                customerEl.style.fontSize = '14px';
+                customerEl.style.margin = '10px 20px';
+                customerEl.style.position = 'relative';
+                customerEl.style.zIndex = '1';
+
+                // --- TABLE (Abs Element) ---
+                const tableEl = document.getElementById('canvasTable');
+                const tWidth = getNum('tableWidth');
+                const tHeight = getNum('tableHeight');
+                const tX = getNum('tableX');
+                const tY = getNum('tableY');
+                const tScale = getNum('tableScale') / 100;
+                const tBorderW = getNum('tableBorderWidth');
+                const tRadius = getNum('tableRadius');
+                const tHeaderFont = getNum('tableHeaderFontSize');
+                const tBodyFont = getNum('tableBodyFontSize');
+                const tHeaderH = getNum('tableHeaderHeight');
+                const tRowH = getNum('tableRowHeight');
+                const tAlt = getCheck('tableAlternate');
+                const tAltColor = getVal('tableAlternateColor');
+                const tOpacity = getNum('tableOpacity') / 100;
+                const col1W = getNum('col1Width');
+                const col2W = getNum('col2Width');
+                const col3W = getNum('col3Width');
+                const col4W = getNum('col4Width');
+                const col1Align = getVal('col1Align');
+                const col2Align = getVal('col2Align');
+                const col3Align = getVal('col3Align');
+                const col4Align = getVal('col4Align');
+
+                tableEl.style.cssText = `
+                    position: absolute;
+                    left: ${tX}px;
+                    top: ${tY}px;
+                    width: ${tWidth}px;
+                    height: ${tHeight}px;
+                    border-collapse: collapse;
+                    font-size: ${tBodyFont}px;
+                    border: ${tBorderW}px solid ${border};
+                    border-radius: ${tRadius}px;
+                    overflow: hidden;
+                    opacity: ${tOpacity};
+                    transform: scale(${tScale});
+                    transform-origin: top left;
+                    z-index: 2;
+                `;
+
+                const ths = tableEl.querySelectorAll('th');
+                const colWidths = [col1W, col2W, col3W, col4W];
+                const colAligns = [col1Align, col2Align, col3Align, col4Align];
+                ths.forEach((th, idx) => {
+                    th.style.cssText = `
+                        background: ${tableHeader};
+                        color: ${heading};
+                        padding: 4px 10px;
+                        text-align: ${colAligns[idx] || 'left'};
+                        font-size: ${tHeaderFont}px;
+                        border-bottom: 2px solid ${border};
+                        width: ${colWidths[idx] || 25}%;
+                        height: ${tHeaderH}px;
                     `;
                 });
-                grid.innerHTML = html;
 
-                grid.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editTemplate(b.dataset.id)));
-                grid.querySelectorAll('.btn-duplicate').forEach(b => b.addEventListener('click', () => duplicateTemplate(b
-                    .dataset.id)));
-                grid.querySelectorAll('.btn-inactive').forEach(b => b.addEventListener('click', () => toggleTemplateActive(b
-                    .dataset.id, false)));
-                grid.querySelectorAll('.btn-active').forEach(b => b.addEventListener('click', () => toggleTemplateActive(b
-                    .dataset.id, true)));
-                grid.querySelectorAll('.btn-default').forEach(b => b.addEventListener('click', () => setDefaultTemplate(b
-                    .dataset.id)));
-                grid.querySelectorAll('.btn-danger').forEach(b => b.addEventListener('click', () => deleteTemplate(b.dataset
-                    .id)));
-            }
-
-            function getTemplateById(id) {
-                const templates = getTemplates();
-                return templates.find(t => t.templateId === id) || null;
-            }
-
-            function toggleTemplateActive(id, setActive) {
-                const templates = getTemplates();
-                const template = templates.find(t => t.templateId === id);
-                if (!template) { showToast('Template not found.', 'error'); return; }
-                if (template.isDefault && !setActive) {
-                    showToast('Cannot deactivate default template. Set another as default first.', 'warning');
-                    return;
-                }
-                template.active = setActive;
-                template.updatedAt = new Date().toISOString();
-                saveTemplates(templates);
-                renderTemplates();
-                showToast(setActive ? '✅ Template activated.' : '🔴 Template deactivated.', 'success');
-            }
-
-            function setDefaultTemplate(id) {
-                const templates = getTemplates();
-                const template = templates.find(t => t.templateId === id);
-                if (!template) { showToast('Template not found.', 'error'); return; }
-                const docType = template.documentType || 'quotation';
-                templates.forEach(t => { if (t.documentType === docType) t.isDefault = false; });
-                template.isDefault = true;
-                template.active = true;
-                template.updatedAt = new Date().toISOString();
-                saveTemplates(templates);
-                renderTemplates();
-                showToast('★ Default template set.', 'success');
-            }
-
-            function deleteTemplate(id) {
-                const templates = getTemplates();
-                const template = templates.find(t => t.templateId === id);
-                if (!template) { showToast('Template not found.', 'error'); return; }
-                if (template.isDefault) { showToast('Cannot delete default template.', 'warning'); return; }
-                if (!confirm('Move this template to deleted state? It can be restored later.')) return;
-                template._deleted = true;
-                template._deletedAt = new Date().toISOString();
-                saveTemplates(templates);
-                renderTemplates();
-                showToast('🗑️ Template deleted.', 'success');
-            }
-
-            function duplicateTemplate(id) {
-                const templates = getTemplates();
-                const original = templates.find(t => t.templateId === id);
-                if (!original) { showToast('Template not found.', 'error'); return; }
-                const copy = JSON.parse(JSON.stringify(original));
-                copy.templateId = generateTemplateId();
-                copy.templateName = original.templateName + ' (Copy)';
-                copy.isDefault = false;
-                copy.active = true;
-                delete copy._deleted;
-                delete copy._deletedAt;
-                copy.createdAt = new Date().toISOString();
-                copy.updatedAt = new Date().toISOString();
-                // Preserve future fields
-                templates.push(copy);
-                saveTemplates(templates);
-                renderTemplates();
-                showToast('📋 Template duplicated.', 'success');
-            }
-
-            function editTemplate(id) {
-                const template = getTemplateById(id);
-                if (!template) { showToast('Template not found.', 'error'); return; }
-                openTemplateModal('✎ Edit Template', template);
-            }
-
-            // ---------- TEMPLATE MODAL ----------
-            const templateModal = document.getElementById('templateModal');
-            const templateModalTitle = document.getElementById('templateModalTitle');
-            const templateForm = document.getElementById('templateForm');
-            const editTemplateIdInput = document.getElementById('editTemplateId');
-            const templateModalCloseBtn = document.getElementById('templateModalCloseBtn');
-            const templateModalCancelBtn = document.getElementById('templateModalCancelBtn');
-
-            function openTemplateModal(title, data = null) {
-                templateModalTitle.textContent = title;
-                populateTemplateThemeDropdown();
-
-                if (data) {
-                    editTemplateIdInput.value = data.templateId;
-                    document.getElementById('templateName').value = data.templateName || '';
-                    document.getElementById('documentType').value = data.documentType || 'quotation';
-                    document.getElementById('templateThemeSelect').value = data.themeId || '';
-                    document.getElementById('templateDesc').value = data.description || '';
-                    document.getElementById('templateActive').checked = data.active !== false;
-                    document.getElementById('templateDefault').checked = data.isDefault === true;
-                    updateTemplateThemeHint();
-                } else {
-                    editTemplateIdInput.value = '';
-                    templateForm.reset();
-                    document.getElementById('templateActive').checked = true;
-                    document.getElementById('templateDefault').checked = false;
-                    document.getElementById('documentType').value = 'quotation';
-                    document.getElementById('templateThemeSelect').value = '';
-                    updateTemplateThemeHint();
-                }
-
-                templateModal.classList.add('open');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => document.getElementById('templateName').focus(), 100);
-            }
-
-            function closeTemplateModal() {
-                templateModal.classList.remove('open');
-                document.body.style.overflow = '';
-                templateForm.reset();
-                editTemplateIdInput.value = '';
-            }
-
-            templateModalCloseBtn.addEventListener('click', closeTemplateModal);
-            templateModalCancelBtn.addEventListener('click', closeTemplateModal);
-            templateModal.addEventListener('click', (e) => { if (e.target === templateModal) closeTemplateModal(); });
-            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && templateModal.classList.contains('open'))
-                    closeTemplateModal(); });
-
-            templateForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const name = document.getElementById('templateName').value.trim();
-                const docType = document.getElementById('documentType').value;
-                const themeId = document.getElementById('templateThemeSelect').value;
-                const description = document.getElementById('templateDesc').value.trim();
-                const active = document.getElementById('templateActive').checked;
-                const isDefault = document.getElementById('templateDefault').checked;
-                const editId = document.getElementById('editTemplateId').value;
-
-                if (!name) { showToast('Template Name is required.', 'warning'); return; }
-                if (!themeId) { showToast('Please select a Theme.', 'warning'); return; }
-
-                const templates = getTemplates();
-
-                // Check duplicate name
-                const dup = templates.find(t =>
-                    t.templateName && t.templateName.toLowerCase() === name.toLowerCase() &&
-                    t.templateId !== editId && !t._deleted
-                );
-                if (dup) { showToast('⚠️ Template name already exists.', 'error'); return; }
-
-                // Check if theme exists
-                const themes = getThemes();
-                const themeExists = themes.some(th => th.themeId === themeId && !th._deleted);
-                if (!themeExists) { showToast('⚠️ Selected theme not found. Please choose another.', 'error'); return; }
-
-                const now = new Date().toISOString();
-
-                // Future fields reserved
-                const futureFields = {
-                    branchId: null,
-                    module: null,
-                    rateProfile: null,
-                    version: 1
-                };
-
-                if (editId) {
-                    const idx = templates.findIndex(t => t.templateId === editId);
-                    if (idx === -1) { showToast('Template not found.', 'error'); return; }
-
-                    if (isDefault) {
-                        templates.forEach(t => { if (t.documentType === docType) t.isDefault = false; });
-                    }
-
-                    templates[idx] = {
-                        ...templates[idx],
-                        templateName: name,
-                        documentType: docType,
-                        themeId: themeId,
-                        description: description,
-                        active: active,
-                        isDefault: isDefault,
-                        updatedAt: now,
-                        ...futureFields
-                    };
-                    saveTemplates(templates);
-                    showToast('✅ Template updated.', 'success');
-                } else {
-                    if (isDefault) {
-                        templates.forEach(t => { if (t.documentType === docType) t.isDefault = false; });
-                    }
-
-                    const newTemplate = {
-                        templateId: generateTemplateId(),
-                        templateName: name,
-                        documentType: docType,
-                        themeId: themeId,
-                        description: description,
-                        active: active,
-                        isDefault: isDefault,
-                        createdAt: now,
-                        updatedAt: now,
-                        ...futureFields
-                    };
-                    templates.push(newTemplate);
-                    saveTemplates(templates);
-                    showToast('✅ Template created.', 'success');
-                }
-
-                closeTemplateModal();
-                renderTemplates();
-            });
-
-            // ---------- SEED DEFAULT TEMPLATES (FIXED) ----------
-            function seedDefaultTemplates() {
-                const templates = getTemplates();
-                const themes = getThemes();
-                if (templates.length === 0 && themes.length > 0) {
-                    const defaultTheme = themes.find(t => t.isDefault === true && !t._deleted) || themes[0];
-                    if (defaultTheme) {
-                        const defaults = [
-                            { name: 'H4 Standard Quotation', docType: 'quotation',
-                            desc: 'Default quotation template', isDefault: true },
-                            { name: 'H4 Standard Invoice', docType: 'invoice',
-                            desc: 'Default invoice template', isDefault: true },
-                            { name: 'H4 General Document', docType: 'general',
-                            desc: 'Default general document template', isDefault: true }
-                        ];
-                        const now = new Date().toISOString();
-                        defaults.forEach((d, idx) => {
-                            templates.push({
-                                templateId: 'TPL-' + String(idx + 1).padStart(4, '0'),
-                                templateName: d.name,
-                                documentType: d.docType,
-                                themeId: defaultTheme.themeId,
-                                description: d.desc,
-                                active: true,
-                                isDefault: d.isDefault,
-                                createdAt: now,
-                                updatedAt: now,
-                                branchId: null,
-                                module: null,
-                                rateProfile: null,
-                                version: 1
-                            });
-                        });
-                        saveTemplates(templates);
-                    }
-                }
-            }
-
-            // ---------- TAB SWITCHING ----------
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const panels = {
-                themes: document.getElementById('panelThemes'),
-                templates: document.getElementById('panelTemplates')
-            };
-
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    const tab = this.dataset.tab;
-                    Object.keys(panels).forEach(key => {
-                        panels[key].classList.toggle('active', key === tab);
+                const rows = tableEl.querySelectorAll('tbody tr');
+                rows.forEach((row, rowIdx) => {
+                    const tds = row.querySelectorAll('td');
+                    tds.forEach((td, colIdx) => {
+                        td.style.cssText = `
+                            padding: 4px 10px;
+                            color: ${tableText};
+                            font-size: ${tBodyFont}px;
+                            background: ${tAlt && rowIdx % 2 === 1 ? tAltColor : 'transparent'};
+                            text-align: ${colAligns[colIdx] || 'left'};
+                            height: ${tRowH}px;
+                            border-bottom: ${tBorderW}px solid ${border};
+                        `;
                     });
                 });
+
+                // --- TOTALS (Abs Element) ---
+                const totalsEl = document.getElementById('canvasTotals');
+                const tStyle = getVal('totalStyle');
+                const tBg = getVal('totalBg');
+                const tTextColor = getVal('totalTextColor');
+                const tFontSize = getNum('totalFontSize');
+                const tPadding = getNum('totalPadding');
+                const tBorderW2 = getNum('totalBorderWidth');
+                const tRadius2 = getNum('totalRadius');
+                const tBorderC2 = getVal('totalBorderColor');
+                const tShadow = getCheck('totalShadow');
+                const tShadowX = getNum('totalShadowX');
+                const tShadowY = getNum('totalShadowY');
+                const tShadowBlur = getNum('totalShadowBlur');
+                const tShadowSpread = getNum('totalShadowSpread');
+                const tShadowColor = getVal('totalShadowColor');
+                const tShadowOpacity2 = getNum('totalShadowOpacity') / 100;
+                const totalWidth = getNum('totalWidth');
+                const totalHeight = getNum('totalHeight');
+                const totalX = getNum('totalX');
+                const totalY = getNum('totalY');
+                const totalScale = getNum('totalScale') / 100;
+
+                let totalStyleStr = '';
+                if (tStyle === 'highlight') {
+                    totalStyleStr =
+                        `background:${tBg};padding:${tPadding}px;border-radius:${tRadius2}px;border:${tBorderW2}px solid ${tBorderC2};`;
+                } else if (tStyle === 'coloredbar') {
+                    totalStyleStr =
+                        `background:${primary};padding:${tPadding}px;border-radius:${tRadius2}px;color:#fff;border:${tBorderW2}px solid ${tBorderC2};`;
+                } else if (tStyle === 'large') {
+                    totalStyleStr = `font-size:${tFontSize + 6}px;`;
+                } else {
+                    totalStyleStr = `padding:${tPadding}px;`;
+                }
+
+                const tShadowStyle = tShadow ?
+                    `box-shadow: ${tShadowX}px ${tShadowY}px ${tShadowBlur}px ${tShadowSpread}px rgba(${hexToRgb(tShadowColor)}, ${tShadowOpacity2});` :
+                    '';
+
+                totalsEl.style.cssText = `
+                    position: absolute;
+                    left: ${totalX}px;
+                    top: ${totalY}px;
+                    width: ${totalWidth}px;
+                    height: ${totalHeight}px;
+                    text-align: right;
+                    ${totalStyleStr}
+                    ${tShadowStyle}
+                    color: ${tStyle === 'coloredbar' ? '#fff' : tTextColor};
+                    font-size: ${tFontSize}px;
+                    transform: scale(${totalScale});
+                    transform-origin: top left;
+                    z-index: 2;
+                    box-sizing: border-box;
+                    overflow: hidden;
+                `;
+
+                // --- SIGNATURE (Abs Element) ---
+                let sigEl = document.getElementById('canvasSignature');
+                if (!sigEl) {
+                    sigEl = document.createElement('div');
+                    sigEl.id = 'canvasSignature';
+                    sigEl.className = 'abs-element';
+                    document.getElementById('themeCanvas').appendChild(sigEl);
+                }
+                const sigShow = getCheck('sigShow');
+                const sigSrc = getVal('sigSrc');
+                const sigW = getNum('sigWidth');
+                const sigH = getNum('sigHeight');
+                const sigX = getNum('sigX');
+                const sigY = getNum('sigY');
+                const sigScale = getNum('sigScale') / 100;
+                const sigRot = getNum('sigRotation');
+                const sigOp = getNum('sigOpacity') / 100;
+                const sigShadow = getCheck('sigShadow');
+                const sShadowX = getNum('sigShadowX');
+                const sShadowY = getNum('sigShadowY');
+                const sShadowBlur = getNum('sigShadowBlur');
+                const sShadowSpread = getNum('sigShadowSpread');
+                const sShadowColor = getVal('sigShadowColor');
+                const sShadowOpacity = getNum('sigShadowOpacity') / 100;
+
+                if (sigShow) {
+                    const w = sigW * sigScale;
+                    const h = sigH * sigScale;
+                    const sShadowStyle = sigShadow ?
+                        `box-shadow: ${sShadowX}px ${sShadowY}px ${sShadowBlur}px ${sShadowSpread}px rgba(${hexToRgb(sShadowColor)}, ${sShadowOpacity});` :
+                        '';
+                    if (sigSrc) {
+                        sigEl.innerHTML =
+                            `<img src="${sigSrc}" style="width:${w}px;height:${h}px;object-fit:contain;opacity:${sigOp};transform:rotate(${sigRot}deg);${sShadowStyle}" />`;
+                    } else {
+                        sigEl.innerHTML =
+                            `<div style="width:${w}px;height:${h}px;background:#edf2f7;border:2px dashed #a0aec0;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:#a0aec0;opacity:${sigOp};transform:rotate(${sigRot}deg);${sShadowStyle}">Signature</div>`;
+                    }
+                    sigEl.style.cssText = `
+                        position: absolute;
+                        left: ${sigX}px;
+                        top: ${sigY}px;
+                        z-index: 5;
+                        transform: scale(${sigScale});
+                        transform-origin: top left;
+                    `;
+                    sigEl.style.display = 'block';
+                } else {
+                    sigEl.style.display = 'none';
+                }
+
+                // --- FOOTER (Abs Element) ---
+                const footerEl = document.getElementById('canvasFooter');
+                const footerText = getVal('footerText');
+                const fWidth = getNum('footerWidth');
+                const fHeight = getNum('footerHeight');
+                const fX = getNum('footerX');
+                const fY = getNum('footerY');
+                const fScale = getNum('footerScale') / 100;
+                const fFontSize = getNum('footerFontSize');
+                const fColor = getVal('footerColor');
+                const fPos = getVal('footerPosition');
+                const fBorderW = getNum('footerBorderWidth');
+                const fBorderC = getVal('footerBorderColor');
+                const fShadow = getCheck('footerShadow');
+
+                footerEl.textContent = footerText;
+                footerEl.style.cssText = `
+                    position: absolute;
+                    left: ${fX}px;
+                    top: ${fY}px;
+                    width: ${fWidth}px;
+                    min-height: ${fHeight}px;
+                    font-size: ${fFontSize}px;
+                    color: ${fColor};
+                    text-align: ${fPos};
+                    border-top: ${fBorderW}px solid ${fBorderC};
+                    padding: 8px 0;
+                    background: ${footerBg};
+                    transform: scale(${fScale});
+                    transform-origin: top left;
+                    ${fShadow ? `box-shadow: 0 -2px 8px rgba(0,0,0,0.05);` : ''}
+                    z-index: 2;
+                    box-sizing: border-box;
+                `;
+
+                // --- Add resize handles to selected elements ---
+                // Cleanup old handles
+                document.querySelectorAll('.resize-handle, .rotate-handle, .rotate-line').forEach(el => el.remove());
+
+                // Add handles only if an element is selected and it's abs-element
+                document.querySelectorAll('.abs-element.selected').forEach(el => {
+                    if (el.id === 'canvasHeader' || el.id === 'canvasTable' || el.id === 'canvasTotals' || el.id ===
+                        'canvasSignature' || el.id === 'canvasFooter') {
+                        addResizeHandles(el);
+                    }
+                });
+
+                // --- Click to select for abs elements ---
+                document.querySelectorAll('.abs-element').forEach(el => {
+                    el.addEventListener('click', function(e) {
+                        if (e.target.classList.contains('resize-handle') || e.target.classList.contains(
+                            'rotate-handle')) return;
+                        document.querySelectorAll('.abs-element').forEach(el2 => el2.classList.remove(
+                        'selected'));
+                        this.classList.add('selected');
+                        // Remove old handles
+                        document.querySelectorAll('.resize-handle, .rotate-handle, .rotate-line').forEach(h =>
+                            h.remove());
+                        addResizeHandles(this);
+                    });
+                });
+
+                // Remove handles when clicking canvas background
+                document.getElementById('themeCanvas').addEventListener('click', function(e) {
+                    if (e.target === this || e.target === document.getElementById('themeCanvas')) {
+                        document.querySelectorAll('.abs-element').forEach(el => el.classList.remove('selected'));
+                        document.querySelectorAll('.resize-handle, .rotate-handle, .rotate-line').forEach(h => h
+                            .remove());
+                    }
+                });
+            }
+
+            // ---------- ADD RESIZE HANDLES ----------
+            function addResizeHandles(element) {
+                const pos = ['tl', 'tr', 'bl', 'br'];
+                pos.forEach(p => {
+                    const handle = document.createElement('div');
+                    handle.className = `resize-handle ${p}`;
+                    handle.addEventListener('pointerdown', function(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        // Simple resize simulation
+                        const el = this.closest('.abs-element');
+                        const rect = el.getBoundingClientRect();
+                        const startX = e.clientX;
+                        const startY = e.clientY;
+                        const startWidth = el.offsetWidth;
+                        const startHeight = el.offsetHeight;
+                        const startLeft = el.offsetLeft;
+                        const startTop = el.offsetTop;
+
+                        const move = function(ev) {
+                            let dx = ev.clientX - startX;
+                            let dy = ev.clientY - startY;
+                            if (p.includes('r')) {
+                                el.style.width = Math.max(30, startWidth + dx) + 'px';
+                                // Update input if it exists
+                                const id = el.id.replace('canvas', '').toLowerCase();
+                                const wInput = document.getElementById(id + 'Width');
+                                if (wInput) wInput.value = Math.max(30, startWidth + dx);
+                            }
+                            if (p.includes('b')) {
+                                el.style.height = Math.max(30, startHeight + dy) + 'px';
+                                const id = el.id.replace('canvas', '').toLowerCase();
+                                const hInput = document.getElementById(id + 'Height');
+                                if (hInput) hInput.value = Math.max(30, startHeight + dy);
+                            }
+                            if (p.includes('l')) {
+                                el.style.left = (startLeft + dx) + 'px';
+                                el.style.width = Math.max(30, startWidth - dx) + 'px';
+                                const id = el.id.replace('canvas', '').toLowerCase();
+                                const xInput = document.getElementById(id + 'X');
+                                if (xInput) xInput.value = startLeft + dx;
+                                const wInput = document.getElementById(id + 'Width');
+                                if (wInput) wInput.value = Math.max(30, startWidth - dx);
+                            }
+                            if (p.includes('t')) {
+                                el.style.top = (startTop + dy) + 'px';
+                                el.style.height = Math.max(30, startHeight - dy) + 'px';
+                                const id = el.id.replace('canvas', '').toLowerCase();
+                                const yInput = document.getElementById(id + 'Y');
+                                if (yInput) yInput.value = startTop + dy;
+                                const hInput = document.getElementById(id + 'Height');
+                                if (hInput) hInput.value = Math.max(30, startHeight - dy);
+                            }
+                        };
+
+                        const up = function() {
+                            document.removeEventListener('pointermove', move);
+                            document.removeEventListener('pointerup', up);
+                        };
+
+                        document.addEventListener('pointermove', move);
+                        document.addEventListener('pointerup', up);
+                    });
+                    element.appendChild(handle);
+                });
+
+                // Rotate handle
+                const line = document.createElement('div');
+                line.className = 'rotate-line';
+                element.appendChild(line);
+
+                const rotateHandle = document.createElement('div');
+                rotateHandle.className = 'rotate-handle';
+                rotateHandle.addEventListener('pointerdown', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    const el = this.closest('.abs-element');
+                    const rect = el.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const move = function(ev) {
+                        const angle = Math.atan2(ev.clientY - cy, ev.clientX - cx) * 180 / Math.PI;
+                        el.style.transform = `rotate(${angle + 90}deg)`;
+                        const id = el.id.replace('canvas', '').toLowerCase();
+                        const rotInput = document.getElementById(id + 'Rotation');
+                        if (rotInput) rotInput.value = Math.round(angle + 90);
+                    };
+                    const up = function() {
+                        document.removeEventListener('pointermove', move);
+                        document.removeEventListener('pointerup', up);
+                    };
+                    document.addEventListener('pointermove', move);
+                    document.addEventListener('pointerup', up);
+                });
+                element.appendChild(rotateHandle);
+            }
+
+            // ---------- SECTION TOGGLES ----------
+            document.querySelectorAll('.section-toggle').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    const content = document.getElementById('sec' + section.charAt(0).toUpperCase() + section.slice(
+                        1));
+                    if (content) {
+                        content.classList.toggle('open');
+                        this.classList.toggle('open');
+                    }
+                });
             });
 
-            // ---------- SEARCH ----------
-            document.getElementById('searchThemes').addEventListener('input', renderThemes);
-            document.getElementById('searchTemplates').addEventListener('input', renderTemplates);
+            // ---------- SHADOW TOGGLES ----------
+            function setupShadowToggle(checkboxId, controlsId) {
+                const cb = document.getElementById(checkboxId);
+                const controls = document.getElementById(controlsId);
+                if (cb && controls) {
+                    cb.addEventListener('change', function() {
+                        controls.style.display = this.checked ? 'block' : 'none';
+                    });
+                }
+            }
+            setupShadowToggle('logoShadow', 'logoShadowControls');
+            setupShadowToggle('headerShadow', 'headerShadowControls');
+            setupShadowToggle('totalShadow', 'totalShadowControls');
+            setupShadowToggle('sigShadow', 'sigShadowControls');
 
-            // ---------- ADD BUTTONS ----------
-            document.getElementById('addThemeBtn').addEventListener('click', function() {
-                openThemeModal('➕ Create Theme');
-            });
+            // ---------- SCALE SYNC ----------
+            function setupScaleSync(rangeId, valId) {
+                const range = document.getElementById(rangeId);
+                const val = document.getElementById(valId);
+                if (range && val) {
+                    range.addEventListener('input', function() { val.value = this.value;
+                        updatePreview(); });
+                    val.addEventListener('input', function() {
+                        let v = parseFloat(this.value) || 0;
+                        if (v < parseInt(range.min)) v = parseInt(range.min);
+                        if (v > parseInt(range.max)) v = parseInt(range.max);
+                        range.value = v;
+                        updatePreview();
+                    });
+                }
+            }
+            setupScaleSync('canvasScale', 'canvasScaleVal');
+            setupScaleSync('logoScale', 'logoScaleVal');
+            setupScaleSync('headerScale', 'headerScaleVal');
+            setupScaleSync('tableScale', 'tableScaleVal');
+            setupScaleSync('totalScale', 'totalScaleVal');
+            setupScaleSync('sigScale', 'sigScaleVal');
+            setupScaleSync('footerScale', 'footerScaleVal');
 
-            document.getElementById('addTemplateBtn').addEventListener('click', function() {
-                openTemplateModal('➕ Create Template');
-            });
+            // ---------- AUTO SAVE ----------
+            let autoSaveTimer = null;
 
-            // ---------- REFRESH ----------
-            document.getElementById('refreshBtn').addEventListener('click', function() {
-                renderThemes();
-                renderTemplates();
-                populateTemplateThemeDropdown();
-                showToast('⟳ Refreshed', 'info', 1200);
-            });
+            function autoSave() {
+                if (autoSaveTimer) clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    saveCurrentTheme();
+                }, 3000);
+            }
 
-            // ---------- NAV ----------
-            document.getElementById('backBtn').addEventListener('click', () => window.location.href = 'index.html');
-            document.getElementById('dashboardBtn').addEventListener('click', () => window.location.href = 'index.html');
-            document.getElementById('brandLink').addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'index.html';
-            });
+            // ---------- ATTACH EVENTS ----------
+            function attachEvents() {
+                const inputs = document.querySelectorAll('#settingsPanel input, #settingsPanel select');
+                inputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        updatePreview();
+                        autoSave();
+                    });
+                    input.addEventListener('change', function() {
+                        updatePreview();
+                        autoSave();
+                    });
+                });
+
+                document.querySelectorAll('#settingsPanel input[type="checkbox"]').forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        updatePreview();
+                        autoSave();
+                    });
+                });
+
+                document.getElementById('saveThemeBtn').addEventListener('click', saveCurrentTheme);
+
+                document.getElementById('refreshBtn').addEventListener('click', function() {
+                    loadThemes();
+                    showToast('⟳ Refreshed', 'info', 1200);
+                });
+
+                document.getElementById('backBtn').addEventListener('click', () => window.location.href = 'index.html');
+                document.getElementById('dashboardBtn').addEventListener('click', () => window.location.href = 'index.html');
+                document.getElementById('brandLink').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                });
+            }
 
             // ---------- INIT ----------
-            initThemes();
-            seedDefaultTemplates();
-            renderThemes();
-            renderTemplates();
-            populateTemplateThemeDropdown();
+            function init() {
+                loadThemes();
+                attachEvents();
+                setTimeout(updatePreview, 200);
 
-            setTimeout(() => {
-                const themeCount = getThemes().filter(t => !t._deleted).length;
-                const templateCount = getTemplates().filter(t => !t._deleted).length;
-                showToast(`🎨 ${themeCount} themes · 📋 ${templateCount} templates loaded.`, 'success', 2500);
-            }, 400);
+                setTimeout(() => {
+                    showToast('🎨 Theme Designer ready. ' + themes.filter(t => !t._deleted).length +
+                        ' themes loaded.', 'info', 2500);
+                }, 500);
 
-            console.log('🎨 Theme & Template Manager loaded.');
-            console.log('📌 Document Types: Quotation, Invoice, General');
-            console.log('📌 Search: Enabled for both tabs');
-            console.log('📌 Future fields: branchId, module, rateProfile, version');
+                console.log('🎨 Theme Designer v2 loaded.');
+                console.log('✅ Multiple themes | h4_themes storage | Drag | Resize handles | Rotate handle | Abs positioning');
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
 
         })();
     </script>
