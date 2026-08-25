@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>H4 – Customer Master</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/mobile.css" />
+    <link rel="stylesheet" href="css/desktop.css" />
+
+    <style>
+        .master-container {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .master-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .master-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+        .master-header h1 span {
+            color: #3182ce;
+        }
+        .master-header .sub {
+            color: #718096;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 0.1rem;
+        }
+
+        .panel-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        .panel-toolbar .search-box {
+            flex: 1 1 280px;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 0.2rem 0.8rem;
+            border: 1px solid #e2e8f0;
+        }
+        .panel-toolbar .search-box input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            width: 100%;
+            outline: none;
+        }
+        .panel-toolbar .search-box span {
+            color: #a0aec0;
+        }
+
+        .btn-primary {
+            background: #3182ce;
+            color: #fff;
+            border: none;
+            padding: 0.55rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover {
+            background: #2b6cb0;
+        }
+
+        .btn-secondary {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-edit {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-edit:hover {
+            background: #e2e8f0;
+        }
+        .btn-active {
+            background: #c6f6d5;
+            color: #276749;
+            border: 1px solid #48bb78;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-active:hover {
+            background: #9ae6b4;
+        }
+        .btn-inactive {
+            background: #fed7d7;
+            color: #9b2c2c;
+            border: 1px solid #fc8181;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-inactive:hover {
+            background: #feb2b2;
+        }
+
+        .table-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #edf2f7;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0.2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 600px;
+        }
+        thead {
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        th {
+            text-align: left;
+            padding: 0.7rem 0.8rem;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        td {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr.inactive-row td {
+            opacity: 0.6;
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 0.15rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: #c6f6d5;
+            color: #276749;
+        }
+        .badge-status.inactive {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+
+        .empty-row td {
+            text-align: center;
+            color: #a0aec0;
+            padding: 2.5rem 1rem;
+            font-style: italic;
+        }
+
+        .action-cell {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            justify-content: flex-end;
+        }
+
+        .customer-type-tag {
+            display: inline-block;
+            background: #edf2f7;
+            padding: 0.1rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #4a5568;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 20px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+            padding: 1.8rem 2rem 1.8rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.96) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            line-height: 1;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 0 0.3rem;
+            transition: color 0.2s;
+        }
+        .modal-close:hover {
+            color: #4a5568;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+        .form-group label .required {
+            color: #e53e3e;
+            margin-left: 0.1rem;
+        }
+        .form-group .hint {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-top: 0.15rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.55rem 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fff;
+            font-family: inherit;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.12);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 0.2rem;
+        }
+        .form-check input[type="checkbox"] {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: #3182ce;
+            cursor: pointer;
+        }
+        .form-check label {
+            font-weight: 500;
+            color: #2d3748;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .lookup-result {
+            background: #ebf8ff;
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            margin-top: 0.3rem;
+            display: none;
+            border-left: 4px solid #3182ce;
+        }
+        .lookup-result.visible {
+            display: block;
+        }
+        .lookup-result .name {
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .lookup-result .details {
+            font-size: 0.85rem;
+            color: #4a5568;
+            margin-top: 0.2rem;
+        }
+        .lookup-result .actions {
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.8rem;
+            padding-top: 1rem;
+            border-top: 1px solid #edf2f7;
+        }
+        .btn-cancel {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1.6rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+        .btn-save {
+            background: #3182ce;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-save:hover {
+            background: #2b6cb0;
+        }
+        .btn-success {
+            background: #48bb78;
+            color: #fff;
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.85rem;
+        }
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .toast {
+            background: #fff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            border-left: 5px solid #3182ce;
+            min-width: 200px;
+        }
+        .toast.success { border-left-color: #48bb78; }
+        .toast.error { border-left-color: #fc8181; }
+        .toast .close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #a0aec0;
+            cursor: pointer;
+        }
+        .toast .close:hover {
+            color: #4a5568;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 640px) {
+            .master-container { padding: 0 0.8rem; }
+            .master-header { flex-direction: column; align-items: flex-start; }
+            .modal { padding: 1.2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .panel-toolbar { flex-direction: column; align-items: stretch; }
+            .action-cell { justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="h4-header">
+        <a href="index.html" class="brand" id="brandLink">
+            <span class="brand-icon">⚜️</span>
+            <span class="brand-name">H4 <span>ERP</span></span>
+        </a>
+        <div class="header-actions">
+            <button class="btn" id="backBtn">← Back</button>
+            <button class="btn btn-primary-header" id="dashboardBtn">🏠 Dashboard</button>
+        </div>
+    </header>
+
+    <div class="master-container">
+
+        <div class="master-header">
+            <div>
+                <h1>👤 <span>Customer</span> Master</h1>
+                <div class="sub">Single source of truth for all customers</div>
+            </div>
+            <div>
+                <button class="btn-secondary" id="refreshBtn">⟳ Refresh</button>
+            </div>
+        </div>
+
+        <div class="panel-toolbar">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="searchCustomers" placeholder="Search by name, mobile, ID..." />
+            </div>
+            <button class="btn-primary" id="addCustomerBtn">＋ Add Customer</button>
+        </div>
+
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Mobile</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th style="text-align:right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <p style="margin-top:1rem;font-size:0.8rem;color:#a0aec0;">
+            💡 Inactive customers won't appear in new quotations. Mobile numbers are globally unique.
+        </p>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="customerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Customer</h2>
+                <button class="modal-close" id="modalCloseBtn">✕</button>
+            </div>
+            <form id="customerForm" autocomplete="off">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Customer ID</label>
+                        <input type="text" id="custId" readonly style="background:#f7fafc;font-weight:600;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Type <span class="required">*</span></label>
+                        <div style="display:flex;gap:0.5rem;align-items:center;">
+                            <select id="custType" required style="flex:1;">
+                                <option value="Direct Customer">Direct Customer</option>
+                                <option value="Mason">Mason</option>
+                                <option value="Engineer">Engineer</option>
+                                <option value="Contractor">Contractor</option>
+                                <option value="Field Worker">Field Worker</option>
+                                <option value="Dealer">Dealer</option>
+                            </select>
+                            <button type="button" class="btn-secondary" id="addTypeBtn" style="white-space:nowrap;padding:0.4rem 0.8rem;">＋ Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Customer / Company Name <span class="required">*</span></label>
+                    <input type="text" id="custName" placeholder="e.g. Muhammed Ali" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mobile <span class="required">*</span></label>
+                        <input type="tel" id="custMobile" placeholder="9876543210" inputmode="numeric" required />
+                        <div class="hint" id="mobileHint"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Alternate Mobile</label>
+                        <input type="tel" id="custAltMobile" placeholder="9876543211" inputmode="numeric" />
+                    </div>
+                </div>
+
+                <div class="lookup-result" id="lookupResult">
+                    <div class="name" id="lookupName">—</div>
+                    <div class="details" id="lookupDetails">—</div>
+                    <div class="actions">
+                        <button type="button" class="btn-success" id="lookupUseBtn">✓ Use This Customer</button>
+                        <button type="button" class="btn-secondary" id="lookupNewBtn">＋ Create New Instead</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="custEmail" placeholder="customer@email.com" />
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="custAddress" rows="1" placeholder="House No, Street, City..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Location / Area</label>
+                        <input type="text" id="custLocation" placeholder="e.g. Tirur, Malappuram" />
+                    </div>
+                    <div class="form-group">
+                        <label>Default Project Name</label>
+                        <input type="text" id="custProject" placeholder="e.g. Al-Shifa Villa" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Default Site Address</label>
+                    <textarea id="custSiteAddress" rows="1" placeholder="Site location details..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="custNotes" rows="2" placeholder="Any special notes about this customer..."></textarea>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="custActive" checked />
+                    <label for="custActive">Active</label>
+                </div>
+
+                <input type="hidden" id="editId" value="" />
+                <input type="hidden" id="lookupCustomerId" value="" />
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="modalCancelBtn">Cancel</button>
+                    <button type="submit" class="btn-save" id="modalSaveBtn">💾 Save Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: Add Customer Type ===== -->
+    <div class="modal-overlay" id="typeModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h2>➕ Add Customer Type</h2>
+                <button class="modal-close" id="typeModalCloseBtn">✕</button>
+            </div>
+            <div class="form-group">
+                <label>Type Name <span class="required">*</span></label>
+                <input type="text" id="modalTypeName" placeholder="e.g. Architect, Supervisor" />
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="typeModalCancelBtn">Cancel</button>
+                <button class="btn-save" id="modalSaveTypeBtn">💾 Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ---------- STORAGE KEYS ----------
+            const STORAGE_KEY = 'h4_customers';
+            const TYPES_KEY = 'h4_customer_types';
+
+            // ---------- BUILT-IN TYPES ----------
+            const BUILT_IN_TYPES = ['Direct Customer', 'Mason', 'Engineer', 'Contractor', 'Field Worker', 'Dealer'];
+
+            // ==========================================================
+            // 🔥 MOBILE NORMALIZATION - CRITICAL FIX
+            // ==========================================================
+            function normalizeMobile(mobile) {
+                if (!mobile) return '';
+                // Remove all spaces, dashes, parentheses, dots
+                let cleaned = mobile.replace(/[\s\-\(\)\.]/g, '');
+                // Remove leading +91, 91, 0 if present
+                if (cleaned.startsWith('+91')) {
+                    cleaned = cleaned.substring(3);
+                } else if (cleaned.startsWith('91')) {
+                    cleaned = cleaned.substring(2);
+                } else if (cleaned.startsWith('0')) {
+                    cleaned = cleaned.substring(1);
+                }
+                // Keep only digits
+                cleaned = cleaned.replace(/\D/g, '');
+                return cleaned;
+            }
+
+            // ==========================================================
+            // 🔥 INDIAN MOBILE VALIDATION - STRICT 10 DIGIT
+            // ==========================================================
+            function isValidIndianMobile(mobile) {
+                const normalized = normalizeMobile(mobile);
+                // Must be exactly 10 digits, starting with 6,7,8,9
+                return /^[6-9]\d{9}$/.test(normalized);
+            }
+
+            // ==========================================================
+            // HELPERS
+            // ==========================================================
+            function getCustomers() {
+                try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; }
+            }
+            function saveCustomers(list) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            }
+            function getCustomerTypes() {
+                try { return JSON.parse(localStorage.getItem(TYPES_KEY)) || []; } catch { return []; }
+            }
+            function saveCustomerTypes(list) {
+                localStorage.setItem(TYPES_KEY, JSON.stringify(list));
+            }
+            function generateId(list) {
+                return list.length ? Math.max(...list.map(c => c.id || 0)) + 1 : 1;
+            }
+            function escapeHtml(text) {
+                if (!text) return '';
+                return String(text).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m] || m));
+            }
+            function showToast(msg, type = 'info', duration = 3000) {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+                toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${msg}</span><button class="close">✕</button>`;
+                container.appendChild(toast);
+                const close = toast.querySelector('.close');
+                close.addEventListener('click', () => toast.remove());
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(40px)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, duration);
+            }
+
+            // ==========================================================
+            // CUSTOMER ID GENERATION (Collision-proof)
+            // ==========================================================
+            function generateCustomerId() {
+                const list = getCustomers();
+                let maxNum = 0;
+                list.forEach(c => {
+                    if (c.customerId && c.customerId.startsWith('H4-CUST-')) {
+                        const num = parseInt(c.customerId.replace('H4-CUST-', ''));
+                        if (num > maxNum) maxNum = num;
+                    }
+                });
+                const next = maxNum + 1;
+                return 'H4-CUST-' + String(next).padStart(4, '0');
+            }
+
+            // ==========================================================
+            // MOBILE LOOKUP - Using normalized mobile
+            // Inactive customers are included (they cannot reuse mobile)
+            // ==========================================================
+            function findCustomerByMobile(mobile) {
+                const normalized = normalizeMobile(mobile);
+                if (!normalized) return null;
+                const customers = getCustomers();
+                return customers.find(c => {
+                    const cNormalized = normalizeMobile(c.mobile);
+                    return cNormalized === normalized && !c._deleted;
+                }) || null;
+            }
+
+            function isMobileTaken(mobile, excludeId = null) {
+                const normalized = normalizeMobile(mobile);
+                if (!normalized) return false;
+                const customers = getCustomers();
+                return customers.some(c => {
+                    const cNormalized = normalizeMobile(c.mobile);
+                    return cNormalized === normalized && c.id !== excludeId && !c._deleted;
+                });
+            }
+
+            // ==========================================================
+            // CUSTOMER TYPE DROPDOWN
+            // ==========================================================
+            function populateTypeDropdown() {
+                const customTypes = getCustomerTypes();
+                const select = document.getElementById('custType');
+                const currentVal = select.value;
+
+                while (select.options.length > 0) {
+                    select.remove(0);
+                }
+
+                BUILT_IN_TYPES.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t;
+                    opt.textContent = t;
+                    select.appendChild(opt);
+                });
+
+                customTypes.forEach(t => {
+                    if (BUILT_IN_TYPES.includes(t)) return;
+                    const opt = document.createElement('option');
+                    opt.value = t;
+                    opt.textContent = t;
+                    select.appendChild(opt);
+                });
+
+                if (currentVal && [...select.options].some(o => o.value === currentVal)) {
+                    select.value = currentVal;
+                } else {
+                    select.value = 'Direct Customer';
+                }
+            }
+
+            // ==========================================================
+            // MOBILE LOOKUP UI
+            // ==========================================================
+            function lookupMobileUI(mobile) {
+                const resultDiv = document.getElementById('lookupResult');
+                const nameEl = document.getElementById('lookupName');
+                const detailsEl = document.getElementById('lookupDetails');
+                const useBtn = document.getElementById('lookupUseBtn');
+                const newBtn = document.getElementById('lookupNewBtn');
+                const hiddenId = document.getElementById('lookupCustomerId');
+
+                const normalized = normalizeMobile(mobile);
+                if (!normalized || normalized.length < 10) {
+                    resultDiv.classList.remove('visible');
+                    hiddenId.value = '';
+                    return null;
+                }
+
+                const found = findCustomerByMobile(mobile);
+                if (found) {
+                    resultDiv.classList.add('visible');
+                    nameEl.textContent = found.name || '—';
+                    const details = [
+                        found.customerType || 'Direct Customer',
+                        found.location || '',
+                        found.address || ''
+                    ].filter(Boolean).join(' • ');
+                    detailsEl.textContent = details || 'No additional details';
+                    hiddenId.value = found.id;
+
+                    const editId = parseInt(document.getElementById('editId').value);
+                    if (editId && editId === found.id) {
+                        useBtn.style.display = 'none';
+                        newBtn.textContent = '✕ Continue Editing';
+                    } else {
+                        useBtn.style.display = '';
+                        newBtn.textContent = '＋ Create New Instead';
+                    }
+                    return found;
+                } else {
+                    resultDiv.classList.remove('visible');
+                    hiddenId.value = '';
+                    return null;
+                }
+            }
+
+            // ==========================================================
+            // MODAL CONTROLS
+            // ==========================================================
+            const modal = document.getElementById('customerModal');
+            const typeModal = document.getElementById('typeModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const form = document.getElementById('customerForm');
+            const editIdInput = document.getElementById('editId');
+            const custIdInput = document.getElementById('custId');
+            const custMobile = document.getElementById('custMobile');
+            const lookupResult = document.getElementById('lookupResult');
+            const lookupUseBtn = document.getElementById('lookupUseBtn');
+            const lookupNewBtn = document.getElementById('lookupNewBtn');
+
+            let lookupData = null;
+
+            function openModal(title, data = null) {
+                modalTitle.textContent = title;
+                populateTypeDropdown();
+
+                lookupResult.classList.remove('visible');
+                document.getElementById('lookupCustomerId').value = '';
+
+                if (data) {
+                    editIdInput.value = data.id;
+                    custIdInput.value = data.customerId || generateCustomerId();
+                    document.getElementById('custName').value = data.name || '';
+                    document.getElementById('custType').value = data.customerType || 'Direct Customer';
+                    document.getElementById('custMobile').value = data.mobile || '';
+                    document.getElementById('custAltMobile').value = data.alternateMobile || '';
+                    document.getElementById('custEmail').value = data.email || '';
+                    document.getElementById('custAddress').value = data.address || '';
+                    document.getElementById('custLocation').value = data.location || '';
+                    document.getElementById('custProject').value = data.defaultProjectName || '';
+                    document.getElementById('custSiteAddress').value = data.defaultSiteAddress || '';
+                    document.getElementById('custNotes').value = data.notes || '';
+                    document.getElementById('custActive').checked = data.active !== false && !data._deleted;
+
+                    if (data.mobile) {
+                        const found = findCustomerByMobile(data.mobile);
+                        if (found && found.id === data.id) {
+                            lookupResult.classList.add('visible');
+                            document.getElementById('lookupName').textContent = found.name || '—';
+                            document.getElementById('lookupDetails').textContent = '✓ Current customer';
+                            document.getElementById('lookupUseBtn').style.display = 'none';
+                            document.getElementById('lookupNewBtn').textContent = '✕ Continue Editing';
+                            document.getElementById('lookupCustomerId').value = found.id;
+                        }
+                    }
+                } else {
+                    editIdInput.value = '';
+                    custIdInput.value = generateCustomerId();
+                    form.reset();
+                    document.getElementById('custActive').checked = true;
+                    document.getElementById('custType').value = 'Direct Customer';
+                    document.getElementById('custMobile').value = '';
+                }
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('custName').focus(), 100);
+            }
+
+            function closeModal() {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+                form.reset();
+                editIdInput.value = '';
+                lookupResult.classList.remove('visible');
+                document.getElementById('lookupCustomerId').value = '';
+                lookupData = null;
+            }
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalCancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+            // ==========================================================
+            // MOBILE LOOKUP EVENTS
+            // ==========================================================
+            let lookupTimeout = null;
+            custMobile.addEventListener('input', function() {
+                const mobile = this.value.trim();
+                if (lookupTimeout) clearTimeout(lookupTimeout);
+                lookupTimeout = setTimeout(() => {
+                    const found = lookupMobileUI(mobile);
+                    if (found) {
+                        lookupData = found;
+                        const editId = parseInt(document.getElementById('editId').value);
+                        if (editId && editId === found.id) {
+                            document.getElementById('lookupUseBtn').style.display = 'none';
+                            document.getElementById('lookupNewBtn').textContent = '✕ Continue Editing';
+                        } else {
+                            document.getElementById('lookupUseBtn').style.display = '';
+                            document.getElementById('lookupNewBtn').textContent = '＋ Create New Instead';
+                        }
+                    } else {
+                        lookupData = null;
+                    }
+                }, 300);
+            });
+
+            // Use existing customer
+            lookupUseBtn.addEventListener('click', function() {
+                const id = parseInt(document.getElementById('lookupCustomerId').value);
+                if (!id) return;
+                const customers = getCustomers();
+                const found = customers.find(c => c.id === id);
+                if (!found) { showToast('Customer not found.', 'error'); return; }
+
+                document.getElementById('custName').value = found.name || '';
+                document.getElementById('custType').value = found.customerType || 'Direct Customer';
+                document.getElementById('custAltMobile').value = found.alternateMobile || '';
+                document.getElementById('custEmail').value = found.email || '';
+                document.getElementById('custAddress').value = found.address || '';
+                document.getElementById('custLocation').value = found.location || '';
+                document.getElementById('custProject').value = found.defaultProjectName || '';
+                document.getElementById('custSiteAddress').value = found.defaultSiteAddress || '';
+                document.getElementById('custNotes').value = found.notes || '';
+                document.getElementById('custActive').checked = found.active !== false;
+                document.getElementById('editId').value = found.id;
+                document.getElementById('custId').value = found.customerId || generateCustomerId();
+                lookupResult.classList.remove('visible');
+                showToast('✓ Customer loaded', 'success', 1200);
+                document.getElementById('custName').focus();
+            });
+
+            // Create new instead
+            lookupNewBtn.addEventListener('click', function() {
+                lookupResult.classList.remove('visible');
+                document.getElementById('lookupCustomerId').value = '';
+                const mobile = custMobile.value.trim();
+                const editId = parseInt(document.getElementById('editId').value);
+                if (mobile && isValidIndianMobile(mobile)) {
+                    const normalized = normalizeMobile(mobile);
+                    const customers = getCustomers();
+                    const existing = customers.find(c => {
+                        const cNormalized = normalizeMobile(c.mobile);
+                        return cNormalized === normalized && c.id !== editId && !c._deleted;
+                    });
+                    if (existing) {
+                        custMobile.value = '';
+                        showToast('Please enter a different mobile number.', 'warning', 2000);
+                        custMobile.focus();
+                    }
+                }
+            });
+
+            // ==========================================================
+            // TYPE MODAL
+            // ==========================================================
+            function openTypeModal() {
+                typeModal.classList.add('open');
+                modalTypeName.value = '';
+                setTimeout(() => modalTypeName.focus(), 100);
+            }
+
+            function closeTypeModal() {
+                typeModal.classList.remove('open');
+            }
+
+            typeModalCloseBtn.addEventListener('click', closeTypeModal);
+            typeModalCancelBtn.addEventListener('click', closeTypeModal);
+            typeModal.addEventListener('click', (e) => { if (e.target === typeModal) closeTypeModal(); });
+
+            modalSaveTypeBtn.addEventListener('click', function() {
+                const name = modalTypeName.value.trim();
+                if (!name) { showToast('Please enter a type name.', 'warning'); return; }
+                if (BUILT_IN_TYPES.includes(name)) {
+                    showToast('This is a built-in type.', 'warning');
+                    return;
+                }
+                const customTypes = getCustomerTypes();
+                if (customTypes.includes(name)) { showToast('Type already exists.', 'warning'); return; }
+                customTypes.push(name);
+                saveCustomerTypes(customTypes);
+                populateTypeDropdown();
+                document.getElementById('custType').value = name;
+                showToast('✅ Type added.', 'success');
+                closeTypeModal();
+            });
+
+            document.getElementById('addTypeBtn').addEventListener('click', openTypeModal);
+
+            // ==========================================================
+            // RENDER TABLE
+            // ==========================================================
+            function renderCustomers() {
+                const list = getCustomers();
+                const search = document.getElementById('searchCustomers').value.toLowerCase().trim();
+                const filtered = list.filter(c =>
+                    !c._deleted &&
+                    ((c.name || '').toLowerCase().includes(search) ||
+                        (c.mobile || '').includes(search) ||
+                        (c.customerId || '').toLowerCase().includes(search) ||
+                        (c.location || '').toLowerCase().includes(search))
+                );
+
+                const tbody = document.getElementById('customersTableBody');
+                if (filtered.length === 0) {
+                    tbody.innerHTML =
+                        `<tr class="empty-row"><td colspan="7">No customers found. Click "Add Customer" to create one.</td></tr>`;
+                    return;
+                }
+
+                let html = '';
+                filtered.forEach(c => {
+                    const isActive = c.active !== false;
+                    const statusClass = isActive ? 'active' : 'inactive';
+                    const statusLabel = isActive ? 'Active' : 'Inactive';
+                    const rowClass = isActive ? '' : 'inactive-row';
+
+                    html += `
+                        <tr class="${rowClass}">
+                            <td><code style="background:#edf2f7;padding:0.1rem 0.4rem;border-radius:4px;font-size:0.75rem;">${escapeHtml(c.customerId || '—')}</code></td>
+                            <td><strong>${escapeHtml(c.name)}</strong></td>
+                            <td><span class="customer-type-tag">${escapeHtml(c.customerType || 'Direct Customer')}</span></td>
+                            <td>${escapeHtml(c.mobile || '—')}</td>
+                            <td>${escapeHtml(c.location || '—')}</td>
+                            <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+                            <td style="text-align:right;">
+                                <div class="action-cell">
+                                    <button class="btn-edit" data-id="${c.id}">✎</button>
+                                    ${isActive ? `<button class="btn-inactive" data-id="${c.id}">🔴</button>` : `<button class="btn-active" data-id="${c.id}">🟢</button>`}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+
+                tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editCustomer(parseInt(b
+                    .dataset.id))));
+                tbody.querySelectorAll('.btn-inactive').forEach(b => b.addEventListener('click', () => toggleActive(parseInt(b
+                    .dataset.id), false)));
+                tbody.querySelectorAll('.btn-active').forEach(b => b.addEventListener('click', () => toggleActive(parseInt(b
+                    .dataset.id), true)));
+            }
+
+            // ==========================================================
+            // CRUD
+            // ==========================================================
+            function editCustomer(id) {
+                const list = getCustomers();
+                const customer = list.find(c => c.id === id);
+                if (!customer) { showToast('Customer not found.', 'error'); return; }
+                openModal('✎ Edit Customer', customer);
+            }
+
+            function toggleActive(id, setActive) {
+                let list = getCustomers();
+                const customer = list.find(c => c.id === id);
+                if (!customer) { showToast('Customer not found.', 'error'); return; }
+                customer.active = setActive;
+                customer.updatedAt = new Date().toISOString();
+                saveCustomers(list);
+                renderCustomers();
+                showToast(setActive ? '✅ Customer activated.' : '🔴 Customer deactivated.', 'success');
+            }
+
+            // ==========================================================
+            // FORM SUBMIT (with strict Indian mobile validation)
+            // ==========================================================
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById('custName').value.trim();
+                const customerType = document.getElementById('custType').value;
+                const mobileRaw = document.getElementById('custMobile').value.trim();
+                const mobile = normalizeMobile(mobileRaw);
+                const alternateMobile = document.getElementById('custAltMobile').value.trim();
+                const email = document.getElementById('custEmail').value.trim();
+                const address = document.getElementById('custAddress').value.trim();
+                const location = document.getElementById('custLocation').value.trim();
+                const defaultProjectName = document.getElementById('custProject').value.trim();
+                const defaultSiteAddress = document.getElementById('custSiteAddress').value.trim();
+                const notes = document.getElementById('custNotes').value.trim();
+                const active = document.getElementById('custActive').checked;
+                const editId = parseInt(document.getElementById('editId').value);
+                const customerId = document.getElementById('custId').value || generateCustomerId();
+
+                if (!name) { showToast('Customer Name is required.', 'warning'); return; }
+                if (!mobile) { showToast('Mobile number is required.', 'warning'); return; }
+
+                // 🔥 STRICT INDIAN MOBILE VALIDATION
+                if (!/^[6-9]\d{9}$/.test(mobile)) {
+                    showToast('Please enter a valid 10-digit Indian mobile number starting with 6,7,8, or 9.', 'warning');
+                    document.getElementById('custMobile').focus();
+                    return;
+                }
+
+                // Check duplicate mobile (normalized) - exclude self
+                if (isMobileTaken(mobile, editId)) {
+                    const existing = findCustomerByMobile(mobile);
+                    showToast('⚠️ This mobile number is already registered with ' + (existing ? existing.name : 'another customer'), 'error');
+                    const found = findCustomerByMobile(mobile);
+                    if (found) {
+                        lookupResult.classList.add('visible');
+                        document.getElementById('lookupName').textContent = found.name || '—';
+                        document.getElementById('lookupDetails').textContent = 'This number is already in use.';
+                        document.getElementById('lookupUseBtn').style.display = '';
+                        document.getElementById('lookupNewBtn').textContent = '✕ Cancel';
+                        document.getElementById('lookupCustomerId').value = found.id;
+                    }
+                    return;
+                }
+
+                const now = new Date().toISOString();
+
+                const customer = {
+                    id: editId || generateId(getCustomers()),
+                    customerId: customerId,
+                    name: name,
+                    customerType: customerType,
+                    mobile: mobile,
+                    alternateMobile: alternateMobile,
+                    email: email,
+                    address: address,
+                    location: location,
+                    defaultProjectName: defaultProjectName,
+                    defaultSiteAddress: defaultSiteAddress,
+                    notes: notes,
+                    active: active,
+                    updatedAt: now,
+                    branchId: null,
+                    rateProfile: null,
+                    customerSpecialRate: null
+                };
+
+                const list = getCustomers();
+
+                if (editId) {
+                    const idx = list.findIndex(c => c.id === editId);
+                    if (idx === -1) { showToast('Customer not found.', 'error'); return; }
+                    customer.createdAt = list[idx].createdAt || now;
+                    if (list[idx]._deleted && active) {
+                        delete list[idx]._deleted;
+                        delete list[idx]._deletedAt;
+                    }
+                    list[idx] = { ...list[idx], ...customer };
+                    saveCustomers(list);
+                    showToast('✅ Customer updated.', 'success');
+                } else {
+                    customer.createdAt = now;
+                    list.push(customer);
+                    saveCustomers(list);
+                    showToast('✅ Customer added.', 'success');
+                }
+
+                closeModal();
+                renderCustomers();
+            });
+
+            // ==========================================================
+            // SMART ENTER
+            // ==========================================================
+            function setupSmartEnter() {
+                const fields = [
+                    'custName',
+                    'custType',
+                    'custMobile',
+                    'custAltMobile',
+                    'custEmail',
+                    'custAddress',
+                    'custLocation',
+                    'custProject',
+                    'custSiteAddress',
+                    'custNotes'
+                ];
+
+                const allInputs = fields.map(id => document.getElementById(id)).filter(Boolean);
+
+                allInputs.forEach((input, index) => {
+                    input.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (this.tagName === 'TEXTAREA' && e.shiftKey) return;
+
+                            const nextInput = allInputs[index + 1];
+                            if (nextInput) {
+                                if (nextInput.offsetParent !== null && !nextInput.disabled) {
+                                    nextInput.focus();
+                                    nextInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            } else {
+                                const saveBtn = document.getElementById('modalSaveBtn');
+                                if (saveBtn) {
+                                    saveBtn.focus();
+                                    saveBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            }
+                        }
+                    });
+                });
+
+                document.getElementById('modalSaveBtn').addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        form.dispatchEvent(new Event('submit'));
+                    }
+                });
+            }
+
+            // ==========================================================
+            // MIGRATION - Single source of truth
+            // ==========================================================
+            function migrateAllCustomers() {
+                const customers = getCustomers();
+                if (customers.length > 0) {
+                    console.log('✅ Customers already exist in h4_customers. Skipping migration.');
+                    return;
+                }
+
+                let allLegacy = [];
+
+                // Try waterproofingCustomers
+                let wpCustomers = [];
+                try { wpCustomers = JSON.parse(localStorage.getItem('waterproofingCustomers')) || []; } catch { wpCustomers =
+                        []; }
+                if (wpCustomers.length > 0) {
+                    console.log('🔄 Found ' + wpCustomers.length + ' customers in waterproofingCustomers');
+                    allLegacy = allLegacy.concat(wpCustomers);
+                }
+
+                // Try epoxyCustomers
+                let epCustomers = [];
+                try { epCustomers = JSON.parse(localStorage.getItem('epoxyCustomers')) || []; } catch { epCustomers = []; }
+                if (epCustomers.length > 0) {
+                    console.log('🔄 Found ' + epCustomers.length + ' customers in epoxyCustomers');
+                    allLegacy = allLegacy.concat(epCustomers);
+                }
+
+                // Also check any other possible keys
+                const otherKeys = ['h4_customers_old', 'customers', 'customerMaster'];
+                otherKeys.forEach(key => {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key)) || [];
+                        if (data.length > 0) {
+                            console.log('🔄 Found ' + data.length + ' customers in ' + key);
+                            allLegacy = allLegacy.concat(data);
+                        }
+                    } catch { /* ignore */ }
+                });
+
+                if (allLegacy.length === 0) {
+                    console.log('ℹ️ No legacy customers found to migrate.');
+                    return;
+                }
+
+                console.log('🔄 Migrating total ' + allLegacy.length + ' customers...');
+
+                let maxId = 0;
+                const migrated = allLegacy.map((c, index) => {
+                    const id = c.id || (maxId + index + 1);
+                    if (id > maxId) maxId = id;
+                    return {
+                        id: id,
+                        customerId: c.customerId || 'H4-CUST-' + String(id).padStart(4, '0'),
+                        name: c.name || 'Unknown',
+                        customerType: c.type || c.customerType || 'Direct Customer',
+                        mobile: normalizeMobile(c.mobile) || '',
+                        alternateMobile: c.alternateMobile || '',
+                        email: c.email || '',
+                        address: c.address || '',
+                        location: c.location || '',
+                        defaultProjectName: c.project || c.defaultProjectName || '',
+                        defaultSiteAddress: c.siteAddress || c.defaultSiteAddress || '',
+                        notes: c.notes || '',
+                        active: c.active !== false,
+                        branchId: null,
+                        rateProfile: null,
+                        customerSpecialRate: null,
+                        createdAt: c.createdAt || new Date().toISOString(),
+                        updatedAt: c.updatedAt || new Date().toISOString()
+                    };
+                });
+
+                // Deduplicate by normalized mobile
+                const seen = new Map();
+                const unique = [];
+                migrated.forEach(c => {
+                    const key = c.mobile || 'no-mobile-' + c.id;
+                    if (!seen.has(key)) {
+                        seen.set(key, c);
+                        unique.push(c);
+                    } else {
+                        // Keep the one with more data
+                        const existing = seen.get(key);
+                        if (c.name && c.name !== 'Unknown' && (!existing.name || existing.name === 'Unknown')) {
+                            seen.set(key, c);
+                            const idx = unique.indexOf(existing);
+                            if (idx !== -1) unique[idx] = c;
+                        }
+                    }
+                });
+
+                if (unique.length > 0) {
+                    // Fix IDs to be sequential
+                    unique.forEach((c, idx) => {
+                        c.id = idx + 1;
+                        if (!c.customerId || c.customerId === 'H4-CUST-0000') {
+                            c.customerId = 'H4-CUST-' + String(idx + 1).padStart(4, '0');
+                        }
+                    });
+                    saveCustomers(unique);
+                    console.log('✅ Migrated ' + unique.length + ' unique customers to h4_customers.');
+                    showToast('🔄 Migrated ' + unique.length + ' customers from legacy data.', 'info', 3000);
+                }
+            }
+
+            // ==========================================================
+            // INIT
+            // ==========================================================
+            function init() {
+                // Initialize custom types storage (only custom types, not built-in)
+                let customTypes = getCustomerTypes();
+                const filtered = customTypes.filter(t => !BUILT_IN_TYPES.includes(t));
+                if (filtered.length !== customTypes.length) {
+                    saveCustomerTypes(filtered);
+                }
+                populateTypeDropdown();
+
+                // Migrate from all legacy storage to h4_customers
+                migrateAllCustomers();
+
+                renderCustomers();
+                setupSmartEnter();
+
+                document.getElementById('addCustomerBtn').addEventListener('click', function() {
+                    openModal('➕ Add Customer');
+                });
+
+                document.getElementById('searchCustomers').addEventListener('input', renderCustomers);
+
+                document.getElementById('refreshBtn').addEventListener('click', function() {
+                    renderCustomers();
+                    showToast('⟳ Refreshed', 'info', 1200);
+                });
+
+                document.getElementById('backBtn').addEventListener('click', () => window.location.href = 'index.html');
+                document.getElementById('dashboardBtn').addEventListener('click', () => window.location.href = 'index.html');
+                document.getElementById('brandLink').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                });
+
+                setTimeout(() => {
+                    const count = getCustomers().filter(c => c.active !== false && !c._deleted).length;
+                    showToast(`👤 ${count} active customers loaded.`, 'success', 2000);
+                }, 400);
+
+                console.log('👤 Customer Master v3 loaded.');
+                console.log('📌 Customers: ' + getCustomers().length);
+                console.log('📌 Built-in types: ' + BUILT_IN_TYPES.join(', '));
+                console.log('📌 Custom types: ' + getCustomerTypes().join(', '));
+                console.log('📌 Mobile normalization + strict Indian validation: enabled');
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+        })();
+    </script>
+
+</body>
+</html>
