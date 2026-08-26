@@ -43,6 +43,34 @@
     background:var(--accent); border:none; color:#fff; font-weight:700; font-size:13px;
     border-radius:8px; padding:0 16px; white-space:nowrap;
   }
+  .topbtn{
+    background:var(--panel-bg-2); border:1px solid var(--panel-line); color:var(--text-hi);
+    font-weight:700; font-size:12px; border-radius:8px; padding:0 12px; white-space:nowrap;
+  }
+  .topbtn.danger-btn{ color:var(--danger); border-color:#5a2b2b; padding:0 12px; }
+
+  /* ---------- SAVED TEMPLATES BAR ---------- */
+  #tplBar{
+    background:var(--panel-bg-2); border-bottom:1px solid var(--panel-line); padding:8px 10px 9px; flex-shrink:0;
+  }
+  .tpl-tabs{display:flex; gap:6px; margin-bottom:7px;}
+  .tpl-tab{
+    flex:1; background:var(--panel-bg); border:1px solid var(--panel-line); color:var(--text-lo);
+    border-radius:8px; padding:6px 8px; font-size:11px; font-weight:700;
+  }
+  .tpl-tab.active{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  #tplChips{display:flex; gap:6px; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  #tplChips::-webkit-scrollbar{display:none;}
+  .tpl-chip{
+    flex:0 0 auto; display:flex; align-items:center; gap:6px; background:var(--panel-bg);
+    border:1px solid var(--panel-line); border-radius:16px; padding:5px 6px 5px 12px; font-size:11px;
+  }
+  .tpl-chip.current{ border-color:var(--accent); background:rgba(91,140,255,.14); }
+  .tpl-chip .del{
+    background:none; border:none; color:var(--text-lo); font-size:13px; padding:3px 6px; border-radius:50%;
+  }
+  .tpl-chip .del:active{ color:var(--danger); }
+  .tpl-empty{ font-size:11px; color:var(--text-lo); padding:4px 2px; }
 
   /* ---------- ELEMENT TOOLBAR ---------- */
   #toolbar{
@@ -207,8 +235,19 @@
         <label>Theme</label>
         <select id="tplTheme"></select>
       </div>
+      <button id="newBtn" class="topbtn">🆕 New</button>
       <button id="saveBtn">💾 Save</button>
+      <button id="deleteBtn" class="topbtn danger-btn">🗑</button>
     </div>
+  </div>
+
+  <!-- SAVED TEMPLATES (separate lists per document type) -->
+  <div id="tplBar">
+    <div class="tpl-tabs">
+      <button class="tpl-tab" data-type="quotation">📋 Quotations</button>
+      <button class="tpl-tab" data-type="invoice">🧾 Invoices</button>
+    </div>
+    <div id="tplChips"></div>
   </div>
 
   <!-- ELEMENT TOOLBAR -->
@@ -295,6 +334,13 @@ let selectedId = null;
 let scale = 0.45;
 const PAGE_W = 794, PAGE_H = 1123;
 let currentTemplateId = null;
+
+/* Saved templates are stored separately per document type — nothing here is written
+   to storage automatically; every list mutation below happens only from an explicit
+   Save / Delete / confirm action, never from a timer or an input listener. */
+let templatesStore = { quotation:[], invoice:[] };
+let browseType = 'quotation';
+const STORAGE_KEY_FOR = type => 'h4_templates_' + type;
 
 const $ = (sel, root) => (root||document).querySelector(sel);
 const $all = (sel, root) => Array.from((root||document).querySelectorAll(sel));
@@ -879,15 +925,47 @@ function fitScale(){
   return Math.max(0.2, Math.min(0.9, w/PAGE_W));
 }
 
-/* ================= SAVE / EXPORT ================= */
+/* ================= SAVED TEMPLATES: LOAD / SAVE / DELETE (all explicit, all confirmed) ================= */
+function loadTemplatesStore(){
+  ['quotation','invoice'].forEach(t=>{
+    try{ templatesStore[t] = JSON.parse(localStorage.getItem(STORAGE_KEY_FOR(t)) || '[]'); }
+    catch(err){ templatesStore[t] = []; }
+  });
+}
+function persistList(type){
+  localStorage.setItem(STORAGE_KEY_FOR(type), JSON.stringify(templatesStore[type]));
+}
+function findTemplateAnywhere(id){
+  for(const type of ['quotation','invoice']){
+    const tpl = templatesStore[type].find(t=>t.templateId===id);
+    if(tpl) return {tpl, type};
+  }
+  return null;
+}
+let _createdAtCache = {};
+
+/* Explicit Save button only — no input/change listener anywhere calls this. */
 $('#saveBtn').addEventListener('click', saveTemplate);
 function saveTemplate(){
-  const now = new Date().toISOString();
+  const type = $('#tplType').value;
+  const name = $('#tplName').value.trim() || 'Untitled Template';
+  const found = currentTemplateId ? findTemplateAnywhere(currentTemplateId) : null;
+
+  if(found){
+    if(!confirm(`Update "${name}" in ${found.type === type ? found.type : found.type + ' → ' + type}?`)) return;
+    if(found.type !== type){
+      templatesStore[found.type] = templatesStore[found.type].filter(t=>t.templateId!==currentTemplateId);
+      persistList(found.type);
+    }
+  }
+
   currentTemplateId = currentTemplateId || uid();
+  if(!_createdAtCache[currentTemplateId]) _createdAtCache[currentTemplateId] = new Date().toISOString();
+
   const template = {
     templateId: currentTemplateId,
-    templateName: $('#tplName').value || 'Untitled Template',
-    documentType: $('#tplType').value,
+    templateName: name,
+    documentType: type,
     themeId: currentThemeId,
     active: true,
     isDefault: false,
@@ -895,25 +973,101 @@ function saveTemplate(){
       ({id,type,x:Math.round(x),y:Math.round(y),w:Math.round(w),h:Math.round(h),
         rotation,opacity,locked,hidden,zIndex:z,props})),
     pageSettings: { width:PAGE_W, height:PAGE_H, unit:'px', orientation:'portrait' },
-    createdAt: template_createdAt(),
-    updatedAt: now
+    createdAt: _createdAtCache[currentTemplateId],
+    updatedAt: new Date().toISOString()
   };
-  persistLocally(template);
+
+  const idx = templatesStore[type].findIndex(t=>t.templateId===currentTemplateId);
+  if(idx>-1) templatesStore[type][idx] = template; else templatesStore[type].push(template);
+  persistList(type);
+  browseType = type;
+  renderTemplateBar();
+  toast('Saved to ' + (type==='invoice'?'Invoices':'Quotations'));
   showJsonModal(template);
 }
-let _createdAtCache = {};
-function template_createdAt(){
-  if(!_createdAtCache[currentTemplateId]) _createdAtCache[currentTemplateId] = new Date().toISOString();
-  return _createdAtCache[currentTemplateId];
+
+/* Start a fresh, unsaved template — confirmed if the canvas has unsaved work. */
+$('#newBtn').addEventListener('click', ()=>{
+  if(elements.length && !confirm('Start a new template? Anything not saved will be lost.')) return;
+  currentTemplateId = null;
+  elements = [];
+  selectedId = null;
+  $('#tplName').value = 'Untitled Template';
+  render();
+  closePropSheet();
+  toast('New template');
+});
+
+/* Delete the template currently loaded in the editor. */
+$('#deleteBtn').addEventListener('click', ()=>{
+  if(!currentTemplateId){ toast('Nothing saved yet to delete'); return; }
+  const found = findTemplateAnywhere(currentTemplateId);
+  if(!found){ toast('Nothing saved yet to delete'); return; }
+  deleteTemplateEntry(found.tpl, found.type);
+});
+
+/* Delete from a saved-templates chip. Always confirmed, never automatic. */
+function deleteTemplateEntry(tpl, type){
+  if(!confirm(`Delete "${tpl.templateName}"? This can't be undone.`)) return;
+  templatesStore[type] = templatesStore[type].filter(t=>t.templateId!==tpl.templateId);
+  persistList(type);
+  if(currentTemplateId === tpl.templateId){
+    currentTemplateId = null;
+    elements = [];
+    selectedId = null;
+    $('#tplName').value = 'Untitled Template';
+    render();
+    closePropSheet();
+  }
+  renderTemplateBar();
+  toast('Deleted "' + tpl.templateName + '"');
 }
-function persistLocally(template){
-  try{
-    const store = JSON.parse(localStorage.getItem('h4_templates')||'[]');
-    const idx = store.findIndex(t=>t.templateId===template.templateId);
-    if(idx>-1) store[idx]=template; else store.push(template);
-    localStorage.setItem('h4_templates', JSON.stringify(store));
-  }catch(err){ console.warn('local persist failed', err); }
+
+/* Load a saved template into the canvas for editing. Confirmed if there's unsaved work. */
+function loadTemplateIntoCanvas(tpl){
+  if(elements.length && !confirm(`Load "${tpl.templateName}"? Anything not saved on the current canvas will be lost.`)) return;
+  currentTemplateId = tpl.templateId;
+  $('#tplName').value = tpl.templateName;
+  $('#tplType').value = tpl.documentType;
+  currentThemeId = tpl.themeId;
+  themeSel.value = tpl.themeId;
+  elements = tpl.elements.map(e => ({
+    id:e.id, type:e.type, x:e.x, y:e.y, w:e.w, h:e.h, rotation:e.rotation,
+    opacity:e.opacity, locked:!!e.locked, hidden:!!e.hidden, z:e.zIndex,
+    props: JSON.parse(JSON.stringify(e.props))
+  }));
+  zCounter = Math.max(1, ...elements.map(e=>e.z)) + 1;
+  selectedId = null;
+  applyThemeToCanvasBackground();
+  render();
+  closePropSheet();
+  toast('Loaded "' + tpl.templateName + '"');
 }
+
+/* ================= SAVED TEMPLATES BAR (tabs + chips) ================= */
+$all('.tpl-tab').forEach(btn=>{
+  btn.addEventListener('click', ()=>{ browseType = btn.dataset.type; renderTemplateBar(); });
+});
+function renderTemplateBar(){
+  $all('.tpl-tab').forEach(btn=> btn.classList.toggle('active', btn.dataset.type===browseType));
+  const chips = $('#tplChips');
+  chips.innerHTML = '';
+  const list = templatesStore[browseType];
+  if(!list.length){
+    chips.innerHTML = `<div class="tpl-empty">No saved ${browseType==='invoice'?'invoices':'quotations'} yet.</div>`;
+    return;
+  }
+  list.forEach(tpl=>{
+    const chip = document.createElement('div');
+    chip.className = 'tpl-chip' + (tpl.templateId===currentTemplateId?' current':'');
+    chip.innerHTML = `<span class="cname">${escapeHtml(tpl.templateName)}</span><button class="del">✕</button>`;
+    chip.querySelector('.cname').addEventListener('click', ()=>loadTemplateIntoCanvas(tpl));
+    chip.querySelector('.del').addEventListener('click', (e)=>{ e.stopPropagation(); deleteTemplateEntry(tpl, browseType); });
+    chips.appendChild(chip);
+  });
+}
+
+/* ================= EXPORT (JSON preview shown after an explicit Save) ================= */
 function showJsonModal(template){
   $('#jsonOut').textContent = JSON.stringify(template, null, 2);
   $('#modalBg').classList.add('open');
@@ -958,9 +1112,12 @@ function seedSample(){
 
 /* ================= BOOT ================= */
 applyThemeToCanvasBackground();
+loadTemplatesStore();
+browseType = $('#tplType').value;
 seedSample();
 scale = fitScale();
 render();
+renderTemplateBar();
 window.addEventListener('resize', ()=>{ layoutStage(); });
 
 })();
